@@ -1022,8 +1022,10 @@ namespace Office_File_Explorer.Helpers
             return false;
         }
 
-        public static void RemovePersonalInfo(WordprocessingDocument document)
+        public static bool RemovePersonalInfo(WordprocessingDocument document)
         {
+            bool isFixed = false;
+
             // remove the company name from /docProps/app.xml
             // set TotalTime to "0"
             XNamespace x = Strings.OfficeExtendedProps;
@@ -1039,6 +1041,7 @@ namespace Office_File_Explorer.Helpers
             using (XmlWriter xw = XmlWriter.Create(extendedFilePropertiesPart.GetStream(FileMode.Create, FileAccess.Write)))
             {
                 extendedFilePropertiesXDoc.Save(xw);
+                isFixed = true;
             }
 
             // remove the values of dc:creator, cp:lastModifiedBy from /docProps/core.xml
@@ -1072,6 +1075,7 @@ namespace Office_File_Explorer.Helpers
             using (XmlWriter xw = XmlWriter.Create(coreFilePropertiesPart.GetStream(FileMode.Create, FileAccess.Write)))
             {
                 coreFilePropertiesXDoc.Save(xw);
+                isFixed = true;
             }
 
             // add w:removePersonalInformation, w:removeDateAndTime to /word/settings.xml
@@ -1115,7 +1119,10 @@ namespace Office_File_Explorer.Helpers
             using (XmlWriter xw = XmlWriter.Create(documentSettingsPart.GetStream(FileMode.Create, FileAccess.Write)))
             {
                 documentSettingsXDoc.Save(xw);
+                isFixed = true;
             }
+
+            return isFixed;
         }
 
         private static string GetStyleIdFromStyleName(MainDocumentPart mainPart, string styleName)

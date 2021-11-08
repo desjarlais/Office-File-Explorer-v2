@@ -76,7 +76,8 @@ namespace Office_File_Explorer.Helpers
             SetPrintOrientation,
             ChangeDefaultTemplate,
             AcceptRevisions,
-            ConvertDocmToDocx
+            ConvertDocmToDocx,
+            RemovePII
         }
 
         public enum ExcelModifyCmds

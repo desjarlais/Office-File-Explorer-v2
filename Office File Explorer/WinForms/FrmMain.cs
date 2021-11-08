@@ -1107,6 +1107,21 @@ namespace Office_File_Explorer
                                 LstDisplay.Items.Add(lblFilePath.Text + Strings.convertedTo + fNewName);
                             }
                         }
+
+                        if (f.wdModCmd == AppUtilities.WordModifyCmds.RemovePII)
+                        {
+                            using (WordprocessingDocument document = WordprocessingDocument.Open(lblFilePath.Text, true))
+                            {
+                                if ((WordExtensions.HasPersonalInfo(document) == true) && WordExtensions.RemovePersonalInfo(document) == true)
+                                {
+                                    LogInformation(LogInfoType.ClearAndAdd, "PII Removed from file.", string.Empty);
+                                }
+                                else
+                                {
+                                    LogInformation(LogInfoType.EmptyCount, Strings.wPII, string.Empty);
+                                }
+                            }
+                        }
                     }
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)

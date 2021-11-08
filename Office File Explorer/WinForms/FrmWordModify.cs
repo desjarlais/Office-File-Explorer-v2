@@ -74,6 +74,11 @@ namespace Office_File_Explorer.WinForms
                 wdModCmd = AppUtilities.WordModifyCmds.SetPrintOrientation;
             }
 
+            if (rdoRemovePII.Checked)
+            {
+                wdModCmd = AppUtilities.WordModifyCmds.RemovePII;
+            }
+
             Close();
         }
 

@@ -45,11 +45,13 @@ namespace Office_File_Explorer.WinForms
             this.rdoDelHF = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
+            this.rdoRemovePII = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoRemovePII);
             this.groupBox1.Controls.Add(this.rdoAcceptRevisions);
             this.groupBox1.Controls.Add(this.rdoChangeDefTemp);
             this.groupBox1.Controls.Add(this.rdoSetPrint);
@@ -64,7 +66,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.rdoDelHF);
             this.groupBox1.Location = new System.Drawing.Point(12, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(389, 179);
+            this.groupBox1.Size = new System.Drawing.Size(389, 194);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Content to Modify";
@@ -72,7 +74,7 @@ namespace Office_File_Explorer.WinForms
             // rdoAcceptRevisions
             // 
             this.rdoAcceptRevisions.AutoSize = true;
-            this.rdoAcceptRevisions.Location = new System.Drawing.Point(211, 144);
+            this.rdoAcceptRevisions.Location = new System.Drawing.Point(211, 119);
             this.rdoAcceptRevisions.Name = "rdoAcceptRevisions";
             this.rdoAcceptRevisions.Size = new System.Drawing.Size(131, 19);
             this.rdoAcceptRevisions.TabIndex = 10;
@@ -83,7 +85,7 @@ namespace Office_File_Explorer.WinForms
             // rdoChangeDefTemp
             // 
             this.rdoChangeDefTemp.AutoSize = true;
-            this.rdoChangeDefTemp.Location = new System.Drawing.Point(211, 119);
+            this.rdoChangeDefTemp.Location = new System.Drawing.Point(211, 94);
             this.rdoChangeDefTemp.Name = "rdoChangeDefTemp";
             this.rdoChangeDefTemp.Size = new System.Drawing.Size(158, 19);
             this.rdoChangeDefTemp.TabIndex = 9;
@@ -94,7 +96,7 @@ namespace Office_File_Explorer.WinForms
             // rdoSetPrint
             // 
             this.rdoSetPrint.AutoSize = true;
-            this.rdoSetPrint.Location = new System.Drawing.Point(211, 94);
+            this.rdoSetPrint.Location = new System.Drawing.Point(211, 69);
             this.rdoSetPrint.Name = "rdoSetPrint";
             this.rdoSetPrint.Size = new System.Drawing.Size(132, 19);
             this.rdoSetPrint.TabIndex = 2;
@@ -105,7 +107,7 @@ namespace Office_File_Explorer.WinForms
             // rdoConvertDocmToDocx
             // 
             this.rdoConvertDocmToDocx.AutoSize = true;
-            this.rdoConvertDocmToDocx.Location = new System.Drawing.Point(211, 69);
+            this.rdoConvertDocmToDocx.Location = new System.Drawing.Point(211, 44);
             this.rdoConvertDocmToDocx.Name = "rdoConvertDocmToDocx";
             this.rdoConvertDocmToDocx.Size = new System.Drawing.Size(147, 19);
             this.rdoConvertDocmToDocx.TabIndex = 8;
@@ -116,7 +118,7 @@ namespace Office_File_Explorer.WinForms
             // rdoDelOrphanStyles
             // 
             this.rdoDelOrphanStyles.AutoSize = true;
-            this.rdoDelOrphanStyles.Location = new System.Drawing.Point(211, 44);
+            this.rdoDelOrphanStyles.Location = new System.Drawing.Point(11, 169);
             this.rdoDelOrphanStyles.Name = "rdoDelOrphanStyles";
             this.rdoDelOrphanStyles.Size = new System.Drawing.Size(134, 19);
             this.rdoDelOrphanStyles.TabIndex = 7;
@@ -203,7 +205,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(245, 185);
+            this.BtnOk.Location = new System.Drawing.Point(245, 200);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 0;
@@ -213,7 +215,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(326, 185);
+            this.BtnCancel.Location = new System.Drawing.Point(326, 200);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 1;
@@ -221,11 +223,22 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
+            // rdoRemovePII
+            // 
+            this.rdoRemovePII.AutoSize = true;
+            this.rdoRemovePII.Location = new System.Drawing.Point(211, 144);
+            this.rdoRemovePII.Name = "rdoRemovePII";
+            this.rdoRemovePII.Size = new System.Drawing.Size(84, 19);
+            this.rdoRemovePII.TabIndex = 11;
+            this.rdoRemovePII.TabStop = true;
+            this.rdoRemovePII.Text = "Remove PII";
+            this.rdoRemovePII.UseVisualStyleBackColor = true;
+            // 
             // FrmWordModify
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(409, 217);
+            this.ClientSize = new System.Drawing.Size(409, 236);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.groupBox1);
@@ -259,5 +272,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoAcceptRevisions;
         private System.Windows.Forms.RadioButton rdoChangeDefTemp;
         private System.Windows.Forms.RadioButton rdoSetPrint;
+        private System.Windows.Forms.RadioButton rdoRemovePII;
     }
 }
