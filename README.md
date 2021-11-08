@@ -50,7 +50,7 @@ If you need assistance (find a bug, have a question or any suggestions or feedba
 * View Custom Xml - view custom xml files in Office documents
 
 ## Batch File Processing Window
-![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofcbatch.png?raw=true)
+![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2batch.jpg?raw=true)
 
 ### Batch File Processing (following features can be used to change many documents at one time)
 * Change Theme (Word, Excel, PowerPoint)
