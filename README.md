@@ -11,7 +11,7 @@ Keep in mind if you use this on a production document and choose to use somethin
 If you need assistance (find a bug, have a question or any suggestions or feedback), please report them using the [Issues tab](https://github.com/desjarlais/Office-File-Explorer/issues)
 
 ## Main Window
-![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofcmain.png?raw=true)
+![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2.jpg?raw=true)
 
 ## List of features
 
