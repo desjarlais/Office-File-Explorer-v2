@@ -25,6 +25,7 @@ If you need assistance (find a bug, have a question or any suggestions or feedba
 * Change Default Template
 * Accept All Revisions
 * Fix document corruptions (bookmarks, revisions, endnotes, list templates, table properties, comments, hyperlinks)
+* Remove PII
 
 ### Excel
 * List function to display (links, comments, worksheets, hidden rows & columns, shared strings, cell values, connections, defined names, hyperlinks, formulas)
@@ -48,7 +49,6 @@ If you need assistance (find a bug, have a question or any suggestions or feedba
 * Change theme for a file
 * Validate underlying xml file details
 * View Custom Xml - view custom xml files in Office documents
-* Remove PII
 
 ## Batch File Processing Window
 ![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2batch.jpg?raw=true)
