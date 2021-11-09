@@ -30,6 +30,7 @@ namespace Office_File_Explorer.WinForms
                 rdoFixRevisionsW.Enabled = true;
                 rdoFixHyperlinksW.Enabled = true;
                 rdoFixTablePropsW.Enabled = true;
+                rdoFixContentControlsW.Enabled = true;
             }
             else if (type == Strings.oAppExcel)
             {
@@ -117,6 +118,15 @@ namespace Office_File_Explorer.WinForms
             {
                 corruptionChecked = Strings.wHyperlinks;
                 if (WordFixes.FixHyperlinks(filePath) == true)
+                {
+                    isFileFixed = true;
+                }
+            }
+
+            if (rdoFixContentControlsW.Checked)
+            {
+                corruptionChecked = Strings.wContentControls;
+                if (WordFixes.FixContentControls(filePath) == true)
                 {
                     isFileFixed = true;
                 }

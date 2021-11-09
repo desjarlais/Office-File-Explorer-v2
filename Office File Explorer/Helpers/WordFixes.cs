@@ -1,6 +1,9 @@
-﻿using DocumentFormat.OpenXml;
+﻿// Open Xml SDK Refs
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+
+// .NET refs
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,18 @@ namespace Office_File_Explorer.Helpers
     class WordFixes
     {
         static bool corruptionFound = false;
+
+        public static bool FixContentControls(string filePath)
+        {
+            corruptionFound = false;
+
+            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
+            {
+
+            }
+
+            return corruptionFound;
+        }
 
         public static bool FixShapeInComment(string filePath)
         {
