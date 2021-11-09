@@ -8,7 +8,7 @@
     <Setting Name="RemoveFallback" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="OpenInWord" Type="System.Boolean" Scope="User">
+    <Setting Name="ListRsids" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="FixGroupedShapes" Type="System.Boolean" Scope="User">

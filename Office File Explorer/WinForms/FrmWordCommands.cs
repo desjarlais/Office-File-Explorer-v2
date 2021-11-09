@@ -192,7 +192,7 @@ namespace Office_File_Explorer.WinForms
                             }
                         }
 
-                        List<string> tempAuthors = WordExtensions.GetAllAuthors(doc.MainDocumentPart.Document);
+                        List<string> tempAuthors = Word.GetAllAuthors(doc.MainDocumentPart.Document);
 
                         // sometimes there are authors in a file but they don't exist in people.xml
                         if (tempAuthors.Count > 0)

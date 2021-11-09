@@ -33,7 +33,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ckbRemoveAtMentions = new System.Windows.Forms.CheckBox();
             this.ckbFixGroupedShapes = new System.Windows.Forms.CheckBox();
-            this.ckbOpenInWord = new System.Windows.Forms.CheckBox();
+            this.ckbListRsids = new System.Windows.Forms.CheckBox();
             this.ckbRemoveFallbackTags = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.ckbResetNotes = new System.Windows.Forms.CheckBox();
@@ -54,7 +54,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.groupBox1.Controls.Add(this.ckbRemoveAtMentions);
             this.groupBox1.Controls.Add(this.ckbFixGroupedShapes);
-            this.groupBox1.Controls.Add(this.ckbOpenInWord);
+            this.groupBox1.Controls.Add(this.ckbListRsids);
             this.groupBox1.Controls.Add(this.ckbRemoveFallbackTags);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
@@ -83,15 +83,15 @@ namespace Office_File_Explorer.WinForms
             this.ckbFixGroupedShapes.Text = "Fix Grouped Shapes";
             this.ckbFixGroupedShapes.UseVisualStyleBackColor = true;
             // 
-            // ckbOpenInWord
+            // ckbListRsids
             // 
-            this.ckbOpenInWord.AutoSize = true;
-            this.ckbOpenInWord.Location = new System.Drawing.Point(19, 44);
-            this.ckbOpenInWord.Name = "ckbOpenInWord";
-            this.ckbOpenInWord.Size = new System.Drawing.Size(165, 19);
-            this.ckbOpenInWord.TabIndex = 1;
-            this.ckbOpenInWord.Text = "Open In Word After Repair";
-            this.ckbOpenInWord.UseVisualStyleBackColor = true;
+            this.ckbListRsids.AutoSize = true;
+            this.ckbListRsids.Location = new System.Drawing.Point(19, 44);
+            this.ckbListRsids.Name = "ckbListRsids";
+            this.ckbListRsids.Size = new System.Drawing.Size(159, 19);
+            this.ckbListRsids.TabIndex = 1;
+            this.ckbListRsids.Text = "List Rsids With Doc Props";
+            this.ckbListRsids.UseVisualStyleBackColor = true;
             // 
             // ckbRemoveFallbackTags
             // 
@@ -231,7 +231,7 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox ckbRemoveAtMentions;
         private System.Windows.Forms.CheckBox ckbFixGroupedShapes;
-        private System.Windows.Forms.CheckBox ckbOpenInWord;
+        private System.Windows.Forms.CheckBox ckbListRsids;
         private System.Windows.Forms.CheckBox ckbRemoveFallbackTags;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox ckbResetNotes;

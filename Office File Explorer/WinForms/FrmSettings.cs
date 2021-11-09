@@ -15,9 +15,9 @@ namespace Office_File_Explorer.WinForms
                 ckbRemoveFallbackTags.Checked = true;
             }
 
-            if (Properties.Settings.Default.OpenInWord == true)
+            if (Properties.Settings.Default.ListRsids == true)
             {
-                ckbOpenInWord.Checked = true;
+                ckbListRsids.Checked = true;
             }
 
             if (Properties.Settings.Default.FixGroupedShapes == true)
@@ -53,7 +53,7 @@ namespace Office_File_Explorer.WinForms
         private void BtnOk_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.RemoveFallback = ckbRemoveFallbackTags.Checked;
-            Properties.Settings.Default.OpenInWord = ckbOpenInWord.Checked;
+            Properties.Settings.Default.ListRsids = ckbListRsids.Checked;
             Properties.Settings.Default.FixGroupedShapes = ckbFixGroupedShapes.Checked;
             Properties.Settings.Default.ResetNotesMaster = ckbResetNotes.Checked;
             Properties.Settings.Default.DeleteCopiesOnExit = ckbDeleteOnExit.Checked;

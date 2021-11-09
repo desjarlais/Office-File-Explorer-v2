@@ -6,6 +6,7 @@ using System.IO.Packaging;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using System.Text;
 
 // open xml sdk refs
 using DocumentFormat.OpenXml;
@@ -16,11 +17,10 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using O = DocumentFormat.OpenXml;
 using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
 using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
-using System.Text;
 
 namespace Office_File_Explorer.Helpers
 {
-    class Word
+    public static class Word
     {
         public static bool fSuccess;
 
@@ -46,7 +46,7 @@ namespace Office_File_Explorer.Helpers
                 if (authorName == "* All Authors *")
                 {
                     List<string> temp = new List<string>();
-                    temp = WordExtensions.GetAllAuthors(document.MainDocumentPart.Document);
+                    temp = GetAllAuthors(document.MainDocumentPart.Document);
 
                     // create a temp list for each author so we can loop the changes individually and list them
                     foreach (string s in temp)
@@ -410,7 +410,7 @@ namespace Office_File_Explorer.Helpers
                         StringBuilder tempBaseStyleChain = new StringBuilder();
                         tempBaseStyleChain.Append(sBase);
 
-                        StringBuilder baseStyleChain = WordExtensions.GetBasedOnStyleChain(stylePart, sBase, tempBaseStyleChain);
+                        StringBuilder baseStyleChain = GetBasedOnStyleChain(stylePart, sBase, tempBaseStyleChain);
 
                         if (baseStyleChain.ToString().Contains(Strings.wArrowOnly))
                         {
@@ -434,9 +434,9 @@ namespace Office_File_Explorer.Helpers
                             {
                                 foreach (string w in words.Reverse())
                                 {
-                                    int pWStyleCount = WordExtensions.ParagraphsByStyleId(mainPart, w).Count();
-                                    int rWStyleCount = WordExtensions.RunsByStyleId(mainPart, w).Count();
-                                    int tWStyleCount = WordExtensions.TablesByStyleId(mainPart, w).Count();
+                                    int pWStyleCount = ParagraphsByStyleId(mainPart, w).Count();
+                                    int rWStyleCount = RunsByStyleId(mainPart, w).Count();
+                                    int tWStyleCount = TablesByStyleId(mainPart, w).Count();
                                     count += 1;
 
                                     // if the style is used in a para, run or table, don't delete
@@ -558,7 +558,7 @@ namespace Office_File_Explorer.Helpers
                     }
 
                     EndnotesPart ep = mainPart.EndnotesPart;
-                    ep.Endnotes = WordExtensions.CreateDefaultEndnotes();
+                    ep.Endnotes = CreateDefaultEndnotes();
                     mainPart.Document.Save();
                     fSuccess = true;
                 }
@@ -1019,7 +1019,7 @@ namespace Office_File_Explorer.Helpers
                                         settingList.Add(cNode.LocalName + Strings.wColon + cNode.OuterXml);
                                     }
                                 }
-                                else if (xe.Name == "w:rsids")
+                                else if (xe.Name == "w:rsids" && Properties.Settings.Default.ListRsids == true)
                                 {
                                     rsidList.Add(xe.Name);
                                     foreach (XmlNode rNode in xe.ChildNodes)
@@ -1177,7 +1177,7 @@ namespace Office_File_Explorer.Helpers
                     try
                     {
                         string styleEl = el.GetAttribute("styleId", Strings.wordMainAttributeNamespace).Value;
-                        int pStyle = WordExtensions.ParagraphsByStyleName(mainPart, styleEl).Count();
+                        int pStyle = ParagraphsByStyleName(mainPart, styleEl).Count();
 
                         if (pStyle > 0)
                         {
@@ -1245,7 +1245,7 @@ namespace Office_File_Explorer.Helpers
                 }
 
                 // get the unused list templates
-                oNumIdList = WordExtensions.OrphanedListTemplates(numIdList, aNumIdList);
+                oNumIdList = OrphanedListTemplates(numIdList, aNumIdList);
 
                 ltList.Add(string.Empty);
                 ltList.Add("Orphaned List Templates:");
@@ -1367,7 +1367,7 @@ namespace Office_File_Explorer.Helpers
                             sType = s.Type;
                             styleInUse = false;
 
-                            int pStyleCount = WordExtensions.ParagraphsByStyleName(mainPart, sName).Count();
+                            int pStyleCount = ParagraphsByStyleName(mainPart, sName).Count();
                             if (sType == "paragraph")
                             {
                                 if (pStyleCount > 0)
@@ -1380,7 +1380,7 @@ namespace Office_File_Explorer.Helpers
                                 }
                             }
 
-                            int rStyleCount = WordExtensions.RunsByStyleName(mainPart, sName).Count();
+                            int rStyleCount = RunsByStyleName(mainPart, sName).Count();
                             if (sType == "character")
                             {
                                 if (rStyleCount > 0)
@@ -1393,7 +1393,7 @@ namespace Office_File_Explorer.Helpers
                                 }
                             }
 
-                            int tStyleCount = WordExtensions.TablesByStyleName(mainPart, sName).Count();
+                            int tStyleCount = TablesByStyleName(mainPart, sName).Count();
                             if (sType == "table")
                             {
                                 if (tStyleCount > 0)
@@ -1500,7 +1500,7 @@ namespace Office_File_Explorer.Helpers
                     {
                         para.ParagraphNode,
                         para.StyleName,
-                        Text = WordExtensions.ParagraphText(para.ParagraphNode)
+                        Text = ParagraphText(para.ParagraphNode)
                     };
 
                 foreach (var p in paraWithText)
@@ -1593,6 +1593,895 @@ namespace Office_File_Explorer.Helpers
             }
 
             return ccList;
+        }
+
+        /// <summary>
+        /// get a list of all authors in each story of the document
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public static List<string> GetAllAuthors(Document doc)
+        {
+            bool nullAuthor = false;
+            List<string> allAuthorsInDocument = new List<string>();
+
+            var paragraphChanged = doc.Descendants<ParagraphPropertiesChange>().ToList();
+            var runChanged = doc.Descendants<RunPropertiesChange>().ToList();
+            var deleted = doc.Descendants<DeletedRun>().ToList();
+            var deletedParagraph = doc.Descendants<Deleted>().ToList();
+            var inserted = doc.Descendants<InsertedRun>().ToList();
+
+            // loop through each revision and catalog the authors
+            // some authors show up as null, check and ignore
+            foreach (ParagraphPropertiesChange ppc in paragraphChanged)
+            {
+                if (ppc.Author != null)
+                {
+                    allAuthorsInDocument.Add(ppc.Author);
+                }
+                else
+                {
+                    nullAuthor = true;
+                }
+            }
+
+            foreach (RunPropertiesChange rpc in runChanged)
+            {
+                if (rpc.Author != null)
+                {
+                    allAuthorsInDocument.Add(rpc.Author);
+                }
+                else
+                {
+                    nullAuthor = true;
+                }
+            }
+
+            foreach (DeletedRun dr in deleted)
+            {
+                if (dr.Author != null)
+                {
+                    allAuthorsInDocument.Add(dr.Author);
+                }
+                else
+                {
+                    nullAuthor = true;
+                }
+            }
+
+            foreach (Deleted d in deletedParagraph)
+            {
+                if (d.Author != null)
+                {
+                    allAuthorsInDocument.Add(d.Author);
+                }
+                else
+                {
+                    nullAuthor = true;
+                }
+            }
+
+            foreach (InsertedRun ir in inserted)
+            {
+                if (ir.Author != null)
+                {
+                    allAuthorsInDocument.Add(ir.Author);
+                }
+                else
+                {
+                    nullAuthor = true;
+                }
+            }
+
+            // log if we have a null author, not sure how this happens yet
+            if (nullAuthor)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "Null Author Found");
+            }
+
+            List<string> distinctAuthors = allAuthorsInDocument.Distinct().ToList();
+
+            return distinctAuthors;
+        }
+
+
+
+
+
+        /// <summary>
+        /// Set the font for a text run.
+        /// </summary>
+        /// <param name="fileName"></param>        
+        public static void SetRunFont(string fileName)
+        {
+            // Open a Wordprocessing document for editing.
+            using (WordprocessingDocument package = WordprocessingDocument.Open(fileName, true))
+            {
+                // Set the font to Arial to the first Run.
+                // Use an object initializer for RunProperties and rPr.
+                RunProperties rPr = new RunProperties(
+                    new RunFonts()
+                    {
+                        Ascii = "Arial"
+                    });
+
+                Run r = package.MainDocumentPart.Document.Descendants<Run>().First();
+                r.PrependChild<RunProperties>(rPr);
+
+                // Save changes to the MainDocumentPart part.
+                package.MainDocumentPart.Document.Save();
+            }
+        }
+
+
+
+        /// <summary>
+        /// Sometimes bookmarks are added and the start/end tag is missing
+        /// This function will try to find those orphan tags and remove them
+        /// </summary>
+        /// <param name="filename">file to be scanned</param>
+        /// <returns>true for successful removal and false if none are found</returns>
+        public static bool RemoveMissingBookmarkTags(string filename)
+        {
+            bool isFixed = false;
+
+            try
+            {
+                using (WordprocessingDocument package = WordprocessingDocument.Open(filename, true))
+                {
+                    if (package.MainDocumentPart.WordprocessingCommentsPart is null) { return false; }
+                    if (package.MainDocumentPart.WordprocessingCommentsPart.Comments is null) { return false; }
+
+                    // check for bookmarks in comments and main parts and combine into one
+                    IEnumerable<BookmarkStart> bkStartListComment = package.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
+                    IEnumerable<BookmarkEnd> bkEndListComment = package.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkEnd>();
+                    IEnumerable<BookmarkStart> bkStartListMain = package.MainDocumentPart.Document.Descendants<BookmarkStart>();
+                    IEnumerable<BookmarkEnd> bkEndListMain = package.MainDocumentPart.Document.Descendants<BookmarkEnd>();
+                    IEnumerable<BookmarkEnd> bkEndList = bkEndListComment.Concat(bkEndListMain);
+                    IEnumerable<BookmarkStart> bkStartList = bkStartListComment.Concat(bkStartListMain);
+
+                    // create temp lists so we can loop and remove any that exist in both lists
+                    // if we have a start and end, the bookmark is valid and we can remove the rest
+                    List<string> bkStartTagIds = new List<string>();
+                    List<string> bkEndTagIds = new List<string>();
+
+                    // check each start and find if there is a matching end tag id
+                    foreach (BookmarkStart bks in bkStartList)
+                    {
+                        foreach (BookmarkEnd bke in bkEndList)
+                        {
+                            if (bke.Id.ToString() == bks.Id.ToString())
+                            {
+                                bkStartTagIds.Add(bke.Id);
+                            }
+                        }
+                    }
+
+                    // now we can check if there is a end tag with a matching start tag id
+                    foreach (BookmarkEnd bke in bkEndList)
+                    {
+                        foreach (BookmarkStart bks in bkStartList)
+                        {
+                            if (bks.Id.ToString() == bke.Id.ToString())
+                            {
+                                bkEndTagIds.Add(bks.Id);
+                            }
+                        }
+                    }
+
+                    // now that we know all the id's that match, we can loop again and remove id's that are not in the lists
+                    // first check orphaned start tags
+                    bool startTagFound = false;
+
+                    foreach (BookmarkStart bks in bkStartList)
+                    {
+                        foreach (object o in bkEndTagIds)
+                        {
+                            // if the end tag matches and we can ignore doing anything
+                            if (o.ToString() == bks.Id.ToString())
+                            {
+                                startTagFound = true;
+                            }
+                        }
+
+                        // if we get here and no match was found, it is orphaned and we can delete
+                        if (startTagFound == false)
+                        {
+                            bks.Remove();
+                            isFixed = true;
+                        }
+                        else
+                        {
+                            // reset the value for the next start tag check
+                            startTagFound = false;
+                        }
+                    }
+
+                    // do the same check for end tags
+                    bool endTagFound = false;
+
+                    foreach (BookmarkEnd bke in bkEndList)
+                    {
+                        foreach (object o in bkStartTagIds)
+                        {
+                            if (o.ToString() == bke.Id.ToString())
+                            {
+                                endTagFound = true;
+                            }
+                        }
+
+                        if (endTagFound == false)
+                        {
+                            bke.Remove();
+                            isFixed = true;
+                        }
+                        else
+                        {
+                            endTagFound = false;
+                        }
+                    }
+
+                    if (isFixed)
+                    {
+                        package.MainDocumentPart.Document.Save();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "RemoveMissingBookmarkTags: " + ex.Message);
+                return false;
+            }
+
+            return isFixed;
+        }
+
+        /// <summary>
+        /// look for bookmark tags in a plain cc
+        /// this is not allowed and those need to be removed
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static bool RemovePlainTextCcFromBookmark(string filename)
+        {
+            bool isFixed = false;
+
+            try
+            {
+                using (WordprocessingDocument package = WordprocessingDocument.Open(filename, true))
+                {
+                    IEnumerable<BookmarkStart> bkStartList = package.MainDocumentPart.Document.Descendants<BookmarkStart>();
+                    IEnumerable<BookmarkEnd> bkEndList = package.MainDocumentPart.Document.Descendants<BookmarkEnd>();
+                    List<string> removedBookmarkIds = new List<string>();
+
+                    if (bkStartList.Count() > 0)
+                    {
+                        foreach (BookmarkStart bk in bkStartList)
+                        {
+                            var cElem = bk.Parent;
+                            var pElem = bk.Parent;
+                            bool endLoop = false;
+
+                            do
+                            {
+                                // first check if we are a content control
+                                if (cElem.Parent != null && cElem.Parent.ToString().Contains(Strings.dfowSdt))
+                                {
+                                    foreach (OpenXmlElement oxe in cElem.Parent.ChildElements)
+                                    {
+                                        // get the properties
+                                        if (oxe.GetType().Name == "SdtProperties")
+                                        {
+                                            foreach (OpenXmlElement oxeSdtAlias in oxe)
+                                            {
+                                                // check for plain text
+                                                if (oxeSdtAlias.GetType().Name == "SdtContentText")
+                                                {
+                                                    // if the parent is a plain text content control, bookmark is not allowed
+                                                    // add the id to the list of bookmarks that need to be deleted
+                                                    removedBookmarkIds.Add(bk.Id);
+                                                    endLoop = true;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // set the next element to the parent and continue moving up the element chain
+                                    pElem = cElem.Parent;
+                                    cElem = pElem;
+                                }
+                                else
+                                {
+                                    // if the next element is null, bail
+                                    if (cElem is null || cElem.Parent is null)
+                                    {
+                                        endLoop = true;
+                                    }
+                                    else
+                                    {
+                                        // set pElem to the parent so we can check for the end of the loop
+                                        // set cElem to the parent also so we can continue moving up the element chain
+                                        pElem = cElem.Parent;
+                                        cElem = pElem;
+
+                                        // loop should continue until we get to the body element, then we can stop looping
+                                        if (pElem.ToString() == Strings.dfowBody)
+                                        {
+                                            endLoop = true;
+                                        }
+                                    }
+                                }
+                            } while (endLoop == false);
+                        }
+
+                        // now that we have the list of bookmark id's to be removed
+                        // loop each list and delete any bookmark that has a matching id
+                        foreach (var o in removedBookmarkIds)
+                        {
+                            foreach (BookmarkStart bkStart in bkStartList)
+                            {
+                                if (bkStart.Id == o)
+                                {
+                                    bkStart.Remove();
+                                }
+                            }
+
+                            foreach (BookmarkEnd bkEnd in bkEndList)
+                            {
+                                if (bkEnd.Id == o)
+                                {
+                                    bkEnd.Remove();
+                                }
+                            }
+                        }
+
+                        // save the part
+                        package.MainDocumentPart.Document.Save();
+
+                        // check if there were any fixes made and update the output display
+                        if (removedBookmarkIds.Count > 0)
+                        {
+                            isFixed = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "Error Removing Bookmarks" + ex.Message);
+                return false;
+            }
+
+            return isFixed;
+        }
+
+        // Creates an Endnotes instance and adds its children.
+        public static Endnotes CreateDefaultEndnotes()
+        {
+            Endnotes endnotes1 = new Endnotes() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid w16 w16cex wp14" } };
+            endnotes1.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
+            endnotes1.AddNamespaceDeclaration("cx", "http://schemas.microsoft.com/office/drawing/2014/chartex");
+            endnotes1.AddNamespaceDeclaration("cx1", "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex");
+            endnotes1.AddNamespaceDeclaration("cx2", "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex");
+            endnotes1.AddNamespaceDeclaration("cx3", "http://schemas.microsoft.com/office/drawing/2016/5/9/chartex");
+            endnotes1.AddNamespaceDeclaration("cx4", "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex");
+            endnotes1.AddNamespaceDeclaration("cx5", "http://schemas.microsoft.com/office/drawing/2016/5/11/chartex");
+            endnotes1.AddNamespaceDeclaration("cx6", "http://schemas.microsoft.com/office/drawing/2016/5/12/chartex");
+            endnotes1.AddNamespaceDeclaration("cx7", "http://schemas.microsoft.com/office/drawing/2016/5/13/chartex");
+            endnotes1.AddNamespaceDeclaration("cx8", "http://schemas.microsoft.com/office/drawing/2016/5/14/chartex");
+            endnotes1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+            endnotes1.AddNamespaceDeclaration("aink", "http://schemas.microsoft.com/office/drawing/2016/ink");
+            endnotes1.AddNamespaceDeclaration("am3d", "http://schemas.microsoft.com/office/drawing/2017/model3d");
+            endnotes1.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
+            endnotes1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+            endnotes1.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+            endnotes1.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
+            endnotes1.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+            endnotes1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+            endnotes1.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
+            endnotes1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+            endnotes1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
+            endnotes1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
+            endnotes1.AddNamespaceDeclaration("w16cex", "http://schemas.microsoft.com/office/word/2018/wordml/cex");
+            endnotes1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
+            endnotes1.AddNamespaceDeclaration("w16", "http://schemas.microsoft.com/office/word/2018/wordml");
+            endnotes1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
+            endnotes1.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
+            endnotes1.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
+            endnotes1.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
+            endnotes1.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+
+            Endnote endnote1 = new Endnote() { Type = FootnoteEndnoteValues.Separator, Id = -1 };
+            string rsidAdditionGuid = Office.CreateNewRsid();
+            string rsidPropsGuid = Office.CreateNewRsid();
+
+            Paragraph paragraph1 = new Paragraph() { RsidParagraphAddition = rsidAdditionGuid, RsidParagraphProperties = rsidPropsGuid, RsidRunAdditionDefault = rsidAdditionGuid, ParagraphId = Office.CreateNewRsid(), TextId = "77777777" };
+
+            ParagraphProperties paragraphProperties1 = new ParagraphProperties();
+            SpacingBetweenLines spacingBetweenLines1 = new SpacingBetweenLines() { After = "0", Line = "240", LineRule = LineSpacingRuleValues.Auto };
+
+            paragraphProperties1.Append(spacingBetweenLines1);
+
+            Run run1 = new Run();
+            SeparatorMark separatorMark1 = new SeparatorMark();
+
+            run1.Append(separatorMark1);
+
+            paragraph1.Append(paragraphProperties1);
+            paragraph1.Append(run1);
+
+            endnote1.Append(paragraph1);
+
+            Endnote endnote2 = new Endnote() { Type = FootnoteEndnoteValues.ContinuationSeparator, Id = 0 };
+
+            Paragraph paragraph2 = new Paragraph() { RsidParagraphAddition = rsidAdditionGuid, RsidParagraphProperties = rsidPropsGuid, RsidRunAdditionDefault = rsidAdditionGuid, ParagraphId = Office.CreateNewRsid(), TextId = "77777777" };
+
+            ParagraphProperties paragraphProperties2 = new ParagraphProperties();
+            SpacingBetweenLines spacingBetweenLines2 = new SpacingBetweenLines() { After = "0", Line = "240", LineRule = LineSpacingRuleValues.Auto };
+
+            paragraphProperties2.Append(spacingBetweenLines2);
+
+            Run run2 = new Run();
+            ContinuationSeparatorMark continuationSeparatorMark1 = new ContinuationSeparatorMark();
+
+            run2.Append(continuationSeparatorMark1);
+
+            paragraph2.Append(paragraphProperties2);
+            paragraph2.Append(run2);
+
+            endnote2.Append(paragraph2);
+
+            endnotes1.Append(endnote1);
+            endnotes1.Append(endnote2);
+            return endnotes1;
+        }
+
+        /// <summary>
+        /// Function to check if a part is null
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="partType"></param>
+        /// <returns></returns>
+        public static bool IsPartNull(WordprocessingDocument doc, string partType)
+        {
+            try
+            {
+                if (partType == "DeletedRun")
+                {
+                    var deleted = doc.MainDocumentPart.Document.Descendants<DeletedRun>().ToList();
+                }
+                else if (partType == "Table")
+                {
+                    var tbls = doc.MainDocumentPart.Document.Descendants<Table>().ToList();
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// function to create the style linked list chain
+        /// </summary>
+        /// <param name="sdp">style def part</param>
+        /// <param name="prevStyle">name of the previous style to compare with basedon</param>
+        /// <param name="currentStyleChain">string to hold the sequence of styles starting with the base style</param>
+        /// <returns></returns>
+        public static StringBuilder GetBasedOnStyleChain(StyleDefinitionsPart sdp, string prevStyle, StringBuilder currentStyleChain)
+        {
+            foreach (OpenXmlElement tempEl in sdp.Styles.Elements())
+            {
+                if (tempEl.LocalName == "style")
+                {
+                    Style tempStyle = (Style)tempEl;
+                    if (tempStyle.BasedOn != null)
+                    {
+                        if (tempStyle.BasedOn.Val == prevStyle)
+                        {
+                            currentStyleChain.Append("-->" + tempStyle.StyleId);
+                            GetBasedOnStyleChain(sdp, tempStyle.StyleId, currentStyleChain);
+                        }
+                    }
+                }
+            }
+
+            return currentStyleChain;
+        }
+
+        public static List<int> OrphanedListTemplates(List<int> usedNumIdList, List<int> docNumIdList)
+        {
+            var copyOfDocNumId = new List<int>(docNumIdList);
+
+            foreach (var p in usedNumIdList)
+            {
+                copyOfDocNumId.Remove(p);
+            }
+
+            return copyOfDocNumId;
+        }
+
+        public static string ParagraphText(XElement e)
+        {
+            XNamespace w = e.Name.Namespace;
+            return e
+                   .Elements(w + "r")
+                   .Elements(w + "t")
+                   .StringConcatenate(element => (string)element);
+        }
+
+        public static string StringConcatenate(this IEnumerable<string> source)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (string s in source)
+                sb.Append(s);
+            return sb.ToString();
+        }
+
+        public static string StringConcatenate<T>(this IEnumerable<T> source, Func<T, string> func)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (T item in source)
+                sb.Append(func(item));
+            return sb.ToString();
+        }
+
+        public static string StringConcatenate(this IEnumerable<string> source, string separator)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (string s in source)
+                sb.Append(s).Append(separator);
+            return sb.ToString();
+        }
+
+        public static string StringConcatenate<T>(this IEnumerable<T> source, Func<T, string> func, string separator)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (T item in source)
+                sb.Append(func(item)).Append(separator);
+            return sb.ToString();
+        }
+
+        // Return true if the style id is in the document, false otherwise.
+        public static bool IsStyleIdInDocument(WordprocessingDocument doc, string styleid)
+        {
+            // Get access to the Styles element for this document.
+            Styles s = doc.MainDocumentPart.StyleDefinitionsPart.Styles;
+
+            // Check that there are styles and how many.
+            int n = s.Elements<Style>().Count();
+            if (n == 0)
+                return false;
+
+            // Look for a match on styleid.
+            Style style = s.Elements<Style>()
+                .Where(st => (st.StyleId == styleid) && (st.Type == StyleValues.Paragraph))
+                .FirstOrDefault();
+            if (style is null)
+                return false;
+
+            return true;
+        }
+
+        // Return styleid that matches the styleName, or null when there's no match.
+        public static string GetStyleIdFromStyleName(WordprocessingDocument doc, string styleName)
+        {
+            StyleDefinitionsPart stylePart = doc.MainDocumentPart.StyleDefinitionsPart;
+            string styleId = stylePart.Styles.Descendants<StyleName>()
+                .Where(s => s.Val.Value.Equals(styleName) &&
+                    (((Style)s.Parent).Type == StyleValues.Paragraph))
+                .Select(n => ((Style)n.Parent).StyleId).FirstOrDefault();
+            return styleId;
+        }
+
+        public static IEnumerable<OpenXmlElement> ContentControls(this OpenXmlPart part)
+        {
+            return part.RootElement.Descendants().Where(e => e is SdtBlock || e is SdtRun);
+        }
+
+        public static IEnumerable<OpenXmlElement> ContentControls(this WordprocessingDocument doc)
+        {
+            foreach (var cc in doc.MainDocumentPart.ContentControls())
+                yield return cc;
+            foreach (var header in doc.MainDocumentPart.HeaderParts)
+                foreach (var cc in header.ContentControls())
+                    yield return cc;
+            foreach (var footer in doc.MainDocumentPart.FooterParts)
+                foreach (var cc in footer.ContentControls())
+                    yield return cc;
+            if (doc.MainDocumentPart.FootnotesPart != null)
+                foreach (var cc in doc.MainDocumentPart.FootnotesPart.ContentControls())
+                    yield return cc;
+            if (doc.MainDocumentPart.EndnotesPart != null)
+                foreach (var cc in doc.MainDocumentPart.EndnotesPart.ContentControls())
+                    yield return cc;
+        }
+
+        public static XDocument GetXDocument(this OpenXmlPart part)
+        {
+            XDocument xdoc = part.Annotation<XDocument>();
+            if (xdoc != null)
+            {
+                return xdoc;
+            }
+
+            using (StreamReader sr = new StreamReader(part.GetStream()))
+            using (XmlReader xr = XmlReader.Create(sr))
+            {
+                xdoc = XDocument.Load(xr);
+            }
+
+            part.AddAnnotation(xdoc);
+
+            return xdoc;
+        }
+
+        public static bool HasPersonalInfo(WordprocessingDocument document)
+        {
+            // check for company name from /docProps/app.xml
+            XNamespace x = Strings.OfficeExtendedProps;
+            OpenXmlPart extendedFilePropertiesPart = document.ExtendedFilePropertiesPart;
+            XDocument extendedFilePropertiesXDoc = extendedFilePropertiesPart.GetXDocument();
+            string company = extendedFilePropertiesXDoc.Elements(x + Strings.wProperties).Elements(x + Strings.wCompany).Select(e => (string)e)
+                .Aggregate(string.Empty, (s, i) => s + i);
+
+            if (company.Length > 0)
+            {
+                return true;
+            }
+
+            // check for dc:creator, cp:lastModifiedBy from /docProps/core.xml
+            XNamespace dc = Strings.DcElements;
+            XNamespace cp = Strings.OfficeCoreProps;
+            OpenXmlPart coreFilePropertiesPart = document.CoreFilePropertiesPart;
+            XDocument coreFilePropertiesXDoc = coreFilePropertiesPart.GetXDocument();
+            string creator = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(dc + Strings.wCreator).Select(e => (string)e)
+                .Aggregate(string.Empty, (s, i) => s + i);
+
+            if (creator.Length > 0)
+            {
+                return true;
+            }
+
+            string lastModifiedBy = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(cp + Strings.wLastModifiedBy).Select(e => (string)e)
+                .Aggregate(string.Empty, (s, i) => s + i);
+
+            if (lastModifiedBy.Length > 0)
+            {
+                return true;
+            }
+
+            // check for nonexistence of removePersonalInformation and removeDateAndTime
+            XNamespace w = Strings.wordMainAttributeNamespace;
+            OpenXmlPart documentSettingsPart = document.MainDocumentPart.DocumentSettingsPart;
+            XDocument documentSettingsXDoc = documentSettingsPart.GetXDocument();
+            XElement settings = documentSettingsXDoc.Root;
+
+            if (settings.Element(w + Strings.wRemovePI) is null)
+            {
+                return true;
+            }
+
+            if (settings.Element(w + Strings.wRemoveDateTime) is null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool RemovePersonalInfo(WordprocessingDocument document)
+        {
+            bool isFixed = false;
+
+            // remove the company name from /docProps/app.xml
+            // set TotalTime to "0"
+            XNamespace x = Strings.OfficeExtendedProps;
+            OpenXmlPart extendedFilePropertiesPart = document.ExtendedFilePropertiesPart;
+            XDocument extendedFilePropertiesXDoc = extendedFilePropertiesPart.GetXDocument();
+            extendedFilePropertiesXDoc.Elements(x + Strings.wProperties).Elements(x + Strings.wCompany).Remove();
+            XElement totalTime = extendedFilePropertiesXDoc.Elements(x + Strings.wProperties).Elements(x + "TotalTime").FirstOrDefault();
+            if (totalTime != null)
+            {
+                totalTime.Value = "0";
+            }
+
+            using (XmlWriter xw = XmlWriter.Create(extendedFilePropertiesPart.GetStream(FileMode.Create, FileAccess.Write)))
+            {
+                extendedFilePropertiesXDoc.Save(xw);
+                isFixed = true;
+            }
+
+            // remove the values of dc:creator, cp:lastModifiedBy from /docProps/core.xml
+            // set cp:revision to "1"
+            XNamespace dc = Strings.DcElements;
+            XNamespace cp = Strings.OfficeCoreProps;
+            OpenXmlPart coreFilePropertiesPart = document.CoreFilePropertiesPart;
+            XDocument coreFilePropertiesXDoc = coreFilePropertiesPart.GetXDocument();
+            foreach (var textNode in coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties)
+                                                           .Elements(dc + Strings.wCreator)
+                                                           .Nodes()
+                                                           .OfType<XText>())
+            {
+                textNode.Value = string.Empty;
+            }
+
+            foreach (var textNode in coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties)
+                                                           .Elements(cp + Strings.wLastModifiedBy)
+                                                           .Nodes()
+                                                           .OfType<XText>())
+            {
+                textNode.Value = string.Empty;
+            }
+
+            XElement revision = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(cp + "revision").FirstOrDefault();
+            if (revision != null)
+            {
+                revision.Value = "1";
+            }
+
+            using (XmlWriter xw = XmlWriter.Create(coreFilePropertiesPart.GetStream(FileMode.Create, FileAccess.Write)))
+            {
+                coreFilePropertiesXDoc.Save(xw);
+                isFixed = true;
+            }
+
+            // add w:removePersonalInformation, w:removeDateAndTime to /word/settings.xml
+            XNamespace w = Strings.wordMainAttributeNamespace;
+            OpenXmlPart documentSettingsPart = document.MainDocumentPart.DocumentSettingsPart;
+            XDocument documentSettingsXDoc = documentSettingsPart.GetXDocument();
+
+            // add the new elements in the right position.  Add them after the following three elements
+            // (which may or may not exist in the xml document).
+            XElement settings = documentSettingsXDoc.Root;
+            XElement lastOfTop3 = settings.Elements()
+                .Where(e => e.Name == w + "writeProtection" ||
+                    e.Name == w + "view" ||
+                    e.Name == w + "zoom")
+                .InDocumentOrder()
+                .LastOrDefault();
+            if (lastOfTop3 is null)
+            {
+                // none of those three exist, so add as first children of the root element
+                settings.AddFirst(
+                    settings.Elements(w + Strings.wRemovePI).Any() ?
+                        null :
+                        new XElement(w + Strings.wRemovePI),
+                    settings.Elements(w + Strings.wRemoveDateTime).Any() ?
+                        null :
+                        new XElement(w + Strings.wRemoveDateTime)
+                );
+            }
+            else
+            {
+                // one of those three exist, so add after the last one
+                lastOfTop3.AddAfterSelf(
+                    settings.Elements(w + Strings.wRemovePI).Any() ?
+                        null :
+                        new XElement(w + Strings.wRemovePI),
+                    settings.Elements(w + Strings.wRemoveDateTime).Any() ?
+                        null :
+                        new XElement(w + Strings.wRemoveDateTime)
+                );
+            }
+            using (XmlWriter xw = XmlWriter.Create(documentSettingsPart.GetStream(FileMode.Create, FileAccess.Write)))
+            {
+                documentSettingsXDoc.Save(xw);
+                isFixed = true;
+            }
+
+            return isFixed;
+        }
+
+        private static string GetStyleIdFromStyleName(MainDocumentPart mainPart, string styleName)
+        {
+            StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
+            string styleId = stylePart.Styles.Descendants<StyleName>()
+                .Where(s => s.Val.Value.Equals(styleName))
+                .Select(n => ((Style)n.Parent).StyleId).FirstOrDefault();
+            return styleId ?? styleName;
+        }
+
+        public static IEnumerable<Paragraph> ParagraphsByStyleName(this MainDocumentPart mainPart, string styleName)
+        {
+            string styleId = GetStyleIdFromStyleName(mainPart, styleName);
+            IEnumerable<Paragraph> paraList = mainPart.Document.Descendants<Paragraph>()
+                .Where(p => IsParagraphInStyle(p, styleId));
+            return paraList;
+        }
+
+        public static IEnumerable<Paragraph> ParagraphsByStyleId(this MainDocumentPart mainPart, string styleId)
+        {
+            IEnumerable<Paragraph> paraList = mainPart.Document.Descendants<Paragraph>()
+                .Where(p => IsParagraphInStyle(p, styleId));
+            return paraList;
+        }
+
+        private static bool IsParagraphInStyle(Paragraph p, string styleId)
+        {
+            ParagraphProperties pPr = p.GetFirstChild<ParagraphProperties>();
+            if (pPr != null)
+            {
+                ParagraphStyleId paraStyle = pPr.ParagraphStyleId;
+
+                if (paraStyle != null)
+                {
+                    return paraStyle.Val.Value.Equals(styleId);
+                }
+                return false;
+            }
+            else if (pPr is null && styleId == "Normal")
+            {
+                // typically, if the pPr is null the style is Normal
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static IEnumerable<Run> RunsByStyleName(this MainDocumentPart mainPart, string styleName)
+        {
+            string styleId = GetStyleIdFromStyleName(mainPart, styleName);
+            IEnumerable<Run> runList = mainPart.Document.Descendants<Run>()
+                .Where(r => IsRunInStyle(r, styleId));
+            return runList;
+        }
+
+        public static IEnumerable<Run> RunsByStyleId(this MainDocumentPart mainPart, string styleId)
+        {
+            IEnumerable<Run> runList = mainPart.Document.Descendants<Run>()
+                .Where(r => IsRunInStyle(r, styleId));
+            return runList;
+        }
+
+        private static bool IsRunInStyle(Run r, string styleId)
+        {
+            RunProperties rPr = r.GetFirstChild<RunProperties>();
+
+            if (rPr != null)
+            {
+                RunStyle runStyle = rPr.RunStyle;
+                if (runStyle != null)
+                {
+                    return runStyle.Val.Value.Equals(styleId);
+                }
+            }
+            return false;
+        }
+
+        public static IEnumerable<Table> TablesByStyleName(this MainDocumentPart mainPart, string styleName)
+        {
+            string styleId = GetStyleIdFromStyleName(mainPart, styleName);
+            IEnumerable<Table> tableList = mainPart.Document.Descendants<Table>()
+                .Where(t => IsTableInStyle(t, styleId));
+            return tableList;
+        }
+
+        public static IEnumerable<Table> TablesByStyleId(this MainDocumentPart mainPart, string styleId)
+        {
+            IEnumerable<Table> tableList = mainPart.Document.Descendants<Table>()
+                .Where(t => IsTableInStyle(t, styleId));
+            return tableList;
+        }
+
+        private static bool IsTableInStyle(Table tbl, string styleId)
+        {
+            TableProperties tblPr = tbl.GetFirstChild<TableProperties>();
+
+            if (tblPr != null)
+            {
+                TableStyle tblStyle = tblPr.TableStyle;
+
+                if (tblStyle != null)
+                {
+                    return tblStyle.Val.Value.Equals(styleId);
+                }
+            }
+            return false;
         }
     }
 }

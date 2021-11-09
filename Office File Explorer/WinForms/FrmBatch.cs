@@ -1281,7 +1281,7 @@ namespace Office_File_Explorer.WinForms
 
                         using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
                         {
-                            if (WordExtensions.IsPartNull(document, "DeletedRun") == false)
+                            if (Word.IsPartNull(document, "DeletedRun") == false)
                             {
                                 var deleted = document.MainDocumentPart.Document.Descendants<DeletedRun>().ToList();
 
@@ -1376,7 +1376,7 @@ namespace Office_File_Explorer.WinForms
                             OpenXmlElement tgClone = null;
 
                             // get the list of tables in the document
-                            if (WordExtensions.IsPartNull(document, "Table") == false)
+                            if (Word.IsPartNull(document, "Table") == false)
                             {
                                 List<O.Wordprocessing.Table> tbls = document.MainDocumentPart.Document.Descendants<O.Wordprocessing.Table>().ToList();
 
@@ -1838,9 +1838,9 @@ namespace Office_File_Explorer.WinForms
                     {
                         using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
                         {
-                            if (WordExtensions.HasPersonalInfo(document) == true)
+                            if (Word.HasPersonalInfo(document) == true)
                             {
-                                WordExtensions.RemovePersonalInfo(document);
+                                Word.RemovePersonalInfo(document);
                                 lstOutput.Items.Add(f + " : PII removed from file.");
                                 FileUtilities.WriteToLog(Strings.fLogFilePath, f + " : PII removed from file.");
                             }

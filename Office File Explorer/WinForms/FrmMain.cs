@@ -1112,7 +1112,7 @@ namespace Office_File_Explorer
                         {
                             using (WordprocessingDocument document = WordprocessingDocument.Open(lblFilePath.Text, true))
                             {
-                                if ((WordExtensions.HasPersonalInfo(document) == true) && WordExtensions.RemovePersonalInfo(document) == true)
+                                if ((Word.HasPersonalInfo(document) == true) && Word.RemovePersonalInfo(document) == true)
                                 {
                                     LogInformation(LogInfoType.ClearAndAdd, "PII Removed from file.", string.Empty);
                                 }

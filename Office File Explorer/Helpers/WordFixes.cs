@@ -39,6 +39,7 @@ namespace Office_File_Explorer.Helpers
                 var delRuns = myDoc.MainDocumentPart.Document.Descendants<DeletedRun>().ToList();
                 foreach (DeletedRun del in delRuns)
                 {
+                    // if the first element in a deletedrun is another delete element, that is not correct
                     if (del.FirstChild.LocalName == "del")
                     {
                         // clone the del child element, remove it and then append it after the root del element
@@ -409,7 +410,7 @@ namespace Office_File_Explorer.Helpers
                 // global document variables
                 OpenXmlElement tgClone = null;
 
-                if (WordExtensions.IsPartNull(document, "Table") == false)
+                if (Word.IsPartNull(document, "Table") == false)
                 {
                     // get the list of tables in the document
                     List<Table> tbls = document.MainDocumentPart.Document.Descendants<Table>().ToList();
@@ -694,7 +695,7 @@ namespace Office_File_Explorer.Helpers
                     if (el.GetType().ToString() == Strings.dfowStyle)
                     {
                         string styleEl = el.GetAttribute("styleId", Strings.wordMainAttributeNamespace).Value;
-                        int pStyle = WordExtensions.ParagraphsByStyleName(mainPart, styleEl).Count();
+                        int pStyle = Word.ParagraphsByStyleName(mainPart, styleEl).Count();
 
                         if (pStyle > 0)
                         {
