@@ -91,7 +91,7 @@ namespace Office_File_Explorer.Helpers
                 else
                 {
                     // for single author, just loop that authors from the original list
-                    if (!String.IsNullOrEmpty(authorName))
+                    if (!string.IsNullOrEmpty(authorName))
                     {
                         paragraphChanged = paragraphChanged.Where(item => item.Author == authorName).ToList();
                         runChanged = runChanged.Where(item => item.Author == authorName).ToList();
@@ -547,7 +547,7 @@ namespace Office_File_Explorer.Helpers
 
             using (WordprocessingDocument wdDoc = WordprocessingDocument.Open(docName, true))
             {
-                if (wdDoc.MainDocumentPart.GetPartsOfType<EndnotesPart>().Count() > 0)
+                if (wdDoc.MainDocumentPart.GetPartsOfType<EndnotesPart>().Any())
                 {
                     MainDocumentPart mainPart = wdDoc.MainDocumentPart;
 
@@ -579,8 +579,7 @@ namespace Office_File_Explorer.Helpers
             // Given a document name, remove all headers and footers.
             using (WordprocessingDocument wdDoc = WordprocessingDocument.Open(docName, true))
             {
-                if (wdDoc.MainDocumentPart.GetPartsOfType<HeaderPart>().Count() > 0 ||
-                  wdDoc.MainDocumentPart.GetPartsOfType<FooterPart>().Count() > 0)
+                if (wdDoc.MainDocumentPart.GetPartsOfType<HeaderPart>().Any() || wdDoc.MainDocumentPart.GetPartsOfType<FooterPart>().Any())
                 {
                     // Remove header and footer parts.
                     wdDoc.MainDocumentPart.DeleteParts(wdDoc.MainDocumentPart.HeaderParts);
@@ -723,10 +722,7 @@ namespace Office_File_Explorer.Helpers
                 // now we can check how many comment references there are and display that number, they should be the same
                 IEnumerable<CommentReference> crList = myDoc.MainDocumentPart.Document.Descendants<CommentReference>();
                 IEnumerable<OpenXmlUnknownElement> unknownList = myDoc.MainDocumentPart.Document.Descendants<OpenXmlUnknownElement>();
-                int cRefCount = 0;
-
-                cRefCount = crList.Count();
-
+                int cRefCount = crList.Count();
                 foreach (OpenXmlUnknownElement uk in unknownList)
                 {
                     if (uk.LocalName == "commentReference")
@@ -1060,7 +1056,7 @@ namespace Office_File_Explorer.Helpers
             using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
             {
                 FootnotesPart footnotePart = doc.MainDocumentPart.FootnotesPart;
-                if (footnotePart != null)
+                if (footnotePart is not null)
                 {
                     int count = 0;
                     foreach (Footnote fn in footnotePart.Footnotes)
@@ -1084,7 +1080,7 @@ namespace Office_File_Explorer.Helpers
             using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
             {
                 EndnotesPart endnotePart = doc.MainDocumentPart.EndnotesPart;
-                if (endnotePart != null)
+                if (endnotePart is not null)
                 {
                     int count = 0;
                     foreach (Endnote en in endnotePart.Endnotes)
@@ -1138,7 +1134,7 @@ namespace Office_File_Explorer.Helpers
                 // Loop each paragraph, get the NumberingId and add it to the array
                 foreach (OpenXmlElement el in mainPart.Document.Descendants<Paragraph>())
                 {
-                    if (el.Descendants<NumberingId>().Count() > 0)
+                    if (el.Descendants<NumberingId>().Any())
                     {
                         foreach (NumberingId pNumId in el.Descendants<NumberingId>())
                         {
@@ -1226,7 +1222,7 @@ namespace Office_File_Explorer.Helpers
                 ltList.Add("All List Templates in document:");
                 int aCount = 0;
 
-                if (numPart != null)
+                if (numPart is not null)
                 {
                     foreach (OpenXmlElement el in numPart.Numbering.Elements())
                     {
@@ -1292,7 +1288,7 @@ namespace Office_File_Explorer.Helpers
                 IEnumerable<Hyperlink> hLinks = myDoc.MainDocumentPart.Document.Descendants<O.Wordprocessing.Hyperlink>();
 
                 // handle if no links are found
-                if (myDoc.MainDocumentPart.HyperlinkRelationships.Count() == 0 && myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>().Count() == 0 && hLinks.Count() == 0)
+                if (!myDoc.MainDocumentPart.HyperlinkRelationships.Any() && !myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>().Any() && !hLinks.Any())
                 {
                     return hlinkList;
                 }
@@ -1456,7 +1452,7 @@ namespace Office_File_Explorer.Helpers
                 using (Package wdPackage = Package.Open(fPath, FileMode.Open, FileAccess.Read))
                 {
                     PackageRelationship docPackageRelationship = wdPackage.GetRelationshipsByType(Strings.MainDocumentPartType).FirstOrDefault();
-                    if (docPackageRelationship != null)
+                    if (docPackageRelationship is not null)
                     {
                         Uri documentUri = PackUriHelper.ResolvePartUri(new Uri("/", UriKind.Relative), docPackageRelationship.TargetUri);
                         PackagePart documentPart = wdPackage.GetPart(documentUri);
@@ -1466,7 +1462,7 @@ namespace Office_File_Explorer.Helpers
 
                         //  Find the styles part. There will only be one.
                         PackageRelationship styleRelation = documentPart.GetRelationshipsByType(Strings.StyleDefsPartType).FirstOrDefault();
-                        if (styleRelation != null)
+                        if (styleRelation is not null)
                         {
                             Uri styleUri = PackUriHelper.ResolvePartUri(documentUri, styleRelation.TargetUri);
                             PackagePart stylePart = wdPackage.GetPart(styleUri);
@@ -1713,248 +1709,6 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
-
-
-        /// <summary>
-        /// Sometimes bookmarks are added and the start/end tag is missing
-        /// This function will try to find those orphan tags and remove them
-        /// </summary>
-        /// <param name="filename">file to be scanned</param>
-        /// <returns>true for successful removal and false if none are found</returns>
-        public static bool RemoveMissingBookmarkTags(string filename)
-        {
-            bool isFixed = false;
-
-            try
-            {
-                using (WordprocessingDocument package = WordprocessingDocument.Open(filename, true))
-                {
-                    if (package.MainDocumentPart.WordprocessingCommentsPart is null) { return false; }
-                    if (package.MainDocumentPart.WordprocessingCommentsPart.Comments is null) { return false; }
-
-                    // check for bookmarks in comments and main parts and combine into one
-                    IEnumerable<BookmarkStart> bkStartListComment = package.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
-                    IEnumerable<BookmarkEnd> bkEndListComment = package.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkEnd>();
-                    IEnumerable<BookmarkStart> bkStartListMain = package.MainDocumentPart.Document.Descendants<BookmarkStart>();
-                    IEnumerable<BookmarkEnd> bkEndListMain = package.MainDocumentPart.Document.Descendants<BookmarkEnd>();
-                    IEnumerable<BookmarkEnd> bkEndList = bkEndListComment.Concat(bkEndListMain);
-                    IEnumerable<BookmarkStart> bkStartList = bkStartListComment.Concat(bkStartListMain);
-
-                    // create temp lists so we can loop and remove any that exist in both lists
-                    // if we have a start and end, the bookmark is valid and we can remove the rest
-                    List<string> bkStartTagIds = new List<string>();
-                    List<string> bkEndTagIds = new List<string>();
-
-                    // check each start and find if there is a matching end tag id
-                    foreach (BookmarkStart bks in bkStartList)
-                    {
-                        foreach (BookmarkEnd bke in bkEndList)
-                        {
-                            if (bke.Id.ToString() == bks.Id.ToString())
-                            {
-                                bkStartTagIds.Add(bke.Id);
-                            }
-                        }
-                    }
-
-                    // now we can check if there is a end tag with a matching start tag id
-                    foreach (BookmarkEnd bke in bkEndList)
-                    {
-                        foreach (BookmarkStart bks in bkStartList)
-                        {
-                            if (bks.Id.ToString() == bke.Id.ToString())
-                            {
-                                bkEndTagIds.Add(bks.Id);
-                            }
-                        }
-                    }
-
-                    // now that we know all the id's that match, we can loop again and remove id's that are not in the lists
-                    // first check orphaned start tags
-                    bool startTagFound = false;
-
-                    foreach (BookmarkStart bks in bkStartList)
-                    {
-                        foreach (object o in bkEndTagIds)
-                        {
-                            // if the end tag matches and we can ignore doing anything
-                            if (o.ToString() == bks.Id.ToString())
-                            {
-                                startTagFound = true;
-                            }
-                        }
-
-                        // if we get here and no match was found, it is orphaned and we can delete
-                        if (startTagFound == false)
-                        {
-                            bks.Remove();
-                            isFixed = true;
-                        }
-                        else
-                        {
-                            // reset the value for the next start tag check
-                            startTagFound = false;
-                        }
-                    }
-
-                    // do the same check for end tags
-                    bool endTagFound = false;
-
-                    foreach (BookmarkEnd bke in bkEndList)
-                    {
-                        foreach (object o in bkStartTagIds)
-                        {
-                            if (o.ToString() == bke.Id.ToString())
-                            {
-                                endTagFound = true;
-                            }
-                        }
-
-                        if (endTagFound == false)
-                        {
-                            bke.Remove();
-                            isFixed = true;
-                        }
-                        else
-                        {
-                            endTagFound = false;
-                        }
-                    }
-
-                    if (isFixed)
-                    {
-                        package.MainDocumentPart.Document.Save();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                FileUtilities.WriteToLog(Strings.fLogFilePath, "RemoveMissingBookmarkTags: " + ex.Message);
-                return false;
-            }
-
-            return isFixed;
-        }
-
-        /// <summary>
-        /// look for bookmark tags in a plain cc
-        /// this is not allowed and those need to be removed
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static bool RemovePlainTextCcFromBookmark(string filename)
-        {
-            bool isFixed = false;
-
-            try
-            {
-                using (WordprocessingDocument package = WordprocessingDocument.Open(filename, true))
-                {
-                    IEnumerable<BookmarkStart> bkStartList = package.MainDocumentPart.Document.Descendants<BookmarkStart>();
-                    IEnumerable<BookmarkEnd> bkEndList = package.MainDocumentPart.Document.Descendants<BookmarkEnd>();
-                    List<string> removedBookmarkIds = new List<string>();
-
-                    if (bkStartList.Count() > 0)
-                    {
-                        foreach (BookmarkStart bk in bkStartList)
-                        {
-                            var cElem = bk.Parent;
-                            var pElem = bk.Parent;
-                            bool endLoop = false;
-
-                            do
-                            {
-                                // first check if we are a content control
-                                if (cElem.Parent != null && cElem.Parent.ToString().Contains(Strings.dfowSdt))
-                                {
-                                    foreach (OpenXmlElement oxe in cElem.Parent.ChildElements)
-                                    {
-                                        // get the properties
-                                        if (oxe.GetType().Name == "SdtProperties")
-                                        {
-                                            foreach (OpenXmlElement oxeSdtAlias in oxe)
-                                            {
-                                                // check for plain text
-                                                if (oxeSdtAlias.GetType().Name == "SdtContentText")
-                                                {
-                                                    // if the parent is a plain text content control, bookmark is not allowed
-                                                    // add the id to the list of bookmarks that need to be deleted
-                                                    removedBookmarkIds.Add(bk.Id);
-                                                    endLoop = true;
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    // set the next element to the parent and continue moving up the element chain
-                                    pElem = cElem.Parent;
-                                    cElem = pElem;
-                                }
-                                else
-                                {
-                                    // if the next element is null, bail
-                                    if (cElem is null || cElem.Parent is null)
-                                    {
-                                        endLoop = true;
-                                    }
-                                    else
-                                    {
-                                        // set pElem to the parent so we can check for the end of the loop
-                                        // set cElem to the parent also so we can continue moving up the element chain
-                                        pElem = cElem.Parent;
-                                        cElem = pElem;
-
-                                        // loop should continue until we get to the body element, then we can stop looping
-                                        if (pElem.ToString() == Strings.dfowBody)
-                                        {
-                                            endLoop = true;
-                                        }
-                                    }
-                                }
-                            } while (endLoop == false);
-                        }
-
-                        // now that we have the list of bookmark id's to be removed
-                        // loop each list and delete any bookmark that has a matching id
-                        foreach (var o in removedBookmarkIds)
-                        {
-                            foreach (BookmarkStart bkStart in bkStartList)
-                            {
-                                if (bkStart.Id == o)
-                                {
-                                    bkStart.Remove();
-                                }
-                            }
-
-                            foreach (BookmarkEnd bkEnd in bkEndList)
-                            {
-                                if (bkEnd.Id == o)
-                                {
-                                    bkEnd.Remove();
-                                }
-                            }
-                        }
-
-                        // save the part
-                        package.MainDocumentPart.Document.Save();
-
-                        // check if there were any fixes made and update the output display
-                        if (removedBookmarkIds.Count > 0)
-                        {
-                            isFixed = true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                FileUtilities.WriteToLog(Strings.fLogFilePath, "Error Removing Bookmarks" + ex.Message);
-                return false;
-            }
-
-            return isFixed;
-        }
-
         // Creates an Endnotes instance and adds its children.
         public static Endnotes CreateDefaultEndnotes()
         {
@@ -2081,7 +1835,7 @@ namespace Office_File_Explorer.Helpers
                     {
                         if (tempStyle.BasedOn.Val == prevStyle)
                         {
-                            currentStyleChain.Append("-->" + tempStyle.StyleId);
+                            currentStyleChain.Append(Strings.wArrowOnly + tempStyle.StyleId);
                             GetBasedOnStyleChain(sdp, tempStyle.StyleId, currentStyleChain);
                         }
                     }
@@ -2202,7 +1956,7 @@ namespace Office_File_Explorer.Helpers
         public static XDocument GetXDocument(this OpenXmlPart part)
         {
             XDocument xdoc = part.Annotation<XDocument>();
-            if (xdoc != null)
+            if (xdoc is not null)
             {
                 return xdoc;
             }
@@ -2224,8 +1978,8 @@ namespace Office_File_Explorer.Helpers
             XNamespace x = Strings.OfficeExtendedProps;
             OpenXmlPart extendedFilePropertiesPart = document.ExtendedFilePropertiesPart;
             XDocument extendedFilePropertiesXDoc = extendedFilePropertiesPart.GetXDocument();
-            string company = extendedFilePropertiesXDoc.Elements(x + Strings.wProperties).Elements(x + Strings.wCompany).Select(e => (string)e)
-                .Aggregate(string.Empty, (s, i) => s + i);
+            string company = extendedFilePropertiesXDoc.Elements(x + Strings.wProperties).Elements(x + Strings.wCompany)
+                .Select(e => (string)e).Aggregate(string.Empty, (s, i) => s + i);
 
             if (company.Length > 0)
             {
@@ -2237,16 +1991,16 @@ namespace Office_File_Explorer.Helpers
             XNamespace cp = Strings.OfficeCoreProps;
             OpenXmlPart coreFilePropertiesPart = document.CoreFilePropertiesPart;
             XDocument coreFilePropertiesXDoc = coreFilePropertiesPart.GetXDocument();
-            string creator = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(dc + Strings.wCreator).Select(e => (string)e)
-                .Aggregate(string.Empty, (s, i) => s + i);
+            string creator = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(dc + Strings.wCreator)
+                .Select(e => (string)e).Aggregate(string.Empty, (s, i) => s + i);
 
             if (creator.Length > 0)
             {
                 return true;
             }
 
-            string lastModifiedBy = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(cp + Strings.wLastModifiedBy).Select(e => (string)e)
-                .Aggregate(string.Empty, (s, i) => s + i);
+            string lastModifiedBy = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(cp + Strings.wLastModifiedBy)
+                .Select(e => (string)e).Aggregate(string.Empty, (s, i) => s + i);
 
             if (lastModifiedBy.Length > 0)
             {

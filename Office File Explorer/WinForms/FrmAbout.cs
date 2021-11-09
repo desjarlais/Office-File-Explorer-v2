@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Office_File_Explorer.Helpers;
+using System;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -79,6 +80,11 @@ namespace Office_File_Explorer.WinForms
         private void BtnOk_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            AppUtilities.PlatformSpecificProcessStart("https://github.com/desjarlais/Office-File-Explorer-v2");
         }
     }
 }

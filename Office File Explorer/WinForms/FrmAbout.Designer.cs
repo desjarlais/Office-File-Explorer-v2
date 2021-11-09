@@ -33,6 +33,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblProduct = new System.Windows.Forms.Label();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
@@ -64,6 +65,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.linkLabel1);
             this.groupBox2.Controls.Add(this.lblVersion);
             this.groupBox2.Controls.Add(this.lblProduct);
             this.groupBox2.Location = new System.Drawing.Point(128, 0);
@@ -72,10 +74,21 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(11, 70);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(88, 15);
+            this.linkLabel1.TabIndex = 2;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Github Website";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // lblVersion
             // 
             this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(15, 64);
+            this.lblVersion.Location = new System.Drawing.Point(11, 44);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(48, 15);
             this.lblVersion.TabIndex = 1;
@@ -84,7 +97,7 @@ namespace Office_File_Explorer.WinForms
             // lblProduct
             // 
             this.lblProduct.AutoSize = true;
-            this.lblProduct.Location = new System.Drawing.Point(11, 32);
+            this.lblProduct.Location = new System.Drawing.Point(11, 18);
             this.lblProduct.Name = "lblProduct";
             this.lblProduct.Size = new System.Drawing.Size(52, 15);
             this.lblProduct.TabIndex = 0;
@@ -132,5 +145,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Label lblProduct;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Button BtnOk;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
