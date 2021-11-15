@@ -26,20 +26,20 @@ namespace Office_File_Explorer
     public partial class FrmMain : Form
     {
         // global variables
-        static string StrCopiedFileName = string.Empty;
-        static string StrOfficeApp = string.Empty;
         private string findText;
         private string replaceText;
         private string fromChangeTemplate;
-        public static char PrevChar = '<';
-        public bool IsRegularXmlTag;
-        public bool IsFixed;
-        public static string FixedFallback = string.Empty;
-        public static string StrOrigFileName = string.Empty;
-        public static string StrDestPath = string.Empty;
-        public static string StrExtension = string.Empty;
-        public static string StrDestFileName = string.Empty;
-        public static int gActiveListCount;
+        
+        private static string StrCopiedFileName = string.Empty;
+        private static string StrOfficeApp = string.Empty;
+        private static char PrevChar = '<';
+        private bool IsRegularXmlTag;
+        private bool IsFixed;
+        private static string FixedFallback = string.Empty;
+        private static string StrOrigFileName = string.Empty;
+        private static string StrDestPath = string.Empty;
+        private static string StrExtension = string.Empty;
+        private static string StrDestFileName = string.Empty;
 
         // global lists
         private static List<string> corruptNodes = new List<string>();
@@ -47,7 +47,7 @@ namespace Office_File_Explorer
         private List<string> oNumIdList = new List<string>();
 
         // corrupt doc xml node buffer
-        private static StringBuilder sbNodeBuffer = new StringBuilder();
+        static StringBuilder sbNodeBuffer = new StringBuilder();
 
         // enums
         public enum LogInfoType { ClearAndAdd, Append, TextOnly, InvalidFile, LogException, EmptyCount };
@@ -126,9 +126,9 @@ namespace Office_File_Explorer
                 }
 
                 StringBuilder buffer = new StringBuilder();
-                foreach (object t in LstDisplay.Items)
+                foreach (string s in LstDisplay.Items)
                 {
-                    buffer.Append(t);
+                    buffer.Append(s);
                     buffer.Append('\n');
                 }
 
@@ -405,7 +405,7 @@ namespace Office_File_Explorer
             }
 
             // if we have any values, display them
-            foreach (var s in output)
+            foreach (string s in output)
             {
                 LstDisplay.Items.Add(Strings.wTripleSpace + s);
             }
@@ -461,7 +461,7 @@ namespace Office_File_Explorer
             var fallbackTagsAppended = new List<string>();
             StringBuilder sbFallback = new StringBuilder();
 
-            foreach (object o in input)
+            foreach (string o in input)
             {
                 switch (o.ToString())
                 {
@@ -688,7 +688,7 @@ namespace Office_File_Explorer
 
                             if (list.Count > 0)
                             {
-                                foreach (object o in list)
+                                foreach (string o in list)
                                 {
                                     LstDisplay.Items.Add(o.ToString());
                                 }
@@ -865,7 +865,7 @@ namespace Office_File_Explorer
                 if (f.isFileFixed == true)
                 {
                     LstDisplay.Items.Clear();
-                    LstDisplay.Items.Add("Document fixed");
+                    LstDisplay.Items.Add("Corrupt " + f.corruptionChecked + " found - " + "Document fixed");
                     return;
                 }
 
@@ -1377,6 +1377,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
+                LstDisplay.Items.Clear();
 
                 if (lblFileType.Text == Strings.oAppWord)
                 {
@@ -1429,7 +1430,7 @@ namespace Office_File_Explorer
 
             int count = 0;
 
-            foreach (var v in CfpList(cfp))
+            foreach (string v in CfpList(cfp))
             {
                 count++;
                 LstDisplay.Items.Add(count + Strings.wPeriod + v);

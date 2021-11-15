@@ -1285,7 +1285,7 @@ namespace Office_File_Explorer.Helpers
             {
                 int count = 0;
 
-                IEnumerable<Hyperlink> hLinks = myDoc.MainDocumentPart.Document.Descendants<O.Wordprocessing.Hyperlink>();
+                IEnumerable<Hyperlink> hLinks = myDoc.MainDocumentPart.Document.Descendants<Hyperlink>();
 
                 // handle if no links are found
                 if (!myDoc.MainDocumentPart.HyperlinkRelationships.Any() && !myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>().Any() && !hLinks.Any())

@@ -124,7 +124,7 @@ namespace Office_File_Explorer.Helpers
 						rtfText.Append(rtfDelimiter + text[i] + rtfName);
 						break;
 					case '\\':
-						rtfText.Append("\\\\"); // JArgil:  This solves a bug where if you type \ you loose a line
+						rtfText.Append("\\\\"); 
 						break;
 					default:
 						rtfText.Append(text[i]);

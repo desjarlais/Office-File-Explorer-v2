@@ -22,7 +22,7 @@ namespace Office_File_Explorer.Helpers
 
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
-
+                
             }
 
             return corruptionFound;
@@ -34,7 +34,38 @@ namespace Office_File_Explorer.Helpers
 
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
+                // check for shape in a hyperlink, in a comment, which is not allowed
+                foreach (Comment cm in myDoc.MainDocumentPart.WordprocessingCommentsPart.Comments)
+                {
+                    IEnumerable<Hyperlink> hLinks = cm.Descendants<Hyperlink>();
 
+                    // does the comment have a hyperlink
+                    if (hLinks.Any())
+                    {
+                        foreach (Hyperlink h in hLinks)
+                        {
+                            // get the runs for the hyperlink
+                            IEnumerable<Run> runs = h.Descendants<Run>();
+                            if (runs.Any())
+                            {
+                                // if there is an e1o in the run, delete the run
+                                foreach (Run r in runs)
+                                {
+                                    if (r.Descendants<AlternateContent>().Any())
+                                    {
+                                        r.Remove();
+                                        corruptionFound = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (corruptionFound)
+                {
+                    myDoc.MainDocumentPart.Document.Save();
+                }
             }
 
             return corruptionFound;
