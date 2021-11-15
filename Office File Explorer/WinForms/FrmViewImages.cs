@@ -83,7 +83,7 @@ namespace Office_File_Explorer.WinForms
 
                 if (ip.Uri.ToString().EndsWith(".svg") || ip.Uri.ToString().EndsWith(".emf") || ip.Uri.ToString().EndsWith(".wmf"))
                 {
-                    MessageBox.Show("Format not currently supported.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    toolStripStatusInfo.Text = "Format not supported.";
                     pbImage.Image = pbImage.ErrorImage;
                     pbImage.SizeMode = PictureBoxSizeMode.CenterImage;
                 }
@@ -105,10 +105,12 @@ namespace Office_File_Explorer.WinForms
                 }
 
                 pbImage.Visible = true;
+                toolStripStatusInfo.Text = "Ready";
             }
             catch (Exception ex)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "ViewImages::UnableToDisplayImage : " + ex.Message);
+                toolStripStatusInfo.Text = "Error - " + ex.Message;
             }
 
             return fSuccess;

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Office_File_Explorer.Helpers;
+using System;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms
@@ -27,7 +21,7 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            PropName = "Cancel";
+            PropName = Strings.wCancel;
             Close();
         }
     }

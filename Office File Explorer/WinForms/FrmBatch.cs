@@ -298,7 +298,7 @@ namespace Office_File_Explorer.WinForms
                         {
                             using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
                             {
-                                if (propNameToDelete == "Cancel")
+                                if (propNameToDelete == Strings.wCancel)
                                 {
                                     return;
                                 }
@@ -350,7 +350,7 @@ namespace Office_File_Explorer.WinForms
                         {
                             using (SpreadsheetDocument document = SpreadsheetDocument.Open(f, true))
                             {
-                                if (propNameToDelete == "Cancel")
+                                if (propNameToDelete == Strings.wCancel)
                                 {
                                     return;
                                 }
@@ -398,7 +398,7 @@ namespace Office_File_Explorer.WinForms
                         {
                             using (PresentationDocument document = PresentationDocument.Open(f, true))
                             {
-                                if (propNameToDelete == "Cancel")
+                                if (propNameToDelete == Strings.wCancel)
                                 {
                                     return;
                                 }
@@ -619,7 +619,7 @@ namespace Office_File_Explorer.WinForms
                                 }
                             }
 
-                            if (fromChangeTemplate == filePath || fromChangeTemplate is null || fromChangeTemplate == "Cancel")
+                            if (fromChangeTemplate == filePath || fromChangeTemplate is null || fromChangeTemplate == Strings.wCancel)
                             {
                                 // file path is the same or user closed without wanting changes, do nothing
                                 return;

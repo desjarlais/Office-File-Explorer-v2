@@ -865,11 +865,11 @@ namespace Office_File_Explorer
                 if (f.isFileFixed == true)
                 {
                     LstDisplay.Items.Clear();
-                    LstDisplay.Items.Add("Corrupt " + f.corruptionChecked + " found - " + "Document fixed");
+                    LstDisplay.Items.Add("Corrupt " + f.corruptionChecked + " Found - " + "Document Fixed");
                     return;
                 }
 
-                if (f.corruptionChecked != "Cancel")
+                if (f.corruptionChecked != Strings.wCancel)
                 {
                     LstDisplay.Items.Clear();
                     LstDisplay.Items.Add("No Corrupt " + f.corruptionChecked + " Found");
@@ -1049,7 +1049,7 @@ namespace Office_File_Explorer
                                 };
                                 ctFrm.ShowDialog();
 
-                                if (fromChangeTemplate == filePath || fromChangeTemplate is null || fromChangeTemplate == "Cancel")
+                                if (fromChangeTemplate == filePath || fromChangeTemplate is null || fromChangeTemplate == Strings.wCancel)
                                 {
                                     // file path is the same or user closed without wanting changes, do nothing
                                     return;
@@ -1847,6 +1847,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
+                LstDisplay.Items.Clear();
                 if (lblFileType.Text == Strings.oAppWord)
                 {
                     using (WordprocessingDocument myDoc = WordprocessingDocument.Open(lblFilePath.Text, false))

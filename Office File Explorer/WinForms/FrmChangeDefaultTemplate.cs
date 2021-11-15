@@ -21,11 +21,11 @@ namespace Office_File_Explorer.WinForms
         {
             if (Owner is FrmBatch f)
             {
-                f.DefaultTemplate = "Cancel";
+                f.DefaultTemplate = Strings.wCancel;
             }
             else if (Owner is FrmMain fm)
             {
-                fm.DefaultTemplate = "Cancel";
+                fm.DefaultTemplate = Strings.wCancel;
             }
             Close();
         }
