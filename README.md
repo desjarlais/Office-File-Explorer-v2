@@ -17,6 +17,8 @@ If you need assistance (find a bug, have a question or any suggestions or feedba
 
 ## List of features
 
+Use the Wiki for more information about the features listed here -> [Wiki](https://github.com/desjarlais/Office-File-Explorer-v2/wiki)
+
 ### Word
 * Display the following document content: (content controls, styles, hyperlinks, List Templates, fonts, footnotes, endnotes, document properties, revisions/tracked changes, comments, field codes, bookmarks)
 * Delete content (headers / footers, orphan list templates, page breaks, comments, hidden text, footnotes, endnotes, unused styles)
