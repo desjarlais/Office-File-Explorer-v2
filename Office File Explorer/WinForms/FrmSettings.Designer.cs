@@ -108,7 +108,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.ckbResetNotes);
             this.groupBox2.Location = new System.Drawing.Point(305, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(225, 116);
+            this.groupBox2.Size = new System.Drawing.Size(238, 116);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PowerPoint Options";
@@ -116,7 +116,7 @@ namespace Office_File_Explorer.WinForms
             // ckbResetNotes
             // 
             this.ckbResetNotes.AutoSize = true;
-            this.ckbResetNotes.Location = new System.Drawing.Point(3, 19);
+            this.ckbResetNotes.Location = new System.Drawing.Point(8, 19);
             this.ckbResetNotes.Name = "ckbResetNotes";
             this.ckbResetNotes.Size = new System.Drawing.Size(217, 19);
             this.ckbResetNotes.TabIndex = 0;
@@ -149,7 +149,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox4.Controls.Add(this.rdoDOM);
             this.groupBox4.Location = new System.Drawing.Point(261, 134);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(269, 100);
+            this.groupBox4.Size = new System.Drawing.Size(282, 100);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Excel Cell Value Option";
@@ -178,17 +178,17 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(374, 240);
+            this.BtnOk.Location = new System.Drawing.Point(387, 240);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
-            this.BtnOk.Text = "Ok";
+            this.BtnOk.Text = "OK";
             this.BtnOk.UseVisualStyleBackColor = true;
             this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(455, 240);
+            this.BtnCancel.Location = new System.Drawing.Point(468, 240);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 2;

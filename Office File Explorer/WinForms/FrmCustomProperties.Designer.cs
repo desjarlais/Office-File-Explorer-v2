@@ -95,7 +95,7 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 4;
-            this.BtnOk.Text = "Ok";
+            this.BtnOk.Text = "OK";
             this.BtnOk.UseVisualStyleBackColor = true;
             this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
             // 
@@ -210,7 +210,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(534, 256);
+            this.ClientSize = new System.Drawing.Size(521, 250);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnOk);

@@ -503,7 +503,7 @@ namespace Office_File_Explorer
         {
             try
             {
-                if (Properties.Settings.Default.DeleteCopiesOnExit == true)
+                if (Properties.Settings.Default.DeleteCopiesOnExit == true && File.Exists(StrCopiedFileName))
                 {
                     File.Delete(StrCopiedFileName);
                 }

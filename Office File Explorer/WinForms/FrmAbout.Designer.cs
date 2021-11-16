@@ -70,7 +70,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.lblProduct);
             this.groupBox2.Location = new System.Drawing.Point(128, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(336, 101);
+            this.groupBox2.Size = new System.Drawing.Size(181, 101);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             // 
@@ -105,11 +105,11 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(389, 107);
+            this.BtnOk.Location = new System.Drawing.Point(234, 107);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
-            this.BtnOk.Text = "Ok";
+            this.BtnOk.Text = "OK";
             this.BtnOk.UseVisualStyleBackColor = true;
             this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
             // 
@@ -117,7 +117,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 133);
+            this.ClientSize = new System.Drawing.Size(318, 133);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);

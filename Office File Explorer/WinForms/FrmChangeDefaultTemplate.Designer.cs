@@ -50,7 +50,7 @@ namespace Office_File_Explorer.WinForms
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 59);
+            this.label2.Location = new System.Drawing.Point(31, 59);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 15);
             this.label2.TabIndex = 1;
@@ -58,17 +58,17 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(250, 98);
+            this.BtnOk.Location = new System.Drawing.Point(405, 97);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 2;
-            this.BtnOk.Text = "Ok";
+            this.BtnOk.Text = "OK";
             this.BtnOk.UseVisualStyleBackColor = true;
             this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(331, 98);
+            this.BtnCancel.Location = new System.Drawing.Point(486, 97);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 3;
@@ -81,7 +81,7 @@ namespace Office_File_Explorer.WinForms
             this.tbOldPath.Location = new System.Drawing.Point(149, 6);
             this.tbOldPath.Multiline = true;
             this.tbOldPath.Name = "tbOldPath";
-            this.tbOldPath.Size = new System.Drawing.Size(258, 35);
+            this.tbOldPath.Size = new System.Drawing.Size(412, 35);
             this.tbOldPath.TabIndex = 4;
             // 
             // tbNewPath
@@ -89,14 +89,14 @@ namespace Office_File_Explorer.WinForms
             this.tbNewPath.Location = new System.Drawing.Point(149, 56);
             this.tbNewPath.Multiline = true;
             this.tbNewPath.Name = "tbNewPath";
-            this.tbNewPath.Size = new System.Drawing.Size(258, 36);
+            this.tbNewPath.Size = new System.Drawing.Size(412, 36);
             this.tbNewPath.TabIndex = 5;
             // 
             // FrmChangeDefaultTemplate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(419, 132);
+            this.ClientSize = new System.Drawing.Size(573, 132);
             this.Controls.Add(this.tbNewPath);
             this.Controls.Add(this.tbOldPath);
             this.Controls.Add(this.BtnCancel);

@@ -38,7 +38,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // txbEncoded
             // 
-            this.txbEncoded.Location = new System.Drawing.Point(12, 37);
+            this.txbEncoded.Location = new System.Drawing.Point(11, 27);
             this.txbEncoded.Multiline = true;
             this.txbEncoded.Name = "txbEncoded";
             this.txbEncoded.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -48,7 +48,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // txbResult
             // 
-            this.txbResult.Location = new System.Drawing.Point(12, 255);
+            this.txbResult.Location = new System.Drawing.Point(11, 245);
             this.txbResult.Multiline = true;
             this.txbResult.Name = "txbResult";
             this.txbResult.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -58,7 +58,7 @@ namespace Office_File_Explorer.WinForms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(278, 19);
+            this.label1.Location = new System.Drawing.Point(277, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(116, 15);
             this.label1.TabIndex = 2;
@@ -67,7 +67,7 @@ namespace Office_File_Explorer.WinForms
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(277, 237);
+            this.label2.Location = new System.Drawing.Point(276, 227);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(117, 15);
             this.label2.TabIndex = 3;
@@ -77,7 +77,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(693, 552);
+            this.ClientSize = new System.Drawing.Size(688, 542);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txbResult);
