@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoFixContentControlsW = new System.Windows.Forms.RadioButton();
             this.rdoFixCommentHyperlinksW = new System.Windows.Forms.RadioButton();
             this.rdoFixHyperlinksW = new System.Windows.Forms.RadioButton();
             this.rdoFixCommentsW = new System.Windows.Forms.RadioButton();
@@ -46,7 +47,6 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixStrictX = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoFixContentControlsW = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -69,6 +69,18 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Document";
+            // 
+            // rdoFixContentControlsW
+            // 
+            this.rdoFixContentControlsW.AutoSize = true;
+            this.rdoFixContentControlsW.Enabled = false;
+            this.rdoFixContentControlsW.Location = new System.Drawing.Point(6, 222);
+            this.rdoFixContentControlsW.Name = "rdoFixContentControlsW";
+            this.rdoFixContentControlsW.Size = new System.Drawing.Size(134, 19);
+            this.rdoFixContentControlsW.TabIndex = 8;
+            this.rdoFixContentControlsW.TabStop = true;
+            this.rdoFixContentControlsW.Text = "Fix Content Controls";
+            this.rdoFixContentControlsW.UseVisualStyleBackColor = true;
             // 
             // rdoFixCommentHyperlinksW
             // 
@@ -229,7 +241,7 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
-            this.BtnOk.Text = "Ok";
+            this.BtnOk.Text = "OK";
             this.BtnOk.UseVisualStyleBackColor = true;
             this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
             // 
@@ -242,18 +254,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
-            // 
-            // rdoFixContentControlsW
-            // 
-            this.rdoFixContentControlsW.AutoSize = true;
-            this.rdoFixContentControlsW.Enabled = false;
-            this.rdoFixContentControlsW.Location = new System.Drawing.Point(6, 222);
-            this.rdoFixContentControlsW.Name = "rdoFixContentControlsW";
-            this.rdoFixContentControlsW.Size = new System.Drawing.Size(134, 19);
-            this.rdoFixContentControlsW.TabIndex = 8;
-            this.rdoFixContentControlsW.TabStop = true;
-            this.rdoFixContentControlsW.Text = "Fix Content Controls";
-            this.rdoFixContentControlsW.UseVisualStyleBackColor = true;
             // 
             // FrmFixDocument
             // 

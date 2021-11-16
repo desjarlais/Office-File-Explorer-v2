@@ -19,10 +19,43 @@ namespace Office_File_Explorer.Helpers
         public static bool FixContentControls(string filePath)
         {
             corruptionFound = false;
-
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
-                
+                // plain text content controls can't have any nested content controls
+                foreach (var cc in myDoc.ContentControls())
+                {
+                    bool plainTextControl = false;
+                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
+                    foreach (OpenXmlElement oxe in cc.ChildElements)
+                    {
+                        // make sure we are a plain text control
+                        foreach (OpenXmlElement oxeProp in props.ChildElements)
+                        {
+                            if (oxeProp.GetType().Name == "SdtContentText")
+                            {
+                                plainTextControl = true;
+                            }
+                        }
+
+                        // if it is a plain text and it has an sdtcontentrun, we need to remove it
+                        if (oxe.GetType().Name == "SdtContentRun" && plainTextControl == true)
+                        {
+                            foreach (OpenXmlElement oxeInner in oxe.ChildElements)
+                            {
+                                if (oxeInner.GetType().Name == "SdtRun")
+                                {
+                                    oxeInner.Remove();
+                                    corruptionFound = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (corruptionFound)
+                {
+                    myDoc.MainDocumentPart.Document.Save();
+                }
             }
 
             return corruptionFound;
