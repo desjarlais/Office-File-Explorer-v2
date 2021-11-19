@@ -26,7 +26,7 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Set Print Orientation
 * Change Default Template
 * Accept All Revisions
-* Fix document corruptions (bookmarks, revisions, endnotes, list templates, table properties, comments, hyperlinks)
+* Fix document corruptions (bookmarks, revisions, endnotes, list templates, table properties, comments, hyperlinks, content controls, formulas)
 * Remove PII
 
 ### Excel
