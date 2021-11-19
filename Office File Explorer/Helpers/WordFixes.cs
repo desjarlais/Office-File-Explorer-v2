@@ -1,5 +1,6 @@
 ﻿// Open Xml SDK Refs
 using DocumentFormat.OpenXml;
+using OM = DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
@@ -15,6 +16,36 @@ namespace Office_File_Explorer.Helpers
     class WordFixes
     {
         static bool corruptionFound = false;
+
+        public static bool FixMathAccents(string filePath)
+        {
+            corruptionFound = false;
+            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
+            {
+                // there is a scenario where accents are added to the subscript node, not oMath
+                // accent is not allwed is subscript elements
+                foreach (OM.Subscript sSub in myDoc.MainDocumentPart.Document.Descendants<OM.Subscript>())
+                {
+                    // loop through the subscript elements and if "acc" is found, delete it
+                    // use localname because the openxml type shows unknown
+                    foreach (OpenXmlElement oxe in sSub.ChildElements)
+                    {
+                        if (oxe.LocalName == "acc")
+                        {
+                            oxe.Remove();
+                            corruptionFound = true;
+                        }
+                    }
+                }
+
+                if (corruptionFound)
+                {
+                    myDoc.MainDocumentPart.Document.Save();
+                }
+            }
+
+            return corruptionFound;
+        }
 
         public static bool FixContentControls(string filePath)
         {
@@ -67,6 +98,11 @@ namespace Office_File_Explorer.Helpers
 
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
+                if (myDoc.MainDocumentPart.WordprocessingCommentsPart is null)
+                {
+                    return corruptionFound;
+                }
+
                 // check for shape in a hyperlink, in a comment, which is not allowed
                 foreach (Comment cm in myDoc.MainDocumentPart.WordprocessingCommentsPart.Comments)
                 {
@@ -300,6 +336,11 @@ namespace Office_File_Explorer.Helpers
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
                 Regex emailPattern = new Regex(@"(.*?)<?(\b\S+@\S+\b)>?");
+                if (myDoc.MainDocumentPart.WordprocessingCommentsPart is null)
+                {
+                    return isFileChanged;
+                }
+                
                 WordprocessingCommentsPart commentsPart = myDoc.MainDocumentPart.WordprocessingCommentsPart;
 
                 foreach (Comment cmt in commentsPart.Comments)

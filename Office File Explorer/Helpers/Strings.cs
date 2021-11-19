@@ -47,6 +47,7 @@ namespace Office_File_Explorer.Helpers
         public const string wComments = "Comments";
         public const string wOle = "OLE objects";
         public const string wBookmarks = "Bookmarks";
+        public const string wMathAccents = "Math Formula Accents";
         public const string wFldCodes = "Field Codes";
         public const string wListTemplates = "List Templates";
         public const string wFootnotes = "Footnotes";

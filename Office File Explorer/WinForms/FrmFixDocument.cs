@@ -132,6 +132,15 @@ namespace Office_File_Explorer.WinForms
                 }
             }
 
+            if (rdoFixMathAccentsW.Checked)
+            {
+                corruptionChecked = Strings.wMathAccents;
+                if (WordFixes.FixMathAccents(filePath) == true)
+                {
+                    isFileFixed = true;
+                }
+            }
+
             // isFileFixed should be set, now close the form
             Close();
         }
