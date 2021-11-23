@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
             this.rdoFixContentControlsW = new System.Windows.Forms.RadioButton();
             this.rdoFixCommentHyperlinksW = new System.Windows.Forms.RadioButton();
             this.rdoFixHyperlinksW = new System.Windows.Forms.RadioButton();
@@ -47,7 +48,7 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixStrictX = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
+            this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -55,6 +56,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoTryAllFixesW);
             this.groupBox1.Controls.Add(this.rdoFixMathAccentsW);
             this.groupBox1.Controls.Add(this.rdoFixContentControlsW);
             this.groupBox1.Controls.Add(this.rdoFixCommentHyperlinksW);
@@ -67,10 +69,21 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.rdoFixBookmarksW);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(369, 206);
+            this.groupBox1.Size = new System.Drawing.Size(369, 185);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Document";
+            // 
+            // rdoFixMathAccentsW
+            // 
+            this.rdoFixMathAccentsW.AutoSize = true;
+            this.rdoFixMathAccentsW.Location = new System.Drawing.Point(193, 72);
+            this.rdoFixMathAccentsW.Name = "rdoFixMathAccentsW";
+            this.rdoFixMathAccentsW.Size = new System.Drawing.Size(170, 19);
+            this.rdoFixMathAccentsW.TabIndex = 3;
+            this.rdoFixMathAccentsW.TabStop = true;
+            this.rdoFixMathAccentsW.Text = "Fix Corrupt Math Equations";
+            this.rdoFixMathAccentsW.UseVisualStyleBackColor = true;
             // 
             // rdoFixContentControlsW
             // 
@@ -100,7 +113,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.rdoFixHyperlinksW.AutoSize = true;
             this.rdoFixHyperlinksW.Enabled = false;
-            this.rdoFixHyperlinksW.Location = new System.Drawing.Point(6, 172);
+            this.rdoFixHyperlinksW.Location = new System.Drawing.Point(193, 122);
             this.rdoFixHyperlinksW.Name = "rdoFixHyperlinksW";
             this.rdoFixHyperlinksW.Size = new System.Drawing.Size(99, 19);
             this.rdoFixHyperlinksW.TabIndex = 6;
@@ -112,7 +125,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.rdoFixCommentsW.AutoSize = true;
             this.rdoFixCommentsW.Enabled = false;
-            this.rdoFixCommentsW.Location = new System.Drawing.Point(6, 147);
+            this.rdoFixCommentsW.Location = new System.Drawing.Point(6, 122);
             this.rdoFixCommentsW.Name = "rdoFixCommentsW";
             this.rdoFixCommentsW.Size = new System.Drawing.Size(102, 19);
             this.rdoFixCommentsW.TabIndex = 5;
@@ -124,7 +137,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.rdoFixTablePropsW.AutoSize = true;
             this.rdoFixTablePropsW.Enabled = false;
-            this.rdoFixTablePropsW.Location = new System.Drawing.Point(6, 122);
+            this.rdoFixTablePropsW.Location = new System.Drawing.Point(193, 97);
             this.rdoFixTablePropsW.Name = "rdoFixTablePropsW";
             this.rdoFixTablePropsW.Size = new System.Drawing.Size(126, 19);
             this.rdoFixTablePropsW.TabIndex = 4;
@@ -186,7 +199,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.rdoFixNotesPageSizeP);
             this.groupBox2.Location = new System.Drawing.Point(387, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(201, 206);
+            this.groupBox2.Size = new System.Drawing.Size(201, 156);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PowerPoint Document";
@@ -220,7 +233,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.rdoFixStrictX);
             this.groupBox3.Location = new System.Drawing.Point(594, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(172, 206);
+            this.groupBox3.Size = new System.Drawing.Size(172, 156);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Excel Document";
@@ -239,7 +252,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(610, 224);
+            this.BtnOk.Location = new System.Drawing.Point(609, 174);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -249,7 +262,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(691, 224);
+            this.BtnCancel.Location = new System.Drawing.Point(690, 174);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 2;
@@ -257,22 +270,23 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // rdoFixMathAccentsW
+            // rdoTryAllFixesW
             // 
-            this.rdoFixMathAccentsW.AutoSize = true;
-            this.rdoFixMathAccentsW.Location = new System.Drawing.Point(193, 72);
-            this.rdoFixMathAccentsW.Name = "rdoFixMathAccentsW";
-            this.rdoFixMathAccentsW.Size = new System.Drawing.Size(170, 19);
-            this.rdoFixMathAccentsW.TabIndex = 3;
-            this.rdoFixMathAccentsW.TabStop = true;
-            this.rdoFixMathAccentsW.Text = "Fix Corrupt Math Equations";
-            this.rdoFixMathAccentsW.UseVisualStyleBackColor = true;
+            this.rdoTryAllFixesW.AutoSize = true;
+            this.rdoTryAllFixesW.Enabled = false;
+            this.rdoTryAllFixesW.Location = new System.Drawing.Point(6, 160);
+            this.rdoTryAllFixesW.Name = "rdoTryAllFixesW";
+            this.rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
+            this.rdoTryAllFixesW.TabIndex = 9;
+            this.rdoTryAllFixesW.TabStop = true;
+            this.rdoTryAllFixesW.Text = "Try All Fixes";
+            this.rdoTryAllFixesW.UseVisualStyleBackColor = true;
             // 
             // FrmFixDocument
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(777, 255);
+            this.ClientSize = new System.Drawing.Size(777, 204);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.groupBox3);
@@ -312,5 +326,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.RadioButton rdoFixContentControlsW;
         private System.Windows.Forms.RadioButton rdoFixMathAccentsW;
+        private System.Windows.Forms.RadioButton rdoTryAllFixesW;
     }
 }

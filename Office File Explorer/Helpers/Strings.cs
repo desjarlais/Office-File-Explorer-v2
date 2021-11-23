@@ -44,6 +44,7 @@ namespace Office_File_Explorer.Helpers
         public const string wDocSecurity = "DocSecurity";
         
         public const string wAuthors = "Authors";
+        public const string wAllFixes = "All";
         public const string wComments = "Comments";
         public const string wOle = "OLE objects";
         public const string wBookmarks = "Bookmarks";

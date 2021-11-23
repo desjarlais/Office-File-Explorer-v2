@@ -865,14 +865,21 @@ namespace Office_File_Explorer
                 if (f.isFileFixed == true)
                 {
                     LstDisplay.Items.Clear();
-                    LstDisplay.Items.Add("Corrupt " + f.corruptionChecked + " Found - " + "Document Fixed");
+                    if (f.corruptionChecked == "All")
+                    {
+                        LstDisplay.Items.Add("Document Fixed");
+                    }
+                    else
+                    {
+                        LstDisplay.Items.Add("Corrupt " + f.corruptionChecked + " Found - " + "Document Fixed");
+                    }
+                    
                     return;
                 }
-
-                if (f.corruptionChecked != Strings.wCancel)
+                else
                 {
                     LstDisplay.Items.Clear();
-                    LstDisplay.Items.Add("No Corrupt " + f.corruptionChecked + " Found");
+                    LstDisplay.Items.Add("No Corruption Found");
                 }
             }
         }

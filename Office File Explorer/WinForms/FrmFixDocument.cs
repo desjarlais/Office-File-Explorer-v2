@@ -1,5 +1,6 @@
 ﻿using Office_File_Explorer.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms
@@ -7,6 +8,7 @@ namespace Office_File_Explorer.WinForms
     public partial class FrmFixDocument : Form
     {
         public bool isFileFixed = false;
+        public bool tryAllFixes = false;
         public string corruptionChecked = string.Empty;
         public string filePath, fileType;
         public FrmFixDocument(string fPath, string fType)
@@ -31,6 +33,7 @@ namespace Office_File_Explorer.WinForms
                 rdoFixHyperlinksW.Enabled = true;
                 rdoFixTablePropsW.Enabled = true;
                 rdoFixContentControlsW.Enabled = true;
+                rdoTryAllFixesW.Enabled = true;
             }
             else if (type == Strings.oAppExcel)
             {
@@ -45,96 +48,112 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            corruptionChecked = Strings.wCancel;
             Close();
+        }
+
+        public void SetCorruptionChecked(string fixType)
+        {
+            if (tryAllFixes == true)
+            {
+                corruptionChecked = Strings.wAllFixes;
+            }
+            else
+            {
+                corruptionChecked = fixType;
+            }
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
         {
-            if (rdoFixBookmarksW.Checked)
+            if (rdoTryAllFixesW.Checked)
             {
-                corruptionChecked = Strings.wBookmarks;
+                tryAllFixes = true;
+            }
+
+            if (rdoFixBookmarksW.Checked || tryAllFixes == true)
+            {
+                SetCorruptionChecked(Strings.wBookmarks);
                 if (WordFixes.RemoveMissingBookmarkTags(filePath) == true || WordFixes.RemovePlainTextCcFromBookmark(filePath) == true)
                 {
                     isFileFixed = true;
                 }
             }
 
-            if (rdoFixRevisionsW.Checked)
+            if (rdoFixRevisionsW.Checked || tryAllFixes == true)
             {
-                corruptionChecked = Strings.wRevisions;
+                SetCorruptionChecked(Strings.wRevisions);
                 if (WordFixes.FixRevisions(filePath) == true || WordFixes.FixDeleteRevision(filePath) == true)
                 {
                     isFileFixed = true;
                 }
             }
             
-            if (rdoFixEndnotesW.Checked)
+            if (rdoFixEndnotesW.Checked || tryAllFixes == true)
             {
-                corruptionChecked = Strings.wEndnotes;
+                SetCorruptionChecked(Strings.wEndnotes);
                 if (WordFixes.FixEndnotes(filePath) == true)
                 {
                     isFileFixed = true;
                 }
             }
 
-            if (rdoFixListTemplatesW.Checked)
+            if (rdoFixListTemplatesW.Checked || tryAllFixes == true)
             {
-                corruptionChecked = Strings.wListTemplates;
+                SetCorruptionChecked(Strings.wListTemplates);
                 if (WordFixes.FixListTemplates(filePath) == true)
                 {
                     isFileFixed = true;
                 }
             }
 
-            if (rdoFixTablePropsW.Checked)
+            if (rdoFixTablePropsW.Checked || tryAllFixes == true)
             {
                 if (WordFixes.FixTableGridProps(filePath) == true)
                 {
-                    corruptionChecked = Strings.wTableProps;
+                    SetCorruptionChecked(Strings.wTableProps);
                     isFileFixed = true;
                 }
             }
 
-            if (rdoFixCommentsW.Checked)
+            if (rdoFixCommentsW.Checked || tryAllFixes == true)
             {
-                corruptionChecked = Strings.wComments;
+                SetCorruptionChecked(Strings.wComments);
                 if (WordFixes.FixMissingCommentRefs(filePath) == true || WordFixes.FixShapeInComment(filePath) == true)
                 {
                     isFileFixed = true;
                 }
             }
 
-            if (rdoFixCommentHyperlinksW.Checked)
+            if (rdoFixCommentHyperlinksW.Checked || tryAllFixes == true)
             {
-                corruptionChecked = Strings.wFieldCodes;
+                SetCorruptionChecked(Strings.wFieldCodes);
                 if (WordFixes.FixCommentFieldCodes(filePath) == true)
                 {
                     isFileFixed = true;
                 }
             }
 
-            if (rdoFixHyperlinksW.Checked)
+            if (rdoFixHyperlinksW.Checked || tryAllFixes == true)
             {
-                corruptionChecked = Strings.wHyperlinks;
+                SetCorruptionChecked(Strings.wHyperlinks);
                 if (WordFixes.FixHyperlinks(filePath) == true)
                 {
                     isFileFixed = true;
                 }
             }
 
-            if (rdoFixContentControlsW.Checked)
+            if (rdoFixContentControlsW.Checked || tryAllFixes == true)
             {
-                corruptionChecked = Strings.wContentControls;
+                SetCorruptionChecked(Strings.wContentControls);
                 if (WordFixes.FixContentControls(filePath) == true)
                 {
                     isFileFixed = true;
                 }
             }
 
-            if (rdoFixMathAccentsW.Checked)
+            if (rdoFixMathAccentsW.Checked || tryAllFixes == true)
             {
-                corruptionChecked = Strings.wMathAccents;
+                SetCorruptionChecked(Strings.wMathAccents);
                 if (WordFixes.FixMathAccents(filePath) == true)
                 {
                     isFileFixed = true;

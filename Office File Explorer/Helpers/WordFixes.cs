@@ -20,10 +20,11 @@ namespace Office_File_Explorer.Helpers
         public static bool FixMathAccents(string filePath)
         {
             corruptionFound = false;
+
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
                 // there is a scenario where accents are added to the subscript node, not oMath
-                // accent is not allwed is subscript elements
+                // accent is not allowed is subscript elements
                 foreach (OM.Subscript sSub in myDoc.MainDocumentPart.Document.Descendants<OM.Subscript>())
                 {
                     // loop through the subscript elements and if "acc" is found, delete it
