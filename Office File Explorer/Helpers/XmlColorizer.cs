@@ -144,16 +144,16 @@ namespace Office_File_Explorer.Helpers
             StringBuilder rtf = new StringBuilder();
 			foreach (char letter in unicode)
 			{
-				if (letter <= 0x7F) //before this is ASCII in UTF-8 and UTF-16 Encoding
+				if (letter <= 0x7F) 
 				{
 					rtf.Append(letter);
 				}
-				else //starts Eurpean (except ASCII), arabic, hebrew, etc.
+				else 
 				{
 					rtf.Append(string.Format(@"\u{0}?", Convert.ToUInt32(letter)));
 				}
 			}
-			return rtf.ToString(/*it has the same text but the utf characters where changed to something like \\u###?*/);
+			return rtf.ToString();
 		}
 
 		internal const string rtfString = @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fmodern\fprq1\fcharset0 Courier New;}}{\colortbl	;\red0\green0\blue255;\red128\green0\blue0;\red255\green0\blue0;\red0\green128\blue0;}\pard\f0\fs20 ";

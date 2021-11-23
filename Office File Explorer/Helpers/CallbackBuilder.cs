@@ -65,21 +65,9 @@ namespace Office_File_Explorer.Helpers
 		private static StringBuilder ColorizingCallbacks(StringBuilder callbacks)
 		{
 			callbacks.Replace("\n", "\\par ");
-
 			callbacks.Replace("<green>", XmlColorizer.rtfComment);
 			callbacks.Replace("<blue>", XmlColorizer.rtfAttributeValue);
 			callbacks.Replace("<black>", XmlColorizer.rtfAttributeQuote);
-
-			//callbacks.Replace("'", XmlColorizer.rtfComment + "'");
-			//callbacks.Replace(SUB, XmlColorizer.rtfAttributeValue + SUB + XmlColorizer.rtfAttributeQuote);
-			//callbacks.Replace("End Sub", XmlColorizer.rtfAttributeValue + "End Sub" + XmlColorizer.rtfAttributeQuote);
-			//callbacks.Replace("As ", XmlColorizer.rtfAttributeValue + "As " + XmlColorizer.rtfAttributeQuote);
-			//callbacks.Replace("ByRef", XmlColorizer.rtfAttributeValue + "ByRef" + XmlColorizer.rtfAttributeQuote);
-			//callbacks.Replace(" Object", XmlColorizer.rtfAttributeValue + " Object" + XmlColorizer.rtfAttributeQuote);
-			//callbacks.Replace(" Boolean", XmlColorizer.rtfAttributeValue + " Boolean" + XmlColorizer.rtfAttributeQuote);
-			//callbacks.Replace(" Integer", XmlColorizer.rtfAttributeValue + " Integer" + XmlColorizer.rtfAttributeQuote);
-			//callbacks.Replace(" String", XmlColorizer.rtfAttributeValue + " String" + XmlColorizer.rtfAttributeQuote);
-
 			return callbacks;
 		}
 

@@ -1092,7 +1092,7 @@ namespace Office_File_Explorer.WinForms
                                 {
                                     try
                                     {
-                                        string docText = null;
+                                        string docText = string.Empty;
                                         using (StreamReader sr = new StreamReader(part.GetStream()))
                                         {
                                             docText = sr.ReadToEnd();

@@ -172,7 +172,7 @@ namespace Office_File_Explorer.Helpers
                     {
                         count++;
 
-                        string hRelUri = null;
+                        string hRelUri = string.Empty;
 
                         // then check for hyperlinks relationships
                         if (wsp.HyperlinkRelationships.Count() > 0)

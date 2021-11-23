@@ -1,6 +1,5 @@
 ﻿using Office_File_Explorer.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms
@@ -11,6 +10,7 @@ namespace Office_File_Explorer.WinForms
         public bool tryAllFixes = false;
         public string corruptionChecked = string.Empty;
         public string filePath, fileType;
+
         public FrmFixDocument(string fPath, string fType)
         {
             InitializeComponent();

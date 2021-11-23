@@ -13,12 +13,12 @@ namespace Office_File_Explorer
         static void Main()
         {
             // create a named mutex
-            Mutex mutex = new Mutex(false, "brandesoft office file explorer", out bool noInstanceCurrently);
+            Mutex mutex = new Mutex(false, "brandesoft office file explorer v2", out bool noInstanceCurrently);
 
             // let the user know if we already exist.
             if (noInstanceCurrently == false)
             {
-                MessageBox.Show("The application is already running.", "Application Launch Error",
+                MessageBox.Show("The application is already running.", "Application Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }

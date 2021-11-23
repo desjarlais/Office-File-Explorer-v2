@@ -1,13 +1,19 @@
-﻿using DocumentFormat.OpenXml;
+﻿// open xml sdk refs
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.CustomProperties;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.VariantTypes;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Validation;
+
+// .net refs
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -17,9 +23,6 @@ using O = DocumentFormat.OpenXml;
 using AO = DocumentFormat.OpenXml.Office.Drawing;
 using A = DocumentFormat.OpenXml.Drawing;
 using Path = System.IO.Path;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Validation;
-using System.Text;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -131,7 +134,7 @@ namespace Office_File_Explorer.Helpers
             newProp.FormatId = "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}";
             newProp.Name = propertyName;
 
-            if (fileType == "Word")
+            if (fileType == Strings.oAppWord)
             {
                 using (var document = WordprocessingDocument.Open(fileName, true))
                 {
@@ -173,7 +176,7 @@ namespace Office_File_Explorer.Helpers
                     }
                 }
             }
-            else if (fileType == "Excel")
+            else if (fileType == Strings.oAppExcel)
             {
                 using (var document = SpreadsheetDocument.Open(fileName, true))
                 {

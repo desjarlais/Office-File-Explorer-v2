@@ -124,7 +124,7 @@ namespace Office_File_Explorer.Helpers
 
             using (StreamWriter sw = File.AppendText(fPath))
             {
-                sw.WriteLine(DateTime.Now + ":" + sOutput);
+                sw.WriteLine(DateTime.Now + Strings.wColon + sOutput);
             }
         }
 
@@ -137,7 +137,7 @@ namespace Office_File_Explorer.Helpers
 
             using (StreamWriter sw = File.AppendText(fPath))
             {
-                sw.Write(DateTime.Now + ":" + "\r\n");
+                sw.Write(DateTime.Now + Strings.wColon + "\r\n");
                 foreach (var s in sbOutput.ToString())
                 {
                     sw.WriteLine(s);
@@ -147,7 +147,6 @@ namespace Office_File_Explorer.Helpers
 
         public static string GetAppFromFileExtension(string fPath)
         {
-            //.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm"
             if (fPath.EndsWith(".docx") || fPath.EndsWith(".dotx") || fPath.EndsWith(".docm") || fPath.EndsWith(".dotm"))
             {
                 return Strings.oAppWord;

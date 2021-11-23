@@ -846,7 +846,7 @@ namespace Office_File_Explorer
             };
             srForm.ShowDialog();
 
-            if ((findText == string.Empty || findText is null) && (replaceText == string.Empty || replaceText is null))
+            if (string.IsNullOrEmpty(findText) && string.IsNullOrEmpty(replaceText))
             {
                 return;
             }
@@ -1230,7 +1230,7 @@ namespace Office_File_Explorer
                                         {
                                             try
                                             {
-                                                string docText = null;
+                                                string docText = string.Empty;
                                                 using (StreamReader sr = new StreamReader(part.GetStream()))
                                                 {
                                                     docText = sr.ReadToEnd();

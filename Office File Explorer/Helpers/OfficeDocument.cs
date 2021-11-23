@@ -123,8 +123,8 @@ namespace Office_File_Explorer.Helpers
 			Uri customUIUri = new Uri(relativePath, UriKind.Relative);
 			PackageRelationship relationship = _package.CreateRelationship(customUIUri, TargetMode.Internal, relType);
 
-			OfficePart part = null;
-			if (!_package.PartExists(customUIUri))
+            OfficePart part;
+            if (!_package.PartExists(customUIUri))
 			{
 				part = new OfficePart(_package.CreatePart(customUIUri, "application/xml"), partType, relationship.Id);
 			}
