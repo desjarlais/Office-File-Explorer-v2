@@ -1129,6 +1129,18 @@ namespace Office_File_Explorer
                                 }
                             }
                         }
+
+                        if (f.wdModCmd == AppUtilities.WordModifyCmds.RemoveCustomTitleProp)
+                        {
+                            if (Word.RemoveCustomTitleProp(lblFilePath.Text))
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "Custom Property 'Title' Removed From File.", string.Empty);
+                            }
+                            else
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "'Title' Property Not Found.", string.Empty);
+                            }
+                        }
                     }
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)

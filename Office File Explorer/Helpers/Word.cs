@@ -17,12 +17,32 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using O = DocumentFormat.OpenXml;
 using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
 using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
+using DocumentFormat.OpenXml.CustomProperties;
 
 namespace Office_File_Explorer.Helpers
 {
     public static class Word
     {
         public static bool fSuccess;
+
+        public static bool RemoveCustomTitleProp(string docName)
+        {
+            fSuccess = false;
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
+            {
+                foreach (CustomDocumentProperty cdp in document.CustomFilePropertiesPart.RootElement)
+                {
+                    if (cdp.Name.ToString().ToLower() == "title")
+                    {
+                        cdp.Remove();
+                        fSuccess = true;
+                    }
+                }
+            }
+
+            return fSuccess;
+        }
 
         /// <summary>
         /// Given a document name and an author name, accept all revisions by the specified author. 

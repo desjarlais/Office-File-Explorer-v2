@@ -79,6 +79,11 @@ namespace Office_File_Explorer.WinForms
                 wdModCmd = AppUtilities.WordModifyCmds.RemovePII;
             }
 
+            if (rdoRemoveCustomTitleProp.Checked)
+            {
+                wdModCmd = AppUtilities.WordModifyCmds.RemoveCustomTitleProp;
+            }
+
             Close();
         }
 

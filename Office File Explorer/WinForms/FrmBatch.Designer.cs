@@ -60,6 +60,7 @@ namespace Office_File_Explorer.WinForms
             this.BtnDeleteCustomProps = new System.Windows.Forms.Button();
             this.BtnAddCustomProps = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.BtnRemoveCustomTitle = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -120,14 +121,14 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Location = new System.Drawing.Point(238, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(709, 64);
+            this.groupBox2.Size = new System.Drawing.Size(726, 64);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Folder Location";
             // 
             // BtnBrowseFolder
             // 
-            this.BtnBrowseFolder.Location = new System.Drawing.Point(577, 25);
+            this.BtnBrowseFolder.Location = new System.Drawing.Point(594, 25);
             this.BtnBrowseFolder.Name = "BtnBrowseFolder";
             this.BtnBrowseFolder.Size = new System.Drawing.Size(126, 23);
             this.BtnBrowseFolder.TabIndex = 2;
@@ -139,7 +140,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.tbFolderPath.Location = new System.Drawing.Point(46, 26);
             this.tbFolderPath.Name = "tbFolderPath";
-            this.tbFolderPath.Size = new System.Drawing.Size(525, 23);
+            this.tbFolderPath.Size = new System.Drawing.Size(542, 23);
             this.tbFolderPath.TabIndex = 1;
             // 
             // label1
@@ -158,14 +159,14 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.lstOutput);
             this.groupBox3.Location = new System.Drawing.Point(12, 82);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(935, 285);
+            this.groupBox3.Size = new System.Drawing.Size(952, 285);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Files";
             // 
             // BtnCopyOutput
             // 
-            this.BtnCopyOutput.Location = new System.Drawing.Point(803, 254);
+            this.BtnCopyOutput.Location = new System.Drawing.Point(817, 254);
             this.BtnCopyOutput.Name = "BtnCopyOutput";
             this.BtnCopyOutput.Size = new System.Drawing.Size(126, 23);
             this.BtnCopyOutput.TabIndex = 2;
@@ -190,11 +191,12 @@ namespace Office_File_Explorer.WinForms
             this.lstOutput.ItemHeight = 15;
             this.lstOutput.Location = new System.Drawing.Point(3, 19);
             this.lstOutput.Name = "lstOutput";
-            this.lstOutput.Size = new System.Drawing.Size(926, 229);
+            this.lstOutput.Size = new System.Drawing.Size(940, 229);
             this.lstOutput.TabIndex = 0;
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.BtnRemoveCustomTitle);
             this.groupBox4.Controls.Add(this.BtnFixComments);
             this.groupBox4.Controls.Add(this.BtnRemovePII);
             this.groupBox4.Controls.Add(this.BtnFixTableProps);
@@ -213,7 +215,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox4.Controls.Add(this.BtnAddCustomProps);
             this.groupBox4.Location = new System.Drawing.Point(12, 367);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(935, 118);
+            this.groupBox4.Size = new System.Drawing.Size(952, 118);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Batch Commands";
@@ -232,7 +234,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.BtnRemovePII.Location = new System.Drawing.Point(838, 22);
             this.BtnRemovePII.Name = "BtnRemovePII";
-            this.BtnRemovePII.Size = new System.Drawing.Size(91, 23);
+            this.BtnRemovePII.Size = new System.Drawing.Size(105, 23);
             this.BtnRemovePII.TabIndex = 14;
             this.BtnRemovePII.Text = "Remove PII";
             this.BtnRemovePII.UseVisualStyleBackColor = true;
@@ -250,9 +252,9 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnChangeTheme
             // 
-            this.BtnChangeTheme.Location = new System.Drawing.Point(681, 22);
+            this.BtnChangeTheme.Location = new System.Drawing.Point(838, 51);
             this.BtnChangeTheme.Name = "BtnChangeTheme";
-            this.BtnChangeTheme.Size = new System.Drawing.Size(151, 23);
+            this.BtnChangeTheme.Size = new System.Drawing.Size(105, 23);
             this.BtnChangeTheme.TabIndex = 12;
             this.BtnChangeTheme.Text = "Change Theme";
             this.BtnChangeTheme.UseVisualStyleBackColor = true;
@@ -300,9 +302,9 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnRemovePIIOnSave
             // 
-            this.BtnRemovePIIOnSave.Location = new System.Drawing.Point(344, 51);
+            this.BtnRemovePIIOnSave.Location = new System.Drawing.Point(681, 22);
             this.BtnRemovePIIOnSave.Name = "BtnRemovePIIOnSave";
-            this.BtnRemovePIIOnSave.Size = new System.Drawing.Size(173, 23);
+            this.BtnRemovePIIOnSave.Size = new System.Drawing.Size(151, 23);
             this.BtnRemovePIIOnSave.TabIndex = 7;
             this.BtnRemovePIIOnSave.Text = "Remove PII On Save";
             this.BtnRemovePIIOnSave.UseVisualStyleBackColor = true;
@@ -378,11 +380,21 @@ namespace Office_File_Explorer.WinForms
             this.BtnAddCustomProps.UseVisualStyleBackColor = true;
             this.BtnAddCustomProps.Click += new System.EventHandler(this.BtnAddCustomProps_Click);
             // 
+            // BtnRemoveCustomTitle
+            // 
+            this.BtnRemoveCustomTitle.Location = new System.Drawing.Point(344, 51);
+            this.BtnRemoveCustomTitle.Name = "BtnRemoveCustomTitle";
+            this.BtnRemoveCustomTitle.Size = new System.Drawing.Size(173, 23);
+            this.BtnRemoveCustomTitle.TabIndex = 1;
+            this.BtnRemoveCustomTitle.Text = "Remove Custom Title Prop";
+            this.BtnRemoveCustomTitle.UseVisualStyleBackColor = true;
+            this.BtnRemoveCustomTitle.Click += new System.EventHandler(this.BtnRemoveCustomTitle_Click);
+            // 
             // FrmBatch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(959, 496);
+            this.ClientSize = new System.Drawing.Size(967, 496);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
@@ -437,5 +449,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnDeleteCustomProps;
         private System.Windows.Forms.Button BtnAddCustomProps;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.Button BtnRemoveCustomTitle;
     }
 }

@@ -77,7 +77,8 @@ namespace Office_File_Explorer.Helpers
             ChangeDefaultTemplate,
             AcceptRevisions,
             ConvertDocmToDocx,
-            RemovePII
+            RemovePII,
+            RemoveCustomTitleProp
         }
 
         public enum ExcelModifyCmds

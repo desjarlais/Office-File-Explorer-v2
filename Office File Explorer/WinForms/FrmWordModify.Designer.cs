@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWordModify));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoRemovePII = new System.Windows.Forms.RadioButton();
             this.rdoAcceptRevisions = new System.Windows.Forms.RadioButton();
             this.rdoChangeDefTemp = new System.Windows.Forms.RadioButton();
             this.rdoSetPrint = new System.Windows.Forms.RadioButton();
@@ -45,12 +46,13 @@ namespace Office_File_Explorer.WinForms
             this.rdoDelHF = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoRemovePII = new System.Windows.Forms.RadioButton();
+            this.rdoRemoveCustomTitleProp = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoRemoveCustomTitleProp);
             this.groupBox1.Controls.Add(this.rdoRemovePII);
             this.groupBox1.Controls.Add(this.rdoAcceptRevisions);
             this.groupBox1.Controls.Add(this.rdoChangeDefTemp);
@@ -70,6 +72,17 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Content to Modify";
+            // 
+            // rdoRemovePII
+            // 
+            this.rdoRemovePII.AutoSize = true;
+            this.rdoRemovePII.Location = new System.Drawing.Point(211, 144);
+            this.rdoRemovePII.Name = "rdoRemovePII";
+            this.rdoRemovePII.Size = new System.Drawing.Size(84, 19);
+            this.rdoRemovePII.TabIndex = 11;
+            this.rdoRemovePII.TabStop = true;
+            this.rdoRemovePII.Text = "Remove PII";
+            this.rdoRemovePII.UseVisualStyleBackColor = true;
             // 
             // rdoAcceptRevisions
             // 
@@ -223,16 +236,16 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // rdoRemovePII
+            // rdoRemoveCustomTitleProp
             // 
-            this.rdoRemovePII.AutoSize = true;
-            this.rdoRemovePII.Location = new System.Drawing.Point(211, 144);
-            this.rdoRemovePII.Name = "rdoRemovePII";
-            this.rdoRemovePII.Size = new System.Drawing.Size(84, 19);
-            this.rdoRemovePII.TabIndex = 11;
-            this.rdoRemovePII.TabStop = true;
-            this.rdoRemovePII.Text = "Remove PII";
-            this.rdoRemovePII.UseVisualStyleBackColor = true;
+            this.rdoRemoveCustomTitleProp.AutoSize = true;
+            this.rdoRemoveCustomTitleProp.Location = new System.Drawing.Point(211, 169);
+            this.rdoRemoveCustomTitleProp.Name = "rdoRemoveCustomTitleProp";
+            this.rdoRemoveCustomTitleProp.Size = new System.Drawing.Size(156, 19);
+            this.rdoRemoveCustomTitleProp.TabIndex = 2;
+            this.rdoRemoveCustomTitleProp.TabStop = true;
+            this.rdoRemoveCustomTitleProp.Text = "Delete Custom Title Prop";
+            this.rdoRemoveCustomTitleProp.UseVisualStyleBackColor = true;
             // 
             // FrmWordModify
             // 
@@ -273,5 +286,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoChangeDefTemp;
         private System.Windows.Forms.RadioButton rdoSetPrint;
         private System.Windows.Forms.RadioButton rdoRemovePII;
+        private System.Windows.Forms.RadioButton rdoRemoveCustomTitleProp;
     }
 }

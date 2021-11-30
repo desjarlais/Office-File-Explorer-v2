@@ -105,6 +105,7 @@ namespace Office_File_Explorer.WinForms
             BtnFixHyperlinks.Enabled = false;
             BtnUpdateNamespaces.Enabled = false;
             BtnFixComments.Enabled = false;
+            BtnRemoveCustomTitle.Enabled = false;
         }
 
         public void EnableUI()
@@ -138,6 +139,7 @@ namespace Office_File_Explorer.WinForms
                 BtnChangeTemplate.Enabled = true;
                 BtnUpdateNamespaces.Enabled = true;
                 BtnFixComments.Enabled = true;
+                BtnRemoveCustomTitle.Enabled = true;
             }
 
             if (rdoPowerPoint.Checked == true)
@@ -332,7 +334,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
-                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + " : " + innerEx.Message);
+                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
                 }
@@ -380,7 +382,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
-                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + " : " + innerEx.Message);
+                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
                 }
@@ -428,7 +430,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
-                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + " : " + innerEx.Message);
+                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
                 }
@@ -548,7 +550,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixExcelHyperlinks Error: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixExcelHyperlinks Error: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -752,7 +754,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteOpenByDefault Error: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteOpenByDefault Error: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -1024,7 +1026,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnUpdateQuickPartNamespaces Error: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnUpdateQuickPartNamespaces Error: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -1132,7 +1134,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnConvertStrict: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnConvertStrict: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -1176,7 +1178,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnPPTResetPII: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnPPTResetPII: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -1245,7 +1247,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixCorruptBookmarks: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixCorruptBookmarks: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
 
                 }
@@ -1338,7 +1340,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixCorruptRevisions: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixCorruptRevisions: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -1446,7 +1448,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixTableProps: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixTableProps: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -1573,7 +1575,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
-                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + f + " : " + innerEx.Message);
+                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
                 }
@@ -1630,7 +1632,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
-                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + f + " : " + innerEx.Message);
+                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
                 }
@@ -1687,7 +1689,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
-                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + f + " : " + innerEx.Message);
+                            FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
                 }
@@ -1810,7 +1812,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixCorruptComments Error: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixCorruptComments Error: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -1853,7 +1855,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnRemovePII Error: " + f + " : " + innerEx.Message);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnRemovePII Error: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
@@ -1897,6 +1899,48 @@ namespace Office_File_Explorer.WinForms
         private void CkbSubfolders_CheckedChanged(object sender, EventArgs e)
         {
             PopulateAndDisplayFiles();
+        }
+
+        /// <summary>
+        /// There is a scenario where SharePoint property promotion will use the "Title" for the document from custom.xml instead of core.xml
+        /// Removing the custom.xml title will allow SP to not change the title of the document.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnRemoveCustomTitle_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                lstOutput.Items.Clear();
+
+                foreach (string f in files)
+                {
+                    try
+                    {
+                        if (Word.RemoveCustomTitleProp(f))
+                        {
+                            lstOutput.Items.Add(f + Strings.wColonBuffer + "Custom Property 'Title' Removed From File.");
+                        }
+                        else
+                        {
+                            lstOutput.Items.Add(f + Strings.wColonBuffer + "'Title' Property Not Found.");
+                        }
+                    }
+                    catch (Exception innerEx)
+                    {
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnRemoveCustomTitle Error: " + f + Strings.wColonBuffer + innerEx.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnRemoveCustomTitle Error: " + ex.Message);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
     }
 }

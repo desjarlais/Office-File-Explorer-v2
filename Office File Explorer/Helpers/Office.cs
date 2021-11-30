@@ -433,7 +433,7 @@ namespace Office_File_Explorer.Helpers
 
             // Add the ExtendedFilePropertiesPart part in the new word processing document.
             var extendedFilePropPart = wordDoc.AddNewPart<ExtendedFilePropertiesPart>("rId5");
-            extendedFilePropPart.Properties = new DocumentFormat.OpenXml.ExtendedProperties.Properties();
+            extendedFilePropPart.Properties = new O.ExtendedProperties.Properties();
 
             // Add the ThumbnailPart part in the new word processing document.
             wordDoc.AddNewPart<ThumbnailPart>("image/jpeg", "rId6");
