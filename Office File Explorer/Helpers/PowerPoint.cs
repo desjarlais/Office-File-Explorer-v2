@@ -503,5 +503,89 @@ namespace Office_File_Explorer.Helpers
             // Return the list of strings.
             return ret;
         }
+
+        // Delete comments by a specific author. Pass an empty string for the author to delete all comments, by all authors.
+        public void DeleteComments(string fileName, string author)
+        {
+
+            using (PresentationDocument doc = PresentationDocument.Open(fileName, true))
+            {
+                // Get the authors part.
+                CommentAuthorsPart authorsPart =
+                  doc.PresentationPart.GetPartsOfType<CommentAuthorsPart>().FirstOrDefault();
+
+                if (authorsPart == null)
+                {
+                    // There's no authors part, so just
+                    // fail. If no authors, there can't be any comments.
+                    return;
+                }
+
+                // Get the comment authors, or the specified author if supplied:
+                var commentAuthors = authorsPart.CommentAuthorList.Elements<CommentAuthor>();
+                if (!string.IsNullOrEmpty(author))
+                {
+                    commentAuthors = commentAuthors.Where(e => e.Name.Value.Equals(author));
+                }
+
+                bool changed = false;
+                foreach (var commentAuthor in commentAuthors.ToArray())
+                {
+                    var authorId = commentAuthor.Id;
+
+                    // Iterate through all the slides and get the slide parts.
+                    foreach (var slide in doc.PresentationPart.GetPartsOfType<SlidePart>())
+                    {
+                        // Iterate through the slide parts and find the slide comment parts.
+                        var slideCommentParts = slide.GetPartsOfType<SlideCommentsPart>().ToArray();
+
+                        foreach (var slideCommentsPart in slideCommentParts)
+                        {
+                            // Get the list of comments.
+                            var commentList = slideCommentsPart.CommentList.Elements<Comment>().
+                              Where(e => e.AuthorId.Value == authorId.Value);
+
+                            foreach (var comment in commentList.ToArray())
+                            {
+                                // Delete all the comments by the specified author.
+                                slideCommentsPart.CommentList.RemoveChild<Comment>(comment);
+                            }
+
+                            // No comments left? Delete the comments part for this slide.
+                            if (slideCommentsPart.CommentList.Count() == 0)
+                            {
+                                slide.DeletePart(slideCommentsPart);
+                            }
+                            else
+                            {
+                                // Save the slide comments part.
+                                slideCommentsPart.CommentList.Save();
+                            }
+                        }
+                    }
+
+                    // Delete the comment author from the comment authors part.
+                    authorsPart.CommentAuthorList.RemoveChild<CommentAuthor>(commentAuthor);
+
+                    changed = true;
+                }
+
+                // Changed will only be false if the caller requested comments
+                // for a particular author, and that author has no comments.
+                if (changed)
+                {
+                    if (authorsPart.CommentAuthorList.Count() == 0)
+                    {
+                        // No authors left, so delete the part.
+                        doc.PresentationPart.DeletePart(authorsPart);
+                    }
+                    else
+                    {
+                        // Save the comment authors part.
+                        authorsPart.CommentAuthorList.Save();
+                    }
+                }
+            }
+        }
     }
 }

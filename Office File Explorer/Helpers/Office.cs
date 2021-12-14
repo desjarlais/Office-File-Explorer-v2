@@ -38,6 +38,38 @@ namespace Office_File_Explorer.Helpers
             NumberDouble
         }
 
+        public enum CompressionMethod : int
+        {
+            None,               // 0 - The file is stored (no compression)
+            Shrunk,             // 1 - The file is Shrunk
+            Factor1,            // 2 - The file is Reduced with compression factor 1
+            Factor2,            // 3 - The file is Reduced with compression factor 2
+            Factor3,            // 4 - The file is Reduced with compression factor 3
+            Factor4,            // 5 - The file is Reduced with compression factor 4
+            Imploded,           // 6 - The file is Imploded
+            Tokenizing,         // 7 - Reserved for Tokenizing compression algorithm
+            Deflated,           // 8 - The file is Deflated
+            Deflate64,          // 9 - Enhanced Deflating using Deflate64(tm)
+            PKWareDCL,          //10 - PKWARE Data Compression Library Imploding(old IBM TERSE)
+            PKWAREReserved1,    //11 - Reserved by PKWARE
+            BZIP2,              //12 - File is compressed using BZIP2 algorithm
+            PKWAREReserved2,    //13 - Reserved by PKWARE
+            LZMA,               //14 - LZMA
+            PKWAREReserved3,    //15 - Reserved by PKWARE
+            IBMzOS,             //16 - IBM z/OS CMPSC Compression
+            PKWAREReserved4,    //17 - Reserved by PKWARE
+            IBMTerse,           //18 - File is compressed using IBM TERSE(new)
+            IBMLZ77,            //19 - IBM LZ77 z Architecture
+            Deprecated,         //20 - deprecated(use method 93 for zstd)
+            Zstandard,          //93 - Zstandard(zstd) Compression 
+            MP3,                //94 - MP3 Compression
+            XZ,                 //95 - XZ Compression
+            JPEG,               //96 - JPEG variant
+            WavPack,            //97 - WavPack compressed data
+            PPMd,               //98 - PPMd version I, Rev 1
+            AEx                //99 - AE-x encryption marker(see APPENDIX E)
+        }
+
         public static List<string> DisplayValidationErrorInformation(OpenXmlPackage docPackage)
         {
             OpenXmlValidator validator = new OpenXmlValidator();
@@ -762,6 +794,78 @@ namespace Office_File_Explorer.Helpers
             }
 
             return tList;
+        }
+
+        /// <summary>
+        /// if data descriptor is used; crc, compressed and uncompressed must be zero
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool IsZippedFileCorrupt(string path)
+        {
+            bool isCorrupt = false;
+
+            using (FileStream zFile = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                byte[] buffer = new byte[zFile.Length];
+                zFile.Read(buffer, 0, buffer.Length);
+
+                List<string> bList = new List<string>();
+                int byteCount = 1;
+                string fileHeaderSignature = "807534";
+                bool isStartOfHeader = false;
+                LocalZipFileHeader lzfh;
+
+                // loop each header 80-75-3-4 and see if the 7th byte is > 0
+                foreach (Byte b in buffer)
+                {
+                    if (b.ToString() == "80")
+                    {
+                        isStartOfHeader = true;
+                    }
+
+                    if (isStartOfHeader)
+                    {
+                        // process the 4 byte signature
+                        if (byteCount <= 4 && isStartOfHeader == true)
+                        {
+                            bList.Add(b.ToString());
+
+                            if (byteCount == 4)
+                            {
+                                // if the signature matches the lfh signature, create the new lfh class to keep processing
+                                StringBuilder sbSignature = new StringBuilder();
+                                sbSignature.Append(bList[0]);
+                                sbSignature.Append(bList[1]);
+                                sbSignature.Append(bList[2]);
+                                sbSignature.Append(bList[3]);
+
+                                if (sbSignature.ToString() == fileHeaderSignature)
+                                {
+                                    lzfh = new LocalZipFileHeader();
+                                    byteCount++;
+                                }
+                                else
+                                {
+                                    // reset the lfh check values
+                                    byteCount = 0;
+                                    isStartOfHeader = false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // check byte 5+
+                            if (byteCount == 5)
+                            {
+                                
+                            }
+                        }
+                    }
+                }
+            }
+
+            return isCorrupt;
         }
     }
 }

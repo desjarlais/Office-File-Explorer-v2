@@ -44,6 +44,7 @@ namespace Office_File_Explorer
         // global lists
         private static List<string> corruptNodes = new List<string>();
         private static List<string> pParts = new List<string>();
+        private static List<string> zFiles = new List<string>();
         private List<string> oNumIdList = new List<string>();
 
         // corrupt doc xml node buffer
@@ -179,8 +180,15 @@ namespace Office_File_Explorer
                             // if the file does start with PK, check if it fails in the SDK
                             if (OpenWithSdk(lblFilePath.Text))
                             {
-                                lblFileType.Text = StrOfficeApp;
-                                PopulatePackageParts();
+                                if (Office.IsZippedFileCorrupt(lblFilePath.Text))
+                                {
+                                    
+                                }
+                                else
+                                {
+                                    lblFileType.Text = StrOfficeApp;
+                                    PopulatePackageParts();
+                                }
                             }
                             else
                             {
@@ -250,6 +258,7 @@ namespace Office_File_Explorer
                 {
                     foreach (ZipArchiveEntry zae in archive.Entries)
                     {
+                        // add part to list
                         pParts.Add(zae.FullName + Strings.wColonBuffer + FileUtilities.SizeSuffix(zae.Length));
                     }
                 }
@@ -1867,6 +1876,8 @@ namespace Office_File_Explorer
             {
                 Cursor = Cursors.WaitCursor;
                 LstDisplay.Items.Clear();
+
+                // check for xml validation errors
                 if (lblFileType.Text == Strings.oAppWord)
                 {
                     using (WordprocessingDocument myDoc = WordprocessingDocument.Open(lblFilePath.Text, false))

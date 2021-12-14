@@ -1,8 +1,10 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -471,6 +473,420 @@ namespace Office_File_Explorer.Helpers
 
                 return values;
             }
+        }
+
+        public bool DeleteSheet(string fileName, string sheetToDelete)
+        {
+            // Delete the specified sheet from within the specified workbook.
+            // Return True if the sheet was found and deleted, False if it was not.
+            // Note that this procedure might leave "orphaned" references, such as strings
+            // in the shared strings table. You must take care when adding new strings, for example. 
+            // The XLInsertStringIntoCell snippet handles this problem for you.
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, true))
+            {
+                WorkbookPart wbPart = document.WorkbookPart;
+
+                Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().
+                  Where(s => s.Name == sheetToDelete).FirstOrDefault();
+                if (theSheet == null)
+                {
+                    // The specified sheet doesn't exist.
+                    return false;
+                }
+
+                // Remove the sheet reference from the workbook.
+                WorksheetPart worksheetPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
+                theSheet.Remove();
+
+                // Delete the worksheet part.
+                wbPart.DeletePart(worksheetPart);
+
+                // Save the workbook.
+                wbPart.Workbook.Save();
+            }
+            return true;
+        }
+
+        public CellFormat GetCellFormat(SpreadsheetDocument document,
+  string sheetName, string addressName)
+        {
+            CellFormat theCellFormat = null;
+
+            WorkbookPart wbPart = document.WorkbookPart;
+
+            // Find the sheet with the supplied name, and then use that Sheet object
+            // to retrieve a reference to the appropriate worksheet.
+            Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().
+              Where(s => s.Name == sheetName).FirstOrDefault();
+
+            if (theSheet == null)
+            {
+                throw new ArgumentException("sheetName");
+            }
+
+            // Retrieve a reference to the worksheet part, and then use its Worksheet property to get 
+            // a reference to the cell whose address matches the address you've supplied:
+            WorksheetPart wsPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
+            Cell theCell = wsPart.Worksheet.Descendants<Cell>().
+              Where(c => c.CellReference == addressName).FirstOrDefault();
+
+            // It the cell doesn't exist, simply return a null reference:
+            if (theCell != null)
+            {
+                // Go get the styles information.
+                var styles = wbPart.GetPartsOfType<WorkbookStylesPart>().FirstOrDefault();
+                // If you can't retrieve the styles part, you're done.
+                if (styles != null)
+                {
+                    var cf = System.Convert.ToInt32(theCell.StyleIndex.Value);
+                    theCellFormat = (CellFormat)(styles.Stylesheet.CellFormats.Elements().ElementAt(cf));
+                }
+            }
+            return theCellFormat;
+
+        }
+
+        public CellFormat GetCellFormat(string fileName, string sheetName, string addressName)
+        {
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, false))
+            {
+                return GetCellFormat(document, sheetName, addressName);
+            }
+        }
+
+        // Delete comments from a workbook, given an author name. 
+        // Pass an empty string or null for the author name to delete all comments.
+        public void DeleteCommentsByUser(string fileName, string userName)
+        {
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, true))
+            {
+                WorkbookPart wbPart = document.WorkbookPart;
+
+                var wsParts = wbPart.GetPartsOfType<WorksheetPart>();
+                foreach (var ws in wsParts)
+                {
+                    var commentPart = ws.GetPartsOfType<WorksheetCommentsPart>().FirstOrDefault();
+                    if (commentPart != null)
+                    {
+                        // The sheet has comments.
+
+                        if (string.IsNullOrEmpty(userName))
+                        {
+                            // Delete the comments part.
+                            ws.DeletePart(commentPart);
+                        }
+                        else
+                        {
+                            // Delete comments by the specific user.
+                            var authors = commentPart.Comments.Authors;
+                            Author author = null;
+                            int authorID = 0;
+
+                            // Get the index of the author, if the author exists:
+                            int i = 0;
+                            foreach (var Item in authors)
+                            {
+                                if (Item.InnerText == userName)
+                                {
+                                    author = (Author)Item;
+                                    authorID = i;
+                                    break;
+                                }
+                                else
+                                {
+                                    i += 1;
+                                }
+                            }
+
+                            // If the supplied name had added comments, remove those comments:
+                            if (author != null)
+                            {
+                                Comments theComments = commentPart.Comments;
+                                var commentArray = theComments.CommentList.ToArray();
+
+
+                                foreach (Comment comment in commentArray)
+                                {
+                                    if (comment.AuthorId.Value == authorID)
+                                    {
+                                        comment.Remove();
+                                    }
+                                }
+
+                                if (theComments.CommentList.Count() > 0)
+                                {
+                                    // Still commments left in the list?
+
+                                    // Remove the author from the author list.
+                                    authors.RemoveChild(author);
+
+                                    // Fix up author id values in the remaining comments.
+                                    foreach (Comment comment in commentArray)
+                                    {
+                                        if (comment.AuthorId.Value > authorID)
+                                        {
+                                            comment.AuthorId.Value--;
+                                        }
+                                    }
+                                    theComments.Save();
+                                }
+                                else
+                                {
+                                    // No more comments? Just delete the part.
+                                    ws.DeletePart(commentPart);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Given a reference to an Excel SpreadsheetDocument, the name of a sheet,
+        // and a cell address, return a reference to the cell. Throw an ArgumentException
+        // if the sheet doesn't exist, or if the cell doesn't yet exist.
+        public Cell GetCellForReading(SpreadsheetDocument document, string sheetName, string address)
+        {
+
+            WorkbookPart wbPart = document.WorkbookPart;
+
+            // Find the sheet with the supplied name, and then use that Sheet object
+            // to retrieve a reference to the appropriate worksheet.
+            Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().
+              Where(s => s.Name == sheetName).FirstOrDefault();
+
+            if (theSheet == null)
+            {
+                throw new ArgumentException("sheetName");
+            }
+
+            // Retrieve a reference to the worksheet part, and then use its Worksheet property to get 
+            // a reference to the cell whose address matches the address you've supplied:
+            WorksheetPart wsPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
+            Cell theCell = wsPart.Worksheet.Descendants<Cell>().
+              Where(c => c.CellReference == address).FirstOrDefault();
+
+            // If the cell doesn't exist, raise an exception to the caller:
+            if (theCell == null)
+            {
+                throw new ArgumentException("address");
+            }
+            return theCell;
+        }
+
+        // Given a reference to an Excel SpreadsheetDocument, the name of a sheet,
+        // and a cell address, return a reference to the cell. Throw an ArgumentException
+        // if the sheet doesn't exist. If the cell doesn't exist, create it.
+        public Cell GetCellForWriting(SpreadsheetDocument document, string sheetName, string address)
+        {
+
+            WorkbookPart wbPart = document.WorkbookPart;
+
+            // Find the sheet with the supplied name, and then use that Sheet object
+            // to retrieve a reference to the appropriate worksheet.
+            Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().
+              Where(s => s.Name == sheetName).FirstOrDefault();
+
+            if (theSheet == null)
+            {
+                throw new ArgumentException("sheetName");
+            }
+
+            // Retrieve a reference to the worksheet part, and then use its Worksheet property to get 
+            // a reference to the cell whose address matches the address you've supplied:
+            WorksheetPart wsPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
+            Worksheet ws = wsPart.Worksheet;
+            Cell theCell = ws.Descendants<Cell>().
+              Where(c => c.CellReference == address).FirstOrDefault();
+
+            // If the cell doesn't exist, create it:
+            if (theCell == null)
+            {
+                theCell = InsertCellInWorksheet(ws, address);
+            }
+            return theCell;
+        }
+        // Given a Worksheet and an address (like "AZ254"), either return a cell reference, or 
+        // create the cell reference and return it.
+        private Cell InsertCellInWorksheet(Worksheet ws, string addressName)
+        {
+
+            // Use regular expressions to get the row number and column name.
+            // If the parameter wasn't well formed, this code
+            // will fail:
+            Regex rx = new Regex("^(?<col>\\D+)(?<row>\\d+)");
+            Match m = rx.Match(addressName);
+            uint rowNumber = uint.Parse(m.Result("${row}"));
+            string colName = m.Result("${col}");
+
+            SheetData sheetData = ws.GetFirstChild<SheetData>();
+            string cellReference = (colName + rowNumber.ToString());
+            Cell theCell = null;
+
+            // If the worksheet does not contain a row with the specified row index, insert one.
+            var theRow = sheetData.Elements<Row>().
+              Where(r => r.RowIndex.Value == rowNumber).FirstOrDefault();
+
+            if (theRow == null)
+            {
+                theRow = new Row();
+                theRow.RowIndex = rowNumber;
+                sheetData.Append(theRow);
+            }
+
+            // If the cell you need already exists, return it.
+            // If there is not a cell with the specified column name, insert one.  
+            Cell refCell = theRow.Elements<Cell>().
+              Where(c => c.CellReference.Value == cellReference).FirstOrDefault();
+            if (refCell != null)
+            {
+                theCell = refCell;
+            }
+            else
+            {
+                // Cells must be in sequential order according to CellReference. Determine where to insert the new cell.
+                foreach (Cell cell in theRow.Elements<Cell>())
+                {
+                    if (string.Compare(cell.CellReference.Value, cellReference, true) > 0)
+                    {
+                        refCell = cell;
+                        break;
+                    }
+                }
+
+                theCell = new Cell();
+                theCell.CellReference = cellReference;
+
+                theRow.InsertBefore(theCell, refCell);
+            }
+            return theCell;
+        }
+
+        public bool InsertNumberIntoCell(string fileName, string sheetName, string addressName, int value)
+        {
+
+            // Given a file, a sheet, and a cell, insert a specified value.
+            // For example: InsertNumberIntoCell("C:\Test.xlsx", "Sheet3", "C3", 14)
+
+            // Assume failure.
+            bool returnValue = false;
+
+            // Open the document for editing.
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, true))
+            {
+                WorkbookPart wbPart = document.WorkbookPart;
+
+                Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().
+                  Where(s => s.Name == sheetName).FirstOrDefault();
+                if (theSheet != null)
+                {
+                    Worksheet ws = ((WorksheetPart)(wbPart.GetPartById(theSheet.Id))).Worksheet;
+                    Cell theCell = InsertCellInWorksheet(ws, addressName);
+
+                    // Set the value of cell A1.
+                    theCell.CellValue = new CellValue(value.ToString());
+                    theCell.DataType = new EnumValue<CellValues>(CellValues.Number);
+
+                    // Save the worksheet.
+                    ws.Save();
+                    returnValue = true;
+                }
+            }
+
+            return returnValue;
+        }
+
+        public bool InsertStringIntoCell(string fileName, string sheetName, string addressName, string value)
+        {
+            // Given a file, a sheet, and a cell, insert a specified string.
+            // For example: XLInsertStringIntoCell("C:\Test.xlsx", "Sheet3", "C3", "Microsoft");
+
+            // If the string exists in the shared string table, get its index.
+            // If the string doesn't exist in the shared string table, add it and get the next index.
+
+            // Then, the remainder is the same as inserting a number, but insert the string index instead
+            // of a value. Also, set the cell's t attribute to be the value "s".
+
+
+            // Assume failure.
+            bool returnValue = false;
+
+            // Open the document for editing.
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, true))
+            {
+                WorkbookPart wbPart = document.WorkbookPart;
+
+                Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().Where((s) => s.Name == sheetName).FirstOrDefault();
+
+                if (theSheet != null)
+                {
+                    Worksheet ws = ((WorksheetPart)(wbPart.GetPartById(theSheet.Id))).Worksheet;
+                    Cell theCell = InsertCellInWorksheet(ws, addressName);
+
+                    // Either retrieve the index of an existing string,
+                    // or insert the string into the shared string table
+                    // and get the index of the new item.
+                    int stringIndex = InsertSharedStringItem(wbPart, value);
+
+                    theCell.CellValue = new CellValue(stringIndex.ToString());
+                    theCell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
+
+                    // Save the worksheet.
+                    ws.Save();
+                    returnValue = true;
+                }
+            }
+
+            return returnValue;
+        }
+
+        // Given the main workbook part, and a text value, insert the text into the shared
+        // string table. Create the table if necessary. If the value already exists, return
+        // its index. If it doesn't exist, insert it and return its new index.
+        private int InsertSharedStringItem(WorkbookPart wbPart, string value)
+        {
+            // Insert a value into the shared string table, creating the table if necessary.
+            // Insert the string if it's not already there.
+            // Return the index of the string.
+
+            int index = 0;
+            bool found = false;
+            var stringTablePart = wbPart.GetPartsOfType<SharedStringTablePart>().FirstOrDefault();
+
+            // If the shared string table is missing, something's wrong.
+            // Just return the index that you found in the cell.
+            // Otherwise, look up the correct text in the table.
+            if (stringTablePart == null)
+            {
+                // Create it.
+                stringTablePart = wbPart.AddNewPart<SharedStringTablePart>();
+            }
+
+            var stringTable = stringTablePart.SharedStringTable;
+            if (stringTable == null)
+            {
+                stringTable = new SharedStringTable();
+            }
+
+            // Iterate through all the items in the SharedStringTable. If the text already exists, return its index.
+            foreach (SharedStringItem item in stringTable.Elements<SharedStringItem>())
+            {
+                if (item.InnerText == value)
+                {
+                    found = true;
+                    break;
+                }
+                index += 1;
+            }
+
+            if (!found)
+            {
+                stringTable.AppendChild(new SharedStringItem(new Text(value)));
+                stringTable.Save();
+            }
+
+            return index;
         }
     }
 }
