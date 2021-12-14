@@ -811,56 +811,332 @@ namespace Office_File_Explorer.Helpers
                 zFile.Read(buffer, 0, buffer.Length);
 
                 List<string> bList = new List<string>();
-                int byteCount = 1;
-                string fileHeaderSignature = "807534";
+                int byteCount = 0;
                 bool isStartOfHeader = false;
-                LocalZipFileHeader lzfh;
+                LocalZipFileHeader lzfh = new LocalZipFileHeader();
+                StringBuilder tempSB = new StringBuilder();
 
                 // loop each header 80-75-3-4 and see if the 7th byte is > 0
                 foreach (Byte b in buffer)
                 {
-                    if (b.ToString() == "80")
+                    switch (byteCount)
                     {
-                        isStartOfHeader = true;
+                        case 0:
+                            if (b.ToString() == Strings.bP)
+                            {
+                                isStartOfHeader = true;
+                            }
+                            else
+                            {
+                                isStartOfHeader = false;
+                            }
+                            break;
+                        case 1:
+                            if (isStartOfHeader == true && b.ToString() == Strings.bK)
+                            {
+                                isStartOfHeader = true;
+                            }
+                            else
+                            {
+                                isStartOfHeader = false;
+                            }
+                            break;
+                        case 2:
+                            if (isStartOfHeader == true && b.ToString() == Strings.b3)
+                            {
+                                isStartOfHeader = true;
+                            }
+                            else
+                            {
+                                isStartOfHeader = false;
+                            }
+                            break;
+                        case 3:
+                            if (isStartOfHeader == true && b.ToString() == Strings.b4)
+                            {
+                                isStartOfHeader = true;
+                            }
+                            else
+                            {
+                                // if the last byte is not 4, we are not in a signature sequence
+                                // reset the SOH and count
+                                isStartOfHeader = false;
+                                byteCount = 0;
+                            }
+                            break;
+                        case 4:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 5:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.Version = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        case 6:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 7:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.GeneralPurposeBitFlag = tempSB.ToString();
+                            tempSB.Clear();
+
+                            if (lzfh.GeneralPurposeBitFlag != "0000")
+                            {
+                                isCorrupt = true;
+                            }
+                            break;
+                        case 8:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 9:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.CompressionMethod = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        case 10:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 11:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.LastModifiedTime = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        case 12:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 13:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.LastModifiedDate = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        case 14:
+                        case 15:
+                        case 16:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 17:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.CRC32 = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        case 18:
+                        case 19:
+                        case 20:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 21:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.CompressedSize = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        case 22:
+                        case 23:
+                        case 24:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 25:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.UncompressedSize = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        case 26:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 27:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.FileNameLength = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        case 28:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+                            break;
+                        case 29:
+                            if (isStartOfHeader == true && b.ToString().Length == 1)
+                            {
+                                tempSB.Append(Strings.bZero);
+                                tempSB.Append(b.ToString());
+                            }
+                            else
+                            {
+                                tempSB.Append(b.ToString());
+                            }
+
+                            lzfh.ExtraFieldLength = tempSB.ToString();
+                            tempSB.Clear();
+                            break;
+                        default:
+                            break;
                     }
 
-                    if (isStartOfHeader)
+                    // increment until end of header
+                    if (byteCount == 29 || isStartOfHeader == false)
                     {
-                        // process the 4 byte signature
-                        if (byteCount <= 4 && isStartOfHeader == true)
-                        {
-                            bList.Add(b.ToString());
-
-                            if (byteCount == 4)
-                            {
-                                // if the signature matches the lfh signature, create the new lfh class to keep processing
-                                StringBuilder sbSignature = new StringBuilder();
-                                sbSignature.Append(bList[0]);
-                                sbSignature.Append(bList[1]);
-                                sbSignature.Append(bList[2]);
-                                sbSignature.Append(bList[3]);
-
-                                if (sbSignature.ToString() == fileHeaderSignature)
-                                {
-                                    lzfh = new LocalZipFileHeader();
-                                    byteCount++;
-                                }
-                                else
-                                {
-                                    // reset the lfh check values
-                                    byteCount = 0;
-                                    isStartOfHeader = false;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // check byte 5+
-                            if (byteCount == 5)
-                            {
-                                
-                            }
-                        }
+                        byteCount = 0;
+                    }
+                    else
+                    {
+                        byteCount++;
                     }
                 }
             }

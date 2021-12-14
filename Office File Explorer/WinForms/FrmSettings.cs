@@ -48,6 +48,11 @@ namespace Office_File_Explorer.WinForms
             {
                 rdoDOM.Checked = true;
             }
+
+            if (Properties.Settings.Default.CheckZipItemCorrupt == true)
+            {
+                ckbZipItemCorrupt.Checked = true;
+            }
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -58,6 +63,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.ResetNotesMaster = ckbResetNotes.Checked;
             Properties.Settings.Default.DeleteCopiesOnExit = ckbDeleteOnExit.Checked;
             Properties.Settings.Default.RemoveCorruptAtMentions = ckbRemoveAtMentions.Checked;
+            Properties.Settings.Default.CheckZipItemCorrupt = ckbZipItemCorrupt.Checked;
 
             if (rdoSAX.Checked == true)
             {

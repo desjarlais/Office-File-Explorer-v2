@@ -106,5 +106,17 @@ namespace Office_File_Explorer.Properties {
                 this["DeleteCopiesOnExit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CheckZipItemCorrupt {
+            get {
+                return ((bool)(this["CheckZipItemCorrupt"]));
+            }
+            set {
+                this["CheckZipItemCorrupt"] = value;
+            }
+        }
     }
 }

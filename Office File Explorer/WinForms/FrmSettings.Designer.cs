@@ -44,6 +44,7 @@ namespace Office_File_Explorer.WinForms
             this.rdoDOM = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
+            this.ckbZipItemCorrupt = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -125,6 +126,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.ckbZipItemCorrupt);
             this.groupBox3.Controls.Add(this.ckbDeleteOnExit);
             this.groupBox3.Location = new System.Drawing.Point(12, 134);
             this.groupBox3.Name = "groupBox3";
@@ -196,6 +198,16 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
+            // ckbZipItemCorrupt
+            // 
+            this.ckbZipItemCorrupt.AutoSize = true;
+            this.ckbZipItemCorrupt.Location = new System.Drawing.Point(19, 48);
+            this.ckbZipItemCorrupt.Name = "ckbZipItemCorrupt";
+            this.ckbZipItemCorrupt.Size = new System.Drawing.Size(187, 19);
+            this.ckbZipItemCorrupt.TabIndex = 3;
+            this.ckbZipItemCorrupt.Text = "Check For Zip Item Corruption";
+            this.ckbZipItemCorrupt.UseVisualStyleBackColor = true;
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -242,5 +254,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.RadioButton rdoSAX;
         private System.Windows.Forms.RadioButton rdoDOM;
+        private System.Windows.Forms.CheckBox ckbZipItemCorrupt;
     }
 }

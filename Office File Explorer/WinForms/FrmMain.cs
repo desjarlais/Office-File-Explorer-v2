@@ -180,15 +180,16 @@ namespace Office_File_Explorer
                             // if the file does start with PK, check if it fails in the SDK
                             if (OpenWithSdk(lblFilePath.Text))
                             {
-                                if (Office.IsZippedFileCorrupt(lblFilePath.Text))
+                                if (Properties.Settings.Default.CheckZipItemCorrupt == true)
                                 {
-                                    
+                                    if (Office.IsZippedFileCorrupt(lblFilePath.Text))
+                                    {
+                                        LstDisplay.Items.Add("Warning - One of the zipped items is corrupt.");
+                                    }
                                 }
-                                else
-                                {
-                                    lblFileType.Text = StrOfficeApp;
-                                    PopulatePackageParts();
-                                }
+
+                                lblFileType.Text = StrOfficeApp;
+                                PopulatePackageParts();
                             }
                             else
                             {

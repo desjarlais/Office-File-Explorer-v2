@@ -5,6 +5,13 @@ namespace Office_File_Explorer.Helpers
 {
     public class Strings
     {
+        // byte values
+        public const string bZero = "0";
+        public const string bP = "80";
+        public const string bK = "75";
+        public const string b3 = "3";
+        public const string b4 = "4";
+
         // global app words
         public const string oAppWord = "Word";
         public const string oAppExcel = "Excel";
