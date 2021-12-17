@@ -715,6 +715,61 @@ namespace Office_File_Explorer.Helpers
             return ltFieldCodes;
         }
 
+        public static List<string> LstTables(string fPath)
+        {
+            var ltTables = new List<string>();
+
+            using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
+            {
+                IEnumerable<Table> tList = package.MainDocumentPart.Document.Descendants<Table>();
+                int tableCount = 0;
+                
+                foreach (var t in tList)
+                {
+                    tableCount++;
+
+                    bool isNested = false;
+
+                    // check if the table is nested
+                    OpenXmlElement tOxe = (OpenXmlElement)t;
+                    if (tOxe.Parent.ToString() == "DocumentFormat.OpenXml.Wordprocessing.TableCell")
+                    {
+                        isNested = true;
+                    }
+
+                    // track the row/col for each table
+                    int rowCount = 0;
+                    int colCount = 0;
+
+                    foreach (OpenXmlElement oxe in t.ChildElements)
+                    {
+                        // get the count of columns
+                        if (oxe.GetType().ToString() == "DocumentFormat.OpenXml.Wordprocessing.TableGrid")
+                        {
+                            colCount = oxe.ChildElements.Count();
+                        }
+
+                        // track the number of rows
+                        if (oxe.GetType().ToString() == "DocumentFormat.OpenXml.Wordprocessing.TableRow")
+                        {
+                            rowCount++;
+                        }
+                    }
+
+                    if (isNested)
+                    {
+                        ltTables.Add("Table " + tableCount + Strings.wEqualSign + colCount + " x " + rowCount + " (Nested Table)");
+                    }
+                    else
+                    {
+                        ltTables.Add("Table " + tableCount + Strings.wEqualSign + colCount + " x " + rowCount);
+                    }
+                }
+            }
+
+            return ltTables;
+        }
+
         public static List<string> LstComments(string fPath)
         {
             var ltComments = new List<string>();

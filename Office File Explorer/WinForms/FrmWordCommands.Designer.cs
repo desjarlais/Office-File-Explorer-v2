@@ -54,6 +54,7 @@ namespace Office_File_Explorer.WinForms
             this.ckbShapes = new System.Windows.Forms.CheckBox();
             this.ckbOleObjects = new System.Windows.Forms.CheckBox();
             this.ckbSelectAll = new System.Windows.Forms.CheckBox();
+            this.ckbTables = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -61,6 +62,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckbTables);
             this.groupBox1.Controls.Add(this.ckbFieldCodes);
             this.groupBox1.Controls.Add(this.ckbComments);
             this.groupBox1.Controls.Add(this.ckbBookmarks);
@@ -74,7 +76,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.ckbStyles);
             this.groupBox1.Location = new System.Drawing.Point(9, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(212, 305);
+            this.groupBox1.Size = new System.Drawing.Size(212, 379);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Word Content To Display";
@@ -268,9 +270,9 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.ckbPackageParts);
             this.groupBox3.Controls.Add(this.ckbShapes);
             this.groupBox3.Controls.Add(this.ckbOleObjects);
-            this.groupBox3.Location = new System.Drawing.Point(9, 323);
+            this.groupBox3.Location = new System.Drawing.Point(9, 397);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(212, 177);
+            this.groupBox3.Size = new System.Drawing.Size(212, 103);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Select Office Content To Display";
@@ -315,6 +317,16 @@ namespace Office_File_Explorer.WinForms
             this.ckbSelectAll.Text = "Select All Options";
             this.ckbSelectAll.UseVisualStyleBackColor = true;
             this.ckbSelectAll.CheckedChanged += new System.EventHandler(this.CkbSelectAll_CheckedChanged);
+            // 
+            // ckbTables
+            // 
+            this.ckbTables.AutoSize = true;
+            this.ckbTables.Location = new System.Drawing.Point(11, 297);
+            this.ckbTables.Name = "ckbTables";
+            this.ckbTables.Size = new System.Drawing.Size(58, 19);
+            this.ckbTables.TabIndex = 11;
+            this.ckbTables.Text = "Tables";
+            this.ckbTables.UseVisualStyleBackColor = true;
             // 
             // FrmWordCommands
             // 
@@ -371,5 +383,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.CheckBox ckbShapes;
         private System.Windows.Forms.CheckBox ckbOleObjects;
         private System.Windows.Forms.CheckBox ckbSelectAll;
+        private System.Windows.Forms.CheckBox ckbTables;
     }
 }

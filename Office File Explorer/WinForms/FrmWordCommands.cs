@@ -123,6 +123,15 @@ namespace Office_File_Explorer.WinForms
                 wdCmds &= ~AppUtilities.WordViewCmds.FieldCodes;
             }
 
+            if (ckbTables.Checked)
+            {
+                wdCmds |= AppUtilities.WordViewCmds.Tables;
+            }
+            else
+            {
+                wdCmds &= ~AppUtilities.WordViewCmds.Tables;
+            }
+
             // check Office features
             if (ckbShapes.Checked)
             {

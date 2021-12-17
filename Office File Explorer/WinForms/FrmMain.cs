@@ -614,6 +614,12 @@ namespace Office_File_Explorer
                             DisplayListContents(Word.LstFieldCodes(lblFilePath.Text), Strings.wFldCodes);
                         }
 
+                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Tables))
+                        {
+                            LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wTables + Strings.wHeadingEnd);
+                            DisplayListContents(Word.LstTables(lblFilePath.Text), Strings.wTables);
+                        }
+
                         // display Office features
                         if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
                         {

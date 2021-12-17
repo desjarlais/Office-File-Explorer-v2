@@ -20,7 +20,8 @@ namespace Office_File_Explorer.Helpers
             DocumentProperties = 128,
             Bookmarks = 256,
             Comments = 512,
-            FieldCodes = 1024
+            FieldCodes = 1024,
+            Tables = 2048
         }
 
         [Flags]

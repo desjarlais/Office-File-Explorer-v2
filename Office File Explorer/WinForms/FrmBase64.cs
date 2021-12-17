@@ -32,7 +32,6 @@ namespace Office_File_Explorer.WinForms
         public static bool IsBase64String(string base64)
         {
             Span<byte> buffer = new Span<byte>(new byte[base64.Length]);
-            //return Convert.TryFromBase64String(base64.PadRight(base64.Length / 4 * 4 + (base64.Length % 4 == 0 ? 0 : 4), '='), new Span<byte>(new byte[base64.Length]), out _);
             return Convert.TryFromBase64String(base64, buffer, out int bytesParsed);
         }
     }

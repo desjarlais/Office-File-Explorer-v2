@@ -63,6 +63,7 @@ namespace Office_File_Explorer.Helpers
         public const string wConnections = "Connections";
         public const string wRevisions = "Revisions";
         public const string wTableProps = "Table Grid Properties";
+        public const string wTables = "Tables";
         public const string wFieldCodes = "Field Codes";
         public const string wSharedStrings = "Shared Strings";
         public const string wStyles = "Styles";
