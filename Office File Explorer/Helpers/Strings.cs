@@ -169,7 +169,9 @@ namespace Office_File_Explorer.Helpers
         public const string dfowStdAlias = "DocumentFormat.OpenXml.Wordprocessing.SdtAlias";
         public const string dfowTag = "DocumentFormat.OpenXml.Wordprocessing.Tag";
         public const string dfowDataBinding = "DocumentFormat.OpenXml.Wordprocessing.DataBinding";
-
+        public const string dfowTableGrid = "DocumentFormat.OpenXml.Wordprocessing.TableGrid";
+        public const string dfowTableCell = "DocumentFormat.OpenXml.Wordprocessing.TableCell";
+        public const string dfowTableRow = "DocumentFormat.OpenXml.Wordprocessing.TableRow";
 
         // powerpoint sdk refs (DocumentFormat.OpenXml.Presentation = dfop)
         public const string dfopNVSP = "DocumentFormat.OpenXml.Presentation.NonVisualShapeProperties";

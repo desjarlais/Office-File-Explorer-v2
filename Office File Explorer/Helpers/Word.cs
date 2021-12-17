@@ -731,8 +731,8 @@ namespace Office_File_Explorer.Helpers
                     bool isNested = false;
 
                     // check if the table is nested
-                    OpenXmlElement tOxe = (OpenXmlElement)t;
-                    if (tOxe.Parent.ToString() == "DocumentFormat.OpenXml.Wordprocessing.TableCell")
+                    OpenXmlElement tOxe = t;
+                    if (tOxe.Parent.ToString() == Strings.dfowTableCell)
                     {
                         isNested = true;
                     }
@@ -744,13 +744,13 @@ namespace Office_File_Explorer.Helpers
                     foreach (OpenXmlElement oxe in t.ChildElements)
                     {
                         // get the count of columns
-                        if (oxe.GetType().ToString() == "DocumentFormat.OpenXml.Wordprocessing.TableGrid")
+                        if (oxe.GetType().ToString() == Strings.dfowTableGrid)
                         {
-                            colCount = oxe.ChildElements.Count();
+                            colCount = oxe.ChildElements.Count;
                         }
 
                         // track the number of rows
-                        if (oxe.GetType().ToString() == "DocumentFormat.OpenXml.Wordprocessing.TableRow")
+                        if (oxe.GetType().ToString() == Strings.dfowTableRow)
                         {
                             rowCount++;
                         }
