@@ -34,6 +34,7 @@ namespace Office_File_Explorer.Helpers
         public const string wEqualSign = " = ";
         public const string wEqualNoSpace = "=";
         public const string wSpaceChar = " ";
+        public const string wXChar = " x ";
         public const string wHeaderLine = "-------------------------------------------";
         public const string wTripleSpace = "   ";
         public const string wCustomXmlRequestStatus = "RequestStatus";

@@ -44,7 +44,6 @@ namespace Office_File_Explorer
         // global lists
         private static List<string> corruptNodes = new List<string>();
         private static List<string> pParts = new List<string>();
-        private static List<string> zFiles = new List<string>();
         private List<string> oNumIdList = new List<string>();
 
         // corrupt doc xml node buffer
@@ -242,7 +241,7 @@ namespace Office_File_Explorer
                     FileUtilities.WriteToLog(Strings.fLogFilePath, ex);
                     break;
                 case LogInfoType.EmptyCount:
-                    LstDisplay.Items.Add("   ** Document contains no " + output + " **");
+                    LstDisplay.Items.Add(" none");
                     break;
                 default:
                     LstDisplay.Items.Add(output);

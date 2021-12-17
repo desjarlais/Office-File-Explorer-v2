@@ -421,6 +421,7 @@ namespace Office_File_Explorer.WinForms
                 ckbContentControls.Checked = true;
                 ckbComments.Checked = true;
                 ckbBookmarks.Checked = true;
+                ckbTables.Checked = true;
             }
             else
             {
@@ -438,6 +439,7 @@ namespace Office_File_Explorer.WinForms
                 ckbContentControls.Checked = false;
                 ckbComments.Checked = false;
                 ckbBookmarks.Checked = false;
+                ckbTables.Checked = false;
             }
         }
     }

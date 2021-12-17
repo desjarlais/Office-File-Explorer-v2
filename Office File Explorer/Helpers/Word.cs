@@ -629,7 +629,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstFieldCodes(string fPath)
         {
-            var ltFieldCodes = new List<string>();
+            List<string> ltFieldCodes = new List<string>();
 
             using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
             {
@@ -717,7 +717,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstTables(string fPath)
         {
-            var ltTables = new List<string>();
+            List<string> ltTables = new List<string>();
 
             using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
             {
@@ -727,7 +727,6 @@ namespace Office_File_Explorer.Helpers
                 foreach (var t in tList)
                 {
                     tableCount++;
-
                     bool isNested = false;
 
                     // check if the table is nested
@@ -758,11 +757,11 @@ namespace Office_File_Explorer.Helpers
 
                     if (isNested)
                     {
-                        ltTables.Add("Table " + tableCount + Strings.wEqualSign + colCount + " x " + rowCount + " (Nested Table)");
+                        ltTables.Add("Table " + tableCount + Strings.wEqualSign + colCount + Strings.wXChar + rowCount + " (Nested Table)");
                     }
                     else
                     {
-                        ltTables.Add("Table " + tableCount + Strings.wEqualSign + colCount + " x " + rowCount);
+                        ltTables.Add("Table " + tableCount + Strings.wEqualSign + colCount + Strings.wXChar + rowCount);
                     }
                 }
             }
@@ -772,7 +771,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstComments(string fPath)
         {
-            var ltComments = new List<string>();
+            List<string> ltComments = new List<string>();
 
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(fPath, false))
             {
@@ -815,7 +814,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstBookmarks(string fPath)
         {
-            var ltBookmarks = new List<string>();
+            List<string> ltBookmarks = new List<string>();
 
             using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
             {
@@ -1125,7 +1124,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstFootnotes(string fPath)
         {
-            var ltFootnotes = new List<string>();
+            List<string> ltFootnotes = new List<string>();
 
             using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
             {
@@ -1149,7 +1148,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstEndnotes(string fPath)
         {
-            var ltEndnotes = new List<string>();
+            List<string> ltEndnotes = new List<string>();
 
             using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
             {
@@ -1173,7 +1172,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstFonts(string fPath)
         {
-            var ltFonts = new List<string>();
+            List<string> ltFonts = new List<string>();
 
             int count = 0;
 
@@ -1191,7 +1190,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstListTemplates(string fPath, bool onlyReturnUnused)
         {
-            var ltList = new List<string>();
+            List<string> ltList = new List<string>();
 
             // global numid lists
             List<int> oNumIdList = new List<int>();
@@ -1353,7 +1352,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstHyperlinks(string fPath)
         {
-            var hlinkList = new List<string>();
+            List<string> hlinkList = new List<string>();
 
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(fPath, false))
             {
@@ -1406,7 +1405,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstStyles(string fPath)
         {
-            var stylesList = new List<string>();
+            List<string> stylesList = new List<string>();
 
             XNamespace w = Strings.wordMainAttributeNamespace;
             XDocument xDoc = null;
@@ -1585,7 +1584,7 @@ namespace Office_File_Explorer.Helpers
 
         public static List<string> LstContentControls(string fPath)
         {
-            var ccList = new List<string>();
+            List<string> ccList = new List<string>();
 
             using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
             {
@@ -2230,11 +2229,11 @@ namespace Office_File_Explorer.Helpers
         private static bool IsParagraphInStyle(Paragraph p, string styleId)
         {
             ParagraphProperties pPr = p.GetFirstChild<ParagraphProperties>();
-            if (pPr != null)
+            if (pPr is not null)
             {
                 ParagraphStyleId paraStyle = pPr.ParagraphStyleId;
 
-                if (paraStyle != null)
+                if (paraStyle is not null)
                 {
                     return paraStyle.Val.Value.Equals(styleId);
                 }
@@ -2270,10 +2269,10 @@ namespace Office_File_Explorer.Helpers
         {
             RunProperties rPr = r.GetFirstChild<RunProperties>();
 
-            if (rPr != null)
+            if (rPr is not null)
             {
                 RunStyle runStyle = rPr.RunStyle;
-                if (runStyle != null)
+                if (runStyle is not null)
                 {
                     return runStyle.Val.Value.Equals(styleId);
                 }
@@ -2300,11 +2299,11 @@ namespace Office_File_Explorer.Helpers
         {
             TableProperties tblPr = tbl.GetFirstChild<TableProperties>();
 
-            if (tblPr != null)
+            if (tblPr is not null)
             {
                 TableStyle tblStyle = tblPr.TableStyle;
 
-                if (tblStyle != null)
+                if (tblStyle is not null)
                 {
                     return tblStyle.Val.Value.Equals(styleId);
                 }
