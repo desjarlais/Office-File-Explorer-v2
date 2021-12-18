@@ -11,6 +11,7 @@ namespace Office_File_Explorer.Helpers
         public const string bK = "75";
         public const string b3 = "3";
         public const string b4 = "4";
+        public const string bDataDescriptor = "8";
 
         // global app words
         public const string oAppWord = "Word";

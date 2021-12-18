@@ -895,7 +895,7 @@ namespace Office_File_Explorer.Helpers
                             lzfh.GeneralPurposeBitFlag = tempSB.ToString();
                             tempSB.Clear();
 
-                            if (lzfh.GeneralPurposeBitFlag != Strings.bZero)
+                            if (lzfh.GeneralPurposeBitFlag == Strings.bDataDescriptor)
                             {
                                 isDataDescriptorFound = true;
                             }
