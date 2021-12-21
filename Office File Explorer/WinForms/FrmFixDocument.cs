@@ -163,7 +163,11 @@ namespace Office_File_Explorer.WinForms
 
             if (rdoFixDataDescriptorW.Checked || tryAllFixes == true)
             {
-
+                SetCorruptionChecked(Strings.wZipItem);
+                if (WordFixes.FixDataDescriptor(filePath) == true)
+                {
+                    isFileFixed = true;
+                }
             }
 
             // isFileFixed should be set, now close the form

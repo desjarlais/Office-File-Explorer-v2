@@ -590,5 +590,121 @@ namespace Office_File_Explorer.Helpers
 
             return isChanged;
         }
+
+        public int GetSlideIndexByTitle(string fileName, string slideTitle)
+        {
+            // Given a slide document and a slide title, retrieve the 0-based index of the 
+            // first slide with a matching title. Return -1 if the title isn't found.
+
+            // Assume that you won't find a match.
+            int slideLocation = -1;
+
+            using (var document = PresentationDocument.Open(fileName, true))
+            {
+                var presPart = document.PresentationPart;
+
+                // No presentation part? Something's wrong with the document.
+                if (presPart == null)
+                {
+                    throw new ArgumentException("fileName");
+                }
+
+                // If you're here, you know that presentationPart exists.
+                var slideIdList = presPart.Presentation.SlideIdList;
+                // Go through the slides in order.
+                // This requires investigating the actual slide IDs, rather 
+                // than just retrieving the slide parts.
+                int index = 0;
+                foreach (var slideId in slideIdList.Elements<SlideId>())
+                {
+                    SlidePart slidePart = (SlidePart)(presPart.GetPartById(slideId.RelationshipId.ToString()));
+
+                    if (slidePart == null)
+                    {
+                        throw new ArgumentNullException("presentationDocument");
+                    }
+
+                    Slide theSlide = slidePart.Slide;
+                    if (theSlide != null)
+                    {
+
+                        // Assume the first title shape you find contains the title.
+                        var titleShape = slidePart.Slide.Descendants<A.Shape>().
+                          Where(s => IsTitleShape(s)).FirstOrDefault();
+                        if (titleShape != null)
+                        {
+                            // Compare the title, case-insensitively.
+                            if (string.Compare(titleShape.InnerText, slideTitle, true) == 0)
+                            {
+                                slideLocation = index;
+                                break;
+                            }
+                            else
+                            {
+                                index += 1;
+                            }
+                        }
+                    }
+                }
+            }
+            return slideLocation;
+        }
+
+        private bool IsTitleShape(A.Shape shape)
+        {
+            bool isTitle = false;
+
+            var placeholderShape = shape.NonVisualShapeProperties.NonVisualDrawingProperties.GetFirstChild<PlaceholderShape>();
+            if (((placeholderShape) != null) && (((placeholderShape.Type) != null) &&
+              placeholderShape.Type.HasValue))
+            {
+                // Any title shape
+                if (placeholderShape.Type.Value == PlaceholderValues.Title)
+                {
+                    isTitle = true;
+
+                }
+                // A centered title.
+                else if (placeholderShape.Type.Value == PlaceholderValues.CenteredTitle)
+                {
+                    isTitle = true;
+                }
+            }
+            return isTitle;
+        }
+
+        // Return the number of slides, including hidden slides.
+        public int GetSlideCount(string fileName)
+        {
+            return GetSlideCount(fileName, true);
+        }
+
+        public int GetSlideCount(string fileName, bool includeHidden)
+        {
+            int slidesCount = 0;
+
+            using (PresentationDocument doc = PresentationDocument.Open(fileName, false))
+            {
+                // Get the presentation part of the document.
+                PresentationPart presentationPart = doc.PresentationPart;
+                if (presentationPart != null)
+                {
+                    if (includeHidden)
+                    {
+                        slidesCount = presentationPart.GetPartsOfType<SlidePart>().Count();
+                    }
+                    else
+                    {
+                        // Each slide can include a Show property, which if hidden will contain the value "0".
+                        // The Show property may not exist, and most likely will not, for non-hidden slides.
+                        var slides = presentationPart.GetPartsOfType<SlidePart>().
+                          Where((s) => (s.Slide != null) &&
+                            ((s.Slide.Show == null) || (s.Slide.Show.HasValue && s.Slide.Show.Value)));
+                        slidesCount = slides.Count();
+                    }
+                }
+            }
+            return slidesCount;
+        }
     }
 }

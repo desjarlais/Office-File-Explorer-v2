@@ -963,5 +963,29 @@ namespace Office_File_Explorer.Helpers
 
             return index;
         }
+
+        public Font GetStyleFont(SpreadsheetDocument document, int fontIndex)
+        {
+            Font theFont = null;
+
+            WorkbookPart wbPart = document.WorkbookPart;
+
+            // Go get the styles information.
+            var styles = wbPart.GetPartsOfType<WorkbookStylesPart>().FirstOrDefault();
+            // If you can't retrieve the styles part, you're done.
+            if (styles != null)
+            {
+                theFont = (Font)(styles.Stylesheet.Fonts.Elements().ElementAt(fontIndex));
+            }
+            return theFont;
+        }
+
+        public Font GetStyleFont(string fileName, int fontIndex)
+        {
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, false))
+            {
+                return GetStyleFont(document, fontIndex);
+            }
+        }
     }
 }

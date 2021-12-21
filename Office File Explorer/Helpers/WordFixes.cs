@@ -21,7 +21,10 @@ namespace Office_File_Explorer.Helpers
         {
             corruptionFound = false;
 
-            // TODO
+            if (Office.IsZippedFileCorrupt(filePath))
+            {
+                // change the dd back to 0
+            }
 
             return corruptionFound;
         }

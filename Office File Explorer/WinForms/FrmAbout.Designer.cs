@@ -38,6 +38,7 @@ namespace Office_File_Explorer.WinForms
             this.lblProduct = new System.Windows.Forms.Label();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.BtnOk = new System.Windows.Forms.Button();
+            this.LstDisplay = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -46,9 +47,9 @@ namespace Office_File_Explorer.WinForms
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.pictureBox1);
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.Location = new System.Drawing.Point(272, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(122, 101);
+            this.groupBox1.Size = new System.Drawing.Size(141, 101);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
@@ -58,7 +59,7 @@ namespace Office_File_Explorer.WinForms
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(3, 19);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(116, 79);
+            this.pictureBox1.Size = new System.Drawing.Size(135, 79);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -68,9 +69,9 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.linkLabel1);
             this.groupBox2.Controls.Add(this.lblVersion);
             this.groupBox2.Controls.Add(this.lblProduct);
-            this.groupBox2.Location = new System.Drawing.Point(128, 0);
+            this.groupBox2.Location = new System.Drawing.Point(12, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(181, 101);
+            this.groupBox2.Size = new System.Drawing.Size(257, 101);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             // 
@@ -105,7 +106,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(234, 107);
+            this.BtnOk.Location = new System.Drawing.Point(338, 338);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -113,11 +114,21 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk.UseVisualStyleBackColor = true;
             this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
             // 
+            // LstDisplay
+            // 
+            this.LstDisplay.FormattingEnabled = true;
+            this.LstDisplay.ItemHeight = 15;
+            this.LstDisplay.Location = new System.Drawing.Point(12, 109);
+            this.LstDisplay.Name = "LstDisplay";
+            this.LstDisplay.Size = new System.Drawing.Size(401, 214);
+            this.LstDisplay.TabIndex = 2;
+            // 
             // FrmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(318, 133);
+            this.ClientSize = new System.Drawing.Size(429, 373);
+            this.Controls.Add(this.LstDisplay);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -146,5 +157,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Button BtnOk;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.ListBox LstDisplay;
     }
 }

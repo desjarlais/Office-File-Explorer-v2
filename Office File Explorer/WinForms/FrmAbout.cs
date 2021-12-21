@@ -10,8 +10,10 @@ namespace Office_File_Explorer.WinForms
         public FrmAbout()
         {
             InitializeComponent();
+
+            // display app info
             lblProduct.Text = AssemblyProduct;
-            lblVersion.Text = AssemblyVersion;
+            lblVersion.Text = AssemblyVersion;   
         }
 
         #region Assembly Attribute Accessors
