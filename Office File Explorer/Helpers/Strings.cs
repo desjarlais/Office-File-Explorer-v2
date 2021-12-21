@@ -96,6 +96,7 @@ namespace Office_File_Explorer.Helpers
         public const string wBackslash = "/";
         public const string wHeadingBegin = "--- ";
         public const string wHeadingEnd = " ---";
+        public const string wUsedIn = " -> Used in ";
 
         // app messages
         public const string doNotDeleteStyle = "DO NOT DELETE + ";

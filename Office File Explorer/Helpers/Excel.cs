@@ -508,8 +508,83 @@ namespace Office_File_Explorer.Helpers
             return true;
         }
 
-        public CellFormat GetCellFormat(SpreadsheetDocument document,
-  string sheetName, string addressName)
+        // Given a document name, a worksheet name, and a cell name, get the column of the cell and return
+        // the content of the first cell in that column.
+        public string GetColumnHeader(string docName, string worksheetName, string cellName)
+        {
+
+            string returnValue = null;
+
+            // Open the document as read-only.
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(docName, false))
+            {
+                WorkbookPart wbPart = document.WorkbookPart;
+
+                // Given a worksheet name, first find the Sheet that corresponds to the name.
+                var sheet = wbPart.Workbook.Descendants<Sheet>().
+                  Where(s => s.Name == worksheetName).FirstOrDefault();
+                if (sheet == null)
+                {
+                    // The specified worksheet does not exist.
+                    return null;
+                }
+
+                // Given the Sheet, 
+                WorksheetPart worksheetPart = (WorksheetPart)(wbPart.GetPartById(sheet.Id));
+
+                // Get the column name for the specified cell.
+                string columnName = GetColumnName(cellName);
+
+                // Get the cells in the specified column and order them by row.
+                var headCell = worksheetPart.Worksheet.Descendants<Cell>().
+                  Where(c => string.Compare(GetColumnName(c.CellReference.Value), columnName, true) == 0).
+                  OrderBy(r => GetRowIndex(r.CellReference)).FirstOrDefault();
+
+                if (headCell == null)
+                {
+                    // The specified column does not exist.
+                    return null;
+                }
+
+                // If the content of the first cell is stored as a shared string, get the text of the first cell
+                // from the SharedStringTablePart and return it. Otherwise, return the string value of the cell.
+                if (headCell.DataType != null && headCell.DataType.Value == CellValues.SharedString)
+                {
+                    SharedStringTablePart sharedStringPart =
+                      wbPart.GetPartsOfType<SharedStringTablePart>().FirstOrDefault();
+                    if (sharedStringPart != null)
+                    {
+                        var items = sharedStringPart.SharedStringTable.Elements<SharedStringItem>();
+                        returnValue = items.ElementAt(int.Parse(headCell.CellValue.Text)).InnerText;
+                    }
+                }
+                else
+                {
+                    returnValue = headCell.CellValue.Text;
+                }
+            }
+            return returnValue;
+        }
+
+        // Given a cell name, parses the specified cell to get the column name.
+        private string GetColumnName(string cellName)
+        {
+            // Create a regular expression to match the column name portion of the cell name.
+            Regex regex = new Regex("[A-Za-z]+");
+            Match match = regex.Match(cellName);
+            return match.Value;
+        }
+
+        // Given a cell name, parses the specified cell to get the row index.
+        private uint GetRowIndex(string cellName)
+        {
+            // Create a regular expression to match the row index portion the cell name.
+            Regex regex = new Regex("\\d+");
+            Match match = regex.Match(cellName);
+            return uint.Parse(match.Value);
+        }
+
+        public CellFormat GetCellFormat(SpreadsheetDocument document, string sheetName, string addressName)
         {
             CellFormat theCellFormat = null;
 

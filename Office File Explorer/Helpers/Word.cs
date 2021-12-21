@@ -17,6 +17,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
 using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
 using DocumentFormat.OpenXml.CustomProperties;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -90,7 +91,7 @@ namespace Office_File_Explorer.Helpers
 
                         foreach (var item in tempInserted)
                         {
-                            if (item.Parent != null)
+                            if (item.Parent is not null)
                             {
                                 var textRuns = item.Elements<Run>().ToList();
                                 var parent = item.Parent;
@@ -133,7 +134,7 @@ namespace Office_File_Explorer.Helpers
 
                     foreach (var item in inserted)
                     {
-                        if (item.Parent != null)
+                        if (item.Parent is not null)
                         {
                             var textRuns = item.Elements<Run>().ToList();
                             var parent = item.Parent;
@@ -213,7 +214,7 @@ namespace Office_File_Explorer.Helpers
                             pgSz.Height = width;
 
                             PageMargin pgMar = sectPr.Descendants<PageMargin>().FirstOrDefault();
-                            if (pgMar != null)
+                            if (pgMar is not null)
                             {
                                 // Rotate margins. Printer settings control how far you 
                                 // rotate when switching to landscape mode. Not having those
@@ -368,13 +369,13 @@ namespace Office_File_Explorer.Helpers
                 foreach (var item in hiddenItems)
                 {
                     // Need to go up at least two levels to get to the run.
-                    if ((item.Parent != null) &&
-                      (item.Parent.Parent != null) &&
-                      (item.Parent.Parent.Parent != null))
+                    if ((item.Parent is not null) &&
+                      (item.Parent.Parent is not null) &&
+                      (item.Parent.Parent.Parent is not null))
                     {
                         var topNode = item.Parent.Parent;
                         var topParentNode = item.Parent.Parent.Parent;
-                        if (topParentNode != null)
+                        if (topParentNode is not null)
                         {
                             topNode.Remove();
                             // No more children? Remove the parent node, as well.
@@ -449,7 +450,7 @@ namespace Office_File_Explorer.Helpers
                             string[] separatingStrings = { Strings.wArrowOnly };
                             words = b.Split(separatingStrings, StringSplitOptions.None);
 
-                            if (words.Count() > 0)
+                            if (words.Length > 0)
                             {
                                 foreach (string w in words.Reverse())
                                 {
@@ -532,7 +533,7 @@ namespace Office_File_Explorer.Helpers
             using (WordprocessingDocument wdDoc = WordprocessingDocument.Open(docName, true))
             {
                 FootnotesPart fnp = wdDoc.MainDocumentPart.FootnotesPart;
-                if (fnp != null)
+                if (fnp is not null)
                 {
                     var footnotes = fnp.Footnotes.Elements<Footnote>();
                     var references = wdDoc.MainDocumentPart.Document.Body.Descendants<FootnoteReference>().ToArray();
@@ -821,7 +822,7 @@ namespace Office_File_Explorer.Helpers
                 IEnumerable<BookmarkStart> bkList = package.MainDocumentPart.Document.Descendants<BookmarkStart>();
                 ltBookmarks.Add("** Document Bookmarks **");
 
-                if (bkList.Count() > 0)
+                if (bkList.Any())
                 {
                     int count = 1;
 
@@ -834,7 +835,7 @@ namespace Office_File_Explorer.Helpers
 
                         do
                         {
-                            if (cElem != null && cElem.Parent != null && cElem.Parent.ToString().Contains(Strings.dfowSdt))
+                            if (cElem is not null && cElem.Parent is not null && cElem.Parent.ToString().Contains(Strings.dfowSdt))
                             {
                                 foreach (OpenXmlElement oxe in cElem.Parent.ChildElements)
                                 {
@@ -883,14 +884,14 @@ namespace Office_File_Explorer.Helpers
                     }
                 }
 
-                if (package.MainDocumentPart.WordprocessingCommentsPart != null)
+                if (package.MainDocumentPart.WordprocessingCommentsPart is not null)
                 {
-                    if (package.MainDocumentPart.WordprocessingCommentsPart.Comments != null)
+                    if (package.MainDocumentPart.WordprocessingCommentsPart.Comments is not null)
                     {
                         IEnumerable<BookmarkStart> bkCommentList = package.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
                         int bkCommentCount = 0;
 
-                        if (bkCommentList.Count() > 0)
+                        if (bkCommentList.Any())
                         {
                             ltBookmarks.Add(string.Empty);
                             ltBookmarks.Add("** Comment Bookmarks ** ");
@@ -908,6 +909,34 @@ namespace Office_File_Explorer.Helpers
             return ltBookmarks;
         }
 
+        public static string GetDocSecurity(string val)
+        {
+            string docSecurity;
+            switch (val)
+            {
+                case "0":
+                    docSecurity = "None";
+                    break;
+                case "1":
+                    docSecurity = "Password Protected";
+                    break;
+                case "2":
+                    docSecurity = "Read-Only Recommended";
+                    break;
+                case "4":
+                    docSecurity = "Read-Only Enforced";
+                    break;
+                case "8":
+                    docSecurity = "Locked For Annotation";
+                    break;
+                default:
+                    docSecurity = "Unknown";
+                    break;
+            }
+
+            return docSecurity;
+        }
+
         public static List<string> LstDocProps(string fPath)
         {
             List<string> ltDocProps = new List<string>();
@@ -919,13 +948,13 @@ namespace Office_File_Explorer.Helpers
 
             compatList.Add(string.Empty);
             compatList.Add("---- Compatibility Settings ---- ");
-            settingList.Add("---- Settings ---- ");
+            settingList.Add("---- Document Settings ---- ");
 
             using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
             {
                 DocumentSettingsPart docSettingsPart = doc.MainDocumentPart.DocumentSettingsPart;
 
-                // get the standard file props
+                // add the standard file props
                 ltDocProps.Add("Creator : " + doc.PackageProperties.Creator);
                 ltDocProps.Add("Created : " + doc.PackageProperties.Created);
                 ltDocProps.Add("Last Modified By : " + doc.PackageProperties.LastModifiedBy);
@@ -942,56 +971,91 @@ namespace Office_File_Explorer.Helpers
                 ltDocProps.Add("Language : " + doc.PackageProperties.Language);
                 ltDocProps.Add("Identifier : " + doc.PackageProperties.Identifier);
                 ltDocProps.Add("Keywords : " + doc.PackageProperties.Keywords);
-                ltDocProps.Add(string.Empty);
 
-                // get the extended file props
-                ltDocProps.Add("---- Extended File Properties ----");
-
-                if (doc.ExtendedFilePropertiesPart != null)
+                // add the extended file properties
+                if (doc.ExtendedFilePropertiesPart is not null)
                 {
-                    XmlDocument xmlProps = new XmlDocument();
-                    xmlProps.Load(doc.ExtendedFilePropertiesPart.GetStream());
-                    XmlNodeList exProps = xmlProps.GetElementsByTagName("Properties");
-
-                    foreach (XmlNode xNode in exProps)
+                    if (doc.ExtendedFilePropertiesPart.Properties.Application is not null)
                     {
-                        foreach (XmlElement xElement in xNode)
-                        {
-                            if (xElement.Name == Strings.wDocSecurity)
-                            {
-                                switch (xElement.InnerText)
-                                {
-                                    case "0":
-                                        ltDocProps.Add(Strings.wDocSecurity + Strings.wColon + "None");
-                                        break;
-                                    case "1":
-                                        ltDocProps.Add(Strings.wDocSecurity + Strings.wColon + "Password Protected");
-                                        break;
-                                    case "2":
-                                        ltDocProps.Add(Strings.wDocSecurity + Strings.wColon + "Read-Only Recommended");
-                                        break;
-                                    case "4":
-                                        ltDocProps.Add(Strings.wDocSecurity + Strings.wColon + "Read-Only Enforced");
-                                        break;
-                                    case "8":
-                                        ltDocProps.Add(Strings.wDocSecurity + Strings.wColon + "Locked For Annotation");
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                ltDocProps.Add(xElement.Name + Strings.wColon + xElement.InnerText);
-                            }
-                        }
+                        ltDocProps.Add("Application = " + doc.ExtendedFilePropertiesPart.Properties.Application.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.ApplicationVersion is not null)
+                    {
+                        ltDocProps.Add("Application Version = " + doc.ExtendedFilePropertiesPart.Properties.ApplicationVersion.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.Characters is not null)
+                    {
+                        ltDocProps.Add("Characters = " + doc.ExtendedFilePropertiesPart.Properties.Characters.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.CharactersWithSpaces is not null)
+                    {
+                        ltDocProps.Add("Characters With Spaces = " + doc.ExtendedFilePropertiesPart.Properties.CharactersWithSpaces.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.Company is not null)
+                    {
+                        ltDocProps.Add("Company = " + doc.ExtendedFilePropertiesPart.Properties.Company.Text);
+                    }
+
+                    ltDocProps.Add("Document Security = " + GetDocSecurity(doc.ExtendedFilePropertiesPart.Properties.DocumentSecurity.Text));
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.HyperlinksChanged is not null)
+                    {
+                        ltDocProps.Add("Hyperlinks Changed = " + doc.ExtendedFilePropertiesPart.Properties.HyperlinksChanged.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.Lines is not null)
+                    {
+                        ltDocProps.Add("Lines = " + doc.ExtendedFilePropertiesPart.Properties.Lines.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.LinksUpToDate is not null)
+                    {
+                        ltDocProps.Add("Links Up To Date = " + doc.ExtendedFilePropertiesPart.Properties.LinksUpToDate.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.Paragraphs is not null)
+                    {
+                        ltDocProps.Add("Paragraphs = " + doc.ExtendedFilePropertiesPart.Properties.Paragraphs.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.ScaleCrop is not null)
+                    {
+                        ltDocProps.Add("Scale Crop = " + doc.ExtendedFilePropertiesPart.Properties.ScaleCrop.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.SharedDocument is not null)
+                    {
+                        ltDocProps.Add("Shared Document = " + doc.ExtendedFilePropertiesPart.Properties.SharedDocument.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.Template is not null)
+                    {
+                        ltDocProps.Add("Template = " + doc.ExtendedFilePropertiesPart.Properties.Template.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.TotalTime is not null)
+                    {
+                        ltDocProps.Add("Total Time = " + doc.ExtendedFilePropertiesPart.Properties.TotalTime.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.Words is not null)
+                    {
+                        ltDocProps.Add("Words = " + Strings.wEqualSign + doc.ExtendedFilePropertiesPart.Properties.Words.Text);
+                    }
+
+                    if (doc.ExtendedFilePropertiesPart.Properties.Pages is not null)
+                    {
+                        ltDocProps.Add("Pages = " + doc.ExtendedFilePropertiesPart.Properties.Pages.Text);
                     }
                 }
 
-                if (docSettingsPart != null)
+                if (docSettingsPart is not null)
                 {
                     Settings settings = docSettingsPart.Settings;
-
                     foreach (var setting in settings)
                     {
                         if (setting.LocalName == "compat")
@@ -1442,7 +1506,7 @@ namespace Office_File_Explorer.Helpers
                                 if (pStyleCount > 0)
                                 {
                                     count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + " -> Used in " + pStyleCount + " paragraphs");
+                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + pStyleCount + " paragraphs");
                                     containStyle = true;
                                     styleInUse = true;
                                     continue;
@@ -1455,7 +1519,7 @@ namespace Office_File_Explorer.Helpers
                                 if (rStyleCount > 0)
                                 {
                                     count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + " -> Used in " + rStyleCount + " runs");
+                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + rStyleCount + " runs");
                                     containStyle = true;
                                     styleInUse = true;
                                     continue;
@@ -1468,7 +1532,7 @@ namespace Office_File_Explorer.Helpers
                                 if (tStyleCount > 0)
                                 {
                                     count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + " -> Used in " + tStyleCount + " tables");
+                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + tStyleCount + " tables");
                                     containStyle = true;
                                     styleInUse = true;
                                     continue;
@@ -1494,7 +1558,7 @@ namespace Office_File_Explorer.Helpers
                     foreach (LatentStyleExceptionInfo lex in stylePart.Styles.LatentStyles)
                     {
                         count += 1;
-                        if (lex.UnhideWhenUsed != null)
+                        if (lex.UnhideWhenUsed is not null)
                         {
                             stylesList.Add(count + Strings.wPeriod + lex.Name + " (Hidden)");
                         }
@@ -1559,7 +1623,7 @@ namespace Office_File_Explorer.Helpers
                     select new
                     {
                         ParagraphNode = para,
-                        StyleName = styleNode != null ? (string)styleNode.Attribute(w + "val") : defaultStyle
+                        StyleName = styleNode is null ? defaultStyle : (string)styleNode.Attribute(w + "val")
                     };
 
                 // Retrieve the text of each paragraph.  
@@ -1684,7 +1748,7 @@ namespace Office_File_Explorer.Helpers
             // some authors show up as null, check and ignore
             foreach (ParagraphPropertiesChange ppc in paragraphChanged)
             {
-                if (ppc.Author != null)
+                if (ppc.Author is not null)
                 {
                     allAuthorsInDocument.Add(ppc.Author);
                 }
@@ -1696,7 +1760,7 @@ namespace Office_File_Explorer.Helpers
 
             foreach (RunPropertiesChange rpc in runChanged)
             {
-                if (rpc.Author != null)
+                if (rpc.Author is not null)
                 {
                     allAuthorsInDocument.Add(rpc.Author);
                 }
@@ -1708,7 +1772,7 @@ namespace Office_File_Explorer.Helpers
 
             foreach (DeletedRun dr in deleted)
             {
-                if (dr.Author != null)
+                if (dr.Author is not null)
                 {
                     allAuthorsInDocument.Add(dr.Author);
                 }
@@ -1720,7 +1784,7 @@ namespace Office_File_Explorer.Helpers
 
             foreach (Deleted d in deletedParagraph)
             {
-                if (d.Author != null)
+                if (d.Author is not null)
                 {
                     allAuthorsInDocument.Add(d.Author);
                 }
@@ -1732,7 +1796,7 @@ namespace Office_File_Explorer.Helpers
 
             foreach (InsertedRun ir in inserted)
             {
-                if (ir.Author != null)
+                if (ir.Author is not null)
                 {
                     allAuthorsInDocument.Add(ir.Author);
                 }
@@ -1752,10 +1816,6 @@ namespace Office_File_Explorer.Helpers
 
             return distinctAuthors;
         }
-
-
-
-
 
         /// <summary>
         /// Set the font for a text run.
@@ -1904,7 +1964,7 @@ namespace Office_File_Explorer.Helpers
                 if (tempEl.LocalName == "style")
                 {
                     Style tempStyle = (Style)tempEl;
-                    if (tempStyle.BasedOn != null)
+                    if (tempStyle.BasedOn is not null)
                     {
                         if (tempStyle.BasedOn.Val == prevStyle)
                         {
@@ -2018,10 +2078,10 @@ namespace Office_File_Explorer.Helpers
             foreach (var footer in doc.MainDocumentPart.FooterParts)
                 foreach (var cc in footer.ContentControls())
                     yield return cc;
-            if (doc.MainDocumentPart.FootnotesPart != null)
+            if (doc.MainDocumentPart.FootnotesPart is not null)
                 foreach (var cc in doc.MainDocumentPart.FootnotesPart.ContentControls())
                     yield return cc;
-            if (doc.MainDocumentPart.EndnotesPart != null)
+            if (doc.MainDocumentPart.EndnotesPart is not null)
                 foreach (var cc in doc.MainDocumentPart.EndnotesPart.ContentControls())
                     yield return cc;
         }
@@ -2110,7 +2170,7 @@ namespace Office_File_Explorer.Helpers
             XDocument extendedFilePropertiesXDoc = extendedFilePropertiesPart.GetXDocument();
             extendedFilePropertiesXDoc.Elements(x + Strings.wProperties).Elements(x + Strings.wCompany).Remove();
             XElement totalTime = extendedFilePropertiesXDoc.Elements(x + Strings.wProperties).Elements(x + "TotalTime").FirstOrDefault();
-            if (totalTime != null)
+            if (totalTime is not null)
             {
                 totalTime.Value = "0";
             }
@@ -2144,7 +2204,7 @@ namespace Office_File_Explorer.Helpers
             }
 
             XElement revision = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(cp + "revision").FirstOrDefault();
-            if (revision != null)
+            if (revision is not null)
             {
                 revision.Value = "1";
             }

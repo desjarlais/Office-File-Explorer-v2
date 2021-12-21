@@ -505,20 +505,20 @@ namespace Office_File_Explorer.Helpers
         }
 
         // Delete comments by a specific author. Pass an empty string for the author to delete all comments, by all authors.
-        public void DeleteComments(string fileName, string author)
+        public static bool DeleteComments(string fileName, string author)
         {
+            bool isChanged = false;
 
             using (PresentationDocument doc = PresentationDocument.Open(fileName, true))
             {
                 // Get the authors part.
-                CommentAuthorsPart authorsPart =
-                  doc.PresentationPart.GetPartsOfType<CommentAuthorsPart>().FirstOrDefault();
+                CommentAuthorsPart authorsPart = doc.PresentationPart.GetPartsOfType<CommentAuthorsPart>().FirstOrDefault();
 
-                if (authorsPart == null)
+                if (authorsPart is null)
                 {
                     // There's no authors part, so just
                     // fail. If no authors, there can't be any comments.
-                    return;
+                    return isChanged;
                 }
 
                 // Get the comment authors, or the specified author if supplied:
@@ -549,6 +549,7 @@ namespace Office_File_Explorer.Helpers
                             {
                                 // Delete all the comments by the specified author.
                                 slideCommentsPart.CommentList.RemoveChild<Comment>(comment);
+                                isChanged = true;
                             }
 
                             // No comments left? Delete the comments part for this slide.
@@ -586,6 +587,8 @@ namespace Office_File_Explorer.Helpers
                     }
                 }
             }
+
+            return isChanged;
         }
     }
 }

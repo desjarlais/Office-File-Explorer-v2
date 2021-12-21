@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
             this.rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
             this.rdoFixContentControlsW = new System.Windows.Forms.RadioButton();
             this.rdoFixCommentHyperlinksW = new System.Windows.Forms.RadioButton();
@@ -48,7 +49,7 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixStrictX = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
+            this.rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -56,6 +57,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoFixDataDescriptorW);
             this.groupBox1.Controls.Add(this.rdoTryAllFixesW);
             this.groupBox1.Controls.Add(this.rdoFixMathAccentsW);
             this.groupBox1.Controls.Add(this.rdoFixContentControlsW);
@@ -73,6 +75,18 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Document";
+            // 
+            // rdoTryAllFixesW
+            // 
+            this.rdoTryAllFixesW.AutoSize = true;
+            this.rdoTryAllFixesW.Enabled = false;
+            this.rdoTryAllFixesW.Location = new System.Drawing.Point(6, 160);
+            this.rdoTryAllFixesW.Name = "rdoTryAllFixesW";
+            this.rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
+            this.rdoTryAllFixesW.TabIndex = 9;
+            this.rdoTryAllFixesW.TabStop = true;
+            this.rdoTryAllFixesW.Text = "Try All Fixes";
+            this.rdoTryAllFixesW.UseVisualStyleBackColor = true;
             // 
             // rdoFixMathAccentsW
             // 
@@ -270,17 +284,16 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // rdoTryAllFixesW
+            // rdoFixDataDescriptorW
             // 
-            this.rdoTryAllFixesW.AutoSize = true;
-            this.rdoTryAllFixesW.Enabled = false;
-            this.rdoTryAllFixesW.Location = new System.Drawing.Point(6, 160);
-            this.rdoTryAllFixesW.Name = "rdoTryAllFixesW";
-            this.rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
-            this.rdoTryAllFixesW.TabIndex = 9;
-            this.rdoTryAllFixesW.TabStop = true;
-            this.rdoTryAllFixesW.Text = "Try All Fixes";
-            this.rdoTryAllFixesW.UseVisualStyleBackColor = true;
+            this.rdoFixDataDescriptorW.AutoSize = true;
+            this.rdoFixDataDescriptorW.Location = new System.Drawing.Point(193, 147);
+            this.rdoFixDataDescriptorW.Name = "rdoFixDataDescriptorW";
+            this.rdoFixDataDescriptorW.Size = new System.Drawing.Size(131, 19);
+            this.rdoFixDataDescriptorW.TabIndex = 3;
+            this.rdoFixDataDescriptorW.TabStop = true;
+            this.rdoFixDataDescriptorW.Text = "Fix Corrupt Zip Item";
+            this.rdoFixDataDescriptorW.UseVisualStyleBackColor = true;
             // 
             // FrmFixDocument
             // 
@@ -327,5 +340,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoFixContentControlsW;
         private System.Windows.Forms.RadioButton rdoFixMathAccentsW;
         private System.Windows.Forms.RadioButton rdoTryAllFixesW;
+        private System.Windows.Forms.RadioButton rdoFixDataDescriptorW;
     }
 }

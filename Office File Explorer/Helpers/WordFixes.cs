@@ -17,6 +17,15 @@ namespace Office_File_Explorer.Helpers
     {
         static bool corruptionFound = false;
 
+        public static bool FixDataDescriptor(string filePath)
+        {
+            corruptionFound = false;
+
+            // TODO
+
+            return corruptionFound;
+        }
+
         public static bool FixMathAccents(string filePath)
         {
             corruptionFound = false;

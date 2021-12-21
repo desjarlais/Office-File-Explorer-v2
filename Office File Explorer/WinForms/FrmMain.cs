@@ -179,16 +179,16 @@ namespace Office_File_Explorer
                             // if the file does start with PK, check if it fails in the SDK
                             if (OpenWithSdk(lblFilePath.Text))
                             {
-                                if (Properties.Settings.Default.CheckZipItemCorrupt == true)
+                                lblFileType.Text = StrOfficeApp;
+                                PopulatePackageParts();
+
+                                if (Properties.Settings.Default.CheckZipItemCorrupt == true && lblFileType.Text == Strings.oAppWord)
                                 {
                                     if (Office.IsZippedFileCorrupt(lblFilePath.Text))
                                     {
                                         LstDisplay.Items.Add("Warning - One of the zipped items is corrupt.");
                                     }
                                 }
-
-                                lblFileType.Text = StrOfficeApp;
-                                PopulatePackageParts();
                             }
                             else
                             {
@@ -1328,7 +1328,14 @@ namespace Office_File_Explorer
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.DelComments)
                         {
-                            // todo
+                            if (PowerPoint.DeleteComments(lblFilePath.Text, string.Empty))
+                            {
+                                LstDisplay.Items.Add("Comments Removed");
+                            }
+                            else
+                            {
+                                LstDisplay.Items.Add("No Comments Removed");
+                            }
                         }
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.RemovePIIOnSave)

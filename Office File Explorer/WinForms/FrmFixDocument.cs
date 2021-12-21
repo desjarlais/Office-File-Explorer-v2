@@ -34,6 +34,7 @@ namespace Office_File_Explorer.WinForms
                 rdoFixTablePropsW.Enabled = true;
                 rdoFixContentControlsW.Enabled = true;
                 rdoTryAllFixesW.Enabled = true;
+                rdoFixDataDescriptorW.Enabled = true;
             }
             else if (type == Strings.oAppExcel)
             {
@@ -158,6 +159,11 @@ namespace Office_File_Explorer.WinForms
                 {
                     isFileFixed = true;
                 }
+            }
+
+            if (rdoFixDataDescriptorW.Checked || tryAllFixes == true)
+            {
+
             }
 
             // isFileFixed should be set, now close the form
