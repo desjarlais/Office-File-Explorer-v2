@@ -28,6 +28,8 @@ namespace Office_File_Explorer.Helpers
 {
     class Office
     {
+        public static List<int> corruptByteIndexes = new List<int>();
+
         // custom document property types
         public enum PropertyTypes : int
         {
@@ -807,10 +809,13 @@ namespace Office_File_Explorer.Helpers
 
             using (FileStream zFile = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
+                int totalByteIndex = 0;
+                corruptByteIndexes.Clear();
                 byte[] buffer = new byte[zFile.Length];
                 zFile.Read(buffer, 0, buffer.Length);
 
                 int byteCount = 0;
+                int ddIndex = 0;
                 bool isStartOfHeader = false;
                 bool isDataDescriptorFound = false;
                 bool isCrcZero = false;
@@ -898,6 +903,7 @@ namespace Office_File_Explorer.Helpers
                             if (lzfh.GeneralPurposeBitFlag == Strings.bDataDescriptor)
                             {
                                 isDataDescriptorFound = true;
+                                ddIndex = totalByteIndex - 1;
                             }
                             break;
                         case 8:
@@ -1043,6 +1049,7 @@ namespace Office_File_Explorer.Helpers
                                 if (isCrcZero == false || isCompressedZero == false || isUncompressedZero == false)
                                 {
                                     isCorrupt = true;
+                                    corruptByteIndexes.Add(ddIndex);
                                 }
                             }
                             break;
@@ -1054,6 +1061,7 @@ namespace Office_File_Explorer.Helpers
                     if (byteCount == 29 || isStartOfHeader == false)
                     {
                         byteCount = 0;
+                        ddIndex = 0;
                         isCrcZero = false;
                         isCompressedZero = false;
                         isUncompressedZero = false;
@@ -1063,6 +1071,8 @@ namespace Office_File_Explorer.Helpers
                     {
                         byteCount++;
                     }
+
+                    totalByteIndex++;
                 }
             }
 

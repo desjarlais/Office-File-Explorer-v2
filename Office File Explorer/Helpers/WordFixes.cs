@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.IO;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -23,7 +24,20 @@ namespace Office_File_Explorer.Helpers
 
             if (Office.IsZippedFileCorrupt(filePath))
             {
-                // change the dd back to 0
+                // change the datadescriptor back to 0
+                byte[] zByte = new byte[] { 0x00 };
+
+                // IsZippedFileCorrupt will populate a list of corrupt indexes to change
+                // go through each and overwrite 0 instead of 8 and it should fix the bad zip items 
+                foreach (var b in Office.corruptByteIndexes)
+                {
+                    using (FileStream zFile = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+                    {
+                        zFile.Seek(b, SeekOrigin.Current);
+                        zFile.WriteByte(zByte[0]);
+                        corruptionFound = true;
+                    }
+                }
             }
 
             return corruptionFound;
