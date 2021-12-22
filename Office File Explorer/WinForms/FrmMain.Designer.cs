@@ -35,6 +35,7 @@ namespace Office_File_Explorer
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openErrorLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileBackupFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +90,7 @@ namespace Office_File_Explorer
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
             this.openErrorLogToolStripMenuItem,
+            this.openFileBackupFolderToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
@@ -100,7 +102,7 @@ namespace Office_File_Explorer
             // 
             this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.openToolStripMenuItem.Text = "O&pen";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
@@ -108,27 +110,35 @@ namespace Office_File_Explorer
             // 
             this.openErrorLogToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.ErrorSummary_16x;
             this.openErrorLogToolStripMenuItem.Name = "openErrorLogToolStripMenuItem";
-            this.openErrorLogToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.openErrorLogToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.openErrorLogToolStripMenuItem.Text = "Open Error Log";
             this.openErrorLogToolStripMenuItem.Click += new System.EventHandler(this.OpenErrorLogToolStripMenuItem_Click);
+            // 
+            // openFileBackupFolderToolStripMenuItem
+            // 
+            this.openFileBackupFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openFileBackupFolderToolStripMenuItem.Image")));
+            this.openFileBackupFolderToolStripMenuItem.Name = "openFileBackupFolderToolStripMenuItem";
+            this.openFileBackupFolderToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.openFileBackupFolderToolStripMenuItem.Text = "Open File Backup Folder";
+            this.openFileBackupFolderToolStripMenuItem.Click += new System.EventHandler(this.openFileBackupFolderToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Settings_16x;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.settingsToolStripMenuItem.Text = "&Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(151, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -469,6 +479,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem base64DecoderToolStripMenuItem;
         public System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button BtnValidateDoc;
+        private System.Windows.Forms.ToolStripMenuItem openFileBackupFolderToolStripMenuItem;
     }
 }
 

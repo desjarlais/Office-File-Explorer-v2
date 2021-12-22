@@ -38,13 +38,14 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.ckbResetNotes = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ckbZipItemCorrupt = new System.Windows.Forms.CheckBox();
             this.ckbDeleteOnExit = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.rdoSAX = new System.Windows.Forms.RadioButton();
             this.rdoDOM = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.ckbZipItemCorrupt = new System.Windows.Forms.CheckBox();
+            this.ckbBackupOnOpen = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -126,6 +127,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.ckbBackupOnOpen);
             this.groupBox3.Controls.Add(this.ckbZipItemCorrupt);
             this.groupBox3.Controls.Add(this.ckbDeleteOnExit);
             this.groupBox3.Location = new System.Drawing.Point(12, 134);
@@ -134,6 +136,16 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "App Settings";
+            // 
+            // ckbZipItemCorrupt
+            // 
+            this.ckbZipItemCorrupt.AutoSize = true;
+            this.ckbZipItemCorrupt.Location = new System.Drawing.Point(19, 48);
+            this.ckbZipItemCorrupt.Name = "ckbZipItemCorrupt";
+            this.ckbZipItemCorrupt.Size = new System.Drawing.Size(187, 19);
+            this.ckbZipItemCorrupt.TabIndex = 3;
+            this.ckbZipItemCorrupt.Text = "Check For Zip Item Corruption";
+            this.ckbZipItemCorrupt.UseVisualStyleBackColor = true;
             // 
             // ckbDeleteOnExit
             // 
@@ -198,15 +210,15 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // ckbZipItemCorrupt
+            // ckbBackupOnOpen
             // 
-            this.ckbZipItemCorrupt.AutoSize = true;
-            this.ckbZipItemCorrupt.Location = new System.Drawing.Point(19, 48);
-            this.ckbZipItemCorrupt.Name = "ckbZipItemCorrupt";
-            this.ckbZipItemCorrupt.Size = new System.Drawing.Size(187, 19);
-            this.ckbZipItemCorrupt.TabIndex = 3;
-            this.ckbZipItemCorrupt.Text = "Check For Zip Item Corruption";
-            this.ckbZipItemCorrupt.UseVisualStyleBackColor = true;
+            this.ckbBackupOnOpen.AutoSize = true;
+            this.ckbBackupOnOpen.Location = new System.Drawing.Point(19, 73);
+            this.ckbBackupOnOpen.Name = "ckbBackupOnOpen";
+            this.ckbBackupOnOpen.Size = new System.Drawing.Size(216, 19);
+            this.ckbBackupOnOpen.TabIndex = 3;
+            this.ckbBackupOnOpen.Text = "Make Backup Copy Of File On Open";
+            this.ckbBackupOnOpen.UseVisualStyleBackColor = true;
             // 
             // FrmSettings
             // 
@@ -255,5 +267,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoSAX;
         private System.Windows.Forms.RadioButton rdoDOM;
         private System.Windows.Forms.CheckBox ckbZipItemCorrupt;
+        private System.Windows.Forms.CheckBox ckbBackupOnOpen;
     }
 }

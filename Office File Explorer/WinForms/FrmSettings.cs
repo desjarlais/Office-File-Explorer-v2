@@ -53,6 +53,11 @@ namespace Office_File_Explorer.WinForms
             {
                 ckbZipItemCorrupt.Checked = true;
             }
+
+            if (Properties.Settings.Default.BackupOnOpen == true)
+            {
+                ckbBackupOnOpen.Checked = true;
+            }
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -64,6 +69,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.DeleteCopiesOnExit = ckbDeleteOnExit.Checked;
             Properties.Settings.Default.RemoveCorruptAtMentions = ckbRemoveAtMentions.Checked;
             Properties.Settings.Default.CheckZipItemCorrupt = ckbZipItemCorrupt.Checked;
+            Properties.Settings.Default.BackupOnOpen = ckbBackupOnOpen.Checked;
 
             if (rdoSAX.Checked == true)
             {

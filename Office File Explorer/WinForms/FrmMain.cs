@@ -179,15 +179,27 @@ namespace Office_File_Explorer
                             // if the file does start with PK, check if it fails in the SDK
                             if (OpenWithSdk(lblFilePath.Text))
                             {
+                                // set the file type
                                 lblFileType.Text = StrOfficeApp;
+
+                                // populate the parts
                                 PopulatePackageParts();
 
+                                // check if any zip items are corrupt
                                 if (Properties.Settings.Default.CheckZipItemCorrupt == true && lblFileType.Text == Strings.oAppWord)
                                 {
                                     if (Office.IsZippedFileCorrupt(lblFilePath.Text))
                                     {
                                         LstDisplay.Items.Add("Warning - One of the zipped items is corrupt.");
                                     }
+                                }
+
+                                // make a backup copy of the file and use it going forward
+                                if (Properties.Settings.Default.BackupOnOpen == true)
+                                {
+                                    string backupFileName = AddTextToFileName(lblFilePath.Text, "(Backup)");
+                                    File.Copy(lblFilePath.Text, backupFileName, true);
+                                    lblFilePath.Text = backupFileName;
                                 }
                             }
                             else
@@ -325,9 +337,7 @@ namespace Office_File_Explorer
                     // known issue in .NET with malformed hyperlinks causing SDK to throw during parse
                     // see UriFixHelper for more details
                     // get the path and make a new file name in the same directory
-                    var StrDestPath = Path.GetDirectoryName(lblFilePath.Text) + "\\";
-                    var StrExtension = Path.GetExtension(lblFilePath.Text);
-                    var StrCopyFileName = StrDestPath + Path.GetFileNameWithoutExtension(lblFilePath.Text) + Strings.wCopyFileParentheses + StrExtension;
+                    var StrCopyFileName = AddTextToFileName(lblFilePath.Text, Strings.wCopyFileParentheses);
 
                     // need a copy of the file to change the hyperlinks so we can open the modified version instead of the original
                     if (!File.Exists(StrCopyFileName))
@@ -336,7 +346,7 @@ namespace Office_File_Explorer
                     }
                     else
                     {
-                        StrCopyFileName = StrDestPath + Path.GetFileNameWithoutExtension(lblFilePath.Text) + Strings.wCopyFileParentheses + FileUtilities.GetRandomNumber().ToString() + StrExtension;
+                        StrCopyFileName = AddTextToFileName(lblFilePath.Text, Strings.wCopyFileParentheses + FileUtilities.GetRandomNumber().ToString());
                         File.Copy(lblFilePath.Text, StrCopyFileName);
                     }
 
@@ -506,6 +516,14 @@ namespace Office_File_Explorer
                 val.Add(cdp.Name + Strings.wColonBuffer + cdp.InnerText);
             }
             return val;
+        }
+
+        public string AddTextToFileName(string fileName, string TextToAdd)
+        {
+            string dir = Path.GetDirectoryName(fileName) + "\\";
+            StrExtension = Path.GetExtension(fileName);
+            string newFileName = dir + Path.GetFileNameWithoutExtension(fileName) + TextToAdd + StrExtension;
+            return newFileName;
         }
 
         public void AppExitWork()
@@ -1518,12 +1536,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-
-                StrOrigFileName = lblFilePath.Text;
-                StrDestPath = Path.GetDirectoryName(StrOrigFileName) + "\\";
-                StrExtension = Path.GetExtension(StrOrigFileName);
-                StrDestFileName = StrDestPath + Path.GetFileNameWithoutExtension(StrOrigFileName) + Strings.wFixedFileParentheses + StrExtension;
-
+                StrDestFileName = AddTextToFileName(lblFilePath.Text, "(Fixed)");
                 bool isXmlException = false;
                 string strDocText = string.Empty;
                 IsFixed = false;
@@ -1531,21 +1544,21 @@ namespace Office_File_Explorer
                 // check if file we are about to copy exists and append a number so it is unique
                 if (File.Exists(StrDestFileName))
                 {
-                    StrDestFileName = StrDestPath + Path.GetFileNameWithoutExtension(StrOrigFileName) + Strings.wFixedFileParentheses + FileUtilities.GetRandomNumber().ToString() + StrExtension;
+                    StrDestFileName = AddTextToFileName(StrDestFileName, FileUtilities.GetRandomNumber().ToString());
                 }
 
                 LstDisplay.Items.Clear();
 
                 if (StrExtension == ".docx")
                 {
-                    if ((File.GetAttributes(StrOrigFileName) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                    if ((File.GetAttributes(lblFilePath.Text) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                     {
                         LstDisplay.Items.Add("ERROR: File is Read-Only.");
                         return;
                     }
                     else
                     {
-                        File.Copy(StrOrigFileName, StrDestFileName);
+                        File.Copy(lblFilePath.Text, StrDestFileName);
                     }
                 }
 
@@ -1925,6 +1938,11 @@ namespace Office_File_Explorer
             {
                 Cursor = Cursors.Default;
             }
+        }
+
+        private void openFileBackupFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AppUtilities.PlatformSpecificProcessStart(Path.GetDirectoryName(Application.LocalUserAppDataPath));
         }
     }
 }

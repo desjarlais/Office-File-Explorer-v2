@@ -118,5 +118,17 @@ namespace Office_File_Explorer.Properties {
                 this["CheckZipItemCorrupt"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BackupOnOpen {
+            get {
+                return ((bool)(this["BackupOnOpen"]));
+            }
+            set {
+                this["BackupOnOpen"] = value;
+            }
+        }
     }
 }
