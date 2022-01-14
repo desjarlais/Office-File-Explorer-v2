@@ -192,6 +192,9 @@ namespace Office_File_Explorer.Helpers
         public const string sameBitnessMSI2013 = @"C:\Program Files\Microsoft Office\Office15\excelcnv.exe";
         public const string x86OfficeMSI2013 = @"C:\Program Files (x86)\Microsoft Office\Office15\excelcnv.exe";
 
+        // Microsoft Graph endpoints
+        public const string graphAPIEndpoint = "https://graph.microsoft.com/v1.0/me";
+
         // schema base urls
         public const string schemaOxml2006 = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/";
         public const string schemaMsft2007 = "http://schemas.microsoft.com/office/2007/relationships/";

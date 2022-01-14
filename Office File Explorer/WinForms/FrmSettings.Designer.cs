@@ -38,6 +38,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.ckbResetNotes = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ckbBackupOnOpen = new System.Windows.Forms.CheckBox();
             this.ckbZipItemCorrupt = new System.Windows.Forms.CheckBox();
             this.ckbDeleteOnExit = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -45,11 +46,18 @@ namespace Office_File_Explorer.WinForms
             this.rdoDOM = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.ckbBackupOnOpen = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.tbxClientID = new System.Windows.Forms.TextBox();
+            this.tbxTenant = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbxSiteURL = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -132,10 +140,20 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.ckbDeleteOnExit);
             this.groupBox3.Location = new System.Drawing.Point(12, 134);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(243, 100);
+            this.groupBox3.Size = new System.Drawing.Size(287, 100);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "App Settings";
+            // 
+            // ckbBackupOnOpen
+            // 
+            this.ckbBackupOnOpen.AutoSize = true;
+            this.ckbBackupOnOpen.Location = new System.Drawing.Point(19, 73);
+            this.ckbBackupOnOpen.Name = "ckbBackupOnOpen";
+            this.ckbBackupOnOpen.Size = new System.Drawing.Size(216, 19);
+            this.ckbBackupOnOpen.TabIndex = 3;
+            this.ckbBackupOnOpen.Text = "Make Backup Copy Of File On Open";
+            this.ckbBackupOnOpen.UseVisualStyleBackColor = true;
             // 
             // ckbZipItemCorrupt
             // 
@@ -161,9 +179,9 @@ namespace Office_File_Explorer.WinForms
             // 
             this.groupBox4.Controls.Add(this.rdoSAX);
             this.groupBox4.Controls.Add(this.rdoDOM);
-            this.groupBox4.Location = new System.Drawing.Point(261, 134);
+            this.groupBox4.Location = new System.Drawing.Point(305, 134);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(282, 100);
+            this.groupBox4.Size = new System.Drawing.Size(238, 100);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Excel Cell Value Option";
@@ -192,7 +210,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(387, 240);
+            this.BtnOk.Location = new System.Drawing.Point(388, 362);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -202,7 +220,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(468, 240);
+            this.BtnCancel.Location = new System.Drawing.Point(469, 362);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 2;
@@ -210,21 +228,75 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // ckbBackupOnOpen
+            // groupBox5
             // 
-            this.ckbBackupOnOpen.AutoSize = true;
-            this.ckbBackupOnOpen.Location = new System.Drawing.Point(19, 73);
-            this.ckbBackupOnOpen.Name = "ckbBackupOnOpen";
-            this.ckbBackupOnOpen.Size = new System.Drawing.Size(216, 19);
-            this.ckbBackupOnOpen.TabIndex = 3;
-            this.ckbBackupOnOpen.Text = "Make Backup Copy Of File On Open";
-            this.ckbBackupOnOpen.UseVisualStyleBackColor = true;
+            this.groupBox5.Controls.Add(this.tbxSiteURL);
+            this.groupBox5.Controls.Add(this.label3);
+            this.groupBox5.Controls.Add(this.tbxClientID);
+            this.groupBox5.Controls.Add(this.tbxTenant);
+            this.groupBox5.Controls.Add(this.label2);
+            this.groupBox5.Controls.Add(this.label1);
+            this.groupBox5.Location = new System.Drawing.Point(12, 240);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(531, 116);
+            this.groupBox5.TabIndex = 3;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "ADAL Settings";
+            // 
+            // tbxClientID
+            // 
+            this.tbxClientID.Location = new System.Drawing.Point(61, 25);
+            this.tbxClientID.Name = "tbxClientID";
+            this.tbxClientID.Size = new System.Drawing.Size(464, 23);
+            this.tbxClientID.TabIndex = 3;
+            // 
+            // tbxTenant
+            // 
+            this.tbxTenant.Location = new System.Drawing.Point(61, 52);
+            this.tbxTenant.Name = "tbxTenant";
+            this.tbxTenant.Size = new System.Drawing.Size(464, 23);
+            this.tbxTenant.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 55);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(48, 15);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Tenant: ";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(58, 15);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Client ID: ";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 84);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(50, 15);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Site URL";
+            // 
+            // tbxSiteURL
+            // 
+            this.tbxSiteURL.Location = new System.Drawing.Point(61, 81);
+            this.tbxSiteURL.Name = "tbxSiteURL";
+            this.tbxSiteURL.Size = new System.Drawing.Size(464, 23);
+            this.tbxSiteURL.TabIndex = 5;
             // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 268);
+            this.ClientSize = new System.Drawing.Size(546, 387);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.groupBox2);
@@ -246,6 +318,8 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -268,5 +342,12 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoDOM;
         private System.Windows.Forms.CheckBox ckbZipItemCorrupt;
         private System.Windows.Forms.CheckBox ckbBackupOnOpen;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TextBox tbxClientID;
+        private System.Windows.Forms.TextBox tbxTenant;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbxSiteURL;
+        private System.Windows.Forms.Label label3;
     }
 }

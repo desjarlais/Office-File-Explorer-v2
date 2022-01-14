@@ -518,7 +518,7 @@ namespace Office_File_Explorer
             return val;
         }
 
-        public string AddTextToFileName(string fileName, string TextToAdd)
+        public static string AddTextToFileName(string fileName, string TextToAdd)
         {
             string dir = Path.GetDirectoryName(fileName) + "\\";
             StrExtension = Path.GetExtension(fileName);
@@ -526,7 +526,7 @@ namespace Office_File_Explorer
             return newFileName;
         }
 
-        public void AppExitWork()
+        public static void AppExitWork()
         {
             try
             {

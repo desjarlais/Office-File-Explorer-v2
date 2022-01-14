@@ -43,6 +43,7 @@ namespace Office_File_Explorer.WinForms
             this.ckbSubfolders = new System.Windows.Forms.CheckBox();
             this.lstOutput = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.BtnRemoveCustomTitle = new System.Windows.Forms.Button();
             this.BtnFixComments = new System.Windows.Forms.Button();
             this.BtnRemovePII = new System.Windows.Forms.Button();
             this.BtnFixTableProps = new System.Windows.Forms.Button();
@@ -60,11 +61,14 @@ namespace Office_File_Explorer.WinForms
             this.BtnDeleteCustomProps = new System.Windows.Forms.Button();
             this.BtnAddCustomProps = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.BtnRemoveCustomTitle = new System.Windows.Forms.Button();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.LoginLogoutToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.LoggedInUserToolStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -72,7 +76,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.rdoPowerPoint);
             this.groupBox1.Controls.Add(this.rdoExcel);
             this.groupBox1.Controls.Add(this.rdoWord);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 28);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(220, 64);
             this.groupBox1.TabIndex = 0;
@@ -119,7 +123,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.BtnBrowseFolder);
             this.groupBox2.Controls.Add(this.tbFolderPath);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(238, 12);
+            this.groupBox2.Location = new System.Drawing.Point(238, 28);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(726, 64);
             this.groupBox2.TabIndex = 0;
@@ -157,7 +161,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.BtnCopyOutput);
             this.groupBox3.Controls.Add(this.ckbSubfolders);
             this.groupBox3.Controls.Add(this.lstOutput);
-            this.groupBox3.Location = new System.Drawing.Point(12, 82);
+            this.groupBox3.Location = new System.Drawing.Point(12, 98);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(952, 285);
             this.groupBox3.TabIndex = 0;
@@ -213,12 +217,22 @@ namespace Office_File_Explorer.WinForms
             this.groupBox4.Controls.Add(this.BtnFixHyperlinks);
             this.groupBox4.Controls.Add(this.BtnDeleteCustomProps);
             this.groupBox4.Controls.Add(this.BtnAddCustomProps);
-            this.groupBox4.Location = new System.Drawing.Point(12, 367);
+            this.groupBox4.Location = new System.Drawing.Point(12, 383);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(952, 118);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Batch Commands";
+            // 
+            // BtnRemoveCustomTitle
+            // 
+            this.BtnRemoveCustomTitle.Location = new System.Drawing.Point(344, 51);
+            this.BtnRemoveCustomTitle.Name = "BtnRemoveCustomTitle";
+            this.BtnRemoveCustomTitle.Size = new System.Drawing.Size(173, 23);
+            this.BtnRemoveCustomTitle.TabIndex = 1;
+            this.BtnRemoveCustomTitle.Text = "Remove Custom Title Prop";
+            this.BtnRemoveCustomTitle.UseVisualStyleBackColor = true;
+            this.BtnRemoveCustomTitle.Click += new System.EventHandler(this.BtnRemoveCustomTitle_Click);
             // 
             // BtnFixComments
             // 
@@ -380,21 +394,38 @@ namespace Office_File_Explorer.WinForms
             this.BtnAddCustomProps.UseVisualStyleBackColor = true;
             this.BtnAddCustomProps.Click += new System.EventHandler(this.BtnAddCustomProps_Click);
             // 
-            // BtnRemoveCustomTitle
+            // toolStrip1
             // 
-            this.BtnRemoveCustomTitle.Location = new System.Drawing.Point(344, 51);
-            this.BtnRemoveCustomTitle.Name = "BtnRemoveCustomTitle";
-            this.BtnRemoveCustomTitle.Size = new System.Drawing.Size(173, 23);
-            this.BtnRemoveCustomTitle.TabIndex = 1;
-            this.BtnRemoveCustomTitle.Text = "Remove Custom Title Prop";
-            this.BtnRemoveCustomTitle.UseVisualStyleBackColor = true;
-            this.BtnRemoveCustomTitle.Click += new System.EventHandler(this.BtnRemoveCustomTitle_Click);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.LoginLogoutToolStripButton,
+            this.LoggedInUserToolStripLabel});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(967, 25);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // LoginLogoutToolStripButton
+            // 
+            this.LoginLogoutToolStripButton.Image = global::Office_File_Explorer.Properties.Resources.Login_16x;
+            this.LoginLogoutToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LoginLogoutToolStripButton.Name = "LoginLogoutToolStripButton";
+            this.LoginLogoutToolStripButton.Size = new System.Drawing.Size(57, 22);
+            this.LoginLogoutToolStripButton.Text = "Login";
+            this.LoginLogoutToolStripButton.Click += new System.EventHandler(this.LoginLogoutToolStripButton_Click);
+            // 
+            // LoggedInUserToolStripLabel
+            // 
+            this.LoggedInUserToolStripLabel.Name = "LoggedInUserToolStripLabel";
+            this.LoggedInUserToolStripLabel.Size = new System.Drawing.Size(74, 22);
+            this.LoggedInUserToolStripLabel.Text = "Username = ";
             // 
             // FrmBatch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(967, 496);
+            this.ClientSize = new System.Drawing.Size(967, 513);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
@@ -413,7 +444,10 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -450,5 +484,8 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnAddCustomProps;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button BtnRemoveCustomTitle;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton LoginLogoutToolStripButton;
+        private System.Windows.Forms.ToolStripLabel LoggedInUserToolStripLabel;
     }
 }

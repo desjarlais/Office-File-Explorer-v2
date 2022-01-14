@@ -19,10 +19,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using Microsoft.Identity.Client;
 
 // namespace refs
 using O = DocumentFormat.OpenXml;
 using DataBinding = DocumentFormat.OpenXml.Wordprocessing.DataBinding;
+using System.Threading.Tasks;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -34,11 +36,18 @@ namespace Office_File_Explorer.WinForms
         public bool nodeDeleted = false;
         public bool nodeChanged = false;
         public string fromChangeTemplate;
+        IPublicClientApplication publicClientApp;
 
         public FrmBatch()
         {
             InitializeComponent();
             DisableUI();
+
+            // init adal
+            publicClientApp = PublicClientApplicationBuilder.Create(Properties.Settings.Default.ClientID)
+                .WithRedirectUri("http://localhost")
+                .WithAuthority(AzureCloudInstance.AzurePublic, "organizations")
+                .Build();
         }
 
         public string GetFileExtension()
@@ -798,7 +807,7 @@ namespace Office_File_Explorer.WinForms
 
                         using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
                         {
-                            // now that we know the namespaces, loop the controls and update their data binding prefix mappings
+                            // update the list of content control attributes in the body of the document
                             foreach (var cc in document.ContentControls())
                             {
                                 string ccValue = string.Empty;
@@ -1940,6 +1949,66 @@ namespace Office_File_Explorer.WinForms
             finally
             {
                 Cursor = Cursors.Default;
+            }
+        }
+
+        private void LoginLogoutToolStripButton_Click(object sender, EventArgs e)
+        {
+            Login();
+        }
+
+        public async void Login()
+        {
+            string[] _scopes = new string[] { "files.read" };
+            AuthenticationResult authResult = await publicClientApp.AcquireTokenInteractive(_scopes).ExecuteAsync();
+
+            if (authResult != null)
+            {
+                LoggedInUserToolStripLabel.Text = await GetHttpContentWithToken(Strings.graphAPIEndpoint + "?select=" + Properties.Settings.Default.MySite, authResult.AccessToken);
+                DisplayBasicTokenInfo(authResult);
+            }
+        }
+
+        public void Logout()
+        {
+
+        }
+
+        /// <summary>
+        /// Perform an HTTP GET request to a URL using an HTTP Authorization header
+        /// </summary>
+        /// <param name="url">The URL</param>
+        /// <param name="token">The token</param>
+        /// <returns>String containing the results of the GET operation</returns>
+        public async Task<string> GetHttpContentWithToken(string url, string token)
+        {
+            var httpClient = new System.Net.Http.HttpClient();
+            System.Net.Http.HttpResponseMessage response;
+            try
+            {
+                var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
+                //Add the token in Authorization header
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                response = await httpClient.SendAsync(request);
+                var content = await response.Content.ReadAsStringAsync();
+                return content;
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Display basic information contained in the token
+        /// </summary>
+        private void DisplayBasicTokenInfo(AuthenticationResult authResult)
+        {
+            lstOutput.Text = String.Empty;
+            if (authResult != null)
+            {
+                lstOutput.Items.Add("Username: " + authResult.Account.Username);
+                lstOutput.Items.Add("Token Expires: " + authResult.ExpiresOn.ToLocalTime());
             }
         }
     }

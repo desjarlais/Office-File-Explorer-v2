@@ -70,6 +70,9 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.RemoveCorruptAtMentions = ckbRemoveAtMentions.Checked;
             Properties.Settings.Default.CheckZipItemCorrupt = ckbZipItemCorrupt.Checked;
             Properties.Settings.Default.BackupOnOpen = ckbBackupOnOpen.Checked;
+            Properties.Settings.Default.ClientID = tbxClientID.Text;
+            Properties.Settings.Default.Tenant = tbxTenant.Text;
+            Properties.Settings.Default.MySite = tbxSiteURL.Text;
 
             if (rdoSAX.Checked == true)
             {

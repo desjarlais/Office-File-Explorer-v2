@@ -130,5 +130,41 @@ namespace Office_File_Explorer.Properties {
                 this["BackupOnOpen"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("organizations")]
+        public string Tenant {
+            get {
+                return ((string)(this["Tenant"]));
+            }
+            set {
+                this["Tenant"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        public string ClientID {
+            get {
+                return ((string)(this["ClientID"]));
+            }
+            set {
+                this["ClientID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        public string MySite {
+            get {
+                return ((string)(this["MySite"]));
+            }
+            set {
+                this["MySite"] = value;
+            }
+        }
     }
 }

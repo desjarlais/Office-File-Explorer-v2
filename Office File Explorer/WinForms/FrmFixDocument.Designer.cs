@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
             this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
             this.rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
             this.rdoFixContentControlsW = new System.Windows.Forms.RadioButton();
@@ -49,7 +50,6 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixStrictX = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -76,6 +76,18 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Document";
             // 
+            // rdoFixDataDescriptorW
+            // 
+            this.rdoFixDataDescriptorW.AutoSize = true;
+            this.rdoFixDataDescriptorW.Enabled = false;
+            this.rdoFixDataDescriptorW.Location = new System.Drawing.Point(193, 147);
+            this.rdoFixDataDescriptorW.Name = "rdoFixDataDescriptorW";
+            this.rdoFixDataDescriptorW.Size = new System.Drawing.Size(131, 19);
+            this.rdoFixDataDescriptorW.TabIndex = 3;
+            this.rdoFixDataDescriptorW.TabStop = true;
+            this.rdoFixDataDescriptorW.Text = "Fix Corrupt Zip Item";
+            this.rdoFixDataDescriptorW.UseVisualStyleBackColor = true;
+            // 
             // rdoTryAllFixesW
             // 
             this.rdoTryAllFixesW.AutoSize = true;
@@ -91,6 +103,7 @@ namespace Office_File_Explorer.WinForms
             // rdoFixMathAccentsW
             // 
             this.rdoFixMathAccentsW.AutoSize = true;
+            this.rdoFixMathAccentsW.Enabled = false;
             this.rdoFixMathAccentsW.Location = new System.Drawing.Point(193, 72);
             this.rdoFixMathAccentsW.Name = "rdoFixMathAccentsW";
             this.rdoFixMathAccentsW.Size = new System.Drawing.Size(170, 19);
@@ -283,17 +296,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
-            // 
-            // rdoFixDataDescriptorW
-            // 
-            this.rdoFixDataDescriptorW.AutoSize = true;
-            this.rdoFixDataDescriptorW.Location = new System.Drawing.Point(193, 147);
-            this.rdoFixDataDescriptorW.Name = "rdoFixDataDescriptorW";
-            this.rdoFixDataDescriptorW.Size = new System.Drawing.Size(131, 19);
-            this.rdoFixDataDescriptorW.TabIndex = 3;
-            this.rdoFixDataDescriptorW.TabStop = true;
-            this.rdoFixDataDescriptorW.Text = "Fix Corrupt Zip Item";
-            this.rdoFixDataDescriptorW.UseVisualStyleBackColor = true;
             // 
             // FrmFixDocument
             // 
