@@ -1337,7 +1337,6 @@ namespace Office_File_Explorer.Helpers
                 if (numIdList.Count == 0)
                 {
                     ltList.Clear();
-                    return ltList;
                 }
 
                 // since we have lists, display them

@@ -1959,19 +1959,28 @@ namespace Office_File_Explorer.WinForms
 
         public async void Login()
         {
-            string[] _scopes = new string[] { "files.read" };
-            AuthenticationResult authResult = await publicClientApp.AcquireTokenInteractive(_scopes).ExecuteAsync();
-
-            if (authResult != null)
+            if (LoginLogoutToolStripButton.Text == "Login")
             {
-                LoggedInUserToolStripLabel.Text = await GetHttpContentWithToken(Strings.graphAPIEndpoint + "?select=" + Properties.Settings.Default.MySite, authResult.AccessToken);
-                DisplayBasicTokenInfo(authResult);
+                string[] _scopes = new string[] { "files.read" };
+                AuthenticationResult authResult = await publicClientApp.AcquireTokenInteractive(_scopes).ExecuteAsync();
+
+                if (authResult != null)
+                {
+                    LoggedInUserToolStripLabel.Text = await GetHttpContentWithToken(Strings.graphAPIEndpoint + "?select=" + Properties.Settings.Default.MySite, authResult.AccessToken);
+                    DisplayBasicTokenInfo(authResult);
+                }
+            }
+            else
+            {
+                Logout();
             }
         }
 
         public void Logout()
         {
-
+            publicClientApp = null;
+            LoginLogoutToolStripButton.Text = "Login";
+            LoggedInUserToolStripLabel.Text = "Username: ";
         }
 
         /// <summary>
@@ -2007,8 +2016,8 @@ namespace Office_File_Explorer.WinForms
             lstOutput.Text = String.Empty;
             if (authResult != null)
             {
-                lstOutput.Items.Add("Username: " + authResult.Account.Username);
-                lstOutput.Items.Add("Token Expires: " + authResult.ExpiresOn.ToLocalTime());
+                LoggedInUserToolStripLabel.Text = "Username: " + authResult.Account.Username;
+                LoginLogoutToolStripButton.Text = "Logout";
             }
         }
     }
