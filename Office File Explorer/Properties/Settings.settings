@@ -29,9 +29,6 @@
     <Setting Name="BackupOnOpen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Tenant" Type="System.String" Scope="User">
-      <Value Profile="(Default)">organizations</Value>
-    </Setting>
     <Setting Name="ClientID" Type="System.String" Scope="User">
       <Value Profile="(Default)">""</Value>
     </Setting>

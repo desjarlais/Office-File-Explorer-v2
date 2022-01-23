@@ -133,18 +133,6 @@ namespace Office_File_Explorer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("organizations")]
-        public string Tenant {
-            get {
-                return ((string)(this["Tenant"]));
-            }
-            set {
-                this["Tenant"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
         public string ClientID {
             get {

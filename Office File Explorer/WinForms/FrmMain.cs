@@ -1584,7 +1584,7 @@ namespace Office_File_Explorer
                     }
                 }
 
-                // 2. find any known bad sequences and create a string  with those changes
+                // 2. find any known bad sequences and create a string with those changes
                 using (Package package = Package.Open(StrDestFileName, FileMode.Open, FileAccess.Read))
                 {
                     if (isXmlException)

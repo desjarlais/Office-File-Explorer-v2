@@ -5,6 +5,9 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 
+// Auth SDK's
+using Microsoft.Identity.Client;
+
 // app refs
 using Office_File_Explorer.Helpers;
 
@@ -16,10 +19,11 @@ using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Text;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
-using Microsoft.Identity.Client;
 
 // namespace refs
 using O = DocumentFormat.OpenXml;
@@ -30,13 +34,18 @@ namespace Office_File_Explorer.WinForms
 {
     public partial class FrmBatch : Form
     {
+        // form globals
         public List<string> files = new List<string>();
         public string fileType = string.Empty;
         public string fType = string.Empty;
         public bool nodeDeleted = false;
         public bool nodeChanged = false;
         public string fromChangeTemplate;
-        IPublicClientApplication publicClientApp;
+
+        // graph globals
+        public IPublicClientApplication publicClientApp;
+        public static string[] Scopes = { "Files.Read" };
+        AuthenticationResult authResult;
 
         public FrmBatch()
         {
@@ -462,6 +471,11 @@ namespace Office_File_Explorer.WinForms
             }
         }
 
+        /// <summary>
+        /// this is a very specific type of fix that looks for a unique-ish url that needs to be changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnFixHyperlinks_Click(object sender, EventArgs e)
         {
             try
@@ -566,7 +580,7 @@ namespace Office_File_Explorer.WinForms
             catch (Exception ex)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixExcelHyperlinks Error: " + ex.Message);
-                lstOutput.Items.Add("Error - " + ex.Message);
+                lstOutput.Items.Add(Strings.wErrorText + ex.Message);
             }
             finally
             {
@@ -619,8 +633,7 @@ namespace Office_File_Explorer.WinForms
                             {
                                 // if the part does not exist, this is a Normal.dotm situation
                                 // path out to where it should be based on default install settings
-                                string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                                filePath = userProfile + "\\AppData\\Roaming\\Microsoft\\Templates\\Normal.dotm";
+                                filePath = Strings.fNormalTemplatePath;
 
                                 if (!File.Exists(filePath))
                                 {
@@ -682,14 +695,14 @@ namespace Office_File_Explorer.WinForms
                     catch (Exception innerEx)
                     {
                         FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnChangeAttachedTemplate Error: " + innerEx.Message);
-                        lstOutput.Items.Add("Error - " + innerEx.Message);
+                        lstOutput.Items.Add(Strings.wErrorText + innerEx.Message);
                     }
                 }
             }
             catch (Exception ex)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnChangeAttachedTemplate Error: " + ex.Message);
-                lstOutput.Items.Add("Error - " + ex.Message);
+                lstOutput.Items.Add(Strings.wErrorText + ex.Message);
             }
             finally
             {
@@ -770,12 +783,12 @@ namespace Office_File_Explorer.WinForms
             catch (IOException ioe)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteOpenByDefault Error: " + ioe.Message);
-                lstOutput.Items.Add("Error - " + ioe.Message);
+                lstOutput.Items.Add(Strings.wErrorText + ioe.Message);
             }
             catch (Exception ex)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteOpenByDefault Error: " + ex.Message);
-                lstOutput.Items.Add("Error - " + ex.Message);
+                lstOutput.Items.Add(Strings.wErrorText + ex.Message);
             }
             finally
             {
@@ -1042,7 +1055,7 @@ namespace Office_File_Explorer.WinForms
             catch (Exception ex)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnUpdateQuickPartNamespaces Error: " + ex.Message);
-                lstOutput.Items.Add("Error - " + ex.Message);
+                lstOutput.Items.Add(Strings.wErrorText + ex.Message);
             }
             finally
             {
@@ -1710,12 +1723,12 @@ namespace Office_File_Explorer.WinForms
             catch (IOException ioe)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + ioe.Message);
-                lstOutput.Items.Add("Error - " + ioe.Message);
+                lstOutput.Items.Add(Strings.wErrorText + ioe.Message);
             }
             catch (Exception ex)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + ex.Message);
-                lstOutput.Items.Add("Error - " + ex.Message);
+                lstOutput.Items.Add(Strings.wErrorText + ex.Message);
             }
             finally
             {
@@ -1753,7 +1766,7 @@ namespace Office_File_Explorer.WinForms
                                     saveFile = true;
                                 }
                             }
-                            else if (commentsPart is null && commentRefs.Count() == 0)
+                            else if (commentsPart is null && !commentRefs.Any())
                             {
                                 // for some reason these dangling refs are considered unknown types, not commentrefs
                                 // convert to an openxmlelement then type it to a commentref to get the id
@@ -1828,7 +1841,7 @@ namespace Office_File_Explorer.WinForms
             catch (Exception ex)
             {
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixCorruptComments Error: " + ex.Message);
-                lstOutput.Items.Add("Error - " + ex.Message);
+                lstOutput.Items.Add(Strings.wErrorText + ex.Message);
             }
             finally
             {
@@ -1961,14 +1974,10 @@ namespace Office_File_Explorer.WinForms
         {
             if (LoginLogoutToolStripButton.Text == "Login")
             {
-                string[] _scopes = new string[] { "files.read" };
-                AuthenticationResult authResult = await publicClientApp.AcquireTokenInteractive(_scopes).ExecuteAsync();
-
-                if (authResult != null)
-                {
-                    LoggedInUserToolStripLabel.Text = await GetHttpContentWithToken(Strings.graphAPIEndpoint + "?select=" + Properties.Settings.Default.MySite, authResult.AccessToken);
-                    DisplayBasicTokenInfo(authResult);
-                }
+                // get the user token
+                authResult = await publicClientApp.AcquireTokenInteractive(Scopes).ExecuteAsync();
+                LoggedInUserToolStripLabel.Text = await GetHttpContentWithToken(Strings.graphAPIEndpoint + "?select=" + Properties.Settings.Default.MySite, authResult.AccessToken);
+                DisplayBasicTokenInfo(authResult);
             }
             else
             {
@@ -1978,7 +1987,11 @@ namespace Office_File_Explorer.WinForms
 
         public void Logout()
         {
-            publicClientApp = null;
+            foreach (var user in publicClientApp.GetAccountsAsync().Result)
+            {
+                publicClientApp.RemoveAsync(user);
+            }
+
             LoginLogoutToolStripButton.Text = "Login";
             LoggedInUserToolStripLabel.Text = "Username: ";
         }
@@ -1991,13 +2004,12 @@ namespace Office_File_Explorer.WinForms
         /// <returns>String containing the results of the GET operation</returns>
         public async Task<string> GetHttpContentWithToken(string url, string token)
         {
-            var httpClient = new System.Net.Http.HttpClient();
-            System.Net.Http.HttpResponseMessage response;
+            var httpClient = new HttpClient();
+            HttpResponseMessage response;
             try
             {
-                var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
-                //Add the token in Authorization header
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 response = await httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
                 return content;
@@ -2013,7 +2025,6 @@ namespace Office_File_Explorer.WinForms
         /// </summary>
         private void DisplayBasicTokenInfo(AuthenticationResult authResult)
         {
-            lstOutput.Text = String.Empty;
             if (authResult != null)
             {
                 LoggedInUserToolStripLabel.Text = "Username: " + authResult.Account.Username;

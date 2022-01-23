@@ -38,7 +38,6 @@ namespace Office_File_Explorer.WinForms
             this.lblProduct = new System.Windows.Forms.Label();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.BtnOk = new System.Windows.Forms.Button();
-            this.LstDisplay = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -106,7 +105,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(338, 338);
+            this.BtnOk.Location = new System.Drawing.Point(338, 109);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -114,21 +113,11 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk.UseVisualStyleBackColor = true;
             this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
             // 
-            // LstDisplay
-            // 
-            this.LstDisplay.FormattingEnabled = true;
-            this.LstDisplay.ItemHeight = 15;
-            this.LstDisplay.Location = new System.Drawing.Point(12, 109);
-            this.LstDisplay.Name = "LstDisplay";
-            this.LstDisplay.Size = new System.Drawing.Size(401, 214);
-            this.LstDisplay.TabIndex = 2;
-            // 
             // FrmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(429, 373);
-            this.Controls.Add(this.LstDisplay);
+            this.ClientSize = new System.Drawing.Size(429, 143);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -157,6 +146,5 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Button BtnOk;
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.ListBox LstDisplay;
     }
 }

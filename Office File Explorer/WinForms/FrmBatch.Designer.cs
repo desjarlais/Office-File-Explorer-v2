@@ -64,6 +64,7 @@ namespace Office_File_Explorer.WinForms
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.LoginLogoutToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.LoggedInUserToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+            this.DisplayDrivesToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -398,7 +399,8 @@ namespace Office_File_Explorer.WinForms
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LoginLogoutToolStripButton,
-            this.LoggedInUserToolStripLabel});
+            this.LoggedInUserToolStripLabel,
+            this.DisplayDrivesToolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(967, 25);
@@ -487,5 +489,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton LoginLogoutToolStripButton;
         private System.Windows.Forms.ToolStripLabel LoggedInUserToolStripLabel;
+        private System.Windows.Forms.ToolStripButton DisplayDrivesToolStripButton;
     }
 }
