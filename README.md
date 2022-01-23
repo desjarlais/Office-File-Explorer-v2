@@ -55,7 +55,11 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 ## Batch File Processing Window
 ![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2batch.jpg?raw=true)
 
-### Batch File Processing (following features can be used to change many documents at one time)
+### Authentication Note
+There is an ability to login with the Batch Processing Window, this is a work in progress, see the following wiki for more information
+[Authentication](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Authentication-in-Batch-Processing)
+
+### Batch File Processing Features
 * Change Theme (Word, Excel, PowerPoint)
 * Add Custom Properties (Word, Excel, PowerPoint)
 * Delete Custom Properties (Word, Excel, PowerPoint)
