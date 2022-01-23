@@ -36,8 +36,6 @@ namespace Office_File_Explorer
         private bool IsRegularXmlTag;
         private bool IsFixed;
         private static string FixedFallback = string.Empty;
-        private static string StrOrigFileName = string.Empty;
-        private static string StrDestPath = string.Empty;
         private static string StrExtension = string.Empty;
         private static string StrDestFileName = string.Empty;
 
@@ -253,7 +251,7 @@ namespace Office_File_Explorer
                     FileUtilities.WriteToLog(Strings.fLogFilePath, ex);
                     break;
                 case LogInfoType.EmptyCount:
-                    LstDisplay.Items.Add(" none");
+                    LstDisplay.Items.Add(Strings.wNone);
                     break;
                 default:
                     LstDisplay.Items.Add(output);
@@ -1071,8 +1069,7 @@ namespace Office_File_Explorer
                                 {
                                     // if the part does not exist, this is a Normal.dotm situation
                                     // path out to where it should be based on default install settings
-                                    string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                                    filePath = userProfile + "\\AppData\\Roaming\\Microsoft\\Templates\\Normal.dotm";
+                                    filePath = Strings.fNormalTemplatePath;
 
                                     if (!File.Exists(filePath))
                                     {
@@ -1849,8 +1846,6 @@ namespace Office_File_Explorer
                 IsFixed = false;
                 IsRegularXmlTag = false;
                 FixedFallback = string.Empty;
-                StrOrigFileName = string.Empty;
-                StrDestPath = string.Empty;
                 StrExtension = string.Empty;
                 StrDestFileName = string.Empty;
                 PrevChar = '<';
@@ -1908,21 +1903,21 @@ namespace Office_File_Explorer
                 {
                     using (WordprocessingDocument myDoc = WordprocessingDocument.Open(lblFilePath.Text, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), "Validation Errors");
+                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.validationErrors);
                     }
                 }
                 else if (lblFileType.Text == Strings.oAppExcel)
                 {
                     using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(lblFilePath.Text, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), "Validation Errors");
+                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.validationErrors);
                     }
                 }
                 else if (lblFileType.Text == Strings.oAppPowerPoint)
                 {
                     using (PresentationDocument myDoc = PresentationDocument.Open(lblFilePath.Text, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), "Validation Errors");
+                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.validationErrors);
                     }
                 }
                 else

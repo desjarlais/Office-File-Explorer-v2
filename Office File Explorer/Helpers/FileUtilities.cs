@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -52,11 +51,6 @@ namespace Office_File_Explorer.Helpers
                 {
                     return false;
                 }
-            }
-            catch (UnauthorizedAccessException uae)
-            {
-                WriteToLog(Strings.fLogFilePath, uae.Message);
-                return false;
             }
             catch (Exception ex)
             {

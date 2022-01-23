@@ -130,6 +130,7 @@ namespace Office_File_Explorer.Helpers
         public const string convertedTo = " converted to -> ";
         public const string wdDocumentXml = "/word/document.xml";
         public const string allAuthors = "* All Authors *";
+        public const string validationErrors = "Validation Errors";
 
         // file locations
         public static string fLogFilePath = Path.GetDirectoryName(Application.LocalUserAppDataPath) + "\\offexp.txt";

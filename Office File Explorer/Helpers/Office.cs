@@ -69,7 +69,7 @@ namespace Office_File_Explorer.Helpers
             JPEG,               //96 - JPEG variant
             WavPack,            //97 - WavPack compressed data
             PPMd,               //98 - PPMd version I, Rev 1
-            AEx                //99 - AE-x encryption marker(see APPENDIX E)
+            AEx                 //99 - AE-x encryption marker(see APPENDIX E)
         }
 
         public static List<string> DisplayValidationErrorInformation(OpenXmlPackage docPackage)

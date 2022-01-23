@@ -294,7 +294,7 @@ namespace Office_File_Explorer.WinForms
             cFrm.ShowDialog();
 
             lstOutput.Items.Clear();
-            lstOutput.Items.Add("** Batch Processing done **");
+            lstOutput.Items.Add("** Batch Processing Finished **");
         }
 
         private void BtnDeleteCustomProps_Click(object sender, EventArgs e)
@@ -688,7 +688,7 @@ namespace Office_File_Explorer.WinForms
                             }
                             else
                             {
-                                lstOutput.Items.Add(f + "** No Changed Made To Attached Template **");
+                                lstOutput.Items.Add(f + "** No Changes Made To Attached Template **");
                             }
                         }
                     }
