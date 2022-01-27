@@ -44,6 +44,7 @@ namespace Office_File_Explorer.WinForms
                     WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                     WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
                     SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
+                    Columns cols = worksheetPart.Worksheet.Elements<Columns>().First();
 
                     // add a row to the grid for each row in the sheet
                     AddRows(sheetData.Elements<Row>().Count());
@@ -84,6 +85,14 @@ namespace Office_File_Explorer.WinForms
                                 }
                             }
                         }
+                    }
+
+                    // now adjust the column width
+                    int colCount = dataGridView1.Columns.Count;
+                    for (int i = 0; i < colCount - 1; i++)
+                    {
+                        DataGridViewColumn dgvc = dataGridView1.Columns[i];
+                        dgvc.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     }
                 }
             }

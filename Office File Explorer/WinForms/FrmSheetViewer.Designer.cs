@@ -160,7 +160,7 @@
             // 
             // dataGridView1
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colA,
             this.colB,
@@ -215,6 +215,7 @@
             this.colAY,
             this.colAZ});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(3, 19);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 25;
@@ -225,261 +226,313 @@
             // 
             this.colA.HeaderText = "A";
             this.colA.Name = "colA";
+            this.colA.Width = 40;
             // 
             // colB
             // 
             this.colB.HeaderText = "B";
             this.colB.Name = "colB";
+            this.colB.Width = 39;
             // 
             // colC
             // 
             this.colC.HeaderText = "C";
             this.colC.Name = "colC";
+            this.colC.Width = 40;
             // 
             // colD
             // 
             this.colD.HeaderText = "D";
             this.colD.Name = "colD";
+            this.colD.Width = 40;
             // 
             // colE
             // 
             this.colE.HeaderText = "E";
             this.colE.Name = "colE";
+            this.colE.Width = 38;
             // 
             // colF
             // 
             this.colF.HeaderText = "F";
             this.colF.Name = "colF";
+            this.colF.Width = 38;
             // 
             // colG
             // 
             this.colG.HeaderText = "G";
             this.colG.Name = "colG";
+            this.colG.Width = 40;
             // 
             // colH
             // 
             this.colH.HeaderText = "H";
             this.colH.Name = "colH";
+            this.colH.Width = 41;
             // 
             // colI
             // 
             this.colI.HeaderText = "I";
             this.colI.Name = "colI";
+            this.colI.Width = 35;
             // 
             // colJ
             // 
             this.colJ.HeaderText = "J";
             this.colJ.Name = "colJ";
+            this.colJ.Width = 36;
             // 
             // colK
             // 
             this.colK.HeaderText = "K";
             this.colK.Name = "colK";
+            this.colK.Width = 39;
             // 
             // colL
             // 
             this.colL.HeaderText = "L";
             this.colL.Name = "colL";
+            this.colL.Width = 38;
             // 
             // colM
             // 
             this.colM.HeaderText = "M";
             this.colM.Name = "colM";
+            this.colM.Width = 43;
             // 
             // colN
             // 
             this.colN.HeaderText = "N";
             this.colN.Name = "colN";
+            this.colN.Width = 41;
             // 
             // colO
             // 
             this.colO.HeaderText = "O";
             this.colO.Name = "colO";
+            this.colO.Width = 41;
             // 
             // colP
             // 
             this.colP.HeaderText = "P";
             this.colP.Name = "colP";
+            this.colP.Width = 39;
             // 
             // colQ
             // 
             this.colQ.HeaderText = "Q";
             this.colQ.Name = "colQ";
+            this.colQ.Width = 41;
             // 
             // colR
             // 
             this.colR.HeaderText = "R";
             this.colR.Name = "colR";
+            this.colR.Width = 39;
             // 
             // colS
             // 
             this.colS.HeaderText = "S";
             this.colS.Name = "colS";
+            this.colS.Width = 38;
             // 
             // colT
             // 
             this.colT.HeaderText = "T";
             this.colT.Name = "colT";
+            this.colT.Width = 38;
             // 
             // colU
             // 
             this.colU.HeaderText = "U";
             this.colU.Name = "colU";
+            this.colU.Width = 40;
             // 
             // colV
             // 
             this.colV.HeaderText = "V";
             this.colV.Name = "colV";
+            this.colV.Width = 39;
             // 
             // colW
             // 
             this.colW.HeaderText = "W";
             this.colW.Name = "colW";
+            this.colW.Width = 43;
             // 
             // colX
             // 
             this.colX.HeaderText = "X";
             this.colX.Name = "colX";
+            this.colX.Width = 39;
             // 
             // colY
             // 
             this.colY.HeaderText = "Y";
             this.colY.Name = "colY";
+            this.colY.Width = 39;
             // 
             // colZ
             // 
             this.colZ.HeaderText = "Z";
             this.colZ.Name = "colZ";
+            this.colZ.Width = 39;
             // 
             // colAA
             // 
             this.colAA.HeaderText = "AA";
             this.colAA.Name = "colAA";
+            this.colAA.Width = 48;
             // 
             // colAB
             // 
             this.colAB.HeaderText = "AB";
             this.colAB.Name = "colAB";
+            this.colAB.Width = 47;
             // 
             // colAC
             // 
             this.colAC.HeaderText = "AC";
             this.colAC.Name = "colAC";
+            this.colAC.Width = 48;
             // 
             // colAD
             // 
             this.colAD.HeaderText = "AD";
             this.colAD.Name = "colAD";
+            this.colAD.Width = 48;
             // 
             // colAE
             // 
             this.colAE.HeaderText = "AE";
             this.colAE.Name = "colAE";
+            this.colAE.Width = 46;
             // 
             // colAF
             // 
             this.colAF.HeaderText = "AF";
             this.colAF.Name = "colAF";
+            this.colAF.Width = 46;
             // 
             // colAG
             // 
             this.colAG.HeaderText = "AG";
             this.colAG.Name = "colAG";
+            this.colAG.Width = 48;
             // 
             // colAH
             // 
             this.colAH.HeaderText = "AH";
             this.colAH.Name = "colAH";
+            this.colAH.Width = 49;
             // 
             // colAI
             // 
             this.colAI.HeaderText = "AI";
             this.colAI.Name = "colAI";
+            this.colAI.Width = 43;
             // 
             // colAJ
             // 
             this.colAJ.HeaderText = "AJ";
             this.colAJ.Name = "colAJ";
+            this.colAJ.Width = 45;
             // 
             // colAK
             // 
             this.colAK.HeaderText = "AK";
             this.colAK.Name = "colAK";
+            this.colAK.Width = 47;
             // 
             // colAL
             // 
             this.colAL.HeaderText = "AL";
             this.colAL.Name = "colAL";
+            this.colAL.Width = 46;
             // 
             // colAM
             // 
             this.colAM.HeaderText = "AM";
             this.colAM.Name = "colAM";
+            this.colAM.Width = 51;
             // 
             // colAN
             // 
             this.colAN.HeaderText = "AN";
             this.colAN.Name = "colAN";
+            this.colAN.Width = 49;
             // 
             // colAO
             // 
             this.colAO.HeaderText = "AO";
             this.colAO.Name = "colAO";
+            this.colAO.Width = 49;
             // 
             // colAP
             // 
             this.colAP.HeaderText = "AP";
             this.colAP.Name = "colAP";
+            this.colAP.Width = 47;
             // 
             // colAQ
             // 
             this.colAQ.HeaderText = "AQ";
             this.colAQ.Name = "colAQ";
+            this.colAQ.Width = 49;
             // 
             // colAR
             // 
             this.colAR.HeaderText = "AR";
             this.colAR.Name = "colAR";
+            this.colAR.Width = 47;
             // 
             // colAS
             // 
             this.colAS.HeaderText = "AS";
             this.colAS.Name = "colAS";
+            this.colAS.Width = 46;
             // 
             // colAT
             // 
             this.colAT.HeaderText = "AT";
             this.colAT.Name = "colAT";
+            this.colAT.Width = 45;
             // 
             // colAU
             // 
             this.colAU.HeaderText = "AU";
             this.colAU.Name = "colAU";
+            this.colAU.Width = 48;
             // 
             // colAV
             // 
             this.colAV.HeaderText = "AV";
             this.colAV.Name = "colAV";
+            this.colAV.Width = 46;
             // 
             // colAW
             // 
             this.colAW.HeaderText = "AW";
             this.colAW.Name = "colAW";
+            this.colAW.Width = 50;
             // 
             // colAX
             // 
             this.colAX.HeaderText = "AX";
             this.colAX.Name = "colAX";
+            this.colAX.Width = 47;
             // 
             // colAY
             // 
             this.colAY.HeaderText = "AY";
             this.colAY.Name = "colAY";
+            this.colAY.Width = 46;
             // 
             // colAZ
             // 
             this.colAZ.HeaderText = "AZ";
             this.colAZ.Name = "colAZ";
+            this.colAZ.Width = 47;
             // 
             // FrmSheetViewer
             // 
@@ -506,6 +559,8 @@
         private System.Windows.Forms.RadioButton rdoFormulas;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cboWorksheets;
         private System.Windows.Forms.DataGridViewTextBoxColumn colA;
         private System.Windows.Forms.DataGridViewTextBoxColumn colB;
         private System.Windows.Forms.DataGridViewTextBoxColumn colC;
@@ -558,7 +613,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colAX;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAY;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAZ;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cboWorksheets;
     }
 }
