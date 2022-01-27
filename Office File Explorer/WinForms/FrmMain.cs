@@ -99,6 +99,7 @@ namespace Office_File_Explorer
             BtnFixCorruptDoc.Enabled = false;
             BtnViewCustomUI.Enabled = false;
             BtnValidateDoc.Enabled = false;
+            BtnExcelSheetViewer.Enabled = false;
         }
 
         public void EnableUI()
@@ -591,6 +592,7 @@ namespace Office_File_Explorer
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wFonts + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstFonts(lblFilePath.Text), Strings.wFonts);
+                            DisplayListContents(Word.LstRunFonts(lblFilePath.Text), Strings.wFonts);
                         }
 
                         if (cmds.HasFlag(AppUtilities.WordViewCmds.Footnotes))
@@ -845,6 +847,11 @@ namespace Office_File_Explorer
         {
             EnableUI();
             OpenOfficeDocument();
+
+            if (lblFileType.Text == Strings.oAppExcel)
+            {
+                BtnExcelSheetViewer.Enabled = true;
+            }
         }
 
         private void BtnCopyAll_Click(object sender, EventArgs e)
@@ -1938,6 +1945,14 @@ namespace Office_File_Explorer
         private void openFileBackupFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AppUtilities.PlatformSpecificProcessStart(Path.GetDirectoryName(Application.LocalUserAppDataPath));
+        }
+
+        private void BtnExcelSheetViewer_Click(object sender, EventArgs e)
+        {
+            using (var f = new FrmSheetViewer(lblFilePath.Text))
+            {
+                var result = f.ShowDialog();
+            }
         }
     }
 }

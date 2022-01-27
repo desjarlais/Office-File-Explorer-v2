@@ -67,6 +67,7 @@ namespace Office_File_Explorer
             this.copySelectedLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyAllLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.BtnExcelSheetViewer = new System.Windows.Forms.Button();
             this.mnuMainMenu.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -203,6 +204,7 @@ namespace Office_File_Explorer
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.BtnExcelSheetViewer);
             this.groupBox1.Controls.Add(this.BtnValidateDoc);
             this.groupBox1.Controls.Add(this.BtnViewCustomUI);
             this.groupBox1.Controls.Add(this.BtnFixCorruptDoc);
@@ -416,6 +418,16 @@ namespace Office_File_Explorer
             this.imageList1.Images.SetKeyName(2, "word.png");
             this.imageList1.Images.SetKeyName(3, "XMLFile_789_32.ico");
             // 
+            // BtnExcelSheetViewer
+            // 
+            this.BtnExcelSheetViewer.Location = new System.Drawing.Point(746, 74);
+            this.BtnExcelSheetViewer.Name = "BtnExcelSheetViewer";
+            this.BtnExcelSheetViewer.Size = new System.Drawing.Size(146, 23);
+            this.BtnExcelSheetViewer.TabIndex = 11;
+            this.BtnExcelSheetViewer.Text = "Excel Sheet Viewer";
+            this.BtnExcelSheetViewer.UseVisualStyleBackColor = true;
+            this.BtnExcelSheetViewer.Click += new System.EventHandler(this.BtnExcelSheetViewer_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -480,6 +492,7 @@ namespace Office_File_Explorer
         public System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button BtnValidateDoc;
         private System.Windows.Forms.ToolStripMenuItem openFileBackupFolderToolStripMenuItem;
+        private System.Windows.Forms.Button BtnExcelSheetViewer;
     }
 }
 

@@ -18,6 +18,14 @@ using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
 using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
 using DocumentFormat.OpenXml.CustomProperties;
 using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Break = DocumentFormat.OpenXml.Wordprocessing.Break;
+using Comment = DocumentFormat.OpenXml.Wordprocessing.Comment;
+using Font = DocumentFormat.OpenXml.Wordprocessing.Font;
+using Hyperlink = DocumentFormat.OpenXml.Wordprocessing.Hyperlink;
+using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
+using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
+using TableStyle = DocumentFormat.OpenXml.Wordprocessing.TableStyle;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -1250,6 +1258,19 @@ namespace Office_File_Explorer.Helpers
             }
 
             return ltFonts;
+        }
+
+        public static List<string> LstRunFonts(string fPath)
+        {
+            List<string> ltRunFonts = new List<string>();
+
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
+            {
+                // loop each paragraph and get the run props
+                // display props for each run
+            }
+
+            return ltRunFonts;
         }
 
         public static List<string> LstListTemplates(string fPath, bool onlyReturnUnused)

@@ -101,14 +101,6 @@ namespace Office_File_Explorer.Helpers
             RemovePIIOnSave
         }
 
-        public enum OfficeModifyCmds
-        {
-            None,
-            ChangeTheme,
-            AddCustomProps,
-            DelCustomProps
-        }
-
         public static void PlatformSpecificProcessStart(string url)
         {
             // known issue in .NET Core https://github.com/dotnet/corefx/issues/10361

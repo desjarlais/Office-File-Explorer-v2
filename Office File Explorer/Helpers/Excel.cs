@@ -199,7 +199,7 @@ namespace Office_File_Explorer.Helpers
         {
             List<string> tList = new List<string>();
 
-
+            // todo
 
             return tList;
         }
@@ -270,6 +270,33 @@ namespace Office_File_Explorer.Helpers
                         if (ssValue.Text != null)
                         {
                             tList.Add(sharedStringCount + Strings.wPeriod + ssValue.Text);
+                        }
+                    }
+                }
+            }
+
+            return tList;
+        }
+
+        public static List<string> GetSharedStringsWithoutFormatting(string path)
+        {
+            List<string> tList = new List<string>();
+
+            int sharedStringCount = 0;
+
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            {
+                WorkbookPart wbPart = excelDoc.WorkbookPart;
+                if (wbPart.SharedStringTablePart != null)
+                {
+                    SharedStringTable sst = wbPart.SharedStringTablePart.SharedStringTable;
+                    foreach (SharedStringItem ssi in sst)
+                    {
+                        sharedStringCount++;
+                        Text ssValue = ssi.Text;
+                        if (ssValue.Text != null)
+                        {
+                            tList.Add(ssValue.Text);
                         }
                     }
                 }
@@ -384,7 +411,7 @@ namespace Office_File_Explorer.Helpers
                         int colCount = 0;
 
                         tList.Add("##    ROWS    ##");
-                        IEnumerable<Row> rows = ws.Descendants<Row>().Where((r) => r.Hidden != null && r.Hidden.Value);
+                        IEnumerable<Row> rows = ws.Descendants<Row>().Where((r) => r.Hidden is not null && r.Hidden.Value);
                         foreach (Row row in rows)
                         {
                             rowCount++;
@@ -397,7 +424,7 @@ namespace Office_File_Explorer.Helpers
                         }
 
                         tList.Add("##    COLUMNS    ##");
-                        IEnumerable<Column> cols = ws.Descendants<Column>().Where((c) => c.Hidden != null && c.Hidden.Value);
+                        IEnumerable<Column> cols = ws.Descendants<Column>().Where((c) => c.Hidden is not null && c.Hidden.Value);
                         foreach (Column item in cols)
                         {
                             for (uint i = item.Min.Value; i <= item.Max.Value; i++)
@@ -421,7 +448,6 @@ namespace Office_File_Explorer.Helpers
 
         // The DOM approach.
         // Note that the code below works only for cells that contain numeric values.
-        // 
         public static List<string> ReadExcelFileDOM(string fileName)
         {
             List<string> values = new List<string>();
@@ -431,16 +457,14 @@ namespace Office_File_Explorer.Helpers
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
                 SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                string text;
 
                 foreach (Row r in sheetData.Elements<Row>())
                 {
                     foreach (Cell c in r.Elements<Cell>())
                     {
-                        if (c.CellValue != null)
+                        if (c.CellValue is not null)
                         {
-                            text = c.CellValue.Text;
-                            values.Add(text + Strings.wSpaceChar);
+                            values.Add(c.CellReference + Strings.wColonBuffer + c.CellValue.Text + Strings.wSpaceChar);
                         }
                     }
                 }
