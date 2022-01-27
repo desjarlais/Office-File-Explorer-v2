@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cboWorksheets = new System.Windows.Forms.ComboBox();
             this.rdoCellValues = new System.Windows.Forms.RadioButton();
             this.rdoFormulas = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -85,8 +87,6 @@
             this.colAX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -95,7 +95,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.cboWorksheets);
             this.groupBox1.Controls.Add(this.rdoCellValues);
             this.groupBox1.Controls.Add(this.rdoFormulas);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -105,6 +105,23 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Cell Content Type";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(472, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 15);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Worksheet:";
+            // 
+            // cboWorksheets
+            // 
+            this.cboWorksheets.FormattingEnabled = true;
+            this.cboWorksheets.Location = new System.Drawing.Point(544, 18);
+            this.cboWorksheets.Name = "cboWorksheets";
+            this.cboWorksheets.Size = new System.Drawing.Size(241, 23);
+            this.cboWorksheets.TabIndex = 4;
             // 
             // rdoCellValues
             // 
@@ -464,23 +481,6 @@
             this.colAZ.HeaderText = "AZ";
             this.colAZ.Name = "colAZ";
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(544, 18);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(241, 23);
-            this.comboBox1.TabIndex = 4;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(472, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 15);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Worksheet:";
-            // 
             // FrmSheetViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -559,6 +559,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colAY;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAZ;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cboWorksheets;
     }
 }

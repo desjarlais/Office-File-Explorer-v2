@@ -13,22 +13,32 @@ namespace Office_File_Explorer.WinForms
     public partial class FrmSheetViewer : Form
     {
         public List<string> ss = new List<string>();
+        public List<Worksheet> sheets = new List<Worksheet>();
         public string fPath;
 
         public FrmSheetViewer(string filePath)
         {
             InitializeComponent();
             fPath = filePath;
-            ss = Excel.GetSharedStringsWithoutFormatting(filePath);
-            PopulateGridView(filePath);
+            ss = Excel.GetSharedStringsWithoutFormatting(fPath);
+            sheets = Excel.GetWorkSheets(fPath, false);
+            
+            foreach (Worksheet sheet in sheets)
+            {
+                cboWorksheets.Items.Add(sheet);
+            }
+
+            cboWorksheets.SelectedIndex = 0;
+
+            PopulateGridView();
         }
 
-        public void PopulateGridView(string file)
+        public void PopulateGridView()
         {
             try
             {
                 Cursor = Cursors.WaitCursor;
-                using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(file, false))
+                using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(fPath, false))
                 {
                     // get the first workbook, add other workbooks later
                     WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
@@ -72,7 +82,6 @@ namespace Office_File_Explorer.WinForms
                                 {
                                     dataGridView1.Rows[Convert.ToInt32(r.RowIndex.Value)].Cells[GetColumnNumber(c.CellReference)].Value = string.Empty;
                                 }
-                                
                             }
                         }
                     }
@@ -113,9 +122,11 @@ namespace Office_File_Explorer.WinForms
 
         public int GetColumnNumber(string cellRef)
         {
+            // strip any number from the column name
             var output = Regex.Replace(cellRef, @"[\d-]", string.Empty);
             int columnName = 0;
 
+            // convert the col name to an index number
             switch (output)
             {
                 case "A": columnName = 0; break;
@@ -176,14 +187,21 @@ namespace Office_File_Explorer.WinForms
             return columnName;
         }
 
+        public void ClearRows()
+        {
+            dataGridView1.Rows.Clear();
+        }
+
         private void rdoCellValues_CheckedChanged(object sender, EventArgs e)
         {
-            PopulateGridView(fPath);
+            ClearRows();
+            PopulateGridView();
         }
 
         private void rdoFormulas_CheckedChanged(object sender, EventArgs e)
         {
-            PopulateGridView(fPath);
+            ClearRows();
+            PopulateGridView();
         }
     }
 }
