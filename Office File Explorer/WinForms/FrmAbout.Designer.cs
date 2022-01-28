@@ -37,7 +37,6 @@ namespace Office_File_Explorer.WinForms
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblProduct = new System.Windows.Forms.Label();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.BtnOk = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -103,22 +102,11 @@ namespace Office_File_Explorer.WinForms
             this.lblProduct.TabIndex = 0;
             this.lblProduct.Text = "Product:";
             // 
-            // BtnOk
-            // 
-            this.BtnOk.Location = new System.Drawing.Point(338, 109);
-            this.BtnOk.Name = "BtnOk";
-            this.BtnOk.Size = new System.Drawing.Size(75, 23);
-            this.BtnOk.TabIndex = 1;
-            this.BtnOk.Text = "OK";
-            this.BtnOk.UseVisualStyleBackColor = true;
-            this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
-            // 
             // FrmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(429, 143);
-            this.Controls.Add(this.BtnOk);
+            this.ClientSize = new System.Drawing.Size(429, 113);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -144,7 +132,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Label lblProduct;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.Button BtnOk;
         private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }

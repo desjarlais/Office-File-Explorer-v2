@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Office_File_Explorer.Helpers;
 using System;
@@ -14,23 +13,32 @@ namespace Office_File_Explorer.WinForms
     {
         public List<string> ss = new List<string>();
         public List<Worksheet> sheets = new List<Worksheet>();
+        public Dictionary<string, string> sheetNames = new Dictionary<string,string>();
         public string fPath;
 
         public FrmSheetViewer(string filePath)
         {
             InitializeComponent();
+
             fPath = filePath;
             ss = Excel.GetSharedStringsWithoutFormatting(fPath);
-            sheets = Excel.GetWorkSheets(fPath, false);
-            
-            foreach (Worksheet sheet in sheets)
-            {
-                cboWorksheets.Items.Add(sheet);
-            }
 
+            // populate worksheet info
+            PopulateRIDList(fPath);
             cboWorksheets.SelectedIndex = 0;
-
             PopulateGridView();
+        }
+
+        public void PopulateRIDList(string fPath)
+        {
+            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(fPath, false))
+            {
+                foreach (Sheet s in spreadsheetDocument.WorkbookPart.Workbook.Sheets)
+                {
+                    sheetNames.Add(s.Id, s.Name);
+                    cboWorksheets.Items.Add(s.Name);
+                }
+            }
         }
 
         public void PopulateGridView()
@@ -40,16 +48,23 @@ namespace Office_File_Explorer.WinForms
                 Cursor = Cursors.WaitCursor;
                 using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(fPath, false))
                 {
-                    // get the first workbook, add other workbooks later
-                    WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
-                    WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-                    SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                    Columns cols = worksheetPart.Worksheet.Elements<Columns>().First();
+                    WorkbookPart wbPart = spreadsheetDocument.WorkbookPart;
+                    WorksheetPart wsPart = null;
+                    SheetData sheetData = null;
+
+                    foreach (Sheet s in wbPart.Workbook.Sheets)
+                    {
+                        if (s.Name == cboWorksheets.SelectedItem.ToString())
+                        {
+                            wsPart = (WorksheetPart)(wbPart.GetPartById(s.Id));
+                            sheetData = wsPart.Worksheet.Elements<SheetData>().First();
+                        }
+                    }
 
                     // add a row to the grid for each row in the sheet
                     AddRows(sheetData.Elements<Row>().Count());
 
-                    // now that we have the rows and columns, populate the actual text
+                    // populate the actual text of each cell
                     foreach (Row r in sheetData.Elements<Row>())
                     {
                         foreach (Cell c in r.Elements<Cell>())
@@ -87,18 +102,19 @@ namespace Office_File_Explorer.WinForms
                         }
                     }
 
-                    // now adjust the column width
+                    // adjust the column width based on cell content
+                    Columns cols = wsPart.Worksheet.Elements<Columns>().First();
                     int colCount = dataGridView1.Columns.Count;
-                    for (int i = 0; i < colCount - 1; i++)
+                    for (int i = 0; i < colCount; i++)
                     {
                         DataGridViewColumn dgvc = dataGridView1.Columns[i];
-                        dgvc.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                        dgvc.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
             }
             finally
             {
@@ -190,7 +206,58 @@ namespace Office_File_Explorer.WinForms
                 case "AX": columnName = 49; break;
                 case "AY": columnName = 50; break;
                 case "AZ": columnName = 51; break;
-
+                case "BA": columnName = 52; break;
+                case "BB": columnName = 53; break;
+                case "BC": columnName = 54; break;
+                case "BD": columnName = 55; break;
+                case "BE": columnName = 56; break;
+                case "BF": columnName = 57; break;
+                case "BG": columnName = 58; break;
+                case "BH": columnName = 59; break;
+                case "BI": columnName = 60; break;
+                case "BJ": columnName = 61; break;
+                case "BK": columnName = 62; break;
+                case "BL": columnName = 63; break;
+                case "BM": columnName = 64; break;
+                case "BN": columnName = 65; break;
+                case "BO": columnName = 66; break;
+                case "BP": columnName = 67; break;
+                case "BQ": columnName = 68; break;
+                case "BR": columnName = 69; break;
+                case "BS": columnName = 70; break;
+                case "BT": columnName = 71; break;
+                case "BU": columnName = 72; break;
+                case "BV": columnName = 73; break;
+                case "BW": columnName = 74; break;
+                case "BX": columnName = 75; break;
+                case "BY": columnName = 76; break;
+                case "BZ": columnName = 77; break;
+                case "CA": columnName = 78; break;
+                case "CB": columnName = 79; break;
+                case "CC": columnName = 80; break;
+                case "CD": columnName = 81; break;
+                case "CE": columnName = 82; break;
+                case "CF": columnName = 83; break;
+                case "CG": columnName = 84; break;
+                case "CH": columnName = 85; break;
+                case "CI": columnName = 86; break;
+                case "CJ": columnName = 87; break;
+                case "CK": columnName = 88; break;
+                case "CL": columnName = 89; break;
+                case "CM": columnName = 90; break;
+                case "CN": columnName = 91; break;
+                case "CO": columnName = 92; break;
+                case "CP": columnName = 93; break;
+                case "CQ": columnName = 94; break;
+                case "CR": columnName = 95; break;
+                case "CS": columnName = 96; break;
+                case "CT": columnName = 97; break;
+                case "CU": columnName = 98; break;
+                case "CV": columnName = 99; break;
+                case "CW": columnName = 100; break;
+                case "CX": columnName = 101; break;
+                case "CY": columnName = 102; break;
+                case "CZ": columnName = 103; break;
             }
 
             return columnName;
@@ -208,6 +275,12 @@ namespace Office_File_Explorer.WinForms
         }
 
         private void rdoFormulas_CheckedChanged(object sender, EventArgs e)
+        {
+            ClearRows();
+            PopulateGridView();
+        }
+
+        private void cboWorksheets_SelectedIndexChanged(object sender, EventArgs e)
         {
             ClearRows();
             PopulateGridView();

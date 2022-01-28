@@ -13,7 +13,7 @@ namespace Office_File_Explorer.WinForms
 
             // display app info
             lblProduct.Text = AssemblyProduct;
-            lblVersion.Text = AssemblyVersion;   
+            lblVersion.Text = AssemblyVersion; 
         }
 
         #region Assembly Attribute Accessors
@@ -78,11 +78,6 @@ namespace Office_File_Explorer.WinForms
             }
         }
         #endregion
-
-        private void BtnOk_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

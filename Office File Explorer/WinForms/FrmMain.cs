@@ -144,7 +144,6 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-
                 OpenFileDialog fDialog = new OpenFileDialog
                 {
                     Title = "Select Office Open Xml File.",
@@ -845,34 +844,13 @@ namespace Office_File_Explorer
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DisableUI();
             EnableUI();
             OpenOfficeDocument();
 
             if (lblFileType.Text == Strings.oAppExcel)
             {
                 BtnExcelSheetViewer.Enabled = true;
-            }
-        }
-
-        private void BtnCopyAll_Click(object sender, EventArgs e)
-        {
-            CopyAllItems();
-        }
-
-        private void BtnCopyLine_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (LstDisplay.Items.Count <= 0)
-                {
-                    return;
-                }
-
-                Clipboard.SetText(LstDisplay.SelectedItem.ToString());
-            }
-            catch (Exception ex)
-            {
-                LogInformation(LogInfoType.LogException, "BtnCopyLineOutput Error", ex.Message);
             }
         }
 

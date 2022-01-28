@@ -47,6 +47,7 @@ namespace Office_File_Explorer
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.BtnExcelSheetViewer = new System.Windows.Forms.Button();
             this.BtnValidateDoc = new System.Windows.Forms.Button();
             this.BtnViewCustomUI = new System.Windows.Forms.Button();
             this.BtnFixCorruptDoc = new System.Windows.Forms.Button();
@@ -67,7 +68,6 @@ namespace Office_File_Explorer
             this.copySelectedLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyAllLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.BtnExcelSheetViewer = new System.Windows.Forms.Button();
             this.mnuMainMenu.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -190,7 +190,7 @@ namespace Office_File_Explorer
             // 
             this.aboutToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Dialog_16x;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
@@ -198,7 +198,7 @@ namespace Office_File_Explorer
             // 
             this.feedbackToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.FeedbackBubble_16x;
             this.feedbackToolStripMenuItem.Name = "feedbackToolStripMenuItem";
-            this.feedbackToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.feedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.feedbackToolStripMenuItem.Text = "Feedback";
             this.feedbackToolStripMenuItem.Click += new System.EventHandler(this.FeedbackToolStripMenuItem_Click);
             // 
@@ -226,6 +226,16 @@ namespace Office_File_Explorer
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Document Information";
+            // 
+            // BtnExcelSheetViewer
+            // 
+            this.BtnExcelSheetViewer.Location = new System.Drawing.Point(746, 74);
+            this.BtnExcelSheetViewer.Name = "BtnExcelSheetViewer";
+            this.BtnExcelSheetViewer.Size = new System.Drawing.Size(146, 23);
+            this.BtnExcelSheetViewer.TabIndex = 11;
+            this.BtnExcelSheetViewer.Text = "Excel Sheet Viewer";
+            this.BtnExcelSheetViewer.UseVisualStyleBackColor = true;
+            this.BtnExcelSheetViewer.Click += new System.EventHandler(this.BtnExcelSheetViewer_Click);
             // 
             // BtnValidateDoc
             // 
@@ -417,16 +427,6 @@ namespace Office_File_Explorer
             this.imageList1.Images.SetKeyName(1, "powerpoint.png");
             this.imageList1.Images.SetKeyName(2, "word.png");
             this.imageList1.Images.SetKeyName(3, "XMLFile_789_32.ico");
-            // 
-            // BtnExcelSheetViewer
-            // 
-            this.BtnExcelSheetViewer.Location = new System.Drawing.Point(746, 74);
-            this.BtnExcelSheetViewer.Name = "BtnExcelSheetViewer";
-            this.BtnExcelSheetViewer.Size = new System.Drawing.Size(146, 23);
-            this.BtnExcelSheetViewer.TabIndex = 11;
-            this.BtnExcelSheetViewer.Text = "Excel Sheet Viewer";
-            this.BtnExcelSheetViewer.UseVisualStyleBackColor = true;
-            this.BtnExcelSheetViewer.Click += new System.EventHandler(this.BtnExcelSheetViewer_Click);
             // 
             // FrmMain
             // 

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSheetViewer));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cboWorksheets = new System.Windows.Forms.ComboBox();
@@ -87,6 +88,58 @@
             this.colAX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBA = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBB = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBD = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBG = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBH = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBI = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBM = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBO = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBQ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBR = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBU = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBW = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCA = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCB = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCD = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCF = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCG = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCH = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCI = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCM = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCO = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCQ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCR = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCU = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCW = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -122,6 +175,7 @@
             this.cboWorksheets.Name = "cboWorksheets";
             this.cboWorksheets.Size = new System.Drawing.Size(241, 23);
             this.cboWorksheets.TabIndex = 4;
+            this.cboWorksheets.SelectedIndexChanged += new System.EventHandler(this.cboWorksheets_SelectedIndexChanged);
             // 
             // rdoCellValues
             // 
@@ -153,7 +207,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 48);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(797, 432);
+            this.groupBox2.Size = new System.Drawing.Size(797, 417);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Worksheet View";
@@ -213,13 +267,65 @@
             this.colAW,
             this.colAX,
             this.colAY,
-            this.colAZ});
+            this.colAZ,
+            this.colBA,
+            this.colBB,
+            this.colBC,
+            this.colBD,
+            this.colBE,
+            this.colBF,
+            this.colBG,
+            this.colBH,
+            this.colBI,
+            this.colBJ,
+            this.colBK,
+            this.colBL,
+            this.colBM,
+            this.colBN,
+            this.colBO,
+            this.colBP,
+            this.colBQ,
+            this.colBR,
+            this.colBS,
+            this.colBT,
+            this.colBU,
+            this.colBV,
+            this.colBW,
+            this.colBX,
+            this.colBY,
+            this.colBZ,
+            this.colCA,
+            this.colCB,
+            this.colCC,
+            this.colCD,
+            this.colCE,
+            this.colCF,
+            this.colCG,
+            this.colCH,
+            this.colCI,
+            this.colCJ,
+            this.colCK,
+            this.colCL,
+            this.colCM,
+            this.colCN,
+            this.colCO,
+            this.colCP,
+            this.colCQ,
+            this.colCR,
+            this.colCS,
+            this.colCT,
+            this.colCU,
+            this.colCV,
+            this.colCW,
+            this.colCX,
+            this.colCY,
+            this.colCZ});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(3, 19);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(791, 410);
+            this.dataGridView1.Size = new System.Drawing.Size(791, 395);
             this.dataGridView1.TabIndex = 0;
             // 
             // colA
@@ -534,13 +640,274 @@
             this.colAZ.Name = "colAZ";
             this.colAZ.Width = 47;
             // 
+            // colBA
+            // 
+            this.colBA.HeaderText = "BA";
+            this.colBA.Name = "colBA";
+            // 
+            // colBB
+            // 
+            this.colBB.HeaderText = "BB";
+            this.colBB.Name = "colBB";
+            // 
+            // colBC
+            // 
+            this.colBC.HeaderText = "BC";
+            this.colBC.Name = "colBC";
+            // 
+            // colBD
+            // 
+            this.colBD.HeaderText = "BD";
+            this.colBD.Name = "colBD";
+            // 
+            // colBE
+            // 
+            this.colBE.HeaderText = "BE";
+            this.colBE.Name = "colBE";
+            // 
+            // colBF
+            // 
+            this.colBF.HeaderText = "BF";
+            this.colBF.Name = "colBF";
+            // 
+            // colBG
+            // 
+            this.colBG.HeaderText = "BG";
+            this.colBG.Name = "colBG";
+            // 
+            // colBH
+            // 
+            this.colBH.HeaderText = "BH";
+            this.colBH.Name = "colBH";
+            // 
+            // colBI
+            // 
+            this.colBI.HeaderText = "BI";
+            this.colBI.Name = "colBI";
+            // 
+            // colBJ
+            // 
+            this.colBJ.HeaderText = "BJ";
+            this.colBJ.Name = "colBJ";
+            // 
+            // colBK
+            // 
+            this.colBK.HeaderText = "BK";
+            this.colBK.Name = "colBK";
+            // 
+            // colBL
+            // 
+            this.colBL.HeaderText = "BL";
+            this.colBL.Name = "colBL";
+            // 
+            // colBM
+            // 
+            this.colBM.HeaderText = "BM";
+            this.colBM.Name = "colBM";
+            // 
+            // colBN
+            // 
+            this.colBN.HeaderText = "BN";
+            this.colBN.Name = "colBN";
+            // 
+            // colBO
+            // 
+            this.colBO.HeaderText = "BO";
+            this.colBO.Name = "colBO";
+            // 
+            // colBP
+            // 
+            this.colBP.HeaderText = "BP";
+            this.colBP.Name = "colBP";
+            // 
+            // colBQ
+            // 
+            this.colBQ.HeaderText = "BQ";
+            this.colBQ.Name = "colBQ";
+            // 
+            // colBR
+            // 
+            this.colBR.HeaderText = "BR";
+            this.colBR.Name = "colBR";
+            // 
+            // colBS
+            // 
+            this.colBS.HeaderText = "BS";
+            this.colBS.Name = "colBS";
+            // 
+            // colBT
+            // 
+            this.colBT.HeaderText = "BT";
+            this.colBT.Name = "colBT";
+            // 
+            // colBU
+            // 
+            this.colBU.HeaderText = "BU";
+            this.colBU.Name = "colBU";
+            // 
+            // colBV
+            // 
+            this.colBV.HeaderText = "BV";
+            this.colBV.Name = "colBV";
+            // 
+            // colBW
+            // 
+            this.colBW.HeaderText = "BW";
+            this.colBW.Name = "colBW";
+            // 
+            // colBX
+            // 
+            this.colBX.HeaderText = "BX";
+            this.colBX.Name = "colBX";
+            // 
+            // colBY
+            // 
+            this.colBY.HeaderText = "BY";
+            this.colBY.Name = "colBY";
+            // 
+            // colBZ
+            // 
+            this.colBZ.HeaderText = "BZ";
+            this.colBZ.Name = "colBZ";
+            // 
+            // colCA
+            // 
+            this.colCA.HeaderText = "CA";
+            this.colCA.Name = "colCA";
+            // 
+            // colCB
+            // 
+            this.colCB.HeaderText = "CB";
+            this.colCB.Name = "colCB";
+            // 
+            // colCC
+            // 
+            this.colCC.HeaderText = "CC";
+            this.colCC.Name = "colCC";
+            // 
+            // colCD
+            // 
+            this.colCD.HeaderText = "CD";
+            this.colCD.Name = "colCD";
+            // 
+            // colCE
+            // 
+            this.colCE.HeaderText = "CE";
+            this.colCE.Name = "colCE";
+            // 
+            // colCF
+            // 
+            this.colCF.HeaderText = "CF";
+            this.colCF.Name = "colCF";
+            // 
+            // colCG
+            // 
+            this.colCG.HeaderText = "CG";
+            this.colCG.Name = "colCG";
+            // 
+            // colCH
+            // 
+            this.colCH.HeaderText = "CH";
+            this.colCH.Name = "colCH";
+            // 
+            // colCI
+            // 
+            this.colCI.HeaderText = "CI";
+            this.colCI.Name = "colCI";
+            // 
+            // colCJ
+            // 
+            this.colCJ.HeaderText = "CJ";
+            this.colCJ.Name = "colCJ";
+            // 
+            // colCK
+            // 
+            this.colCK.HeaderText = "CK";
+            this.colCK.Name = "colCK";
+            // 
+            // colCL
+            // 
+            this.colCL.HeaderText = "CL";
+            this.colCL.Name = "colCL";
+            // 
+            // colCM
+            // 
+            this.colCM.HeaderText = "CM";
+            this.colCM.Name = "colCM";
+            // 
+            // colCN
+            // 
+            this.colCN.HeaderText = "CN";
+            this.colCN.Name = "colCN";
+            // 
+            // colCO
+            // 
+            this.colCO.HeaderText = "CO";
+            this.colCO.Name = "colCO";
+            // 
+            // colCP
+            // 
+            this.colCP.HeaderText = "CP";
+            this.colCP.Name = "colCP";
+            // 
+            // colCQ
+            // 
+            this.colCQ.HeaderText = "CQ";
+            this.colCQ.Name = "colCQ";
+            // 
+            // colCR
+            // 
+            this.colCR.HeaderText = "CR";
+            this.colCR.Name = "colCR";
+            // 
+            // colCS
+            // 
+            this.colCS.HeaderText = "CS";
+            this.colCS.Name = "colCS";
+            // 
+            // colCT
+            // 
+            this.colCT.HeaderText = "CT";
+            this.colCT.Name = "colCT";
+            // 
+            // colCU
+            // 
+            this.colCU.HeaderText = "CU";
+            this.colCU.Name = "colCU";
+            // 
+            // colCV
+            // 
+            this.colCV.HeaderText = "CV";
+            this.colCV.Name = "colCV";
+            // 
+            // colCW
+            // 
+            this.colCW.HeaderText = "CW";
+            this.colCW.Name = "colCW";
+            // 
+            // colCX
+            // 
+            this.colCX.HeaderText = "CX";
+            this.colCX.Name = "colCX";
+            // 
+            // colCY
+            // 
+            this.colCY.HeaderText = "CY";
+            this.colCY.Name = "colCY";
+            // 
+            // colCZ
+            // 
+            this.colCZ.HeaderText = "CZ";
+            this.colCZ.Name = "colCZ";
+            // 
             // FrmSheetViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(797, 480);
+            this.ClientSize = new System.Drawing.Size(797, 465);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmSheetViewer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Sheet Viewer";
@@ -613,5 +980,57 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colAX;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAY;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAZ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBA;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBB;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBD;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBE;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBG;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBH;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBI;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBJ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBK;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBM;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBN;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBO;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBP;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBQ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBR;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBS;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBT;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBU;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBW;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBX;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBZ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCA;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCB;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCD;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCE;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCG;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCH;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCI;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCJ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCK;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCM;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCN;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCO;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCP;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCQ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCR;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCS;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCT;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCU;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCW;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCX;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCZ;
     }
 }
