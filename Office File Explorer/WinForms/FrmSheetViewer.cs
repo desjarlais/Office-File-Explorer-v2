@@ -12,8 +12,6 @@ namespace Office_File_Explorer.WinForms
     public partial class FrmSheetViewer : Form
     {
         public List<string> ss = new List<string>();
-        public List<Worksheet> sheets = new List<Worksheet>();
-        public Dictionary<string, string> sheetNames = new Dictionary<string,string>();
         public string fPath;
 
         public FrmSheetViewer(string filePath)
@@ -24,18 +22,21 @@ namespace Office_File_Explorer.WinForms
             ss = Excel.GetSharedStringsWithoutFormatting(fPath);
 
             // populate worksheet info
-            PopulateRIDList(fPath);
+            PopulateComboBox(fPath);
             cboWorksheets.SelectedIndex = 0;
             PopulateGridView();
         }
 
-        public void PopulateRIDList(string fPath)
+        /// <summary>
+        /// populate the combo box with sheet names
+        /// </summary>
+        /// <param name="fPath"></param>
+        public void PopulateComboBox(string fPath)
         {
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(fPath, false))
             {
                 foreach (Sheet s in spreadsheetDocument.WorkbookPart.Workbook.Sheets)
                 {
-                    sheetNames.Add(s.Id, s.Name);
                     cboWorksheets.Items.Add(s.Name);
                 }
             }
