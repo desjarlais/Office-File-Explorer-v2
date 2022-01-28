@@ -195,15 +195,6 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetFormulas(string path)
-        {
-            List<string> tList = new List<string>();
-
-            // todo
-
-            return tList;
-        }
-
         public static List<Worksheet> GetWorkSheets(string fileName, bool fileIsEditable)
         {
             List<Worksheet> returnVal = new List<Worksheet>();
@@ -217,34 +208,6 @@ namespace Office_File_Explorer.Helpers
             }
 
             return returnVal;
-        }
-
-        public static List<string> GetHyperlinks2(string path)
-        {
-            List<string> tList = new List<string>();
-
-            int count = 0;
-
-            foreach (Worksheet sht in GetWorkSheets(path, false))
-            {
-                foreach (var s in sht)
-                {
-                    if (s.LocalName == "sheetData")
-                    {
-                        IEnumerable<Cell> cells = sht.WorksheetPart.Worksheet.Descendants<Cell>();
-                        foreach (Cell c in cells)
-                        {
-                            if (c.CellFormula != null)
-                            {
-                                count++;
-                                tList.Add(count + Strings.wPeriod + c.CellReference + Strings.wEqualSign + c.CellFormula.Text);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return tList;
         }
 
         public static List<string> GetSharedStrings(string path)

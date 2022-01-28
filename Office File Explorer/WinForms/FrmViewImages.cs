@@ -35,13 +35,16 @@ namespace Office_File_Explorer.WinForms
                 {
                     foreach (WorksheetPart wp in document.WorkbookPart.WorksheetParts)
                     {
-                        foreach (ImagePart ip in wp.DrawingsPart.ImageParts)
+                        if (wp.DrawingsPart is not null || wp.DrawingsPart.ImageParts is not null)
                         {
-                            if (ip.Uri.ToString() == LstImages.SelectedItem.ToString())
+                            foreach (ImagePart ip in wp.DrawingsPart.ImageParts)
                             {
-                                if (DisplayImage(ip) == false)
+                                if (ip.Uri.ToString() == LstImages.SelectedItem.ToString())
                                 {
-                                    return;
+                                    if (DisplayImage(ip) == false)
+                                    {
+                                        return;
+                                    }
                                 }
                             }
                         }
@@ -139,6 +142,11 @@ namespace Office_File_Explorer.WinForms
                 {
                     foreach (WorksheetPart wp in document.WorkbookPart.WorksheetParts)
                     {
+                        if (wp.DrawingsPart is null)
+                        {
+                            return;
+                        }
+
                         foreach (ImagePart ip in wp.DrawingsPart.ImageParts)
                         {
                             LstImages.Items.Add(ip.Uri);

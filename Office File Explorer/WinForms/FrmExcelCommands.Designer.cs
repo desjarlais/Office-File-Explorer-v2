@@ -35,7 +35,6 @@ namespace Office_File_Explorer.WinForms
             this.ckbShapes = new System.Windows.Forms.CheckBox();
             this.ckbOleObjects = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ckbFormulas = new System.Windows.Forms.CheckBox();
             this.ckbHyperlinks = new System.Windows.Forms.CheckBox();
             this.ckbConnections = new System.Windows.Forms.CheckBox();
             this.ckbDefinedNames = new System.Windows.Forms.CheckBox();
@@ -96,7 +95,6 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.ckbFormulas);
             this.groupBox1.Controls.Add(this.ckbHyperlinks);
             this.groupBox1.Controls.Add(this.ckbConnections);
             this.groupBox1.Controls.Add(this.ckbDefinedNames);
@@ -112,16 +110,6 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Excel Content To Display";
-            // 
-            // ckbFormulas
-            // 
-            this.ckbFormulas.AutoSize = true;
-            this.ckbFormulas.Location = new System.Drawing.Point(6, 246);
-            this.ckbFormulas.Name = "ckbFormulas";
-            this.ckbFormulas.Size = new System.Drawing.Size(75, 19);
-            this.ckbFormulas.TabIndex = 9;
-            this.ckbFormulas.Text = "Formulas";
-            this.ckbFormulas.UseVisualStyleBackColor = true;
             // 
             // ckbHyperlinks
             // 
@@ -277,7 +265,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.CheckBox ckbShapes;
         private System.Windows.Forms.CheckBox ckbOleObjects;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox ckbFormulas;
         private System.Windows.Forms.CheckBox ckbHyperlinks;
         private System.Windows.Forms.CheckBox ckbConnections;
         private System.Windows.Forms.CheckBox ckbDefinedNames;

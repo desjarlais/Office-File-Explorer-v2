@@ -685,12 +685,6 @@ namespace Office_File_Explorer
                             DisplayListContents(Excel.GetHyperlinks(lblFilePath.Text), Strings.wHyperlinks);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.Formulas))
-                        {
-                            LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wForumulas + Strings.wHeadingEnd);
-                            DisplayListContents(Excel.GetFormulas(lblFilePath.Text), Strings.wForumulas);
-                        }
-
                         if (cmds.HasFlag(AppUtilities.ExcelViewCmds.WorksheetInfo))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wWorksheetInfo + Strings.wHeadingEnd);

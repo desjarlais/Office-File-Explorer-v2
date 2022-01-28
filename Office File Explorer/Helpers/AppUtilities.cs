@@ -36,8 +36,7 @@ namespace Office_File_Explorer.Helpers
             CellValues = 32,
             DefinedNames = 64,
             Connections = 128,
-            Formulas = 256,
-            Hyperlinks = 512
+            Hyperlinks = 256
         }
 
         [Flags]

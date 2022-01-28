@@ -162,7 +162,8 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(472, 21);
+            this.label1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label1.Location = new System.Drawing.Point(487, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 15);
             this.label1.TabIndex = 5;
@@ -170,8 +171,9 @@
             // 
             // cboWorksheets
             // 
+            this.cboWorksheets.Dock = System.Windows.Forms.DockStyle.Right;
             this.cboWorksheets.FormattingEnabled = true;
-            this.cboWorksheets.Location = new System.Drawing.Point(544, 18);
+            this.cboWorksheets.Location = new System.Drawing.Point(553, 19);
             this.cboWorksheets.Name = "cboWorksheets";
             this.cboWorksheets.Size = new System.Drawing.Size(241, 23);
             this.cboWorksheets.TabIndex = 4;
@@ -181,7 +183,7 @@
             // 
             this.rdoCellValues.AutoSize = true;
             this.rdoCellValues.Checked = true;
-            this.rdoCellValues.Location = new System.Drawing.Point(12, 22);
+            this.rdoCellValues.Location = new System.Drawing.Point(12, 19);
             this.rdoCellValues.Name = "rdoCellValues";
             this.rdoCellValues.Size = new System.Drawing.Size(81, 19);
             this.rdoCellValues.TabIndex = 3;
@@ -193,7 +195,7 @@
             // rdoFormulas
             // 
             this.rdoFormulas.AutoSize = true;
-            this.rdoFormulas.Location = new System.Drawing.Point(99, 22);
+            this.rdoFormulas.Location = new System.Drawing.Point(99, 19);
             this.rdoFormulas.Name = "rdoFormulas";
             this.rdoFormulas.Size = new System.Drawing.Size(74, 19);
             this.rdoFormulas.TabIndex = 1;

@@ -99,15 +99,6 @@ namespace Office_File_Explorer.WinForms
                 xlCmds &= ~AppUtilities.ExcelViewCmds.Hyperlinks;
             }
 
-            if (ckbFormulas.Checked)
-            {
-                xlCmds |= AppUtilities.ExcelViewCmds.Formulas;
-            }
-            else
-            {
-                xlCmds &= ~AppUtilities.ExcelViewCmds.Formulas;
-            }
-
             // check Office features
             if (ckbShapes.Checked)
             {
@@ -157,7 +148,6 @@ namespace Office_File_Explorer.WinForms
                 ckbHyperlinks.Checked = true;
                 ckbLinks.Checked = true;
                 ckbHiddenRowCol.Checked = true;
-                ckbFormulas.Checked = true;
                 ckbDefinedNames.Checked = true;
                 ckbConnections.Checked = true;
                 ckbComments.Checked = true;
@@ -174,7 +164,6 @@ namespace Office_File_Explorer.WinForms
                 ckbHyperlinks.Checked = false;
                 ckbLinks.Checked = false;
                 ckbHiddenRowCol.Checked = false;
-                ckbFormulas.Checked = false;
                 ckbDefinedNames.Checked = false;
                 ckbConnections.Checked = false;
                 ckbComments.Checked = false;
