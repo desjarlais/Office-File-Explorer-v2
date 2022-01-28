@@ -37,8 +37,6 @@
             this.rdoFormulas = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.viewStylesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.A = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.B = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.C = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -143,6 +141,9 @@
             this.colCX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.viewStylesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyCellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -330,24 +331,11 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(3, 19);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.Size = new System.Drawing.Size(791, 395);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewStylesToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(133, 26);
-            // 
-            // viewStylesToolStripMenuItem
-            // 
-            this.viewStylesToolStripMenuItem.Name = "viewStylesToolStripMenuItem";
-            this.viewStylesToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.viewStylesToolStripMenuItem.Text = "View Styles";
-            this.viewStylesToolStripMenuItem.Click += new System.EventHandler(this.viewStylesToolStripMenuItem_Click);
             // 
             // A
             // 
@@ -921,6 +909,28 @@
             this.colCZ.HeaderText = "CZ";
             this.colCZ.Name = "colCZ";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewStylesToolStripMenuItem,
+            this.copyCellToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(133, 48);
+            // 
+            // viewStylesToolStripMenuItem
+            // 
+            this.viewStylesToolStripMenuItem.Name = "viewStylesToolStripMenuItem";
+            this.viewStylesToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.viewStylesToolStripMenuItem.Text = "View Styles";
+            this.viewStylesToolStripMenuItem.Click += new System.EventHandler(this.viewStylesToolStripMenuItem_Click);
+            // 
+            // copyCellToolStripMenuItem
+            // 
+            this.copyCellToolStripMenuItem.Name = "copyCellToolStripMenuItem";
+            this.copyCellToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.copyCellToolStripMenuItem.Text = "Copy Cell";
+            this.copyCellToolStripMenuItem.Click += new System.EventHandler(this.copyCellToolStripMenuItem_Click);
+            // 
             // FrmSheetViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1056,5 +1066,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCX;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCY;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCZ;
+        private System.Windows.Forms.ToolStripMenuItem copyCellToolStripMenuItem;
     }
 }

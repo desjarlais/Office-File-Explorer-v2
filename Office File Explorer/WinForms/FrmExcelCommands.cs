@@ -17,7 +17,6 @@ namespace Office_File_Explorer.WinForms
         private void BtnOk_Click(object sender, EventArgs e)
         {
             // check Excel features
-            // check Word features
             if (ckbLinks.Checked)
             {
                 xlCmds |= AppUtilities.ExcelViewCmds.Links;

@@ -229,10 +229,13 @@ namespace Office_File_Explorer.Helpers
                     foreach (SharedStringItem ssi in sst)
                     {
                         sharedStringCount++;
-                        Text ssValue = ssi.Text;
-                        if (ssValue.Text != null)
+                        if (ssi is not null)
                         {
-                            tList.Add(sharedStringCount + Strings.wPeriod + ssValue.Text);
+                            Text ssValue = ssi.Text;
+                            if (ssValue is not null)
+                            {
+                                tList.Add(sharedStringCount + Strings.wPeriod + ssValue.Text);
+                            }
                         }
                     }
                 }
@@ -250,16 +253,19 @@ namespace Office_File_Explorer.Helpers
             using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
             {
                 WorkbookPart wbPart = excelDoc.WorkbookPart;
-                if (wbPart.SharedStringTablePart != null)
+                if (wbPart.SharedStringTablePart is not null)
                 {
                     SharedStringTable sst = wbPart.SharedStringTablePart.SharedStringTable;
                     foreach (SharedStringItem ssi in sst)
                     {
                         sharedStringCount++;
-                        Text ssValue = ssi.Text;
-                        if (ssValue.Text != null)
+                        if (ssi.Text is not null)
                         {
-                            tList.Add(ssValue.Text);
+                            Text ssValue = ssi.Text;
+                            if (ssValue.Text is not null)
+                            {
+                                tList.Add(ssValue.Text);
+                            }
                         }
                     }
                 }
@@ -282,7 +288,7 @@ namespace Office_File_Explorer.Helpers
                 DefinedNames definedNames = wbPart.Workbook.DefinedNames;
 
                 // If there are defined names, add them to the dictionary.
-                if (definedNames != null)
+                if (definedNames is not null)
                 {
                     foreach (DefinedName dn in definedNames)
                     {

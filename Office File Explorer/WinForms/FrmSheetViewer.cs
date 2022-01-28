@@ -301,5 +301,10 @@ namespace Office_File_Explorer.WinForms
 
             MessageBox.Show(sb.ToString());
         }
+
+        private void copyCellToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(dataGridView1.CurrentCell.Value.ToString());
+        }
     }
 }

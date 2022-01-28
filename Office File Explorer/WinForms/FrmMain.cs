@@ -860,8 +860,13 @@ namespace Office_File_Explorer
                 }
                 else
                 {
-                    LstDisplay.Items.Clear();
-                    LstDisplay.Items.Add("No Corruption Found");
+                    // if it wasn't cancelled, no corruption was found
+                    // if it was cancelled, do nothing
+                    if (f.corruptionChecked != "Cancel")
+                    {
+                        LstDisplay.Items.Clear();
+                        LstDisplay.Items.Add("No Corruption Found");
+                    }
                 }
             }
         }

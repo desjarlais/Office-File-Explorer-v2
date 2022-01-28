@@ -50,6 +50,7 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
+            corruptionChecked = "Cancel";
             Close();
         }
 
