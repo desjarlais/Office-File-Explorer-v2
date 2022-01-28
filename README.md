@@ -26,14 +26,15 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Set Print Orientation
 * Change Default Template
 * Accept All Revisions
-* Fix document corruptions (bookmarks, revisions, endnotes, list templates, table properties, comments, hyperlinks, content controls, formulas)
+* Fix document corruptions (bookmarks, revisions, endnotes, list templates, table properties, comments, hyperlinks, content controls, math formulas)
 * Remove PII
 
 ### Excel
-* List function to display (links, comments, worksheets, hidden rows & columns, shared strings, cell values, connections, defined names, hyperlinks, formulas)
+* List function to display (links, comments, worksheets, hidden rows & columns, shared strings, connections, defined names, hyperlinks)
 * Delete content (comments, links)
 * Convert Macro enabled file (.xlsm) to non-macro enabled (.xlsx) 
 * Convert Strict .xlsx format to non-Strict .xlsx format
+* Added a Sheet Viewer form to look at cell values, formulas and font information for cells
 
 ### PowerPoint
 * List function to display (hyperlinks, slide titles, slide text, comments, slide transitions)
