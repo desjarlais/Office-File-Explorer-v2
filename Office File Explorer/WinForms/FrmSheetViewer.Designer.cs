@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSheetViewer));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -36,32 +37,34 @@
             this.rdoFormulas = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.colA = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colB = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colC = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colD = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colE = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colF = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colG = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colH = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colI = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colK = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colM = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colO = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colQ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colR = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colS = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colT = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colU = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colV = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colW = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colX = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.viewStylesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.A = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.B = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.C = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.D = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.E = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.F = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.G = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.H = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.I = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.J = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.K = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.L = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.M = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.N = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.O = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.P = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Q = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.R = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.S = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.T = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.U = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.V = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.W = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.X = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Z = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAA = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAB = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAC = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -143,6 +146,7 @@
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -218,32 +222,32 @@
             // 
             this.dataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colA,
-            this.colB,
-            this.colC,
-            this.colD,
-            this.colE,
-            this.colF,
-            this.colG,
-            this.colH,
-            this.colI,
-            this.colJ,
-            this.colK,
-            this.colL,
-            this.colM,
-            this.colN,
-            this.colO,
-            this.colP,
-            this.colQ,
-            this.colR,
-            this.colS,
-            this.colT,
-            this.colU,
-            this.colV,
-            this.colW,
-            this.colX,
-            this.colY,
-            this.colZ,
+            this.A,
+            this.B,
+            this.C,
+            this.D,
+            this.E,
+            this.F,
+            this.G,
+            this.H,
+            this.I,
+            this.J,
+            this.K,
+            this.L,
+            this.M,
+            this.N,
+            this.O,
+            this.P,
+            this.Q,
+            this.R,
+            this.S,
+            this.T,
+            this.U,
+            this.V,
+            this.W,
+            this.X,
+            this.Y,
+            this.Z,
             this.colAA,
             this.colAB,
             this.colAC,
@@ -322,6 +326,7 @@
             this.colCX,
             this.colCY,
             this.colCZ});
+            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(3, 19);
@@ -330,161 +335,175 @@
             this.dataGridView1.Size = new System.Drawing.Size(791, 395);
             this.dataGridView1.TabIndex = 0;
             // 
-            // colA
+            // contextMenuStrip1
             // 
-            this.colA.HeaderText = "A";
-            this.colA.Name = "colA";
-            this.colA.Width = 40;
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewStylesToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(133, 26);
             // 
-            // colB
+            // viewStylesToolStripMenuItem
             // 
-            this.colB.HeaderText = "B";
-            this.colB.Name = "colB";
-            this.colB.Width = 39;
+            this.viewStylesToolStripMenuItem.Name = "viewStylesToolStripMenuItem";
+            this.viewStylesToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.viewStylesToolStripMenuItem.Text = "View Styles";
+            this.viewStylesToolStripMenuItem.Click += new System.EventHandler(this.viewStylesToolStripMenuItem_Click);
             // 
-            // colC
+            // A
             // 
-            this.colC.HeaderText = "C";
-            this.colC.Name = "colC";
-            this.colC.Width = 40;
+            this.A.HeaderText = "A";
+            this.A.Name = "A";
+            this.A.Width = 40;
             // 
-            // colD
+            // B
             // 
-            this.colD.HeaderText = "D";
-            this.colD.Name = "colD";
-            this.colD.Width = 40;
+            this.B.HeaderText = "B";
+            this.B.Name = "B";
+            this.B.Width = 39;
             // 
-            // colE
+            // C
             // 
-            this.colE.HeaderText = "E";
-            this.colE.Name = "colE";
-            this.colE.Width = 38;
+            this.C.HeaderText = "C";
+            this.C.Name = "C";
+            this.C.Width = 40;
             // 
-            // colF
+            // D
             // 
-            this.colF.HeaderText = "F";
-            this.colF.Name = "colF";
-            this.colF.Width = 38;
+            this.D.HeaderText = "D";
+            this.D.Name = "D";
+            this.D.Width = 40;
             // 
-            // colG
+            // E
             // 
-            this.colG.HeaderText = "G";
-            this.colG.Name = "colG";
-            this.colG.Width = 40;
+            this.E.HeaderText = "E";
+            this.E.Name = "E";
+            this.E.Width = 38;
             // 
-            // colH
+            // F
             // 
-            this.colH.HeaderText = "H";
-            this.colH.Name = "colH";
-            this.colH.Width = 41;
+            this.F.HeaderText = "F";
+            this.F.Name = "F";
+            this.F.Width = 38;
             // 
-            // colI
+            // G
             // 
-            this.colI.HeaderText = "I";
-            this.colI.Name = "colI";
-            this.colI.Width = 35;
+            this.G.HeaderText = "G";
+            this.G.Name = "G";
+            this.G.Width = 40;
             // 
-            // colJ
+            // H
             // 
-            this.colJ.HeaderText = "J";
-            this.colJ.Name = "colJ";
-            this.colJ.Width = 36;
+            this.H.HeaderText = "H";
+            this.H.Name = "H";
+            this.H.Width = 41;
             // 
-            // colK
+            // I
             // 
-            this.colK.HeaderText = "K";
-            this.colK.Name = "colK";
-            this.colK.Width = 39;
+            this.I.HeaderText = "I";
+            this.I.Name = "I";
+            this.I.Width = 35;
             // 
-            // colL
+            // J
             // 
-            this.colL.HeaderText = "L";
-            this.colL.Name = "colL";
-            this.colL.Width = 38;
+            this.J.HeaderText = "J";
+            this.J.Name = "J";
+            this.J.Width = 36;
             // 
-            // colM
+            // K
             // 
-            this.colM.HeaderText = "M";
-            this.colM.Name = "colM";
-            this.colM.Width = 43;
+            this.K.HeaderText = "K";
+            this.K.Name = "K";
+            this.K.Width = 39;
             // 
-            // colN
+            // L
             // 
-            this.colN.HeaderText = "N";
-            this.colN.Name = "colN";
-            this.colN.Width = 41;
+            this.L.HeaderText = "L";
+            this.L.Name = "L";
+            this.L.Width = 38;
             // 
-            // colO
+            // M
             // 
-            this.colO.HeaderText = "O";
-            this.colO.Name = "colO";
-            this.colO.Width = 41;
+            this.M.HeaderText = "M";
+            this.M.Name = "M";
+            this.M.Width = 43;
             // 
-            // colP
+            // N
             // 
-            this.colP.HeaderText = "P";
-            this.colP.Name = "colP";
-            this.colP.Width = 39;
+            this.N.HeaderText = "N";
+            this.N.Name = "N";
+            this.N.Width = 41;
             // 
-            // colQ
+            // O
             // 
-            this.colQ.HeaderText = "Q";
-            this.colQ.Name = "colQ";
-            this.colQ.Width = 41;
+            this.O.HeaderText = "O";
+            this.O.Name = "O";
+            this.O.Width = 41;
             // 
-            // colR
+            // P
             // 
-            this.colR.HeaderText = "R";
-            this.colR.Name = "colR";
-            this.colR.Width = 39;
+            this.P.HeaderText = "P";
+            this.P.Name = "P";
+            this.P.Width = 39;
             // 
-            // colS
+            // Q
             // 
-            this.colS.HeaderText = "S";
-            this.colS.Name = "colS";
-            this.colS.Width = 38;
+            this.Q.HeaderText = "Q";
+            this.Q.Name = "Q";
+            this.Q.Width = 41;
             // 
-            // colT
+            // R
             // 
-            this.colT.HeaderText = "T";
-            this.colT.Name = "colT";
-            this.colT.Width = 38;
+            this.R.HeaderText = "R";
+            this.R.Name = "R";
+            this.R.Width = 39;
             // 
-            // colU
+            // S
             // 
-            this.colU.HeaderText = "U";
-            this.colU.Name = "colU";
-            this.colU.Width = 40;
+            this.S.HeaderText = "S";
+            this.S.Name = "S";
+            this.S.Width = 38;
             // 
-            // colV
+            // T
             // 
-            this.colV.HeaderText = "V";
-            this.colV.Name = "colV";
-            this.colV.Width = 39;
+            this.T.HeaderText = "T";
+            this.T.Name = "T";
+            this.T.Width = 38;
             // 
-            // colW
+            // U
             // 
-            this.colW.HeaderText = "W";
-            this.colW.Name = "colW";
-            this.colW.Width = 43;
+            this.U.HeaderText = "U";
+            this.U.Name = "U";
+            this.U.Width = 40;
             // 
-            // colX
+            // V
             // 
-            this.colX.HeaderText = "X";
-            this.colX.Name = "colX";
-            this.colX.Width = 39;
+            this.V.HeaderText = "V";
+            this.V.Name = "V";
+            this.V.Width = 39;
             // 
-            // colY
+            // W
             // 
-            this.colY.HeaderText = "Y";
-            this.colY.Name = "colY";
-            this.colY.Width = 39;
+            this.W.HeaderText = "W";
+            this.W.Name = "W";
+            this.W.Width = 43;
             // 
-            // colZ
+            // X
             // 
-            this.colZ.HeaderText = "Z";
-            this.colZ.Name = "colZ";
-            this.colZ.Width = 39;
+            this.X.HeaderText = "X";
+            this.X.Name = "X";
+            this.X.Width = 39;
+            // 
+            // Y
+            // 
+            this.Y.HeaderText = "Y";
+            this.Y.Name = "Y";
+            this.Y.Width = 39;
+            // 
+            // Z
+            // 
+            this.Z.HeaderText = "Z";
+            this.Z.Name = "Z";
+            this.Z.Width = 39;
             // 
             // colAA
             // 
@@ -917,6 +936,7 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -930,32 +950,34 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cboWorksheets;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colA;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colB;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colC;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colD;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colE;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colF;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colG;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colH;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colI;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colJ;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colK;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colL;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colM;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colN;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colO;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colP;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colQ;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colR;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colS;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colT;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colU;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colW;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colX;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colY;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colZ;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem viewStylesToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn A;
+        private System.Windows.Forms.DataGridViewTextBoxColumn B;
+        private System.Windows.Forms.DataGridViewTextBoxColumn C;
+        private System.Windows.Forms.DataGridViewTextBoxColumn D;
+        private System.Windows.Forms.DataGridViewTextBoxColumn E;
+        private System.Windows.Forms.DataGridViewTextBoxColumn F;
+        private System.Windows.Forms.DataGridViewTextBoxColumn G;
+        private System.Windows.Forms.DataGridViewTextBoxColumn H;
+        private System.Windows.Forms.DataGridViewTextBoxColumn I;
+        private System.Windows.Forms.DataGridViewTextBoxColumn J;
+        private System.Windows.Forms.DataGridViewTextBoxColumn K;
+        private System.Windows.Forms.DataGridViewTextBoxColumn L;
+        private System.Windows.Forms.DataGridViewTextBoxColumn M;
+        private System.Windows.Forms.DataGridViewTextBoxColumn N;
+        private System.Windows.Forms.DataGridViewTextBoxColumn O;
+        private System.Windows.Forms.DataGridViewTextBoxColumn P;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Q;
+        private System.Windows.Forms.DataGridViewTextBoxColumn R;
+        private System.Windows.Forms.DataGridViewTextBoxColumn S;
+        private System.Windows.Forms.DataGridViewTextBoxColumn T;
+        private System.Windows.Forms.DataGridViewTextBoxColumn U;
+        private System.Windows.Forms.DataGridViewTextBoxColumn V;
+        private System.Windows.Forms.DataGridViewTextBoxColumn W;
+        private System.Windows.Forms.DataGridViewTextBoxColumn X;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Z;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAA;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAB;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAC;

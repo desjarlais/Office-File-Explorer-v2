@@ -571,7 +571,7 @@ namespace Office_File_Explorer.Helpers
             return uint.Parse(match.Value);
         }
 
-        public CellFormat GetCellFormat(SpreadsheetDocument document, string sheetName, string addressName)
+        public static CellFormat GetCellFormat(SpreadsheetDocument document, string sheetName, string addressName)
         {
             CellFormat theCellFormat = null;
 
@@ -601,7 +601,7 @@ namespace Office_File_Explorer.Helpers
                 // If you can't retrieve the styles part, you're done.
                 if (styles != null)
                 {
-                    var cf = System.Convert.ToInt32(theCell.StyleIndex.Value);
+                    var cf = Convert.ToInt32(theCell.StyleIndex.Value);
                     theCellFormat = (CellFormat)(styles.Stylesheet.CellFormats.Elements().ElementAt(cf));
                 }
             }
@@ -609,7 +609,7 @@ namespace Office_File_Explorer.Helpers
 
         }
 
-        public CellFormat GetCellFormat(string fileName, string sheetName, string addressName)
+        public static CellFormat GetCellFormat(string fileName, string sheetName, string addressName)
         {
             using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, false))
             {

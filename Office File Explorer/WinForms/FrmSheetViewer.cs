@@ -286,5 +286,10 @@ namespace Office_File_Explorer.WinForms
             ClearRows();
             PopulateGridView();
         }
+
+        private void viewStylesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CellFormat cf = Excel.GetCellFormat(fPath, cboWorksheets.SelectedItem.ToString(), dataGridView1.CurrentCell.OwningColumn.HeaderText + dataGridView1.CurrentCell.RowIndex.ToString());
+        }
     }
 }
