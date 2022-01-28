@@ -697,34 +697,6 @@ namespace Office_File_Explorer
                             DisplayListContents(Excel.GetSharedStrings(lblFilePath.Text), Strings.wSharedStrings);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.CellValues))
-                        {
-                            LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wCellValues + Strings.wHeadingEnd);
-                            
-                            List<string> list;
-
-                            if (Properties.Settings.Default.ListCellValuesSax == true)
-                            {
-                                list = Excel.ReadExcelFileSAX(lblFilePath.Text);
-                            }
-                            else
-                            {
-                                list = Excel.ReadExcelFileDOM(lblFilePath.Text);
-                            }
-
-                            if (list.Count > 0)
-                            {
-                                foreach (string o in list)
-                                {
-                                    LstDisplay.Items.Add(o.ToString());
-                                }
-                            }
-                            else
-                            {
-                                LstDisplay.Items.Add("   None");
-                            }
-                        }
-
                         if (cmds.HasFlag(AppUtilities.ExcelViewCmds.DefinedNames))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wDefinedNames + Strings.wHeadingEnd);

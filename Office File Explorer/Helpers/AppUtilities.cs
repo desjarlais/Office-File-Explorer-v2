@@ -33,10 +33,9 @@ namespace Office_File_Explorer.Helpers
             WorksheetInfo = 4,
             HiddenRowsCols = 8,
             SharedStrings = 16,
-            CellValues = 32,
+            Hyperlinks = 32,
             DefinedNames = 64,
-            Connections = 128,
-            Hyperlinks = 256
+            Connections = 128
         }
 
         [Flags]

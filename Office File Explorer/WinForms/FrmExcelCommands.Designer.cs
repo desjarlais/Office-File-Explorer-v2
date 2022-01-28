@@ -38,7 +38,6 @@ namespace Office_File_Explorer.WinForms
             this.ckbHyperlinks = new System.Windows.Forms.CheckBox();
             this.ckbConnections = new System.Windows.Forms.CheckBox();
             this.ckbDefinedNames = new System.Windows.Forms.CheckBox();
-            this.ckbCellValues = new System.Windows.Forms.CheckBox();
             this.ckbSharedStrings = new System.Windows.Forms.CheckBox();
             this.ckbHiddenRowCol = new System.Windows.Forms.CheckBox();
             this.ckbWorksheetInfo = new System.Windows.Forms.CheckBox();
@@ -58,7 +57,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.ckbOleObjects);
             this.groupBox2.Location = new System.Drawing.Point(233, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(196, 281);
+            this.groupBox2.Size = new System.Drawing.Size(196, 227);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Select Office Content To Display";
@@ -98,7 +97,6 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.ckbHyperlinks);
             this.groupBox1.Controls.Add(this.ckbConnections);
             this.groupBox1.Controls.Add(this.ckbDefinedNames);
-            this.groupBox1.Controls.Add(this.ckbCellValues);
             this.groupBox1.Controls.Add(this.ckbSharedStrings);
             this.groupBox1.Controls.Add(this.ckbHiddenRowCol);
             this.groupBox1.Controls.Add(this.ckbWorksheetInfo);
@@ -106,7 +104,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.ckbLinks);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(208, 281);
+            this.groupBox1.Size = new System.Drawing.Size(208, 227);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Excel Content To Display";
@@ -114,7 +112,7 @@ namespace Office_File_Explorer.WinForms
             // ckbHyperlinks
             // 
             this.ckbHyperlinks.AutoSize = true;
-            this.ckbHyperlinks.Location = new System.Drawing.Point(6, 221);
+            this.ckbHyperlinks.Location = new System.Drawing.Point(6, 197);
             this.ckbHyperlinks.Name = "ckbHyperlinks";
             this.ckbHyperlinks.Size = new System.Drawing.Size(82, 19);
             this.ckbHyperlinks.TabIndex = 8;
@@ -124,7 +122,7 @@ namespace Office_File_Explorer.WinForms
             // ckbConnections
             // 
             this.ckbConnections.AutoSize = true;
-            this.ckbConnections.Location = new System.Drawing.Point(6, 196);
+            this.ckbConnections.Location = new System.Drawing.Point(6, 172);
             this.ckbConnections.Name = "ckbConnections";
             this.ckbConnections.Size = new System.Drawing.Size(120, 19);
             this.ckbConnections.TabIndex = 7;
@@ -134,22 +132,12 @@ namespace Office_File_Explorer.WinForms
             // ckbDefinedNames
             // 
             this.ckbDefinedNames.AutoSize = true;
-            this.ckbDefinedNames.Location = new System.Drawing.Point(6, 171);
+            this.ckbDefinedNames.Location = new System.Drawing.Point(6, 147);
             this.ckbDefinedNames.Name = "ckbDefinedNames";
             this.ckbDefinedNames.Size = new System.Drawing.Size(107, 19);
             this.ckbDefinedNames.TabIndex = 6;
             this.ckbDefinedNames.Text = "Defined Names";
             this.ckbDefinedNames.UseVisualStyleBackColor = true;
-            // 
-            // ckbCellValues
-            // 
-            this.ckbCellValues.AutoSize = true;
-            this.ckbCellValues.Location = new System.Drawing.Point(6, 146);
-            this.ckbCellValues.Name = "ckbCellValues";
-            this.ckbCellValues.Size = new System.Drawing.Size(82, 19);
-            this.ckbCellValues.TabIndex = 5;
-            this.ckbCellValues.Text = "Cell Values";
-            this.ckbCellValues.UseVisualStyleBackColor = true;
             // 
             // ckbSharedStrings
             // 
@@ -203,7 +191,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(272, 299);
+            this.BtnOk.Location = new System.Drawing.Point(272, 245);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 10;
@@ -213,7 +201,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(353, 299);
+            this.BtnCancel.Location = new System.Drawing.Point(353, 245);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 11;
@@ -224,7 +212,7 @@ namespace Office_File_Explorer.WinForms
             // ckbSelectAll
             // 
             this.ckbSelectAll.AutoSize = true;
-            this.ckbSelectAll.Location = new System.Drawing.Point(10, 304);
+            this.ckbSelectAll.Location = new System.Drawing.Point(12, 245);
             this.ckbSelectAll.Name = "ckbSelectAll";
             this.ckbSelectAll.Size = new System.Drawing.Size(119, 19);
             this.ckbSelectAll.TabIndex = 12;
@@ -236,7 +224,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(447, 335);
+            this.ClientSize = new System.Drawing.Size(447, 283);
             this.Controls.Add(this.ckbSelectAll);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.BtnCancel);
@@ -268,7 +256,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.CheckBox ckbHyperlinks;
         private System.Windows.Forms.CheckBox ckbConnections;
         private System.Windows.Forms.CheckBox ckbDefinedNames;
-        private System.Windows.Forms.CheckBox ckbCellValues;
         private System.Windows.Forms.CheckBox ckbSharedStrings;
         private System.Windows.Forms.CheckBox ckbHiddenRowCol;
         private System.Windows.Forms.CheckBox ckbWorksheetInfo;

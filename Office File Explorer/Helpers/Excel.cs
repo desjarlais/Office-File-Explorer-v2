@@ -951,7 +951,7 @@ namespace Office_File_Explorer.Helpers
             return index;
         }
 
-        public Font GetStyleFont(SpreadsheetDocument document, int fontIndex)
+        public static Font GetStyleFont(SpreadsheetDocument document, int fontIndex)
         {
             Font theFont = null;
 
@@ -967,7 +967,7 @@ namespace Office_File_Explorer.Helpers
             return theFont;
         }
 
-        public Font GetStyleFont(string fileName, int fontIndex)
+        public static Font GetStyleFont(string fileName, int fontIndex)
         {
             using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, false))
             {

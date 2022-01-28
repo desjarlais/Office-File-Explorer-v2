@@ -63,15 +63,6 @@ namespace Office_File_Explorer.WinForms
                 xlCmds &= ~AppUtilities.ExcelViewCmds.SharedStrings;
             }
 
-            if (ckbCellValues.Checked)
-            {
-                xlCmds |= AppUtilities.ExcelViewCmds.CellValues;
-            }
-            else
-            {
-                xlCmds &= ~AppUtilities.ExcelViewCmds.CellValues;
-            }
-
             if (ckbDefinedNames.Checked)
             {
                 xlCmds |= AppUtilities.ExcelViewCmds.DefinedNames;
@@ -151,7 +142,6 @@ namespace Office_File_Explorer.WinForms
                 ckbDefinedNames.Checked = true;
                 ckbConnections.Checked = true;
                 ckbComments.Checked = true;
-                ckbCellValues.Checked = true;
             }
             else
             {
@@ -167,7 +157,6 @@ namespace Office_File_Explorer.WinForms
                 ckbDefinedNames.Checked = false;
                 ckbConnections.Checked = false;
                 ckbComments.Checked = false;
-                ckbCellValues.Checked = false;
             }
         }
     }

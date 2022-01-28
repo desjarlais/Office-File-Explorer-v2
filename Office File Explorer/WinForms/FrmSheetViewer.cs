@@ -4,6 +4,7 @@ using Office_File_Explorer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -289,7 +290,16 @@ namespace Office_File_Explorer.WinForms
 
         private void viewStylesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CellFormat cf = Excel.GetCellFormat(fPath, cboWorksheets.SelectedItem.ToString(), dataGridView1.CurrentCell.OwningColumn.HeaderText + dataGridView1.CurrentCell.RowIndex.ToString());
+            StringBuilder sb = new StringBuilder();
+            CellFormat cf = Excel.GetCellFormat(fPath, cboWorksheets.SelectedItem.ToString(), 
+                dataGridView1.CurrentCell.OwningColumn.HeaderText + dataGridView1.CurrentCell.RowIndex.ToString());
+
+            if (cf.ApplyFont)
+            {
+                sb.Append("Font = " + Excel.GetStyleFont(fPath, Convert.ToInt32(cf.FontId.Value)).FontName.Val);
+            }
+
+            MessageBox.Show(sb.ToString());
         }
     }
 }
