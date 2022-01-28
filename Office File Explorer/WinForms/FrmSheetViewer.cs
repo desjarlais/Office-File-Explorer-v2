@@ -26,6 +26,18 @@ namespace Office_File_Explorer.WinForms
             PopulateComboBox(fPath);
             cboWorksheets.SelectedIndex = 0;
             PopulateGridView();
+            UpdateRowHeader();
+        }
+
+        /// <summary>
+        /// display the row count in the data grid view
+        /// </summary>
+        public void UpdateRowHeader()
+        {
+            for (int i = 0; i < dataGridView1.RowCount; i++)
+            {
+                dataGridView1.Rows[i].HeaderCell.Value = (i + 1).ToString();
+            }
         }
 
         /// <summary>
