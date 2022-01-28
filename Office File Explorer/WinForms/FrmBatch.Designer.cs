@@ -409,6 +409,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // LoginLogoutToolStripButton
             // 
+            this.LoginLogoutToolStripButton.Enabled = false;
             this.LoginLogoutToolStripButton.Image = global::Office_File_Explorer.Properties.Resources.Login_16x;
             this.LoginLogoutToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.LoginLogoutToolStripButton.Name = "LoginLogoutToolStripButton";
@@ -418,9 +419,15 @@ namespace Office_File_Explorer.WinForms
             // 
             // LoggedInUserToolStripLabel
             // 
+            this.LoggedInUserToolStripLabel.Enabled = false;
             this.LoggedInUserToolStripLabel.Name = "LoggedInUserToolStripLabel";
             this.LoggedInUserToolStripLabel.Size = new System.Drawing.Size(74, 22);
             this.LoggedInUserToolStripLabel.Text = "Username = ";
+            // 
+            // DisplayDrivesToolStripButton
+            // 
+            this.DisplayDrivesToolStripButton.Name = "DisplayDrivesToolStripButton";
+            this.DisplayDrivesToolStripButton.Size = new System.Drawing.Size(23, 22);
             // 
             // FrmBatch
             // 

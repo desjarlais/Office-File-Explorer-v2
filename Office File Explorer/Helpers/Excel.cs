@@ -213,7 +213,6 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetSharedStrings(string path)
         {
             List<string> tList = new List<string>();
-
             int sharedStringCount = 0;
 
             using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
@@ -247,7 +246,6 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetSharedStringsWithoutFormatting(string path)
         {
             List<string> tList = new List<string>();
-
             int sharedStringCount = 0;
 
             using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
@@ -277,7 +275,6 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetDefinedNames(string path)
         {
             List<string> tList = new List<string>();
-
             int nameCount = 0;
 
             using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))

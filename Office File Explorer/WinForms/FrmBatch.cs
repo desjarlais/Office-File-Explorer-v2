@@ -53,10 +53,10 @@ namespace Office_File_Explorer.WinForms
             DisableUI();
 
             // init adal
-            publicClientApp = PublicClientApplicationBuilder.Create(Properties.Settings.Default.ClientID)
-                .WithRedirectUri("http://localhost")
-                .WithAuthority(AzureCloudInstance.AzurePublic, "organizations")
-                .Build();
+            //publicClientApp = PublicClientApplicationBuilder.Create(Properties.Settings.Default.ClientID)
+            //    .WithRedirectUri("http://localhost")
+            //    .WithAuthority(AzureCloudInstance.AzurePublic, "organizations")
+            //    .Build();
         }
 
         public string GetFileExtension()
