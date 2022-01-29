@@ -1151,7 +1151,7 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelEmbeddedLinks)
                         {
-
+                            // todo
                         }
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelComments)

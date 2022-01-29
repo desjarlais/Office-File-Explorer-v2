@@ -35,7 +35,12 @@ namespace Office_File_Explorer.WinForms
                 {
                     foreach (WorksheetPart wp in document.WorkbookPart.WorksheetParts)
                     {
-                        if (wp.DrawingsPart is not null || wp.DrawingsPart.ImageParts is not null)
+                        if (wp.DrawingsPart is null)
+                        {
+                            return;
+                        }
+
+                        if (wp.DrawingsPart.ImageParts is not null)
                         {
                             foreach (ImagePart ip in wp.DrawingsPart.ImageParts)
                             {

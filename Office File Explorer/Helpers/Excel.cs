@@ -317,7 +317,13 @@ namespace Office_File_Explorer.Helpers
                 foreach (Connection c in cPart.Connections)
                 {
                     cCount++;
-                    if (c.DatabaseProperties.Connection != null)
+                    if (c.DatabaseProperties is null)
+                    {
+                        tList.Add("Invalid connections.xml");
+                        return tList;
+                    }
+
+                    if (c.DatabaseProperties.Connection is not null)
                     {
                         string cn = c.DatabaseProperties.Connection;
                         string[] cArray = cn.Split(';');
@@ -328,20 +334,16 @@ namespace Office_File_Explorer.Helpers
                             tList.Add("    " + s);
                         }
 
-                        if (c.ConnectionFile != null)
+                        if (c.ConnectionFile is not null)
                         {
                             tList.Add(string.Empty);
                             tList.Add("    Connection File= " + c.ConnectionFile);
 
-                            if (c.OlapProperties != null)
+                            if (c.OlapProperties is not null)
                             {
                                 tList.Add("    Row Drill Count= " + c.OlapProperties.RowDrillCount);
                             }
                         }
-                    }
-                    else
-                    {
-                        tList.Add("Invalid connections.xml");
                     }
                 }
             }

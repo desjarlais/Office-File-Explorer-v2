@@ -26,7 +26,6 @@ namespace Office_File_Explorer.WinForms
             PopulateComboBox(fPath);
             cboWorksheets.SelectedIndex = 0;
             PopulateGridView();
-            UpdateRowHeader();
         }
 
         /// <summary>
@@ -132,6 +131,9 @@ namespace Office_File_Explorer.WinForms
             }
             finally
             {
+                // update row header with row number
+                UpdateRowHeader();
+
                 Cursor = Cursors.Default;
             }
         }
