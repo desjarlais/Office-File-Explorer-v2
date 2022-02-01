@@ -1154,6 +1154,19 @@ namespace Office_File_Explorer
                             // todo
                         }
 
+                        if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelSheet)
+                        {
+                            using (var fds = new FrmDeleteSheet(lblFilePath.Text))
+                            {
+                                fds.ShowDialog();
+
+                                if (fds.sheetName != string.Empty)
+                                {
+                                    LstDisplay.Items.Add("Sheet: " + fds.sheetName + " Removed");
+                                }
+                            }
+                        }
+
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelComments)
                         {
                             if (Excel.RemoveComments(lblFilePath.Text) == true)

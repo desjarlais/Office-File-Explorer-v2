@@ -40,6 +40,11 @@ namespace Office_File_Explorer.WinForms
                 xlModCmd = AppUtilities.ExcelModifyCmds.ConvertStrictToXlsx;
             }
 
+            if (rdoDeleteSheet.Checked)
+            {
+                xlModCmd = AppUtilities.ExcelModifyCmds.DelSheet;
+            }
+
             Close();
         }
 

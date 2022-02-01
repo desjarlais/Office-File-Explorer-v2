@@ -467,7 +467,7 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
-        public bool DeleteSheet(string fileName, string sheetToDelete)
+        public static bool DeleteSheet(string fileName, string sheetToDelete)
         {
             // Delete the specified sheet from within the specified workbook.
             // Return True if the sheet was found and deleted, False if it was not.

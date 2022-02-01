@@ -85,6 +85,7 @@ namespace Office_File_Explorer.Helpers
             None,
             DelLinks,
             DelComments,
+            DelSheet,
             DelEmbeddedLinks,
             ConvertXlsmToXlsx,
             ConvertStrictToXlsx
