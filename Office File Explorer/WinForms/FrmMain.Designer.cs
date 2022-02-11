@@ -190,7 +190,7 @@ namespace Office_File_Explorer
             // 
             this.aboutToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Dialog_16x;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
@@ -198,7 +198,7 @@ namespace Office_File_Explorer
             // 
             this.feedbackToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.FeedbackBubble_16x;
             this.feedbackToolStripMenuItem.Name = "feedbackToolStripMenuItem";
-            this.feedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.feedbackToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.feedbackToolStripMenuItem.Text = "Feedback";
             this.feedbackToolStripMenuItem.Click += new System.EventHandler(this.FeedbackToolStripMenuItem_Click);
             // 
@@ -300,11 +300,11 @@ namespace Office_File_Explorer
             // lblFileType
             // 
             this.lblFileType.AutoSize = true;
+            this.lblFileType.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblFileType.Location = new System.Drawing.Point(46, 46);
             this.lblFileType.Name = "lblFileType";
-            this.lblFileType.Size = new System.Drawing.Size(17, 15);
+            this.lblFileType.Size = new System.Drawing.Size(2, 17);
             this.lblFileType.TabIndex = 3;
-            this.lblFileType.Text = "\"\"";
             // 
             // label2
             // 
@@ -338,11 +338,11 @@ namespace Office_File_Explorer
             // lblFilePath
             // 
             this.lblFilePath.AutoSize = true;
+            this.lblFilePath.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblFilePath.Location = new System.Drawing.Point(46, 19);
             this.lblFilePath.Name = "lblFilePath";
-            this.lblFilePath.Size = new System.Drawing.Size(17, 15);
+            this.lblFilePath.Size = new System.Drawing.Size(2, 17);
             this.lblFilePath.TabIndex = 1;
-            this.lblFilePath.Text = "\"\"";
             // 
             // BtnModifyContent
             // 

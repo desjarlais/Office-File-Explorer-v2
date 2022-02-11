@@ -178,8 +178,11 @@ namespace Office_File_Explorer.Helpers
                                         {
                                             if (s.StartsWith("xmlns:" + oldNs))
                                             {
+                                                // prep the namespaces 
                                                 string oldNamespace = "xmlns:" + oldNs + "=" + oldGuid;
                                                 string newNamespace = "xmlns:" + oldNs + "='" + newGuid + "'";
+
+                                                // create the databinding object that will replace the old value
                                                 DataBinding db = new DataBinding();
                                                 db.XPath = oldXpath;
                                                 db.PrefixMappings = oxa.Value.Replace(oldNamespace, newNamespace);
@@ -189,6 +192,7 @@ namespace Office_File_Explorer.Helpers
                                                     db.StoreItemId = oldStoreItemID;
                                                 }
 
+                                                // remove the current databinding tag and add the new one back into the file
                                                 oxe.Remove();
                                                 props.Append(db);
                                                 corruptionFound = true;
@@ -1227,7 +1231,8 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
-        /// if there a bookmark end tag in a content control but the start isn't, that is invalid 
+        /// if only one of the bookmark tags exists in the content control run block, that is invalid
+        /// this will check for that condition and remove the bookmark from the file
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
@@ -1243,6 +1248,7 @@ namespace Office_File_Explorer.Helpers
                     IEnumerable<BookmarkEnd> bkEndList = package.MainDocumentPart.Document.Descendants<BookmarkEnd>();
                     List<string> bkIdToRemove = new List<string>(); 
 
+                    // loop the start tags, if the start is in a contentrun, flag it
                     foreach (BookmarkStart bks in bkStartList)
                     {
                         if (bks.Parent.ToString() == Strings.dfowSdtContent)
@@ -1263,7 +1269,7 @@ namespace Office_File_Explorer.Helpers
                         {
                             foreach (BookmarkStart bks in bkStartList)
                             {
-                                if (bks.Id == bke.Id && bke.Parent.ToString() != Strings.dfowSdtContent)
+                                if (bks.Id == bke.Id && bks.Parent.ToString() != Strings.dfowSdtContent)
                                 {
                                     bkIdToRemove.Add(bks.Id);
                                 }

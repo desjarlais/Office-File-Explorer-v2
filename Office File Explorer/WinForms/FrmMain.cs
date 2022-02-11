@@ -213,6 +213,8 @@ namespace Office_File_Explorer
                 {
                     // user cancelled dialog, disable the UI and go back to the form
                     DisableUI();
+                    lblFilePath.Text = string.Empty;
+                    lblFileType.Text = string.Empty;
                     return;
                 }
             }

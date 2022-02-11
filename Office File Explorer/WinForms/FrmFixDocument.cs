@@ -76,7 +76,17 @@ namespace Office_File_Explorer.WinForms
             if (rdoFixBookmarksW.Checked || tryAllFixes == true)
             {
                 SetCorruptionChecked(Strings.wBookmarks);
-                if (WordFixes.RemoveMissingBookmarkTags(filePath) == true || WordFixes.RemovePlainTextCcFromBookmark(filePath) == true)
+                if (WordFixes.RemoveMissingBookmarkTags(filePath))
+                {
+                    isFileFixed = true;
+                }
+
+                if (WordFixes.RemovePlainTextCcFromBookmark(filePath))
+                {
+                    isFileFixed = true;
+                }
+                
+                if (WordFixes.FixBookmarkTagInSdtContent(filePath))
                 {
                     isFileFixed = true;
                 }

@@ -27,7 +27,6 @@ using System.Xml.XPath;
 
 // namespace refs
 using O = DocumentFormat.OpenXml;
-using DataBinding = DocumentFormat.OpenXml.Wordprocessing.DataBinding;
 using System.Threading.Tasks;
 
 namespace Office_File_Explorer.WinForms
@@ -186,7 +185,7 @@ namespace Office_File_Explorer.WinForms
                 DirectoryInfo dir = new DirectoryInfo(tbFolderPath.Text);
                 if (ckbSubfolders.Checked == true)
                 {
-                    foreach (FileInfo f in dir.GetFiles(GetFileExtension(), SearchOption.AllDirectories))
+                    foreach (FileInfo f in dir.GetFiles("*.*", SearchOption.AllDirectories))
                     {
                         if (f.Name.StartsWith("~"))
                         {
@@ -195,16 +194,39 @@ namespace Office_File_Explorer.WinForms
                         }
                         else
                         {
-                            // populate the list of file paths
-                            files.Add(f.FullName);
-                            lstOutput.Items.Add(f.FullName);
-                            fCount++;
+                            if (GetFileExtension() == "*.docx")
+                            {
+                                if (f.Name.EndsWith(".docx") || f.Name.EndsWith(".docm") || f.Name.EndsWith(".dotx") || f.Name.EndsWith(".dotm"))
+                                {
+                                    files.Add(f.FullName);
+                                    lstOutput.Items.Add(f.FullName);
+                                    fCount++;
+                                }
+                            }
+                            else if (GetFileExtension() == "*.xlsx")
+                            {
+                                if (f.Name.EndsWith(".xlsx") || f.Name.EndsWith(".xlsm") || f.Name.EndsWith(".xltx") || f.Name.EndsWith(".xltm"))
+                                {
+                                    files.Add(f.FullName);
+                                    lstOutput.Items.Add(f.FullName);
+                                    fCount++;
+                                }
+                            }
+                            else if (GetFileExtension() == "*.pptx")
+                            {
+                                if (f.Name.EndsWith(".pptx") || f.Name.EndsWith(".pptm") || f.Name.EndsWith(".potx") || f.Name.EndsWith(".potm"))
+                                {
+                                    files.Add(f.FullName);
+                                    lstOutput.Items.Add(f.FullName);
+                                    fCount++;
+                                }
+                            }
                         }
                     }
                 }
                 else
                 {
-                    foreach (FileInfo f in dir.GetFiles(GetFileExtension()))
+                    foreach (FileInfo f in dir.GetFiles("*.*"))
                     {
                         if (f.Name.StartsWith("~"))
                         {
@@ -214,9 +236,33 @@ namespace Office_File_Explorer.WinForms
                         else
                         {
                             // populate the list of file paths
-                            files.Add(f.FullName);
-                            lstOutput.Items.Add(f.FullName);
-                            fCount++;
+                            if (GetFileExtension() == "*.docx")
+                            {
+                                if (f.Name.EndsWith(".docx") || f.Name.EndsWith(".docm") || f.Name.EndsWith(".dotx") || f.Name.EndsWith(".dotm"))
+                                {
+                                    files.Add(f.FullName);
+                                    lstOutput.Items.Add(f.FullName);
+                                    fCount++;
+                                }
+                            }
+                            else if (GetFileExtension() == "*.xlsx")
+                            {
+                                if (f.Name.EndsWith(".xlsx") || f.Name.EndsWith(".xlsm") || f.Name.EndsWith(".xltx") || f.Name.EndsWith(".xltm"))
+                                {
+                                    files.Add(f.FullName);
+                                    lstOutput.Items.Add(f.FullName);
+                                    fCount++;
+                                }
+                            }
+                            else if (GetFileExtension() == "*.pptx")
+                            {
+                                if (f.Name.EndsWith(".pptx") || f.Name.EndsWith(".pptm") || f.Name.EndsWith(".potx") || f.Name.EndsWith(".potm"))
+                                {
+                                    files.Add(f.FullName);
+                                    lstOutput.Items.Add(f.FullName);
+                                    fCount++;
+                                }
+                            }
                         }
                     }
                 }
@@ -802,253 +848,15 @@ namespace Office_File_Explorer.WinForms
             {
                 lstOutput.Items.Clear();
 
-                List<string> nsList = new List<string>();
-                List<string> nList = new List<string>();
-                List<string> tList = new List<string>();
-                List<string> ntList = new List<string>();
-                string targetNS = string.Empty;
-
                 foreach (string f in files)
                 {
-                    try
+                    if (WordFixes.FixContentControlNamespaces(f))
                     {
-                        bool fileChanged = false;
-                        nsList.Clear();
-                        nList.Clear();
-                        tList.Clear();
-                        ntList.Clear();
-
-                        using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
-                        {
-                            // update the list of content control attributes in the body of the document
-                            foreach (var cc in document.ContentControls())
-                            {
-                                string ccValue = string.Empty;
-                                SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
-
-                                foreach (OpenXmlElement oxe in props.ChildElements)
-                                {
-                                    // get the alias and update ccValue
-                                    if (oxe.GetType().ToString() == Strings.dfowStdAlias)
-                                    {
-                                        foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
-                                        {
-                                            ccValue = oxa.Value;
-                                            tList.Add(ccValue);
-                                        }
-                                    }
-                                }
-                            }
-
-                            // get the schemareferences
-                            foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
-                            {
-                                XmlDocument xDoc = new XmlDocument();
-                                xDoc.Load(cxp.GetStream());
-
-                                if (xDoc.DocumentElement.NamespaceURI == Strings.schemaMetadataProperties)
-                                {
-                                    // loop through the metadata and get the uri's
-                                    foreach (XmlNode xNode in xDoc.ChildNodes)
-                                    {
-                                        if (xNode.Name == "p:properties")
-                                        {
-                                            foreach (XmlAttribute a in xNode.Attributes)
-                                            {
-                                                nsList.Add(a.Value);
-                                            }
-
-                                            foreach (XmlNode xNode2 in xNode.ChildNodes)
-                                            {
-                                                if (xNode2.Name == "documentManagement")
-                                                {
-                                                    foreach (XmlNode xNode3 in xNode2.ChildNodes)
-                                                    {
-                                                        // add the node name and uri to a global list for comparing later
-                                                        nsList.Add(xNode3.NamespaceURI);
-                                                        nList.Add(xNode3.Name);
-                                                    }
-                                                }
-                                            }
-
-                                            // remove any duplicates
-                                            nsList = nsList.Distinct().ToList();
-                                        }
-                                    }
-                                }
-
-                                if (xDoc.DocumentElement.NamespaceURI == Strings.schemaContentType)
-                                {
-                                    // get metadata field name map
-                                    foreach (XmlNode xNode in xDoc.ChildNodes)
-                                    {
-                                        if (xNode.Name == "ct:contentTypeSchema")
-                                        {
-                                            foreach (XmlNode xNode2 in xNode.ChildNodes)
-                                            {
-                                                if (xNode2.InnerXml.Contains(Strings.schemaTypes))
-                                                {
-                                                    foreach (XmlNode xNode3 in xNode2.ChildNodes)
-                                                    {
-                                                        if (xNode3.InnerXml.Contains("complexType"))
-                                                        {
-                                                            foreach (string t in tList)
-                                                            {
-                                                                if (xNode3.OuterXml.Contains(string.Concat("\"", t, "\"")))
-                                                                {
-                                                                    string xNodeElement1 = string.Empty;
-                                                                    int iNodeElement1 = xNode3.OuterXml.IndexOf(" name=") + 7;
-                                                                    xNodeElement1 = xNode3.OuterXml.Substring(iNodeElement1, 32);
-
-                                                                    int iNodeElement2 = xNode2.OuterXml.IndexOf(" targetNamespace=") + 18;
-                                                                    if (targetNS == string.Empty)
-                                                                    {
-                                                                        targetNS = xNode2.OuterXml.Substring(iNodeElement2, 36);
-                                                                    }
-
-                                                                    ntList.Add(string.Concat(t, xNodeElement1));
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    // remove any duplicates
-                                    ntList = ntList.Distinct().ToList();
-                                }
-                            }
-
-                            // now that we know the namespaces, loop the controls and update their data binding prefix mappings
-                            foreach (var cc in document.ContentControls())
-                            {
-                                string ccValue = string.Empty;
-                                string ccName = string.Empty;
-                                SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
-
-                                foreach (OpenXmlElement oxe in props.ChildElements)
-                                {
-                                    // get the cc Value from the alias
-                                    if (oxe.GetType().ToString() == Strings.dfowStdAlias)
-                                    {
-                                        foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
-                                        {
-                                            ccValue = oxa.Value;
-                                        }
-                                    }
-                                    // get the cc name from the tag
-                                    if (oxe.GetType().ToString() == Strings.dfowTag)
-                                    {
-                                        foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
-                                        {
-                                            ccName = oxa.Value;
-                                        }
-                                    }
-
-                                    // now use databinding to check the prefix mappings
-                                    if (oxe.GetType().ToString() == Strings.dfowDataBinding)
-                                    {
-                                        // create the DataBinding object
-                                        DataBinding db = (DataBinding)oxe;
-
-                                        if (ccName == string.Empty)
-                                        {
-                                            // parse out the element name
-                                            string[] elemName = db.XPath.ToString().Split('/');
-                                            string xPathName = elemName[elemName.Count() - 1];
-                                            string mappingName = xPathName.Substring(4, xPathName.Length - 7);
-                                        }
-
-                                        bool foundName = false;
-                                        // check if the content control prefix map name matches the metadata xml
-                                        foreach (string sName in nList)
-                                        {
-                                            if (sName == ccName)
-                                            {
-                                                foundName = true;
-                                                break;
-                                            }
-                                        }
-                                        if (foundName == false)
-                                        {
-                                            foreach (string tName in ntList)
-                                            {
-                                                if (tName.Contains(ccValue))
-                                                {
-                                                    if ((tName.Substring(tName.IndexOf(ccValue) + ccValue.Length)).Length == 32)
-                                                    {
-                                                        db.XPath.Value = db.XPath.Value.Replace(ccName, tName.Substring(tName.IndexOf(ccValue) + ccValue.Length));
-                                                        foundName = true;
-                                                    }
-                                                }
-                                            }
-
-                                        }
-                                        if (foundName == true)
-                                        {
-                                            // parse out the namespace mapping but remove the space at the end first
-                                            string[] prefixMappingNamespaces = db.PrefixMappings.Value.TrimEnd().Split(' ');
-                                            string dValue = db.XPath.Value.Substring(db.XPath.Value.IndexOf("documentManagement[1]/ns") + "documentManagement[1]/ns".Length, 1);
-                                            int nsIndex = 0;
-
-                                            // go through each namespace to compare with the content controls namespace value
-                                            foreach (var s in prefixMappingNamespaces)
-                                            {
-                                                bool sMatch = false;
-                                                string xSubstring = string.Empty;
-
-                                                // the first mapping usually doesn't have xmlns at the beginning
-                                                if (s.StartsWith("xmlns:"))
-                                                {
-                                                    xSubstring = s.Substring(11, s.Length - 11);
-                                                    xSubstring = xSubstring.Substring(0, xSubstring.Length - 1);
-                                                }
-                                                else
-                                                {
-                                                    xSubstring = s.Substring(0, s.Length);
-                                                }
-
-                                                foreach (string ns in nsList)
-                                                {
-                                                    if (xSubstring == ns)
-                                                    {
-                                                        sMatch = true;
-                                                        break;
-                                                    }
-
-                                                }
-                                                if (sMatch == false && nsIndex == short.Parse(dValue))
-                                                {
-                                                    // add the xmlns to the guid
-                                                    string valToReplace = "xmlns:ns" + nsIndex + "='" + targetNS + "'";
-                                                    db.PrefixMappings.Value = db.PrefixMappings.Value.Replace(s, valToReplace);
-                                                    fileChanged = true;
-                                                }
-
-                                                nsIndex++;
-                                            }
-
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (fileChanged)
-                            {
-                                lstOutput.Items.Add(f + "** Namespace Guid Updated **");
-                                document.MainDocumentPart.Document.Save();
-                            }
-                            else
-                            {
-                                lstOutput.Items.Add(f + "** No Namespace Needed To Be Updated **");
-                            }
-                        }
+                        lstOutput.Items.Add(f + " : Quick Part Updated");
                     }
-                    catch (Exception innerEx)
+                    else
                     {
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnUpdateQuickPartNamespaces Error: " + f + Strings.wColonBuffer + innerEx.Message);
+                        lstOutput.Items.Add(f + " : No Update Needed");
                     }
                 }
             }
@@ -1258,7 +1066,15 @@ namespace Office_File_Explorer.WinForms
                 {
                     try
                     {
-                        if (WordFixes.RemoveMissingBookmarkTags(f) == true || WordFixes.RemovePlainTextCcFromBookmark(f) == true)
+                        if (WordFixes.RemoveMissingBookmarkTags(f) == true)
+                        {
+                            lstOutput.Items.Add(f + " : Fixed Corrupt Bookmarks");
+                        }
+                        else if (WordFixes.RemovePlainTextCcFromBookmark(f) == true)
+                        {
+                            lstOutput.Items.Add(f + " : Fixed Corrupt Bookmarks");
+                        }
+                        else if (WordFixes.FixBookmarkTagInSdtContent(f) == true)
                         {
                             lstOutput.Items.Add(f + " : Fixed Corrupt Bookmarks");
                         }
