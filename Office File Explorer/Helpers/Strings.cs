@@ -169,6 +169,7 @@ namespace Office_File_Explorer.Helpers
         // word sdk refs (DocumentFormat.OpenXml.Wordprocessing = dfow)
         public const string dfowBody = "DocumentFormat.OpenXml.Wordprocessing.Body";
         public const string dfowSdt = "DocumentFormat.OpenXml.Wordprocessing.Sdt";
+        public const string dfowSdtContent = "DocumentFormat.OpenXml.Wordprocessing.SdtContent";
         public const string dfowStyle = "DocumentFormat.OpenXml.Wordprocessing.Style";
         public const string dfowLevel = "DocumentFormat.OpenXml.Wordprocessing.Level";
         public const string dfowText = "DocumentFormat.OpenXml.Wordprocessing.Text";

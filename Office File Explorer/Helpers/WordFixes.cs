@@ -18,6 +18,198 @@ namespace Office_File_Explorer.Helpers
     {
         static bool corruptionFound = false;
 
+        /// <summary>
+        /// there are SharePoint(SP) migration scenarios as well as SP Copy To style scenarios where a document will move from one doc library to another
+        /// this causes the guid associated with the mapped content control/quick part to change
+        /// the custom xml item.xml file will get this new guid, but the document and its content controls will not get this update
+        /// this fix will update the content control to the new guid from the custom xml
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixContentControlNamespaces(string filePath)
+        {
+            corruptionFound = false;
+            bool mismatchNamespaceFound = false;
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+            {
+                string newGuid = string.Empty;
+                string oldGuid = string.Empty;
+                string oldNs = string.Empty;
+                string oldXpath = string.Empty;
+                string oldStoreItemID = string.Empty;
+
+                // this is a 4 part fix
+                // 1. loop each content control and get the databinding xpaths and prefixmappings
+                // 2. get the custom xml file and loop its nodes looking for the node that matches up with the content control
+                // 3. compare the namespaces in the custom xml with the prefix mappings used in the content control
+                // 4. if the namespace is different, create a new databinding updated with the new namespace and push it back into the content control
+                foreach (var cc in document.ContentControls())
+                {
+                    string ccTag = string.Empty;
+                    string nsUri = string.Empty;
+                    newGuid = string.Empty;
+                    oldGuid = string.Empty;
+                    oldNs = string.Empty;
+                    oldXpath = string.Empty;
+                    oldStoreItemID = string.Empty;
+
+                    List<string> prefixMappingList = new List<string>();
+                    List<string> xPathList = new List<string>();
+                    List<string> nsList = new List<string>();
+                    
+                    mismatchNamespaceFound = false;
+                    corruptionFound = false;
+
+                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
+
+                    foreach (OpenXmlElement oxe in props.ChildElements)
+                    {
+                        // get details from the databinding tag
+                        if (oxe.GetType().ToString() == Strings.dfowDataBinding)
+                        {
+                            foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
+                            {
+                                if (oxa.LocalName == "prefixMappings")
+                                {
+                                    string[] prefixMappings = oxa.Value.Split(' ');
+                                    foreach (string s in prefixMappings)
+                                    {
+                                        prefixMappingList.Add(s);
+                                    }
+                                }
+
+                                if (oxa.LocalName == "xpath")
+                                {
+                                    oldXpath = oxa.Value;
+                                    string[] xpathVal = oxa.Value.Split('/');
+                                    foreach (string s in xpathVal)
+                                    {
+                                        xPathList.Add(s);
+                                    }
+                                }
+                                
+                                if (oxa.LocalName == "storeItemID")
+                                {
+                                    oldStoreItemID = oxa.Value;
+                                }
+                            }
+                        }
+                    }
+
+                    // loop the custom xml and check for the mapped values
+                    foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
+                    {
+                        XmlDocument xDoc = new XmlDocument();
+                        // need to load as a stream to get around a .net bug where using GetStream wasn't closing out properly
+                        // this allows me to close the stream manually to avoid the exception
+                        Stream stream = cxp.GetStream();
+                        xDoc.Load(stream);
+
+                        if (xDoc.DocumentElement.NamespaceURI == Strings.schemaMetadataProperties)
+                        {
+                            // loop through the metadata and get the uri's
+                            foreach (XmlNode xNode in xDoc.ChildNodes)
+                            {
+                                if (xNode.Name == "p:properties")
+                                {
+                                    foreach (XmlNode xNode2 in xNode.ChildNodes)
+                                    {
+                                        if (xNode2.Name == "documentManagement")
+                                        {
+                                            // loop each custom xml and find the name that matches the xpath from the content control
+                                            // check the val of the custom xml ns with the prefixmapping ns value
+                                            // if they don't match, replace the content control guid with the one form the custom xml guid
+                                            foreach (XmlNode xNode3 in xNode2.ChildNodes)
+                                            {
+                                                foreach (string s in xPathList)
+                                                {
+                                                    if (s != string.Empty)
+                                                    {
+                                                        // pull the ns val out of xpath
+                                                        if (s.Substring(0, 2) == "ns")
+                                                        {
+                                                            string[] clientNs = s.Split(':');
+                                                            if (clientNs[1].StartsWith(xNode3.Name))
+                                                            {
+                                                                foreach (string pm in prefixMappingList)
+                                                                {
+                                                                    if (pm.StartsWith("xmlns:" + clientNs[0]))
+                                                                    {
+                                                                        string[] serverNs = pm.Split('=');
+                                                                        string newServerNs = serverNs[1].Replace("'", string.Empty);
+                                                                        if (newServerNs != xNode3.NamespaceURI)
+                                                                        {
+                                                                            // this is the correct guid and needs to be replaced
+                                                                            newGuid = xNode3.NamespaceURI;
+                                                                            oldNs = clientNs[0];
+                                                                            oldGuid = serverNs[1];
+                                                                            mismatchNamespaceFound = true;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        stream.Close();
+                    }
+
+                    // now replace the value in the content control if there was a new guid found
+                    if (mismatchNamespaceFound)
+                    {
+                        foreach (OpenXmlElement oxe in props.ChildElements)
+                        {
+                            if (oxe.GetType().ToString() == Strings.dfowDataBinding)
+                            {
+                                foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
+                                {
+                                    if (oxa.LocalName == "prefixMappings")
+                                    {
+                                        string[] prefixMappings = oxa.Value.Split(' ');
+                                        foreach (string s in prefixMappings)
+                                        {
+                                            if (s.StartsWith("xmlns:" + oldNs))
+                                            {
+                                                string oldNamespace = "xmlns:" + oldNs + "=" + oldGuid;
+                                                string newNamespace = "xmlns:" + oldNs + "='" + newGuid + "'";
+                                                DataBinding db = new DataBinding();
+                                                db.XPath = oldXpath;
+                                                db.PrefixMappings = oxa.Value.Replace(oldNamespace, newNamespace);
+
+                                                if (oldStoreItemID != string.Empty)
+                                                {
+                                                    db.StoreItemId = oldStoreItemID;
+                                                }
+
+                                                oxe.Remove();
+                                                props.Append(db);
+                                                corruptionFound = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (corruptionFound)
+                {
+                    document.Save();
+                }
+            }
+            
+            return corruptionFound;
+        }
+
         public static bool FixDataDescriptor(string filePath)
         {
             corruptionFound = false;
@@ -1034,8 +1226,89 @@ namespace Office_File_Explorer.Helpers
             return isFixed;
         }
 
+        /// <summary>
+        /// if there a bookmark end tag in a content control but the start isn't, that is invalid 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static bool FixBookmarkTagInSdtContent(string filename)
+        {
+            bool isFixed = false;
+
+            try
+            {
+                using (WordprocessingDocument package = WordprocessingDocument.Open(filename, true))
+                {
+                    IEnumerable<BookmarkStart> bkStartList = package.MainDocumentPart.Document.Descendants<BookmarkStart>();
+                    IEnumerable<BookmarkEnd> bkEndList = package.MainDocumentPart.Document.Descendants<BookmarkEnd>();
+                    List<string> bkIdToRemove = new List<string>(); 
+
+                    foreach (BookmarkStart bks in bkStartList)
+                    {
+                        if (bks.Parent.ToString() == Strings.dfowSdtContent)
+                        {
+                            foreach (BookmarkEnd bke in bkEndList)
+                            {
+                                if (bke.Id == bks.Id && bke.Parent.ToString() != Strings.dfowSdtContent)
+                                {
+                                    bkIdToRemove.Add(bke.Id);
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (BookmarkEnd bke in bkEndList)
+                    {
+                        if (bke.Parent.ToString() == Strings.dfowSdtContent)
+                        {
+                            foreach (BookmarkStart bks in bkStartList)
+                            {
+                                if (bks.Id == bke.Id && bke.Parent.ToString() != Strings.dfowSdtContent)
+                                {
+                                    bkIdToRemove.Add(bks.Id);
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (string s in bkIdToRemove)
+                    {
+                        foreach (BookmarkStart bks in bkStartList)
+                        {
+                            if (s == bks.Id)
+                            {
+                                bks.Remove();
+                                isFixed = true;
+                            }
+                        }
+
+                        foreach (BookmarkEnd bke in bkEndList)
+                        {
+                            if (s == bke.Id)
+                            {
+                                bke.Remove();
+                                isFixed = true;
+                            }
+                        }
+                    }
+
+                    if (isFixed)
+                    {
+                        package.Save();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "FixBookmarkTagInSdtContent Error: " + ex.Message);
+                return isFixed;
+            }
+            
+            return isFixed;
+        }
+
         // <summary>
-        /// look for bookmark tags in a plain cc
+        /// look for bookmark tags in a plain content control
         /// this is not allowed and those need to be removed
         /// </summary>
         /// <param name="filename"></param>

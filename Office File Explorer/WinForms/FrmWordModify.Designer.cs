@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWordModify));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoRemoveCustomTitleProp = new System.Windows.Forms.RadioButton();
             this.rdoRemovePII = new System.Windows.Forms.RadioButton();
             this.rdoAcceptRevisions = new System.Windows.Forms.RadioButton();
             this.rdoChangeDefTemp = new System.Windows.Forms.RadioButton();
@@ -46,12 +47,13 @@ namespace Office_File_Explorer.WinForms
             this.rdoDelHF = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoRemoveCustomTitleProp = new System.Windows.Forms.RadioButton();
+            this.rdoUpdateNamespaces = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoUpdateNamespaces);
             this.groupBox1.Controls.Add(this.rdoRemoveCustomTitleProp);
             this.groupBox1.Controls.Add(this.rdoRemovePII);
             this.groupBox1.Controls.Add(this.rdoAcceptRevisions);
@@ -68,10 +70,21 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.rdoDelHF);
             this.groupBox1.Location = new System.Drawing.Point(12, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(389, 194);
+            this.groupBox1.Size = new System.Drawing.Size(389, 226);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Content to Modify";
+            // 
+            // rdoRemoveCustomTitleProp
+            // 
+            this.rdoRemoveCustomTitleProp.AutoSize = true;
+            this.rdoRemoveCustomTitleProp.Location = new System.Drawing.Point(211, 169);
+            this.rdoRemoveCustomTitleProp.Name = "rdoRemoveCustomTitleProp";
+            this.rdoRemoveCustomTitleProp.Size = new System.Drawing.Size(156, 19);
+            this.rdoRemoveCustomTitleProp.TabIndex = 2;
+            this.rdoRemoveCustomTitleProp.TabStop = true;
+            this.rdoRemoveCustomTitleProp.Text = "Delete Custom Title Prop";
+            this.rdoRemoveCustomTitleProp.UseVisualStyleBackColor = true;
             // 
             // rdoRemovePII
             // 
@@ -218,7 +231,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(245, 200);
+            this.BtnOk.Location = new System.Drawing.Point(245, 232);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 0;
@@ -228,7 +241,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(326, 200);
+            this.BtnCancel.Location = new System.Drawing.Point(326, 232);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 1;
@@ -236,22 +249,22 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // rdoRemoveCustomTitleProp
+            // rdoUpdateNamespaces
             // 
-            this.rdoRemoveCustomTitleProp.AutoSize = true;
-            this.rdoRemoveCustomTitleProp.Location = new System.Drawing.Point(211, 169);
-            this.rdoRemoveCustomTitleProp.Name = "rdoRemoveCustomTitleProp";
-            this.rdoRemoveCustomTitleProp.Size = new System.Drawing.Size(156, 19);
-            this.rdoRemoveCustomTitleProp.TabIndex = 2;
-            this.rdoRemoveCustomTitleProp.TabStop = true;
-            this.rdoRemoveCustomTitleProp.Text = "Delete Custom Title Prop";
-            this.rdoRemoveCustomTitleProp.UseVisualStyleBackColor = true;
+            this.rdoUpdateNamespaces.AutoSize = true;
+            this.rdoUpdateNamespaces.Location = new System.Drawing.Point(11, 194);
+            this.rdoUpdateNamespaces.Name = "rdoUpdateNamespaces";
+            this.rdoUpdateNamespaces.Size = new System.Drawing.Size(191, 19);
+            this.rdoUpdateNamespaces.TabIndex = 12;
+            this.rdoUpdateNamespaces.TabStop = true;
+            this.rdoUpdateNamespaces.Text = "Update Quick Part Namespaces";
+            this.rdoUpdateNamespaces.UseVisualStyleBackColor = true;
             // 
             // FrmWordModify
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(409, 236);
+            this.ClientSize = new System.Drawing.Size(409, 267);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.groupBox1);
@@ -287,5 +300,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoSetPrint;
         private System.Windows.Forms.RadioButton rdoRemovePII;
         private System.Windows.Forms.RadioButton rdoRemoveCustomTitleProp;
+        private System.Windows.Forms.RadioButton rdoUpdateNamespaces;
     }
 }

@@ -1127,6 +1127,18 @@ namespace Office_File_Explorer
                                 LogInformation(LogInfoType.ClearAndAdd, "'Title' Property Not Found.", string.Empty);
                             }
                         }
+
+                        if (f.wdModCmd == AppUtilities.WordModifyCmds.UpdateCcNamespaceGuid)
+                        {
+                            if (WordFixes.FixContentControlNamespaces(lblFilePath.Text))
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "Quick Part Namespaces Updated", string.Empty);
+                            }
+                            else
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "No Issues With Namespaces Found.", string.Empty);
+                            }
+                        }
                     }
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)

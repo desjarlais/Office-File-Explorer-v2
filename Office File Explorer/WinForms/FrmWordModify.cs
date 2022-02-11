@@ -84,6 +84,11 @@ namespace Office_File_Explorer.WinForms
                 wdModCmd = AppUtilities.WordModifyCmds.RemoveCustomTitleProp;
             }
 
+            if (rdoUpdateNamespaces.Checked)
+            {
+                wdModCmd = AppUtilities.WordModifyCmds.UpdateCcNamespaceGuid;
+            }
+
             Close();
         }
 
