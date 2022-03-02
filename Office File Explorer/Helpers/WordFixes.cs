@@ -29,7 +29,7 @@ namespace Office_File_Explorer.Helpers
         public static bool FixContentControlNamespaces(string filePath)
         {
             corruptionFound = false;
-            bool mismatchNamespaceFound = false;
+            bool mismatchNamespaceFound;
 
             using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
             {
@@ -56,7 +56,6 @@ namespace Office_File_Explorer.Helpers
 
                     List<string> prefixMappingList = new List<string>();
                     List<string> xPathList = new List<string>();
-                    List<string> nsList = new List<string>();
                     
                     mismatchNamespaceFound = false;
                     corruptionFound = false;

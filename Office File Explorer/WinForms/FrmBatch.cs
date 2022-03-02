@@ -11,6 +11,9 @@ using Microsoft.Identity.Client;
 // app refs
 using Office_File_Explorer.Helpers;
 
+// Microsoft Graph refs
+
+
 //.NET refs
 using System;
 using System.Collections.Generic;
@@ -1736,6 +1739,7 @@ namespace Office_File_Explorer.WinForms
 
         private void CkbSubfolders_CheckedChanged(object sender, EventArgs e)
         {
+            EnableUI();
             PopulateAndDisplayFiles();
         }
 
