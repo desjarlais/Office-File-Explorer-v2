@@ -38,7 +38,7 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Added a Sheet Viewer form to look at cell values, formulas and font information for cells
 
 ### PowerPoint
-* List function to display (hyperlinks, slide titles, slide text, comments, slide transitions)
+* List function to display (hyperlinks, slide titles, slide text, comments, slide transitions, fonts)
 * Convert Macro enabled file (.pptm) to non-macro enabled (.pptx)
 * Reset note page size to default value (if the button doesn't fix the issue, go to File | Settings and enable the notes master checkbox)
 * Reset note page size to custom value based on another presentation file
