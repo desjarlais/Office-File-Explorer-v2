@@ -778,6 +778,12 @@ namespace Office_File_Explorer
                             DisplayListContents(PowerPoint.GetSlideTransitions(lblFilePath.Text), Strings.wSlideTransitions);
                         }
 
+                        if (cmds.HasFlag(AppUtilities.PowerPointViewCmds.Fonts))
+                        {
+                            LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wFonts + Strings.wHeadingEnd);
+                            DisplayListContents(PowerPoint.GetFonts(lblFilePath.Text), Strings.wFonts);
+                        }
+
                         // display Office features
                         if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
                         {

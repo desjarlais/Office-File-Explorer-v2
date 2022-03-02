@@ -43,12 +43,14 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
             this.ckbSelectAll = new System.Windows.Forms.CheckBox();
+            this.ckbListFonts = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckbListFonts);
             this.groupBox1.Controls.Add(this.ckbSlideTransitions);
             this.groupBox1.Controls.Add(this.ckbSlideText);
             this.groupBox1.Controls.Add(this.ckbComments);
@@ -184,6 +186,16 @@ namespace Office_File_Explorer.WinForms
             this.ckbSelectAll.UseVisualStyleBackColor = true;
             this.ckbSelectAll.CheckedChanged += new System.EventHandler(this.CkbSelectAll_CheckedChanged);
             // 
+            // ckbListFonts
+            // 
+            this.ckbListFonts.AutoSize = true;
+            this.ckbListFonts.Location = new System.Drawing.Point(19, 147);
+            this.ckbListFonts.Name = "ckbListFonts";
+            this.ckbListFonts.Size = new System.Drawing.Size(76, 19);
+            this.ckbListFonts.TabIndex = 8;
+            this.ckbListFonts.Text = "List Fonts";
+            this.ckbListFonts.UseVisualStyleBackColor = true;
+            // 
             // FrmPPTCommands
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -225,5 +237,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnOk;
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.CheckBox ckbSelectAll;
+        private System.Windows.Forms.CheckBox ckbListFonts;
     }
 }

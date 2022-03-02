@@ -46,7 +46,8 @@ namespace Office_File_Explorer.Helpers
             SlideTitles = 2,
             Comments = 4,
             SlideText = 8,
-            SlideTransitions = 16
+            SlideTransitions = 16,
+            Fonts = 32
         }
 
         [Flags]
@@ -99,6 +100,33 @@ namespace Office_File_Explorer.Helpers
             DelComments,
             ConvertPptmToPptx,
             RemovePIIOnSave
+        }
+
+        public static string GetFontCharacterSet(string input)
+        {
+            switch (input)
+            {
+                case "0": return "ANSI";
+                case "1": return "Default";
+                case "2": return "Symbol";
+                case "4D": return "Macintosh";
+                case "80": return "JIS";
+                case "81": return "Hangul";
+                case "82": return "Johab";
+                case "86": return "GB-2312";
+                case "88": return "Chinese Big Five";
+                case "A1": return "Greek";
+                case "A2": return "Turkish";
+                case "A3": return "Vietnamese";
+                case "B1": return "Hebrew";
+                case "B2": return "Arabic";
+                case "BA": return "Baltic";
+                case "CC": return "Russian";
+                case "DE": return "Thai";
+                case "EE": return "Eastern European";
+                case "FF": return "OEM";
+                default: return "App-Defined";
+            }
         }
 
         public static void PlatformSpecificProcessStart(string url)

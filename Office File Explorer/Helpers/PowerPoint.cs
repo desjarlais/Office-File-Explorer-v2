@@ -11,13 +11,36 @@ using PShape = DocumentFormat.OpenXml.Presentation.Shape;
 using Drawing = DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml;
 using ShapeStyle = DocumentFormat.OpenXml.Presentation.ShapeStyle;
-using System.Xml;
 
 namespace Office_File_Explorer.Helpers
 {
     class PowerPoint
     {
         public static bool fSuccess;
+
+        public static List<string> GetFonts(string path)
+        {
+            List<string> fonts = new List<string>();
+            int fCount = 0;
+
+            using (PresentationDocument pptDoc = PresentationDocument.Open(path, true))
+            {
+                foreach (EmbeddedFont ef in pptDoc.PresentationPart.Presentation.EmbeddedFontList)
+                {
+                    fCount++;
+                    if (ef.Features.IsReadOnly)
+                    {
+                        fonts.Add(fCount + Strings.wPeriod + "Font: " + ef.Font.Typeface + " || Character Set = " + AppUtilities.GetFontCharacterSet(ef.Font.CharacterSet) + " (Read-Only)");
+                    }
+                    else
+                    {
+                        fonts.Add(fCount + Strings.wPeriod + "Font: " + ef.Font.Typeface + " || Character Set = " + AppUtilities.GetFontCharacterSet(ef.Font.CharacterSet));
+                    }
+                }
+            }
+
+            return fonts;
+        }
 
         public static bool RemoveComments(string path)
         {
@@ -159,10 +182,8 @@ namespace Office_File_Explorer.Helpers
                         // Each slide can include a Show property, which if hidden 
                         // will contain the value "0". The Show property may not 
                         // exist, and most likely will not, for non-hidden slides.
-                        var slides = presentationPart.SlideParts.Where(
-                            (s) => (s.Slide is not null) &&
-                              ((s.Slide.Show is null) || (s.Slide.Show.HasValue &&
-                              s.Slide.Show.Value)));
+                        var slides = presentationPart.SlideParts.Where((s) => (s.Slide is not null) && ((s.Slide.Show is null) ||
+                            (s.Slide.Show.HasValue && s.Slide.Show.Value)));
                         slidesCount = slides.Count();
                     }
                 }
@@ -323,7 +344,6 @@ namespace Office_File_Explorer.Helpers
 
                     return transitionsList;
                 }
-
             }
 
             return null;
@@ -394,7 +414,6 @@ namespace Office_File_Explorer.Helpers
 
                     return titlesList;
                 }
-
             }
 
             return null;
@@ -591,7 +610,7 @@ namespace Office_File_Explorer.Helpers
             return isChanged;
         }
 
-        public int GetSlideIndexByTitle(string fileName, string slideTitle)
+        public static int GetSlideIndexByTitle(string fileName, string slideTitle)
         {
             // Given a slide document and a slide title, retrieve the 0-based index of the 
             // first slide with a matching title. Return -1 if the title isn't found.
@@ -650,7 +669,7 @@ namespace Office_File_Explorer.Helpers
             return slideLocation;
         }
 
-        private bool IsTitleShape(A.Shape shape)
+        private static bool IsTitleShape(A.Shape shape)
         {
             bool isTitle = false;
 
@@ -674,12 +693,12 @@ namespace Office_File_Explorer.Helpers
         }
 
         // Return the number of slides, including hidden slides.
-        public int GetSlideCount(string fileName)
+        public static int GetSlideCount(string fileName)
         {
             return GetSlideCount(fileName, true);
         }
 
-        public int GetSlideCount(string fileName, bool includeHidden)
+        public static int GetSlideCount(string fileName, bool includeHidden)
         {
             int slidesCount = 0;
 

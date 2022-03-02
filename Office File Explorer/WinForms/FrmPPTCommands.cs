@@ -61,6 +61,15 @@ namespace Office_File_Explorer.WinForms
                 pptCmds &= ~AppUtilities.PowerPointViewCmds.Comments;
             }
 
+            if (ckbListFonts.Checked)
+            {
+                pptCmds |= AppUtilities.PowerPointViewCmds.Fonts;
+            }
+            else
+            {
+                pptCmds &= ~AppUtilities.PowerPointViewCmds.Fonts;
+            }
+
             // check Office features
             if (ckbShapes.Checked)
             {
