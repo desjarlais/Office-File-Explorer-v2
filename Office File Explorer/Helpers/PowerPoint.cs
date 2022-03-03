@@ -11,6 +11,7 @@ using PShape = DocumentFormat.OpenXml.Presentation.Shape;
 using Drawing = DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml;
 using ShapeStyle = DocumentFormat.OpenXml.Presentation.ShapeStyle;
+using DocumentFormat.OpenXml.Office2013.Excel;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -25,16 +26,17 @@ namespace Office_File_Explorer.Helpers
 
             using (PresentationDocument pptDoc = PresentationDocument.Open(path, true))
             {
+                // list the embedded fonts
                 foreach (EmbeddedFont ef in pptDoc.PresentationPart.Presentation.EmbeddedFontList)
                 {
                     fCount++;
                     if (ef.Features.IsReadOnly)
                     {
-                        fonts.Add(fCount + Strings.wPeriod + "Font: " + ef.Font.Typeface + " || Character Set = " + AppUtilities.GetFontCharacterSet(ef.Font.CharacterSet) + " (Read-Only)");
+                        fonts.Add(fCount + Strings.wPeriod + ef.Font.Typeface + " || Character Set = " + AppUtilities.GetFontCharacterSet(ef.Font.CharacterSet) + " (Read-Only)");
                     }
                     else
                     {
-                        fonts.Add(fCount + Strings.wPeriod + "Font: " + ef.Font.Typeface + " || Character Set = " + AppUtilities.GetFontCharacterSet(ef.Font.CharacterSet));
+                        fonts.Add(fCount + Strings.wPeriod + ef.Font.Typeface + " || Character Set = " + AppUtilities.GetFontCharacterSet(ef.Font.CharacterSet));
                     }
                 }
             }
