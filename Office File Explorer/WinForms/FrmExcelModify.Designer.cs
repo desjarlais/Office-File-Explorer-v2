@@ -117,10 +117,10 @@ namespace Office_File_Explorer.WinForms
             this.rdoDelLinks.AutoSize = true;
             this.rdoDelLinks.Location = new System.Drawing.Point(6, 22);
             this.rdoDelLinks.Name = "rdoDelLinks";
-            this.rdoDelLinks.Size = new System.Drawing.Size(88, 19);
+            this.rdoDelLinks.Size = new System.Drawing.Size(117, 19);
             this.rdoDelLinks.TabIndex = 0;
             this.rdoDelLinks.TabStop = true;
-            this.rdoDelLinks.Text = "Delete Links";
+            this.rdoDelLinks.Text = "Delete Hyperlinks";
             this.rdoDelLinks.UseVisualStyleBackColor = true;
             // 
             // BtnOk

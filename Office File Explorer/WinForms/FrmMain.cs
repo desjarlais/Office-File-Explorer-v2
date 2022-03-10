@@ -395,6 +395,11 @@ namespace Office_File_Explorer
                     LogInformation(LogInfoType.LogException, "OpenWithSDK UriFix Error:", ope.Message);
                 }
             }
+            catch (InvalidOperationException ioe)
+            {
+                LogInformation(LogInfoType.LogException, "OpenWithSDK Error:", ioe.Message);
+                LogInformation(LogInfoType.LogException, "OpenWithSDK Error:", ioe.StackTrace);
+            }
             catch (Exception ex)
             {
                 // if the file failed to open in the sdk, it is invalid or corrupt and we need to stop opening
@@ -1159,19 +1164,26 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelLinks)
                         {
-                            if (Excel.RemoveLinks(lblFilePath.Text) == true)
+                            if (Excel.RemoveHyperlinks(lblFilePath.Text) == true)
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Deleted Links", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Hyperlinks Deleted", string.Empty);
                             }
                             else
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Unable to delete links", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Unable to delete hyperlinks", string.Empty);
                             }
                         }
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelEmbeddedLinks)
                         {
-                            // todo
+                            if (Excel.RemoveLinks(lblFilePath.Text) == true)
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "Links Deleted", string.Empty);
+                            }
+                            else
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "Unable to delete links", string.Empty);
+                            }
                         }
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelSheet)

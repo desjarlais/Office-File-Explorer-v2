@@ -195,6 +195,74 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
+        public static bool RemoveHyperlinks(string path)
+        {
+            fSuccess = false;
+
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
+            {
+                foreach (WorksheetPart wsPart in excelDoc.WorkbookPart.WorksheetParts)
+                {
+                    var hyperLinkCollection = wsPart.Worksheet.Descendants<Hyperlinks>().First();
+
+                    if (hyperLinkCollection.Any())
+                    {
+                        var hyperLinks = hyperLinkCollection.Descendants<Hyperlink>();
+
+                        foreach (var hyperLink in hyperLinks)
+                        {
+                            wsPart.DeleteReferenceRelationship(hyperLink.Id);
+                        }
+                        hyperLinkCollection.Remove();
+
+                        wsPart.Worksheet.Save();
+                        fSuccess = true;
+                    }
+                }
+            }
+
+            return fSuccess;
+        }
+
+        public static bool RemoveHyperlink(string path, string uriToRemove)
+        {
+            fSuccess = false;           
+
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            {
+                int count = 0;
+
+                foreach (WorksheetPart wsp in excelDoc.WorkbookPart.WorksheetParts)
+                {
+                    IEnumerable<Hyperlink> hLinks = wsp.Worksheet.Descendants<Hyperlink>();
+                    foreach (Hyperlink h in hLinks)
+                    {
+                        count++;
+
+                        string hRelUri = string.Empty;
+
+                        // then check for hyperlinks relationships
+                        if (wsp.HyperlinkRelationships.Any())
+                        {
+                            foreach (HyperlinkRelationship hRel in wsp.HyperlinkRelationships)
+                            {
+                                if (h.Id == hRel.Id)
+                                {
+                                    hRelUri = hRel.Uri.ToString();
+                                    if (hRelUri == uriToRemove)
+                                    {
+                                        h.Remove();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return fSuccess;
+        }
+
         public static List<Worksheet> GetWorkSheets(string fileName, bool fileIsEditable)
         {
             List<Worksheet> returnVal = new List<Worksheet>();
