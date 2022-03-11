@@ -1162,6 +1162,11 @@ namespace Office_File_Explorer
 
                         Cursor = Cursors.WaitCursor;
 
+                        if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelLink)
+                        {
+                            // todo
+                        }
+
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelLinks)
                         {
                             if (Excel.RemoveHyperlinks(lblFilePath.Text) == true)
@@ -1178,7 +1183,7 @@ namespace Office_File_Explorer
                         {
                             if (Excel.RemoveLinks(lblFilePath.Text) == true)
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Links Deleted", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Embedded Links Deleted", string.Empty);
                             }
                             else
                             {
@@ -1203,7 +1208,7 @@ namespace Office_File_Explorer
                         {
                             if (Excel.RemoveComments(lblFilePath.Text) == true)
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Deleted Comments", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Comments Deleted", string.Empty);
                             }
                             else
                             {

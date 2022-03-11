@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmExcelModify));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoDelLink = new System.Windows.Forms.RadioButton();
             this.rdoDeleteSheet = new System.Windows.Forms.RadioButton();
             this.rdoConvertStrict = new System.Windows.Forms.RadioButton();
             this.rdoConvertToXlsm = new System.Windows.Forms.RadioButton();
@@ -44,6 +45,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoDelLink);
             this.groupBox1.Controls.Add(this.rdoDeleteSheet);
             this.groupBox1.Controls.Add(this.rdoConvertStrict);
             this.groupBox1.Controls.Add(this.rdoConvertToXlsm);
@@ -52,15 +54,26 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.rdoDelLinks);
             this.groupBox1.Location = new System.Drawing.Point(12, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(270, 183);
+            this.groupBox1.Size = new System.Drawing.Size(270, 203);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Content To Modify";
             // 
+            // rdoDelLink
+            // 
+            this.rdoDelLink.AutoSize = true;
+            this.rdoDelLink.Location = new System.Drawing.Point(6, 22);
+            this.rdoDelLink.Name = "rdoDelLink";
+            this.rdoDelLink.Size = new System.Drawing.Size(167, 19);
+            this.rdoDelLink.TabIndex = 6;
+            this.rdoDelLink.TabStop = true;
+            this.rdoDelLink.Text = "Delete Individual Hyperlink";
+            this.rdoDelLink.UseVisualStyleBackColor = true;
+            // 
             // rdoDeleteSheet
             // 
             this.rdoDeleteSheet.AutoSize = true;
-            this.rdoDeleteSheet.Location = new System.Drawing.Point(6, 72);
+            this.rdoDeleteSheet.Location = new System.Drawing.Point(6, 97);
             this.rdoDeleteSheet.Name = "rdoDeleteSheet";
             this.rdoDeleteSheet.Size = new System.Drawing.Size(90, 19);
             this.rdoDeleteSheet.TabIndex = 5;
@@ -71,7 +84,7 @@ namespace Office_File_Explorer.WinForms
             // rdoConvertStrict
             // 
             this.rdoConvertStrict.AutoSize = true;
-            this.rdoConvertStrict.Location = new System.Drawing.Point(6, 147);
+            this.rdoConvertStrict.Location = new System.Drawing.Point(6, 172);
             this.rdoConvertStrict.Name = "rdoConvertStrict";
             this.rdoConvertStrict.Size = new System.Drawing.Size(136, 19);
             this.rdoConvertStrict.TabIndex = 4;
@@ -82,7 +95,7 @@ namespace Office_File_Explorer.WinForms
             // rdoConvertToXlsm
             // 
             this.rdoConvertToXlsm.AutoSize = true;
-            this.rdoConvertToXlsm.Location = new System.Drawing.Point(6, 122);
+            this.rdoConvertToXlsm.Location = new System.Drawing.Point(6, 147);
             this.rdoConvertToXlsm.Name = "rdoConvertToXlsm";
             this.rdoConvertToXlsm.Size = new System.Drawing.Size(135, 19);
             this.rdoConvertToXlsm.TabIndex = 3;
@@ -93,7 +106,7 @@ namespace Office_File_Explorer.WinForms
             // rdoDelEmbedLinks
             // 
             this.rdoDelEmbedLinks.AutoSize = true;
-            this.rdoDelEmbedLinks.Location = new System.Drawing.Point(6, 97);
+            this.rdoDelEmbedLinks.Location = new System.Drawing.Point(6, 122);
             this.rdoDelEmbedLinks.Name = "rdoDelEmbedLinks";
             this.rdoDelEmbedLinks.Size = new System.Drawing.Size(148, 19);
             this.rdoDelEmbedLinks.TabIndex = 2;
@@ -104,7 +117,7 @@ namespace Office_File_Explorer.WinForms
             // rdoDelComments
             // 
             this.rdoDelComments.AutoSize = true;
-            this.rdoDelComments.Location = new System.Drawing.Point(6, 47);
+            this.rdoDelComments.Location = new System.Drawing.Point(6, 72);
             this.rdoDelComments.Name = "rdoDelComments";
             this.rdoDelComments.Size = new System.Drawing.Size(120, 19);
             this.rdoDelComments.TabIndex = 1;
@@ -115,17 +128,17 @@ namespace Office_File_Explorer.WinForms
             // rdoDelLinks
             // 
             this.rdoDelLinks.AutoSize = true;
-            this.rdoDelLinks.Location = new System.Drawing.Point(6, 22);
+            this.rdoDelLinks.Location = new System.Drawing.Point(6, 47);
             this.rdoDelLinks.Name = "rdoDelLinks";
-            this.rdoDelLinks.Size = new System.Drawing.Size(117, 19);
+            this.rdoDelLinks.Size = new System.Drawing.Size(134, 19);
             this.rdoDelLinks.TabIndex = 0;
             this.rdoDelLinks.TabStop = true;
-            this.rdoDelLinks.Text = "Delete Hyperlinks";
+            this.rdoDelLinks.Text = "Delete All Hyperlinks";
             this.rdoDelLinks.UseVisualStyleBackColor = true;
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(125, 192);
+            this.BtnOk.Location = new System.Drawing.Point(126, 222);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 5;
@@ -135,7 +148,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(206, 192);
+            this.BtnCancel.Location = new System.Drawing.Point(207, 222);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 6;
@@ -147,7 +160,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 225);
+            this.ClientSize = new System.Drawing.Size(294, 257);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.groupBox1);
@@ -175,5 +188,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnOk;
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.RadioButton rdoDeleteSheet;
+        private System.Windows.Forms.RadioButton rdoDelLink;
     }
 }

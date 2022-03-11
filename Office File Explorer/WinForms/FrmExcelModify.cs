@@ -45,6 +45,11 @@ namespace Office_File_Explorer.WinForms
                 xlModCmd = AppUtilities.ExcelModifyCmds.DelSheet;
             }
 
+            if (rdoDelLink.Checked)
+            {
+                xlModCmd = AppUtilities.ExcelModifyCmds.DelLink;
+            }
+
             Close();
         }
 

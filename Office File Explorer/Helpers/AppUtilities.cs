@@ -85,6 +85,7 @@ namespace Office_File_Explorer.Helpers
         public enum ExcelModifyCmds
         {
             None,
+            DelLink,
             DelLinks,
             DelComments,
             DelSheet,

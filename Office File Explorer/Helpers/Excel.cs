@@ -226,36 +226,29 @@ namespace Office_File_Explorer.Helpers
 
         public static bool RemoveHyperlink(string path, string uriToRemove)
         {
-            fSuccess = false;           
+            fSuccess = false;
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
             {
-                int count = 0;
-
-                foreach (WorksheetPart wsp in excelDoc.WorkbookPart.WorksheetParts)
+                foreach (WorksheetPart wsPart in excelDoc.WorkbookPart.WorksheetParts)
                 {
-                    IEnumerable<Hyperlink> hLinks = wsp.Worksheet.Descendants<Hyperlink>();
-                    foreach (Hyperlink h in hLinks)
+                    var hyperLinkCollection = wsPart.Worksheet.Descendants<Hyperlinks>().First();
+
+                    if (hyperLinkCollection.Any())
                     {
-                        count++;
+                        var hyperLinks = hyperLinkCollection.Descendants<Hyperlink>();
 
-                        string hRelUri = string.Empty;
-
-                        // then check for hyperlinks relationships
-                        if (wsp.HyperlinkRelationships.Any())
+                        foreach (var hyperLink in hyperLinks)
                         {
-                            foreach (HyperlinkRelationship hRel in wsp.HyperlinkRelationships)
+                            if (hyperLink.NamespaceUri == uriToRemove)
                             {
-                                if (h.Id == hRel.Id)
-                                {
-                                    hRelUri = hRel.Uri.ToString();
-                                    if (hRelUri == uriToRemove)
-                                    {
-                                        h.Remove();
-                                    }
-                                }
+                                wsPart.DeleteReferenceRelationship(hyperLink.Id);
                             }
                         }
+                        hyperLinkCollection.Remove();
+
+                        wsPart.Worksheet.Save();
+                        fSuccess = true;
                     }
                 }
             }
