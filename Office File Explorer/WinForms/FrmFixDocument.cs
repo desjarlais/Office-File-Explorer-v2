@@ -1,5 +1,6 @@
 ﻿using Office_File_Explorer.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms
@@ -10,6 +11,7 @@ namespace Office_File_Explorer.WinForms
         public bool tryAllFixes = false;
         public string corruptionChecked = string.Empty;
         public string filePath, fileType;
+        public List<string> featureFixed = new List<string>();
 
         public FrmFixDocument(string fPath, string fType)
         {
@@ -90,6 +92,11 @@ namespace Office_File_Explorer.WinForms
                 {
                     isFileFixed = true;
                 }
+
+                if (isFileFixed)
+                {
+                    featureFixed.Add("Bookmarks Fixed");
+                }
             }
 
             if (rdoFixRevisionsW.Checked || tryAllFixes == true)
@@ -98,6 +105,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixRevisions(filePath) == true || WordFixes.FixDeleteRevision(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("Revisions Fixed");
                 }
             }
             
@@ -107,6 +115,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixEndnotes(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("Endnotes Fixed");
                 }
             }
 
@@ -116,6 +125,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixListTemplates(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("List Templates Fixed");
                 }
             }
 
@@ -125,6 +135,7 @@ namespace Office_File_Explorer.WinForms
                 {
                     SetCorruptionChecked(Strings.wTableProps);
                     isFileFixed = true;
+                    featureFixed.Add("Table Properties Fixed");
                 }
             }
 
@@ -134,6 +145,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixMissingCommentRefs(filePath) == true || WordFixes.FixShapeInComment(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("Comments Fixed");
                 }
             }
 
@@ -143,6 +155,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixCommentFieldCodes(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("Comment Hyperlinks Fixed");
                 }
             }
 
@@ -152,6 +165,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixHyperlinks(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("Hyperlinks Fixed");
                 }
             }
 
@@ -161,6 +175,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixContentControls(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("Content Controls Fixed");
                 }
             }
 
@@ -170,6 +185,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixMathAccents(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("Math Accents Fixed");
                 }
             }
 
@@ -179,10 +195,10 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixDataDescriptor(filePath) == true)
                 {
                     isFileFixed = true;
+                    featureFixed.Add("Corrupt Zip Item Fixed");
                 }
             }
 
-            // isFileFixed should be set, now close the form
             Close();
         }
     }

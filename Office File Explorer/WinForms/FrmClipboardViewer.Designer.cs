@@ -158,7 +158,7 @@ namespace Office_File_Explorer.WinForms
             this.lbClipFormats.ItemHeight = 15;
             this.lbClipFormats.Location = new System.Drawing.Point(0, 24);
             this.lbClipFormats.Name = "lbClipFormats";
-            this.lbClipFormats.Size = new System.Drawing.Size(276, 513);
+            this.lbClipFormats.Size = new System.Drawing.Size(276, 530);
             this.lbClipFormats.TabIndex = 1;
             this.lbClipFormats.SelectedIndexChanged += new System.EventHandler(this.LbClipFormats_SelectedIndexChanged);
             // 
@@ -167,7 +167,7 @@ namespace Office_File_Explorer.WinForms
             this.pbClipData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbClipData.Location = new System.Drawing.Point(3, 19);
             this.pbClipData.Name = "pbClipData";
-            this.pbClipData.Size = new System.Drawing.Size(512, 156);
+            this.pbClipData.Size = new System.Drawing.Size(512, 176);
             this.pbClipData.TabIndex = 2;
             this.pbClipData.TabStop = false;
             // 
@@ -176,7 +176,8 @@ namespace Office_File_Explorer.WinForms
             this.rtbClipData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbClipData.Location = new System.Drawing.Point(3, 19);
             this.rtbClipData.Name = "rtbClipData";
-            this.rtbClipData.Size = new System.Drawing.Size(512, 469);
+            this.rtbClipData.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.rtbClipData.Size = new System.Drawing.Size(512, 288);
             this.rtbClipData.TabIndex = 3;
             this.rtbClipData.Text = "";
             // 
@@ -187,7 +188,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(276, 24);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(524, 513);
+            this.groupBox1.Size = new System.Drawing.Size(524, 530);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Clipboard Data";
@@ -195,10 +196,10 @@ namespace Office_File_Explorer.WinForms
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.pbClipData);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox3.Location = new System.Drawing.Point(3, 332);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.Location = new System.Drawing.Point(3, 329);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(518, 178);
+            this.groupBox3.Size = new System.Drawing.Size(518, 198);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Image";
@@ -206,10 +207,10 @@ namespace Office_File_Explorer.WinForms
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.rtbClipData);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Location = new System.Drawing.Point(3, 19);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(518, 491);
+            this.groupBox2.Size = new System.Drawing.Size(518, 310);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Text";
@@ -218,7 +219,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 537);
+            this.ClientSize = new System.Drawing.Size(800, 554);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lbClipFormats);
             this.Controls.Add(this.menuStrip1);

@@ -598,7 +598,8 @@ namespace Office_File_Explorer
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wFonts + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstFonts(lblFilePath.Text), Strings.wFonts);
-                            DisplayListContents(Word.LstRunFonts(lblFilePath.Text), Strings.wFonts);
+                            LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wRunFonts + Strings.wHeadingEnd);
+                            DisplayListContents(Word.LstRunFonts(lblFilePath.Text), Strings.wRunFonts);
                         }
 
                         if (cmds.HasFlag(AppUtilities.WordViewCmds.Footnotes))
@@ -859,10 +860,14 @@ namespace Office_File_Explorer
 
                 if (f.isFileFixed == true)
                 {
-                    LstDisplay.Items.Clear();
                     if (f.corruptionChecked == "All")
                     {
-                        LstDisplay.Items.Add("Document Fixed");
+                        int count = 0;
+                        foreach (var s in f.featureFixed)
+                        {
+                            count++;
+                            LstDisplay.Items.Add(count + Strings.wPeriod + s);
+                        }
                     }
                     else
                     {

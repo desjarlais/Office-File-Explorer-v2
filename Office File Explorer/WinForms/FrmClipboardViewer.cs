@@ -86,7 +86,7 @@ namespace Office_File_Explorer.WinForms
         {
             rtbClipData.Text = text;
             rtbClipData.SelectAll();
-            rtbClipData.SelectionFont = new Font("Courier New", 10, (FontStyle)0 /* no style */ );
+            rtbClipData.SelectionFont = new Font("Courier New", 10, (FontStyle) 0 /* no style */ );
             rtbClipData.SelectionColor = Color.FromKnownColor(KnownColor.Black);
             rtbClipData.SelectionBackColor = Color.FromKnownColor(KnownColor.White);
             rtbClipData.Select(0, 0);

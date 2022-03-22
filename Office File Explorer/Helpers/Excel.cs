@@ -333,6 +333,32 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
+        public static CalculateModeValues XLSetRecalcOption(string fileName, CalculateModeValues recalc)
+        {
+            CalculateModeValues returnValue = CalculateModeValues.Auto;
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, true))
+            {
+                WorkbookPart wbPart = document.WorkbookPart;
+                Workbook wb = wbPart.Workbook;
+                CalculationProperties calcProps = wb.Descendants<CalculationProperties>().FirstOrDefault();
+                if (calcProps != null)
+                {
+                    if (calcProps.CalculationMode == null)
+                    {
+                        returnValue = CalculateModeValues.Auto;
+                    }
+                    else
+                    {
+                        returnValue = calcProps.CalculationMode;
+                    }
+                    calcProps.CalculationMode = recalc;
+                    wb.Save();
+                }
+            }
+            return returnValue;
+        }
+
         public static List<string> GetDefinedNames(string path)
         {
             List<string> tList = new List<string>();

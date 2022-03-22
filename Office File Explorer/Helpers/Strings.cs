@@ -73,6 +73,7 @@ namespace Office_File_Explorer.Helpers
         public const string wStyles = "Styles";
         public const string wInvalidXml = "invalid xml";
         public const string wFonts = "Fonts";
+        public const string wRunFonts = "Run Fonts";
         public const string wForumulas = "Formulas";
         public const string wHiddenRowCol = "Hidden Rows & Columns";
         public const string wWorksheetInfo = "Worksheet Information";
