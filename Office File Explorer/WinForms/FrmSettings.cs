@@ -90,5 +90,13 @@ namespace Office_File_Explorer.WinForms
         {
             Close();
         }
+
+        private void FrmSettings_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

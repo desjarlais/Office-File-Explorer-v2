@@ -232,11 +232,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmExcelCommands";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Excel Commands";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmExcelCommands_KeyDown);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);

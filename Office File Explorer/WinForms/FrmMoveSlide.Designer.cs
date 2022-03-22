@@ -105,11 +105,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmMoveSlide";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Move Slide";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmMoveSlide_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

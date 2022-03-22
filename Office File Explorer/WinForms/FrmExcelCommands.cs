@@ -158,5 +158,13 @@ namespace Office_File_Explorer.WinForms
                 ckbComments.Checked = false;
             }
         }
+
+        private void FrmExcelCommands_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

@@ -103,11 +103,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmSearchReplace";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Search And Replace";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmSearchReplace_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

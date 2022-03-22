@@ -47,12 +47,12 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.tbxSiteURL = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.tbxClientID = new System.Windows.Forms.TextBox();
             this.tbxTenant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbxSiteURL = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -243,6 +243,22 @@ namespace Office_File_Explorer.WinForms
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "ADAL Settings";
             // 
+            // tbxSiteURL
+            // 
+            this.tbxSiteURL.Location = new System.Drawing.Point(61, 81);
+            this.tbxSiteURL.Name = "tbxSiteURL";
+            this.tbxSiteURL.Size = new System.Drawing.Size(464, 23);
+            this.tbxSiteURL.TabIndex = 5;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 84);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(50, 15);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Site URL";
+            // 
             // tbxClientID
             // 
             this.tbxClientID.Location = new System.Drawing.Point(61, 25);
@@ -275,22 +291,6 @@ namespace Office_File_Explorer.WinForms
             this.label1.TabIndex = 0;
             this.label1.Text = "Client ID: ";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 84);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(50, 15);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Site URL";
-            // 
-            // tbxSiteURL
-            // 
-            this.tbxSiteURL.Location = new System.Drawing.Point(61, 81);
-            this.tbxSiteURL.Name = "tbxSiteURL";
-            this.tbxSiteURL.Size = new System.Drawing.Size(464, 23);
-            this.tbxSiteURL.TabIndex = 5;
-            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -305,11 +305,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmSettings_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

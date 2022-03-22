@@ -31,12 +31,12 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPowerPointModify));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoDeleteComments = new System.Windows.Forms.RadioButton();
             this.rdoRemovePII = new System.Windows.Forms.RadioButton();
             this.rdoConvertPptmToPptx = new System.Windows.Forms.RadioButton();
             this.rdoMoveSlide = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoDeleteComments = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,6 +52,17 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Content To Modify";
+            // 
+            // rdoDeleteComments
+            // 
+            this.rdoDeleteComments.AutoSize = true;
+            this.rdoDeleteComments.Location = new System.Drawing.Point(11, 98);
+            this.rdoDeleteComments.Name = "rdoDeleteComments";
+            this.rdoDeleteComments.Size = new System.Drawing.Size(120, 19);
+            this.rdoDeleteComments.TabIndex = 5;
+            this.rdoDeleteComments.TabStop = true;
+            this.rdoDeleteComments.Text = "Delete Comments";
+            this.rdoDeleteComments.UseVisualStyleBackColor = true;
             // 
             // rdoRemovePII
             // 
@@ -106,17 +117,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // rdoDeleteComments
-            // 
-            this.rdoDeleteComments.AutoSize = true;
-            this.rdoDeleteComments.Location = new System.Drawing.Point(11, 98);
-            this.rdoDeleteComments.Name = "rdoDeleteComments";
-            this.rdoDeleteComments.Size = new System.Drawing.Size(120, 19);
-            this.rdoDeleteComments.TabIndex = 5;
-            this.rdoDeleteComments.TabStop = true;
-            this.rdoDeleteComments.Text = "Delete Comments";
-            this.rdoDeleteComments.UseVisualStyleBackColor = true;
-            // 
             // FrmPowerPointModify
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -127,11 +127,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmPowerPointModify";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Modify PowerPoint Content";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmPowerPointModify_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

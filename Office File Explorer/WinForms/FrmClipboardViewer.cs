@@ -439,5 +439,13 @@ namespace Office_File_Explorer.WinForms
             showPicturesToolStripMenuItem.Checked = DisplayPictures;
             UpdateDisplay();
         }
+
+        private void FrmClipboardViewer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

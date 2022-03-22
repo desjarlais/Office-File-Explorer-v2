@@ -24,5 +24,13 @@ namespace Office_File_Explorer.WinForms
             PropName = Strings.wCancel;
             Close();
         }
+
+        private void FrmBatchDeleteCustomProps_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

@@ -53,31 +53,27 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
-        /// Given a document name and an author name, accept all revisions by the specified author. 
-        /// Pass an empty string for the author to accept all revisions.
+        /// 
         /// </summary>
         /// <param name="docName"></param>
         /// <param name="authorName"></param>
-        public static bool AcceptAllRevisions(string docName, string authorName)
+        public static bool AcceptAllHeaderFooterRevisions(Document docPart, string authorName, List<string> authors)
         {
             fSuccess = false;
 
-            using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
+            var headers = docPart.Descendants<HeaderReference>().ToList();
+            foreach (var header in headers)
             {
-                Document doc = document.MainDocumentPart.Document;
-                var paragraphChanged = doc.Descendants<ParagraphPropertiesChange>().ToList();
-                var runChanged = doc.Descendants<RunPropertiesChange>().ToList();
-                var deleted = doc.Descendants<DeletedRun>().ToList();
-                var deletedParagraph = doc.Descendants<Deleted>().ToList();
-                var inserted = doc.Descendants<InsertedRun>().ToList();
+                var paragraphChanged = header.Descendants<ParagraphPropertiesChange>().ToList();
+                var runChanged = header.Descendants<RunPropertiesChange>().ToList();
+                var deleted = header.Descendants<DeletedRun>().ToList();
+                var deletedParagraph = header.Descendants<Deleted>().ToList();
+                var inserted = header.Descendants<InsertedRun>().ToList();
 
                 if (authorName == "* All Authors *")
                 {
-                    List<string> temp = new List<string>();
-                    temp = GetAllAuthors(document.MainDocumentPart.Document);
-
                     // create a temp list for each author so we can loop the changes individually and list them
-                    foreach (string s in temp)
+                    foreach (string s in authors)
                     {
                         var tempParagraphChanged = paragraphChanged.Where(item => item.Author == s).ToList();
                         var tempRunChanged = runChanged.Where(item => item.Author == s).ToList();
@@ -113,7 +109,7 @@ namespace Office_File_Explorer.Helpers
                             }
                         }
                     }
-                    doc.Save();
+                    docPart.Save();
                     fSuccess = true;
                 }
                 else
@@ -138,6 +134,247 @@ namespace Office_File_Explorer.Helpers
                         item.Remove();
 
                     foreach (var item in deleted)
+                        item.Remove();
+
+                    foreach (var item in inserted)
+                    {
+                        if (item.Parent is not null)
+                        {
+                            var textRuns = item.Elements<Run>().ToList();
+                            var parent = item.Parent;
+                            foreach (var textRun in textRuns)
+                            {
+                                item.RemoveAttribute("rsidR", parent.NamespaceUri);
+                                item.RemoveAttribute("sidRPr", parent.NamespaceUri);
+                                parent.InsertBefore(textRun.CloneNode(true), item);
+                            }
+                            item.Remove();
+                        }
+                    }
+                    docPart.Save();
+                    fSuccess = true;
+                }
+            }
+
+            var footers = docPart.Descendants<FooterReference>().ToList();
+            foreach (var footer in footers)
+            {
+                var paragraphChanged = footer.Descendants<ParagraphPropertiesChange>().ToList();
+                var runChanged = footer.Descendants<RunPropertiesChange>().ToList();
+                var deleted = footer.Descendants<DeletedRun>().ToList();
+                var deletedParagraph = footer.Descendants<Deleted>().ToList();
+                var inserted = footer.Descendants<InsertedRun>().ToList();
+
+                if (authorName == "* All Authors *")
+                {
+                    // create a temp list for each author so we can loop the changes individually and list them
+                    foreach (string s in authors)
+                    {
+                        var tempParagraphChanged = paragraphChanged.Where(item => item.Author == s).ToList();
+                        var tempRunChanged = runChanged.Where(item => item.Author == s).ToList();
+                        var tempDeleted = deleted.Where(item => item.Author == s).ToList();
+                        var tempInserted = inserted.Where(item => item.Author == s).ToList();
+                        var tempDeletedParagraph = deletedParagraph.Where(item => item.Author == s).ToList();
+
+                        foreach (var item in tempParagraphChanged)
+                            item.Remove();
+
+                        foreach (var item in tempDeletedParagraph)
+                            item.Remove();
+
+                        foreach (var item in tempRunChanged)
+                            item.Remove();
+
+                        foreach (var item in tempDeleted)
+                            item.Remove();
+
+                        foreach (var item in tempInserted)
+                        {
+                            if (item.Parent is not null)
+                            {
+                                var textRuns = item.Elements<Run>().ToList();
+                                var parent = item.Parent;
+                                foreach (var textRun in textRuns)
+                                {
+                                    item.RemoveAttribute("rsidR", parent.NamespaceUri);
+                                    item.RemoveAttribute("sidRPr", parent.NamespaceUri);
+                                    parent.InsertBefore(textRun.CloneNode(true), item);
+                                }
+                                item.Remove();
+                            }
+                        }
+                    }
+                    docPart.Save();
+                    fSuccess = true;
+                }
+                else
+                {
+                    // for single author, just loop that authors from the original list
+                    if (!string.IsNullOrEmpty(authorName))
+                    {
+                        paragraphChanged = paragraphChanged.Where(item => item.Author == authorName).ToList();
+                        runChanged = runChanged.Where(item => item.Author == authorName).ToList();
+                        deleted = deleted.Where(item => item.Author == authorName).ToList();
+                        inserted = inserted.Where(item => item.Author == authorName).ToList();
+                        deletedParagraph = deletedParagraph.Where(item => item.Author == authorName).ToList();
+                    }
+
+                    foreach (var item in paragraphChanged)
+                        item.Remove();
+
+                    foreach (var item in deletedParagraph)
+                        item.Remove();
+
+                    foreach (var item in runChanged)
+                        item.Remove();
+
+                    foreach (var item in deleted)
+                        item.Remove();
+
+                    foreach (var item in inserted)
+                    {
+                        if (item.Parent is not null)
+                        {
+                            var textRuns = item.Elements<Run>().ToList();
+                            var parent = item.Parent;
+                            foreach (var textRun in textRuns)
+                            {
+                                item.RemoveAttribute("rsidR", parent.NamespaceUri);
+                                item.RemoveAttribute("sidRPr", parent.NamespaceUri);
+                                parent.InsertBefore(textRun.CloneNode(true), item);
+                            }
+                            item.Remove();
+                        }
+                    }
+                    docPart.Save();
+                    fSuccess = true;
+                }
+            }
+
+            return fSuccess;
+        }
+
+        /// <summary>
+        /// Given a document name and an author name, accept all revisions by the specified author. 
+        /// Pass an empty string for the author to accept all revisions.
+        /// </summary>
+        /// <param name="docName"></param>
+        /// <param name="authorName"></param>
+        public static bool AcceptAllRevisions(string docName, string authorName)
+        {
+            fSuccess = false;
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
+            {
+                Document doc = document.MainDocumentPart.Document;
+
+                List<string> tempAuthors = new List<string>();
+                tempAuthors = GetAllAuthors(document.MainDocumentPart.Document);
+
+                // accept revision in the headers/footers
+                if (doc.MainDocumentPart.HeaderParts.Any() || doc.MainDocumentPart.FooterParts.Any())
+                {
+                    fSuccess = AcceptAllHeaderFooterRevisions(doc, authorName, tempAuthors);
+                }
+
+                // accept revisions in the main document
+                var paragraphChanged = doc.Descendants<ParagraphPropertiesChange>().ToList();
+                var runChanged = doc.Descendants<RunPropertiesChange>().ToList();
+                var deleted = doc.Descendants<DeletedRun>().ToList();
+                var deletedParagraph = doc.Descendants<Deleted>().ToList();
+                var inserted = doc.Descendants<InsertedRun>().ToList();
+                var tableCellPropsChanged = doc.Descendants<TableCellPropertiesChange>().ToList();
+                var tablePropsChanged = doc.Descendants<TablePropertiesChange>().ToList();
+                var tableRowPropsChanged = doc.Descendants<TableRowPropertiesChange>().ToList();
+                
+                if (authorName == "* All Authors *")
+                {
+                    // create a temp list for each author so we can loop the changes individually and list them
+                    foreach (string s in tempAuthors)
+                    {
+                        var tempParagraphChanged = paragraphChanged.Where(item => item.Author == s).ToList();
+                        var tempRunChanged = runChanged.Where(item => item.Author == s).ToList();
+                        var tempDeleted = deleted.Where(item => item.Author == s).ToList();
+                        var tempInserted = inserted.Where(item => item.Author == s).ToList();
+                        var tempDeletedParagraph = deletedParagraph.Where(item => item.Author == s).ToList();
+                        var tempTableCellPropsChanged = tableCellPropsChanged.Where(item => item.Author == s).ToList();
+                        var tempTablePropsChanged = tablePropsChanged.Where(item => item.Author == s).ToList();
+                        var tempTableRowPropsChanged = tableRowPropsChanged.Where(item => item.Author == s).ToList();
+
+                        foreach (var item in tempParagraphChanged)
+                            item.Remove();
+
+                        foreach (var item in tempDeletedParagraph)
+                            item.Remove();
+
+                        foreach (var item in tempRunChanged)
+                            item.Remove();
+
+                        foreach (var item in tempDeleted)
+                            item.Remove();
+
+                        foreach (var item in tempTableCellPropsChanged)
+                            item.Remove();
+
+                        foreach (var item in tempTablePropsChanged)
+                            item.Remove();
+
+                        foreach (var item in tableRowPropsChanged)
+                            item.Remove();
+
+                        foreach (var item in tempInserted)
+                        {
+                            if (item.Parent is not null)
+                            {
+                                var textRuns = item.Elements<Run>().ToList();
+                                var parent = item.Parent;
+                                foreach (var textRun in textRuns)
+                                {
+                                    item.RemoveAttribute("rsidR", parent.NamespaceUri);
+                                    item.RemoveAttribute("sidRPr", parent.NamespaceUri);
+                                    parent.InsertBefore(textRun.CloneNode(true), item);
+                                }
+                                item.Remove();
+                            }
+                        }
+                    }
+                    doc.Save();
+                    fSuccess = true;
+                }
+                else
+                {
+                    // for single author, just loop that authors from the original list
+                    if (!string.IsNullOrEmpty(authorName))
+                    {
+                        paragraphChanged = paragraphChanged.Where(item => item.Author == authorName).ToList();
+                        runChanged = runChanged.Where(item => item.Author == authorName).ToList();
+                        deleted = deleted.Where(item => item.Author == authorName).ToList();
+                        inserted = inserted.Where(item => item.Author == authorName).ToList();
+                        deletedParagraph = deletedParagraph.Where(item => item.Author == authorName).ToList();
+                        tableCellPropsChanged = tableCellPropsChanged.Where(item => item.Author == authorName).ToList();
+                        tablePropsChanged = tablePropsChanged.Where(item => item.Author == authorName).ToList();
+                        tableRowPropsChanged = tableRowPropsChanged.Where(item => item.Author == authorName).ToList();
+                    }
+
+                    foreach (var item in paragraphChanged)
+                        item.Remove();
+
+                    foreach (var item in deletedParagraph)
+                        item.Remove();
+
+                    foreach (var item in runChanged)
+                        item.Remove();
+
+                    foreach (var item in deleted)
+                        item.Remove();
+
+                    foreach (var item in tableCellPropsChanged)
+                        item.Remove();
+
+                    foreach (var item in tablePropsChanged)
+                        item.Remove();
+
+                    foreach (var item in tableRowPropsChanged)
                         item.Remove();
 
                     foreach (var item in inserted)

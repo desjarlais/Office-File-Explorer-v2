@@ -81,11 +81,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbxSheets);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmDeleteSheet";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Delete Sheet";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmDeleteSheet_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

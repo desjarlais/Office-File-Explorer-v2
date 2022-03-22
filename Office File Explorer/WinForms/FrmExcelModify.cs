@@ -57,5 +57,13 @@ namespace Office_File_Explorer.WinForms
         {
             Close();
         }
+
+        private void FrmExcelModify_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

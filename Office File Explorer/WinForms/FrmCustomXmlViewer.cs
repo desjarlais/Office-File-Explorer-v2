@@ -183,6 +183,14 @@ namespace Office_File_Explorer.WinForms
             PopulateBaseNodes(xDoc);
         }
 
+        private void FrmCustomXmlViewer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
+
         /// <summary>
         /// populate the treeview
         /// </summary>

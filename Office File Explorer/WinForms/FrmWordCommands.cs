@@ -442,5 +442,13 @@ namespace Office_File_Explorer.WinForms
                 ckbTables.Checked = false;
             }
         }
+
+        private void FrmWordCommands_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

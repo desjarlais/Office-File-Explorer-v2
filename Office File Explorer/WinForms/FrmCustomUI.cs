@@ -32,5 +32,13 @@ namespace Office_File_Explorer.WinForms
         {
             package.ClosePackage();
         }
+
+        private void FrmCustomUI_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

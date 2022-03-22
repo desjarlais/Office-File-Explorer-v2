@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWordCommands));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ckbTables = new System.Windows.Forms.CheckBox();
             this.ckbFieldCodes = new System.Windows.Forms.CheckBox();
             this.ckbComments = new System.Windows.Forms.CheckBox();
             this.ckbBookmarks = new System.Windows.Forms.CheckBox();
@@ -54,7 +55,6 @@ namespace Office_File_Explorer.WinForms
             this.ckbShapes = new System.Windows.Forms.CheckBox();
             this.ckbOleObjects = new System.Windows.Forms.CheckBox();
             this.ckbSelectAll = new System.Windows.Forms.CheckBox();
-            this.ckbTables = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -80,6 +80,16 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Word Content To Display";
+            // 
+            // ckbTables
+            // 
+            this.ckbTables.AutoSize = true;
+            this.ckbTables.Location = new System.Drawing.Point(11, 297);
+            this.ckbTables.Name = "ckbTables";
+            this.ckbTables.Size = new System.Drawing.Size(58, 19);
+            this.ckbTables.TabIndex = 11;
+            this.ckbTables.Text = "Tables";
+            this.ckbTables.UseVisualStyleBackColor = true;
             // 
             // ckbFieldCodes
             // 
@@ -318,16 +328,6 @@ namespace Office_File_Explorer.WinForms
             this.ckbSelectAll.UseVisualStyleBackColor = true;
             this.ckbSelectAll.CheckedChanged += new System.EventHandler(this.CkbSelectAll_CheckedChanged);
             // 
-            // ckbTables
-            // 
-            this.ckbTables.AutoSize = true;
-            this.ckbTables.Location = new System.Drawing.Point(11, 297);
-            this.ckbTables.Name = "ckbTables";
-            this.ckbTables.Size = new System.Drawing.Size(58, 19);
-            this.ckbTables.TabIndex = 11;
-            this.ckbTables.Text = "Tables";
-            this.ckbTables.UseVisualStyleBackColor = true;
-            // 
             // FrmWordCommands
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -341,11 +341,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmWordCommands";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Word Commands ";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmWordCommands_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

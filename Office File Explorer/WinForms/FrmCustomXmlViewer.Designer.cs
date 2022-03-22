@@ -81,11 +81,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.lstCustomXmlFiles);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmCustomXmlViewer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Custom Xml Viewer";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmCustomXmlViewer_KeyDown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);

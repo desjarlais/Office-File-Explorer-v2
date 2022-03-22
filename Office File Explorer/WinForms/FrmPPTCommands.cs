@@ -131,5 +131,13 @@ namespace Office_File_Explorer.WinForms
                 ckbSlideTransitions.Checked = false;
             }
         }
+
+        private void FrmPPTCommands_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

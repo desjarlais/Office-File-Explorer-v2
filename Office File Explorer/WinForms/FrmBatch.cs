@@ -1851,5 +1851,13 @@ namespace Office_File_Explorer.WinForms
                 LoginLogoutToolStripButton.Text = "Logout";
             }
         }
+
+        private void FrmBatch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

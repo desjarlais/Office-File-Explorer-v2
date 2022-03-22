@@ -83,5 +83,13 @@ namespace Office_File_Explorer.WinForms
         {
             AppUtilities.PlatformSpecificProcessStart("https://github.com/desjarlais/Office-File-Explorer-v2");
         }
+
+        private void FrmAbout_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

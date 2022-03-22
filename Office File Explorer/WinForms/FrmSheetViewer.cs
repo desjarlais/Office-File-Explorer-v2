@@ -322,5 +322,13 @@ namespace Office_File_Explorer.WinForms
         {
             Clipboard.SetText(dataGridView1.CurrentCell.Value.ToString());
         }
+
+        private void FrmSheetViewer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

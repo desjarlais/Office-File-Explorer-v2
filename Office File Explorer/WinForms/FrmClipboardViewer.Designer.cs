@@ -224,12 +224,14 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.lbClipFormats);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmClipboardViewer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Clipboard Viewer";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmClipboardViewer_FormClosed);
             this.Shown += new System.EventHandler(this.FrmClipboardViewer_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmClipboardViewer_KeyDown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbClipData)).EndInit();

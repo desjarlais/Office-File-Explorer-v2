@@ -71,5 +71,13 @@ namespace Office_File_Explorer.WinForms
                 }
             }
         }
+
+        private void FrmDeleteCustomProps_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

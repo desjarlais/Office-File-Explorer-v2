@@ -84,11 +84,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.txbEncoded);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmBase64";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Base64 Decoder";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmBase64_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

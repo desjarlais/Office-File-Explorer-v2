@@ -89,11 +89,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.LstImages);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmViewImages";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Images";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmViewImages_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

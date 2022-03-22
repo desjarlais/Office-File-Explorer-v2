@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWordModify));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoUpdateNamespaces = new System.Windows.Forms.RadioButton();
             this.rdoRemoveCustomTitleProp = new System.Windows.Forms.RadioButton();
             this.rdoRemovePII = new System.Windows.Forms.RadioButton();
             this.rdoAcceptRevisions = new System.Windows.Forms.RadioButton();
@@ -47,7 +48,6 @@ namespace Office_File_Explorer.WinForms
             this.rdoDelHF = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoUpdateNamespaces = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,6 +74,17 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Content to Modify";
+            // 
+            // rdoUpdateNamespaces
+            // 
+            this.rdoUpdateNamespaces.AutoSize = true;
+            this.rdoUpdateNamespaces.Location = new System.Drawing.Point(11, 194);
+            this.rdoUpdateNamespaces.Name = "rdoUpdateNamespaces";
+            this.rdoUpdateNamespaces.Size = new System.Drawing.Size(191, 19);
+            this.rdoUpdateNamespaces.TabIndex = 12;
+            this.rdoUpdateNamespaces.TabStop = true;
+            this.rdoUpdateNamespaces.Text = "Update Quick Part Namespaces";
+            this.rdoUpdateNamespaces.UseVisualStyleBackColor = true;
             // 
             // rdoRemoveCustomTitleProp
             // 
@@ -249,17 +260,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // rdoUpdateNamespaces
-            // 
-            this.rdoUpdateNamespaces.AutoSize = true;
-            this.rdoUpdateNamespaces.Location = new System.Drawing.Point(11, 194);
-            this.rdoUpdateNamespaces.Name = "rdoUpdateNamespaces";
-            this.rdoUpdateNamespaces.Size = new System.Drawing.Size(191, 19);
-            this.rdoUpdateNamespaces.TabIndex = 12;
-            this.rdoUpdateNamespaces.TabStop = true;
-            this.rdoUpdateNamespaces.Text = "Update Quick Part Namespaces";
-            this.rdoUpdateNamespaces.UseVisualStyleBackColor = true;
-            // 
             // FrmWordModify
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -270,11 +270,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmWordModify";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Modify Word Content";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmWordModify_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

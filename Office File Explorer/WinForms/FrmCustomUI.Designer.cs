@@ -86,12 +86,14 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmCustomUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Custom UI";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmCustomUI_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmCustomUI_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);

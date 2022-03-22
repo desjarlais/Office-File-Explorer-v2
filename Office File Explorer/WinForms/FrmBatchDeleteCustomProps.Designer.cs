@@ -83,11 +83,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.BtnOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmBatchDeleteCustomProps";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Delete Custom Properties";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmBatchDeleteCustomProps_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

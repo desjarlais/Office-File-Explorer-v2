@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPPTCommands));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ckbListFonts = new System.Windows.Forms.CheckBox();
             this.ckbSlideTransitions = new System.Windows.Forms.CheckBox();
             this.ckbSlideText = new System.Windows.Forms.CheckBox();
             this.ckbComments = new System.Windows.Forms.CheckBox();
@@ -43,7 +44,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
             this.ckbSelectAll = new System.Windows.Forms.CheckBox();
-            this.ckbListFonts = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -62,6 +62,16 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select PowerPoint Content To Display";
+            // 
+            // ckbListFonts
+            // 
+            this.ckbListFonts.AutoSize = true;
+            this.ckbListFonts.Location = new System.Drawing.Point(19, 147);
+            this.ckbListFonts.Name = "ckbListFonts";
+            this.ckbListFonts.Size = new System.Drawing.Size(76, 19);
+            this.ckbListFonts.TabIndex = 8;
+            this.ckbListFonts.Text = "List Fonts";
+            this.ckbListFonts.UseVisualStyleBackColor = true;
             // 
             // ckbSlideTransitions
             // 
@@ -186,16 +196,6 @@ namespace Office_File_Explorer.WinForms
             this.ckbSelectAll.UseVisualStyleBackColor = true;
             this.ckbSelectAll.CheckedChanged += new System.EventHandler(this.CkbSelectAll_CheckedChanged);
             // 
-            // ckbListFonts
-            // 
-            this.ckbListFonts.AutoSize = true;
-            this.ckbListFonts.Location = new System.Drawing.Point(19, 147);
-            this.ckbListFonts.Name = "ckbListFonts";
-            this.ckbListFonts.Size = new System.Drawing.Size(76, 19);
-            this.ckbListFonts.TabIndex = 8;
-            this.ckbListFonts.Text = "List Fonts";
-            this.ckbListFonts.UseVisualStyleBackColor = true;
-            // 
             // FrmPPTCommands
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -208,11 +208,13 @@ namespace Office_File_Explorer.WinForms
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmPPTCommands";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "PowerPoint Commands";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmPPTCommands_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
