@@ -1005,13 +1005,9 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.AcceptRevisions)
                         {
-                            if (Word.AcceptAllRevisions(lblFilePath.Text, Strings.allAuthors))
+                            foreach (var s in Word.AcceptRevisions(lblFilePath.Text, Strings.allAuthors))
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "All Revisions Accepted", string.Empty);
-                            }
-                            else
-                            {
-                                LogInformation(LogInfoType.ClearAndAdd, "Unable to accept revisions", string.Empty);
+                                LstDisplay.Items.Add(s);
                             }
                         }
 

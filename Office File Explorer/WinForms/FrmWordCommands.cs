@@ -207,17 +207,13 @@ namespace Office_File_Explorer.WinForms
                         if (tempAuthors.Count > 0)
                         {
                             // if the people part count is the same as GetAllAuthors, they must be the same authors
-                            if (count == tempAuthors.Count)
+                            if (count != tempAuthors.Count)
                             {
-                                return;
-                            }
-
-                            // if the count is not the same, display those authors
-                            foreach (string s in tempAuthors)
-                            {
-                                count++;
-                                cbAuthors.Items.Add(s);
-                                //lbRevisions.Items.Add(count + ". User Name = " + s);
+                                foreach (string s in tempAuthors)
+                                {
+                                    count++;
+                                    cbAuthors.Items.Add(s);
+                                }
                             }
                         }
 
@@ -252,42 +248,75 @@ namespace Office_File_Explorer.WinForms
                 Cursor = Cursors.WaitCursor;
 
                 int revCount = 0;
+                int revCountHeader = 0;
+                int revCountFooter = 0;
 
                 List<string> authorList = new List<string>();
 
                 using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, false))
                 {
                     Document doc = document.MainDocumentPart.Document;
-                    var paragraphChanged = doc.Descendants<ParagraphPropertiesChange>().ToList();
-                    var runChanged = doc.Descendants<RunPropertiesChange>().ToList();
-                    var deleted = doc.Descendants<DeletedRun>().ToList();
-                    var deletedParagraph = doc.Descendants<Deleted>().ToList();
-                    var inserted = doc.Descendants<InsertedRun>().ToList();
+
+                    List<ParagraphPropertiesChange> paragraphChanged = doc.Descendants<ParagraphPropertiesChange>().ToList();
+                    List<RunPropertiesChange> runChanged = doc.Descendants<RunPropertiesChange>().ToList();
+                    List<DeletedRun> deleted = doc.Descendants<DeletedRun>().ToList();
+                    List<Deleted> deletedParagraph = doc.Descendants<Deleted>().ToList();
+                    List<InsertedRun> inserted = doc.Descendants<InsertedRun>().ToList();
+
+                    List<ParagraphPropertiesChange> hdrParagraphChanged = null;
+                    List<RunPropertiesChange> hdrRunChanged = null;
+                    List<DeletedRun> hdrDeleted = null;
+                    List<Deleted> hdrDeletedParagraph = null;
+                    List<InsertedRun> hdrInserted = null;
+
+                    List<ParagraphPropertiesChange> ftrParagraphChanged = null;
+                    List<RunPropertiesChange> ftrRunChanged = null;
+                    List<DeletedRun> ftrDeleted = null;
+                    List<Deleted> ftrDeletedParagraph = null;
+                    List<InsertedRun> ftrInserted = null;
+
+                    foreach (HeaderPart hp in doc.MainDocumentPart.HeaderParts)
+                    {
+                        hdrParagraphChanged = hp.Header.Descendants<ParagraphPropertiesChange>().ToList();
+                        hdrRunChanged = hp.Header.Descendants<RunPropertiesChange>().ToList();
+                        hdrDeleted = hp.Header.Descendants<DeletedRun>().ToList();
+                        hdrDeletedParagraph = hp.Header.Descendants<Deleted>().ToList();
+                        hdrInserted = hp.Header.Descendants<InsertedRun>().ToList();
+                        revCountHeader = hdrParagraphChanged.Count + hdrRunChanged.Count + hdrDeleted.Count + hdrDeletedParagraph.Count + hdrInserted.Count;
+                    }
+                    
+                    foreach (FooterPart fp in doc.MainDocumentPart.FooterParts)
+                    {
+                        ftrParagraphChanged = fp.Footer.Descendants<ParagraphPropertiesChange>().ToList();
+                        ftrRunChanged = fp.Footer.Descendants<RunPropertiesChange>().ToList();
+                        ftrDeleted = fp.Footer.Descendants<DeletedRun>().ToList();
+                        ftrDeletedParagraph = fp.Footer.Descendants<Deleted>().ToList();
+                        ftrInserted = fp.Footer.Descendants<InsertedRun>().ToList();
+                        revCountFooter = ftrParagraphChanged.Count + ftrRunChanged.Count + ftrDeleted.Count + ftrDeletedParagraph.Count + ftrInserted.Count;
+                    }
 
                     lbRevisions.Items.Clear();
 
-                    if (cbAuthors.SelectedItem.ToString() == "* All Authors *")
+                    if (cbAuthors.SelectedItem.ToString() == Strings.wAllAuthors)
                     {
                         foreach (string s in cbAuthors.Items)
                         {
-                            if (s == "* All Authors *")
+                            if (s == Strings.wAllAuthors)
                             {
                                 continue;
                             }
                             else
                             {
+                                // main changes
                                 var tempParagraphChanged = paragraphChanged.Where(item => item.Author == s).ToList();
                                 var tempRunChanged = runChanged.Where(item => item.Author == s).ToList();
                                 var tempDeleted = deleted.Where(item => item.Author == s).ToList();
                                 var tempInserted = inserted.Where(item => item.Author == s).ToList();
                                 var tempDeletedParagraph = deletedParagraph.Where(item => item.Author == s).ToList();
 
-                                if ((tempParagraphChanged.Count + tempRunChanged.Count + tempDeleted.Count + tempInserted.Count + tempDeletedParagraph.Count) == 0)
-                                {
-                                    lbRevisions.Items.Add(s + " has no changes.");
-                                    continue;
-                                }
+                                revCount = tempParagraphChanged.Count + tempRunChanged.Count + tempDeleted.Count + tempInserted.Count + tempDeletedParagraph.Count;
 
+                                // look through the main changes
                                 foreach (var item in tempParagraphChanged)
                                 {
                                     revCount++;
@@ -326,6 +355,112 @@ namespace Office_File_Explorer.WinForms
                                         }
                                     }
                                 }
+
+                                if (revCountHeader > 0)
+                                {
+                                    var tempHdrParagraphChanged = hdrParagraphChanged.Where(item => item.Author == s).ToList();
+                                    var tempHdrRunChanged = hdrRunChanged.Where(item => item.Author == s).ToList();
+                                    var tempHdrDeleted = hdrDeleted.Where(item => item.Author == s).ToList();
+                                    var tempHdrInserted = hdrInserted.Where(item => item.Author == s).ToList();
+                                    var tempHdrDeletedParagraph = hdrDeletedParagraph.Where(item => item.Author == s).ToList();
+
+                                    revCountHeader = tempHdrParagraphChanged.Count + tempHdrRunChanged.Count + tempHdrDeleted.Count + tempHdrInserted.Count + tempHdrDeletedParagraph.Count;
+
+                                    // look at the header changes
+                                    foreach (var item in tempHdrParagraphChanged)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " : Paragraph Changed ");
+                                    }
+
+                                    foreach (var item in tempHdrDeletedParagraph)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " : Paragraph Deleted ");
+                                    }
+
+                                    foreach (var item in tempHdrRunChanged)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Run Changed = " + item.InnerText);
+                                    }
+
+                                    foreach (var item in tempHdrDeleted)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Deletion = " + item.InnerText);
+                                    }
+
+                                    foreach (var item in tempHdrInserted)
+                                    {
+                                        if (item.Parent != null)
+                                        {
+                                            var textRuns = item.Elements<Run>().ToList();
+                                            var parent = item.Parent;
+
+                                            foreach (var textRun in textRuns)
+                                            {
+                                                revCount++;
+                                                lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Insertion = " + textRun.InnerText);
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                if (revCountFooter > 0)
+                                {
+                                    var tempFtrParagraphChanged = ftrParagraphChanged.Where(item => item.Author == s).ToList();
+                                    var tempFtrRunChanged = ftrRunChanged.Where(item => item.Author == s).ToList();
+                                    var tempFtrDeleted = ftrDeleted.Where(item => item.Author == s).ToList();
+                                    var tempFtrInserted = ftrInserted.Where(item => item.Author == s).ToList();
+                                    var tempFtrDeletedParagraph = ftrDeletedParagraph.Where(item => item.Author == s).ToList();
+
+                                    // look at the footer changes
+                                    foreach (var item in tempFtrParagraphChanged)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " : Paragraph Formatting Change ");
+                                    }
+
+                                    foreach (var item in tempFtrDeletedParagraph)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " : Paragraph Deleted ");
+                                    }
+
+                                    foreach (var item in tempFtrRunChanged)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Run Formatting Change = ");
+                                    }
+
+                                    foreach (var item in tempFtrDeleted)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Deletion = " + item.InnerText);
+                                    }
+
+                                    foreach (var item in tempFtrInserted)
+                                    {
+                                        if (item.Parent != null)
+                                        {
+                                            var textRuns = item.Elements<Run>().ToList();
+                                            var parent = item.Parent;
+
+                                            foreach (var textRun in textRuns)
+                                            {
+                                                revCount++;
+                                                lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Insertion = " + textRun.InnerText);
+                                            }
+                                        }
+                                    }
+                                }                                
+
+                                if (revCount + revCountHeader + revCountFooter > 0)
+                                {
+                                    lbRevisions.Items.Add(s + " has no changes.");
+                                    continue;
+                                }
                             }
                         }
                     }
@@ -334,15 +469,153 @@ namespace Office_File_Explorer.WinForms
                         // list the selected authors revisions
                         if (!string.IsNullOrEmpty(cbAuthors.SelectedItem.ToString()))
                         {
-                            paragraphChanged = paragraphChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
-                            runChanged = runChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
-                            deleted = deleted.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
-                            inserted = inserted.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
-                            deletedParagraph = deletedParagraph.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                            var tempParagraphChanged = paragraphChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                            var tempRunChanged = runChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                            var tempDeleted = deleted.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                            var tempInserted = inserted.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                            var tempDeletedParagraph = deletedParagraph.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
 
-                            if ((paragraphChanged.Count + runChanged.Count + deleted.Count + inserted.Count + deletedParagraph.Count) == 0)
+                            // look through the main changes
+                            foreach (var item in tempParagraphChanged)
                             {
-                                lbRevisions.Items.Add("* Author has no changes *");
+                                revCount++;
+                                lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " : Paragraph Formatting Change");
+                            }
+
+                            foreach (var item in tempDeletedParagraph)
+                            {
+                                revCount++;
+                                lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " : Paragraph Deleted");
+                            }
+
+                            foreach (var item in tempRunChanged)
+                            {
+                                revCount++;
+                                lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Run Formatting Change");
+                            }
+
+                            foreach (var item in tempDeleted)
+                            {
+                                revCount++;
+                                lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Deletion = " + item.InnerText);
+                            }
+
+                            foreach (var item in tempInserted)
+                            {
+                                if (item.Parent != null)
+                                {
+                                    var textRuns = item.Elements<Run>().ToList();
+                                    var parent = item.Parent;
+
+                                    foreach (var textRun in textRuns)
+                                    {
+                                        revCount++;
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Insertion = " + textRun.InnerText);
+                                    }
+                                }
+                            }
+
+                            if (revCountHeader > 0)
+                            {
+                                var tempHdrParagraphChanged = hdrParagraphChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                                var tempHdrRunChanged = hdrRunChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                                var tempHdrDeleted = hdrDeleted.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                                var tempHdrInserted = hdrInserted.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                                var tempHdrDeletedParagraph = hdrDeletedParagraph.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+
+                                // look at the header changes
+                                foreach (var item in tempHdrParagraphChanged)
+                                {
+                                    revCount++;
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " : Paragraph Formatting Change");
+                                }
+
+                                foreach (var item in tempHdrDeletedParagraph)
+                                {
+                                    revCount++;
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " : Paragraph Deleted");
+                                }
+
+                                foreach (var item in tempHdrRunChanged)
+                                {
+                                    revCount++;
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Run Formatting Change");
+                                }
+
+                                foreach (var item in tempHdrDeleted)
+                                {
+                                    revCount++;
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Deletion = " + item.InnerText);
+                                }
+
+                                foreach (var item in tempHdrInserted)
+                                {
+                                    if (item.Parent != null)
+                                    {
+                                        var textRuns = item.Elements<Run>().ToList();
+                                        var parent = item.Parent;
+
+                                        foreach (var textRun in textRuns)
+                                        {
+                                            revCount++;
+                                            lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Insertion = " + textRun.InnerText);
+                                        }
+                                    }
+                                }
+                            }
+                                                        
+                            if (revCountFooter > 0)
+                            {
+                                var tempFtrParagraphChanged = ftrParagraphChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                                var tempFtrRunChanged = ftrRunChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                                var tempFtrDeleted = ftrDeleted.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                                var tempFtrInserted = ftrInserted.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+                                var tempFtrDeletedParagraph = ftrDeletedParagraph.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
+
+                                // look at the footer changes
+                                foreach (var item in tempFtrParagraphChanged)
+                                {
+                                    revCount++;
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " : Paragraph Formatting Change");
+                                }
+
+                                foreach (var item in tempFtrDeletedParagraph)
+                                {
+                                    revCount++;
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " : Paragraph Deleted");
+                                }
+
+                                foreach (var item in tempFtrRunChanged)
+                                {
+                                    revCount++;
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Run Formatting Change");
+                                }
+
+                                foreach (var item in tempFtrDeleted)
+                                {
+                                    revCount++;
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Deletion = " + item.InnerText);
+                                }
+
+                                foreach (var item in tempFtrInserted)
+                                {
+                                    if (item.Parent != null)
+                                    {
+                                        var textRuns = item.Elements<Run>().ToList();
+                                        var parent = item.Parent;
+
+                                        foreach (var textRun in textRuns)
+                                        {
+                                            revCount++;
+                                            lbRevisions.Items.Add(revCount + Strings.wPeriod + cbAuthors.SelectedItem.ToString() + " :  Insertion = " + textRun.InnerText);
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if (revCount + revCountFooter + revCountHeader == 0)
+                            {
+                                lbRevisions.Items.Add(cbAuthors.SelectedItem.ToString() + " has no changes.");
                                 return;
                             }
                         }
@@ -350,45 +623,6 @@ namespace Office_File_Explorer.WinForms
                         {
                             lbRevisions.Items.Add("** There are no revisions in this document **");
                             return;
-                        }
-
-                        foreach (var item in paragraphChanged)
-                        {
-                            revCount++;
-                            lbRevisions.Items.Add(revCount + ". Paragraph Changed ");
-                        }
-
-                        foreach (var item in deletedParagraph)
-                        {
-                            revCount++;
-                            lbRevisions.Items.Add(revCount + ". Paragraph Deleted ");
-                        }
-
-                        foreach (var item in runChanged)
-                        {
-                            revCount++;
-                            lbRevisions.Items.Add(revCount + ". Run Changed = " + item.InnerText);
-                        }
-
-                        foreach (var item in deleted)
-                        {
-                            revCount++;
-                            lbRevisions.Items.Add(revCount + ". Deletion = " + item.InnerText);
-                        }
-
-                        foreach (var item in inserted)
-                        {
-                            if (item.Parent != null)
-                            {
-                                var textRuns = item.Elements<Run>().ToList();
-                                var parent = item.Parent;
-
-                                foreach (var textRun in textRuns)
-                                {
-                                    revCount++;
-                                    lbRevisions.Items.Add(revCount + ". Insertion = " + textRun.InnerText);
-                                }
-                            }
                         }
                     }
                 }

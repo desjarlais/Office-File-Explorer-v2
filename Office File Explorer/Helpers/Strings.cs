@@ -45,7 +45,9 @@ namespace Office_File_Explorer.Helpers
         public const string wShpChart = "Chart";
         public const string wProperties = "Properties";
         public const string wCoreProperties = "coreProperties";
-        
+        public const string wAllAuthors = "* All Authors *";
+
+
         public const string wCompany = "Company";
         public const string wCreator = "creator";
         public const string wLastModifiedBy = "lastModifiedBy";
