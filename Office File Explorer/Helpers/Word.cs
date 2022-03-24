@@ -31,6 +31,11 @@ namespace Office_File_Explorer.Helpers
     {
         public static bool fSuccess;
 
+        /// <summary>
+        /// remove bookmarks from document body and comments
+        /// </summary>
+        /// <param name="docName"></param>
+        /// <returns></returns>
         public static bool RemoveBookmarks(string docName)
         {
             RemoveBookmarksStart:
@@ -44,6 +49,10 @@ namespace Office_File_Explorer.Helpers
                 IEnumerable<BookmarkStart> bkStartCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
                 IEnumerable<BookmarkEnd> bkEndCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkEnd>();
 
+                // todo: looping through the bookmarks and deleting will cause some to not be deleted from the collection
+                // still not sure why that happens, ongoing debugging to figure that out
+                // until then, if I just save at each loop and then keep running the code until the bookmark count is 0
+                // they all eventually get deleted
                 foreach (BookmarkStart bs in bkStartList)
                 {
                     bs.Remove();

@@ -53,6 +53,7 @@ namespace Office_File_Explorer.WinForms
             this.tbxTenant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.ckbRemoveHiddenBkInCmt = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -62,13 +63,14 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckbRemoveHiddenBkInCmt);
             this.groupBox1.Controls.Add(this.ckbRemoveAtMentions);
             this.groupBox1.Controls.Add(this.ckbFixGroupedShapes);
             this.groupBox1.Controls.Add(this.ckbListRsids);
             this.groupBox1.Controls.Add(this.ckbRemoveFallbackTags);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(287, 116);
+            this.groupBox1.Size = new System.Drawing.Size(287, 141);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Corrupt Document";
@@ -118,7 +120,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.ckbResetNotes);
             this.groupBox2.Location = new System.Drawing.Point(305, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(238, 116);
+            this.groupBox2.Size = new System.Drawing.Size(238, 141);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PowerPoint Options";
@@ -138,7 +140,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.ckbBackupOnOpen);
             this.groupBox3.Controls.Add(this.ckbZipItemCorrupt);
             this.groupBox3.Controls.Add(this.ckbDeleteOnExit);
-            this.groupBox3.Location = new System.Drawing.Point(12, 134);
+            this.groupBox3.Location = new System.Drawing.Point(12, 159);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(287, 100);
             this.groupBox3.TabIndex = 0;
@@ -179,7 +181,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.groupBox4.Controls.Add(this.rdoSAX);
             this.groupBox4.Controls.Add(this.rdoDOM);
-            this.groupBox4.Location = new System.Drawing.Point(305, 134);
+            this.groupBox4.Location = new System.Drawing.Point(306, 159);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(238, 100);
             this.groupBox4.TabIndex = 0;
@@ -210,7 +212,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(388, 362);
+            this.BtnOk.Location = new System.Drawing.Point(387, 387);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -220,7 +222,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(469, 362);
+            this.BtnCancel.Location = new System.Drawing.Point(468, 387);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 2;
@@ -236,7 +238,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox5.Controls.Add(this.tbxTenant);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.label1);
-            this.groupBox5.Location = new System.Drawing.Point(12, 240);
+            this.groupBox5.Location = new System.Drawing.Point(12, 265);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(531, 116);
             this.groupBox5.TabIndex = 3;
@@ -291,11 +293,21 @@ namespace Office_File_Explorer.WinForms
             this.label1.TabIndex = 0;
             this.label1.Text = "Client ID: ";
             // 
+            // ckbRemoveHiddenBkInCmt
+            // 
+            this.ckbRemoveHiddenBkInCmt.AutoSize = true;
+            this.ckbRemoveHiddenBkInCmt.Location = new System.Drawing.Point(19, 116);
+            this.ckbRemoveHiddenBkInCmt.Name = "ckbRemoveHiddenBkInCmt";
+            this.ckbRemoveHiddenBkInCmt.Size = new System.Drawing.Size(248, 19);
+            this.ckbRemoveHiddenBkInCmt.TabIndex = 4;
+            this.ckbRemoveHiddenBkInCmt.Text = "Remove Hidden Bookmarks In Comments";
+            this.ckbRemoveHiddenBkInCmt.UseVisualStyleBackColor = true;
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 387);
+            this.ClientSize = new System.Drawing.Size(546, 420);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnOk);
@@ -351,5 +363,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbxSiteURL;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox ckbRemoveHiddenBkInCmt;
     }
 }
