@@ -35,11 +35,6 @@ namespace Office_File_Explorer.WinForms
                 ckbDeleteOnExit.Checked = true;
             }
 
-            if (Properties.Settings.Default.RemoveCorruptAtMentions == true)
-            {
-                ckbRemoveAtMentions.Checked = true;
-            }
-
             if (Properties.Settings.Default.ListCellValuesSax == true)
             {
                 rdoSAX.Checked = true;
@@ -67,7 +62,6 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.FixGroupedShapes = ckbFixGroupedShapes.Checked;
             Properties.Settings.Default.ResetNotesMaster = ckbResetNotes.Checked;
             Properties.Settings.Default.DeleteCopiesOnExit = ckbDeleteOnExit.Checked;
-            Properties.Settings.Default.RemoveCorruptAtMentions = ckbRemoveAtMentions.Checked;
             Properties.Settings.Default.CheckZipItemCorrupt = ckbZipItemCorrupt.Checked;
             Properties.Settings.Default.BackupOnOpen = ckbBackupOnOpen.Checked;
             Properties.Settings.Default.ClientID = tbxClientID.Text;

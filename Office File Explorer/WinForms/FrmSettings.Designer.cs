@@ -31,7 +31,6 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSettings));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ckbRemoveAtMentions = new System.Windows.Forms.CheckBox();
             this.ckbFixGroupedShapes = new System.Windows.Forms.CheckBox();
             this.ckbListRsids = new System.Windows.Forms.CheckBox();
             this.ckbRemoveFallbackTags = new System.Windows.Forms.CheckBox();
@@ -53,7 +52,6 @@ namespace Office_File_Explorer.WinForms
             this.tbxTenant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.ckbRemoveHiddenBkInCmt = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -63,8 +61,6 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.ckbRemoveHiddenBkInCmt);
-            this.groupBox1.Controls.Add(this.ckbRemoveAtMentions);
             this.groupBox1.Controls.Add(this.ckbFixGroupedShapes);
             this.groupBox1.Controls.Add(this.ckbListRsids);
             this.groupBox1.Controls.Add(this.ckbRemoveFallbackTags);
@@ -74,16 +70,6 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Corrupt Document";
-            // 
-            // ckbRemoveAtMentions
-            // 
-            this.ckbRemoveAtMentions.AutoSize = true;
-            this.ckbRemoveAtMentions.Location = new System.Drawing.Point(19, 91);
-            this.ckbRemoveAtMentions.Name = "ckbRemoveAtMentions";
-            this.ckbRemoveAtMentions.Size = new System.Drawing.Size(177, 19);
-            this.ckbRemoveAtMentions.TabIndex = 3;
-            this.ckbRemoveAtMentions.Text = "Remove Corrupt @Mentions";
-            this.ckbRemoveAtMentions.UseVisualStyleBackColor = true;
             // 
             // ckbFixGroupedShapes
             // 
@@ -162,9 +148,9 @@ namespace Office_File_Explorer.WinForms
             this.ckbZipItemCorrupt.AutoSize = true;
             this.ckbZipItemCorrupt.Location = new System.Drawing.Point(19, 48);
             this.ckbZipItemCorrupt.Name = "ckbZipItemCorrupt";
-            this.ckbZipItemCorrupt.Size = new System.Drawing.Size(187, 19);
+            this.ckbZipItemCorrupt.Size = new System.Drawing.Size(238, 19);
             this.ckbZipItemCorrupt.TabIndex = 3;
-            this.ckbZipItemCorrupt.Text = "Check For Zip Item Corruption";
+            this.ckbZipItemCorrupt.Text = "Check For Zip Item Corruption On Open";
             this.ckbZipItemCorrupt.UseVisualStyleBackColor = true;
             // 
             // ckbDeleteOnExit
@@ -293,16 +279,6 @@ namespace Office_File_Explorer.WinForms
             this.label1.TabIndex = 0;
             this.label1.Text = "Client ID: ";
             // 
-            // ckbRemoveHiddenBkInCmt
-            // 
-            this.ckbRemoveHiddenBkInCmt.AutoSize = true;
-            this.ckbRemoveHiddenBkInCmt.Location = new System.Drawing.Point(19, 116);
-            this.ckbRemoveHiddenBkInCmt.Name = "ckbRemoveHiddenBkInCmt";
-            this.ckbRemoveHiddenBkInCmt.Size = new System.Drawing.Size(248, 19);
-            this.ckbRemoveHiddenBkInCmt.TabIndex = 4;
-            this.ckbRemoveHiddenBkInCmt.Text = "Remove Hidden Bookmarks In Comments";
-            this.ckbRemoveHiddenBkInCmt.UseVisualStyleBackColor = true;
-            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -341,7 +317,6 @@ namespace Office_File_Explorer.WinForms
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox ckbRemoveAtMentions;
         private System.Windows.Forms.CheckBox ckbFixGroupedShapes;
         private System.Windows.Forms.CheckBox ckbListRsids;
         private System.Windows.Forms.CheckBox ckbRemoveFallbackTags;
@@ -363,6 +338,5 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbxSiteURL;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox ckbRemoveHiddenBkInCmt;
     }
 }
