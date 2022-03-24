@@ -31,29 +31,11 @@ namespace Office_File_Explorer.Helpers
     {
         public static bool fSuccess;
 
-        public static int BookmarkCount(string docName)
-        {
-            int bkCount = 0;
-            using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
-            {
-                IEnumerable<BookmarkStart> bkStartList = document.MainDocumentPart.Document.Descendants<BookmarkStart>();
-                IEnumerable<BookmarkEnd> bkEndList = document.MainDocumentPart.Document.Descendants<BookmarkEnd>();
-                IEnumerable<BookmarkStart> bkStartCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
-                IEnumerable<BookmarkEnd> bkEndCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkEnd>();
-
-                bkCount += bkStartList.Count();
-                bkCount += bkStartCommentList.Count();
-                bkCount += bkEndList.Count();
-                bkCount += bkEndCommentList.Count();
-            }
-
-            return bkCount;
-        }
-
         public static bool RemoveBookmarks(string docName)
         {
+            RemoveBookmarksStart:
+            int bkCount = 0;
             fSuccess = false;
-
             using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
             {
                 // remove bookmarks from the main part of the document
@@ -101,10 +83,20 @@ namespace Office_File_Explorer.Helpers
                     }
                 }
 
+                bkCount += bkStartList.Count();
+                bkCount += bkStartCommentList.Count();
+                bkCount += bkEndList.Count();
+                bkCount += bkEndCommentList.Count();
+
                 if (fSuccess)
                 {
                     document.Save();
                 }
+            }
+
+            if (bkCount > 0)
+            {
+                goto RemoveBookmarksStart;
             }
 
             return fSuccess;
