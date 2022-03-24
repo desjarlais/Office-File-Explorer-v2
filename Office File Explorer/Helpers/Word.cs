@@ -59,17 +59,56 @@ namespace Office_File_Explorer.Helpers
         public static bool AcceptTrackedChanges(Document doc, string author, string returnType)
         {
             fSuccess = false;
+            int revCount = 0;
+            int revCountHeader = 0;
+            int revCountFooter = 0;
 
-            var paragraphChanged = doc.Descendants<ParagraphPropertiesChange>().Where(item => item.Author == author).ToList();
-            var runChanged = doc.Descendants<RunPropertiesChange>().Where(item => item.Author == author).ToList();
-            var deleted = doc.Descendants<DeletedRun>().Where(item => item.Author == author).ToList();
-            var deletedParagraph = doc.Descendants<Deleted>().Where(item => item.Author == author).ToList();
-            var inserted = doc.Descendants<InsertedRun>().Where(item => item.Author == author).ToList();
-            var tableCellPropsChanged = doc.Descendants<TableCellPropertiesChange>().Where(item => item.Author == author).ToList();
-            var tablePropsChanged = doc.Descendants<TablePropertiesChange>().Where(item => item.Author == author).ToList();
-            var tableRowPropsChanged = doc.Descendants<TableRowPropertiesChange>().Where(item => item.Author == author).ToList();
+            List<ParagraphPropertiesChange> paragraphChanged = doc.Descendants<ParagraphPropertiesChange>().ToList();
+            List<RunPropertiesChange> runChanged = doc.Descendants<RunPropertiesChange>().ToList();
+            List<DeletedRun> deleted = doc.Descendants<DeletedRun>().ToList();
+            List<Deleted> deletedParagraph = doc.Descendants<Deleted>().ToList();
+            List<InsertedRun> inserted = doc.Descendants<InsertedRun>().ToList();
 
-            if (returnType == "AcceptChanges")
+            var tempParagraphChanged = paragraphChanged.Where(item => item.Author == author).ToList();
+            var tempRunChanged = runChanged.Where(item => item.Author == author).ToList();
+            var tempDeleted = deleted.Where(item => item.Author == author).ToList();
+            var tempInserted = inserted.Where(item => item.Author == author).ToList();
+            var tempDeletedParagraph = deletedParagraph.Where(item => item.Author == author).ToList();
+            revCount = tempParagraphChanged.Count + tempRunChanged.Count + tempDeleted.Count + tempDeletedParagraph.Count + tempInserted.Count;
+
+            List<ParagraphPropertiesChange> hdrParagraphChanged = null;
+            List<RunPropertiesChange> hdrRunChanged = null;
+            List<DeletedRun> hdrDeleted = null;
+            List<Deleted> hdrDeletedParagraph = null;
+            List<InsertedRun> hdrInserted = null;
+
+            List<ParagraphPropertiesChange> ftrParagraphChanged = null;
+            List<RunPropertiesChange> ftrRunChanged = null;
+            List<DeletedRun> ftrDeleted = null;
+            List<Deleted> ftrDeletedParagraph = null;
+            List<InsertedRun> ftrInserted = null;
+
+            foreach (HeaderPart hp in doc.MainDocumentPart.HeaderParts)
+            {
+                hdrParagraphChanged = hp.Header.Descendants<ParagraphPropertiesChange>().ToList();
+                hdrRunChanged = hp.Header.Descendants<RunPropertiesChange>().ToList();
+                hdrDeleted = hp.Header.Descendants<DeletedRun>().ToList();
+                hdrDeletedParagraph = hp.Header.Descendants<Deleted>().ToList();
+                hdrInserted = hp.Header.Descendants<InsertedRun>().ToList();
+                revCountHeader = hdrParagraphChanged.Count + hdrRunChanged.Count + hdrDeleted.Count + hdrDeletedParagraph.Count + hdrInserted.Count;
+            }
+
+            foreach (FooterPart fp in doc.MainDocumentPart.FooterParts)
+            {
+                ftrParagraphChanged = fp.Footer.Descendants<ParagraphPropertiesChange>().ToList();
+                ftrRunChanged = fp.Footer.Descendants<RunPropertiesChange>().ToList();
+                ftrDeleted = fp.Footer.Descendants<DeletedRun>().ToList();
+                ftrDeletedParagraph = fp.Footer.Descendants<Deleted>().ToList();
+                ftrInserted = fp.Footer.Descendants<InsertedRun>().ToList();
+                revCountFooter = ftrParagraphChanged.Count + ftrRunChanged.Count + ftrDeleted.Count + ftrDeletedParagraph.Count + ftrInserted.Count;
+            }
+
+            if (revCount > 0)
             {
                 foreach (var item in paragraphChanged)
                 {
@@ -82,25 +121,26 @@ namespace Office_File_Explorer.Helpers
                     item.Remove();
                     fSuccess = true;
                 }
-                    
+
                 foreach (var item in runChanged)
                 {
                     item.Remove();
                     fSuccess = true;
                 }
-                    
+
                 foreach (var item in deleted)
                 {
                     item.Remove();
                     fSuccess = true;
                 }
-                    
+
                 foreach (var item in inserted)
                 {
                     if (item.Parent is not null)
                     {
                         var textRuns = item.Elements<Run>().ToList();
                         var parent = item.Parent;
+
                         foreach (var textRun in textRuns)
                         {
                             item.RemoveAttribute("rsidR", parent.NamespaceUri);
@@ -113,6 +153,101 @@ namespace Office_File_Explorer.Helpers
                 }
             }
 
+            if (revCountHeader > 0)
+            {
+                foreach (var item in hdrParagraphChanged)
+                {
+                    item.Remove();
+                    fSuccess = true;
+                }
+
+                foreach (var item in hdrDeletedParagraph)
+                {
+                    item.Remove();
+                    fSuccess = true;
+                }
+
+                foreach (var item in hdrRunChanged)
+                {
+                    item.Remove();
+                    fSuccess = true;
+                }
+
+                foreach (var item in hdrDeleted)
+                {
+                    item.Remove();
+                    fSuccess = true;
+                }
+
+                foreach (var item in hdrInserted)
+                {
+                    if (item.Parent is not null)
+                    {
+                        var textRuns = item.Elements<Run>().ToList();
+                        var parent = item.Parent;
+
+                        foreach (var textRun in textRuns)
+                        {
+                            item.RemoveAttribute("rsidR", parent.NamespaceUri);
+                            item.RemoveAttribute("sidRPr", parent.NamespaceUri);
+                            parent.InsertBefore(textRun.CloneNode(true), item);
+                        }
+                        item.Remove();
+                        fSuccess = true;
+                    }
+                }
+            }
+
+            if (revCountFooter > 0)
+            {
+                foreach (var item in ftrParagraphChanged)
+                {
+                    item.Remove();
+                    fSuccess = true;
+                }
+
+                foreach (var item in ftrDeletedParagraph)
+                {
+                    item.Remove();
+                    fSuccess = true;
+                }
+
+                foreach (var item in ftrRunChanged)
+                {
+                    item.Remove();
+                    fSuccess = true;
+                }
+
+                foreach (var item in ftrDeleted)
+                {
+                    item.Remove();
+                    fSuccess = true;
+                }
+
+                foreach (var item in ftrInserted)
+                {
+                    if (item.Parent is not null)
+                    {
+                        var textRuns = item.Elements<Run>().ToList();
+                        var parent = item.Parent;
+
+                        foreach (var textRun in textRuns)
+                        {
+                            item.RemoveAttribute("rsidR", parent.NamespaceUri);
+                            item.RemoveAttribute("sidRPr", parent.NamespaceUri);
+                            parent.InsertBefore(textRun.CloneNode(true), item);
+                        }
+                        item.Remove();
+                        fSuccess = true;
+                    }
+                }
+            }
+
+            if (fSuccess)
+            {
+                doc.Save();
+            }
+            
             return fSuccess;
         }
 

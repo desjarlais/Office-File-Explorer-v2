@@ -55,6 +55,7 @@ namespace Office_File_Explorer.WinForms
             this.ckbShapes = new System.Windows.Forms.CheckBox();
             this.ckbOleObjects = new System.Windows.Forms.CheckBox();
             this.ckbSelectAll = new System.Windows.Forms.CheckBox();
+            this.BtnAcceptChanges = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -223,6 +224,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.BtnAcceptChanges);
             this.groupBox2.Controls.Add(this.lbRevisions);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.cbAuthors);
@@ -242,7 +244,7 @@ namespace Office_File_Explorer.WinForms
             this.lbRevisions.ItemHeight = 15;
             this.lbRevisions.Location = new System.Drawing.Point(6, 76);
             this.lbRevisions.Name = "lbRevisions";
-            this.lbRevisions.Size = new System.Drawing.Size(486, 394);
+            this.lbRevisions.Size = new System.Drawing.Size(486, 379);
             this.lbRevisions.TabIndex = 14;
             // 
             // label1
@@ -328,6 +330,17 @@ namespace Office_File_Explorer.WinForms
             this.ckbSelectAll.UseVisualStyleBackColor = true;
             this.ckbSelectAll.CheckedChanged += new System.EventHandler(this.CkbSelectAll_CheckedChanged);
             // 
+            // BtnAcceptChanges
+            // 
+            this.BtnAcceptChanges.Enabled = false;
+            this.BtnAcceptChanges.Location = new System.Drawing.Point(6, 459);
+            this.BtnAcceptChanges.Name = "BtnAcceptChanges";
+            this.BtnAcceptChanges.Size = new System.Drawing.Size(115, 23);
+            this.BtnAcceptChanges.TabIndex = 15;
+            this.BtnAcceptChanges.Text = "Accept Changes";
+            this.BtnAcceptChanges.UseVisualStyleBackColor = true;
+            this.BtnAcceptChanges.Click += new System.EventHandler(this.BtnAcceptChanges_Click);
+            // 
             // FrmWordCommands
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -386,5 +399,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.CheckBox ckbOleObjects;
         private System.Windows.Forms.CheckBox ckbSelectAll;
         private System.Windows.Forms.CheckBox ckbTables;
+        private System.Windows.Forms.Button BtnAcceptChanges;
     }
 }

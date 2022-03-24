@@ -173,6 +173,7 @@ namespace Office_File_Explorer.WinForms
             try
             {
                 Cursor = Cursors.WaitCursor;
+                lbRevisions.Items.Clear();
 
                 if (cbAuthors.Enabled == true)
                 {
@@ -184,6 +185,7 @@ namespace Office_File_Explorer.WinForms
                 {
                     cbAuthors.Enabled = true;
                     lbRevisions.Enabled = true;
+                    BtnAcceptChanges.Enabled = true;
 
                     using (WordprocessingDocument doc = WordprocessingDocument.Open(filePath, false))
                     {
@@ -320,7 +322,7 @@ namespace Office_File_Explorer.WinForms
                                 foreach (var item in tempParagraphChanged)
                                 {
                                     revCount++;
-                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " : Paragraph Changed ");
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " : Paragraph Formatting Change");
                                 }
 
                                 foreach (var item in tempDeletedParagraph)
@@ -332,7 +334,7 @@ namespace Office_File_Explorer.WinForms
                                 foreach (var item in tempRunChanged)
                                 {
                                     revCount++;
-                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Run Changed = " + item.InnerText);
+                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Run Formatting Change");
                                 }
 
                                 foreach (var item in tempDeleted)
@@ -382,7 +384,7 @@ namespace Office_File_Explorer.WinForms
                                     foreach (var item in tempHdrRunChanged)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Run Changed = " + item.InnerText);
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Run Formatting Change");
                                     }
 
                                     foreach (var item in tempHdrDeleted)
@@ -431,7 +433,7 @@ namespace Office_File_Explorer.WinForms
                                     foreach (var item in tempFtrRunChanged)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Run Formatting Change = ");
+                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + " :  Run Formatting Change");
                                     }
 
                                     foreach (var item in tempFtrDeleted)
@@ -502,7 +504,7 @@ namespace Office_File_Explorer.WinForms
 
                             foreach (var item in tempInserted)
                             {
-                                if (item.Parent != null)
+                                if (item.Parent is not null)
                                 {
                                     var textRuns = item.Elements<Run>().ToList();
                                     var parent = item.Parent;
@@ -682,6 +684,36 @@ namespace Office_File_Explorer.WinForms
             if (e.KeyCode == Keys.Escape)
             {
                 Close();
+            }
+        }
+
+        private void BtnAcceptChanges_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+                {
+                    if (Word.AcceptTrackedChanges(document.MainDocumentPart.Document, cbAuthors.Text, "AcceptChanges"))
+                    {
+                        MessageBox.Show(cbAuthors.Text + " changes accepted.");
+                        ckbRevisions.Checked = false;
+                        cbAuthors.Items.Clear();
+                    }
+                    else
+                    {
+                        MessageBox.Show(cbAuthors.Text + " had no changes.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
     }
