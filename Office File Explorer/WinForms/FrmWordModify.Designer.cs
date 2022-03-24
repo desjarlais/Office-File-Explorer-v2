@@ -48,11 +48,13 @@ namespace Office_File_Explorer.WinForms
             this.rdoDelHF = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
+            this.rdoDelBookmarks = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoDelBookmarks);
             this.groupBox1.Controls.Add(this.rdoUpdateNamespaces);
             this.groupBox1.Controls.Add(this.rdoRemoveCustomTitleProp);
             this.groupBox1.Controls.Add(this.rdoRemovePII);
@@ -260,6 +262,17 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
+            // rdoDelBookmarks
+            // 
+            this.rdoDelBookmarks.AutoSize = true;
+            this.rdoDelBookmarks.Location = new System.Drawing.Point(211, 194);
+            this.rdoDelBookmarks.Name = "rdoDelBookmarks";
+            this.rdoDelBookmarks.Size = new System.Drawing.Size(120, 19);
+            this.rdoDelBookmarks.TabIndex = 2;
+            this.rdoDelBookmarks.TabStop = true;
+            this.rdoDelBookmarks.Text = "Delete Bookmarks";
+            this.rdoDelBookmarks.UseVisualStyleBackColor = true;
+            // 
             // FrmWordModify
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -303,5 +316,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoRemovePII;
         private System.Windows.Forms.RadioButton rdoRemoveCustomTitleProp;
         private System.Windows.Forms.RadioButton rdoUpdateNamespaces;
+        private System.Windows.Forms.RadioButton rdoDelBookmarks;
     }
 }

@@ -31,6 +31,85 @@ namespace Office_File_Explorer.Helpers
     {
         public static bool fSuccess;
 
+        public static int BookmarkCount(string docName)
+        {
+            int bkCount = 0;
+            using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
+            {
+                IEnumerable<BookmarkStart> bkStartList = document.MainDocumentPart.Document.Descendants<BookmarkStart>();
+                IEnumerable<BookmarkEnd> bkEndList = document.MainDocumentPart.Document.Descendants<BookmarkEnd>();
+                IEnumerable<BookmarkStart> bkStartCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
+                IEnumerable<BookmarkEnd> bkEndCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkEnd>();
+
+                bkCount += bkStartList.Count();
+                bkCount += bkStartCommentList.Count();
+                bkCount += bkEndList.Count();
+                bkCount += bkEndCommentList.Count();
+            }
+
+            return bkCount;
+        }
+
+        public static bool RemoveBookmarks(string docName)
+        {
+            fSuccess = false;
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
+            {
+                // remove bookmarks from the main part of the document
+                IEnumerable<BookmarkStart> bkStartList = document.MainDocumentPart.Document.Descendants<BookmarkStart>();
+                IEnumerable<BookmarkEnd> bkEndList = document.MainDocumentPart.Document.Descendants<BookmarkEnd>();
+                IEnumerable<BookmarkStart> bkStartCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
+                IEnumerable<BookmarkEnd> bkEndCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkEnd>();
+
+                foreach (BookmarkStart bs in bkStartList)
+                {
+                    bs.Remove();
+                    fSuccess = true;
+                }
+
+                document.Save();
+
+                foreach (BookmarkEnd be in bkEndList)
+                {
+                    be.Remove();
+                    fSuccess = true;
+                }
+
+                document.Save();
+
+                // now check for bookmarks in comments
+                if (document.MainDocumentPart.WordprocessingCommentsPart is not null)
+                {
+                    if (document.MainDocumentPart.WordprocessingCommentsPart.Comments is not null)
+                    {
+                        foreach (BookmarkStart bs in bkStartCommentList)
+                        {
+                            bs.Remove();
+                            fSuccess = true;
+                        }
+
+                        document.Save();
+
+                        foreach (BookmarkEnd be in bkEndCommentList)
+                        {
+                            be.Remove();
+                            fSuccess = true;
+                        }
+
+                        document.Save();
+                    }
+                }
+
+                if (fSuccess)
+                {
+                    document.Save();
+                }
+            }
+
+            return fSuccess;
+        }
+
         public static bool RemoveCustomTitleProp(string docName)
         {
             fSuccess = false;

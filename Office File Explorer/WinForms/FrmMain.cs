@@ -1153,6 +1153,18 @@ namespace Office_File_Explorer
                                 LogInformation(LogInfoType.ClearAndAdd, "No Issues With Namespaces Found.", string.Empty);
                             }
                         }
+
+                        if (f.wdModCmd == AppUtilities.WordModifyCmds.DelBookmarks)
+                        {
+                            if (Word.RemoveBookmarks(lblFilePath.Text))
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "Bookmarks Deleted", string.Empty);
+                            }
+                            else
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "No Bookmarks In Document", string.Empty);
+                            }
+                        }
                     }
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)

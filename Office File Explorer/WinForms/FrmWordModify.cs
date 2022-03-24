@@ -89,6 +89,11 @@ namespace Office_File_Explorer.WinForms
                 wdModCmd = AppUtilities.WordModifyCmds.UpdateCcNamespaceGuid;
             }
 
+            if (rdoDelBookmarks.Checked)
+            {
+                wdModCmd = AppUtilities.WordModifyCmds.DelBookmarks;
+            }
+
             Close();
         }
 

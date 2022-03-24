@@ -79,7 +79,8 @@ namespace Office_File_Explorer.Helpers
             ConvertDocmToDocx,
             RemovePII,
             RemoveCustomTitleProp,
-            UpdateCcNamespaceGuid
+            UpdateCcNamespaceGuid,
+            DelBookmarks
         }
 
         public enum ExcelModifyCmds
