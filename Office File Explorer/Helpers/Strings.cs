@@ -56,6 +56,11 @@ namespace Office_File_Explorer.Helpers
         public const string wDocSecurity = "DocSecurity";
         
         public const string wAuthors = "Authors";
+        public const string wParaFormatChange = " : Paragraph Formatting Change";
+        public const string wParaDeleted = " : Paragraph Deleted ";
+        public const string wRunFormatChange = " :  Run Formatting Change";
+        public const string wDeletion = " :  Deletion = ";
+        public const string wInsertion = " :  Insertion = ";
         public const string wAllFixes = "All";
         public const string wComments = "Comments";
         public const string wOle = "OLE objects";

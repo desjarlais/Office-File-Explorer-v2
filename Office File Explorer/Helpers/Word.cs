@@ -51,12 +51,13 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
-        /// 
+        /// accept track changes for specific author
+        /// check the body as well as headers and footers
         /// </summary>
         /// <param name="doc"></param>
         /// <param name="author"></param>
         /// <returns></returns>
-        public static bool AcceptTrackedChanges(Document doc, string author, string returnType)
+        public static bool AcceptTrackedChanges(Document doc, string author)
         {
             fSuccess = false;
             int revCount = 0;
@@ -272,7 +273,7 @@ namespace Office_File_Explorer.Helpers
                     // create a temp list for each author so we can loop the changes individually and list them
                     foreach (string s in tempAuthors)
                     {
-                        if (AcceptTrackedChanges(doc, s, "AcceptChanges"))
+                        if (AcceptTrackedChanges(doc, s))
                         {
                             output.Add(s + " - changes accepted.");
                         }
@@ -284,7 +285,7 @@ namespace Office_File_Explorer.Helpers
                     // for single author, just loop that authors from the original list
                     if (!string.IsNullOrEmpty(authorName))
                     {
-                        if (AcceptTrackedChanges(doc, authorName, "AcceptChanges"))
+                        if (AcceptTrackedChanges(doc, authorName))
                         {
                             output.Add(authorName + " - changes accepted.");
                         }
