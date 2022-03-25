@@ -214,7 +214,20 @@ namespace Office_File_Explorer.WinForms
                                 foreach (string s in tempAuthors)
                                 {
                                     count++;
-                                    cbAuthors.Items.Add(s);
+                                    bool authorFound = false;
+
+                                    foreach (string a in cbAuthors.Items)
+                                    {
+                                        if (a == s)
+                                        {
+                                            authorFound = true;
+                                        }
+                                    }
+
+                                    if (authorFound == false)
+                                    {
+                                        cbAuthors.Items.Add(s);
+                                    }
                                 }
                             }
                         }
@@ -301,6 +314,7 @@ namespace Office_File_Explorer.WinForms
 
                     if (cbAuthors.SelectedItem.ToString() == Strings.wAllAuthors)
                     {
+                        int totalRevCount = 0;
                         foreach (string s in cbAuthors.Items)
                         {
                             if (s == Strings.wAllAuthors)
@@ -316,31 +330,38 @@ namespace Office_File_Explorer.WinForms
                                 var tempInserted = inserted.Where(item => item.Author == s).ToList();
                                 var tempDeletedParagraph = deletedParagraph.Where(item => item.Author == s).ToList();
 
-                                revCount = tempParagraphChanged.Count + tempRunChanged.Count + tempDeleted.Count + tempInserted.Count + tempDeletedParagraph.Count;
+                                //revCount = tempParagraphChanged.Count + tempRunChanged.Count + tempDeleted.Count + tempInserted.Count + tempDeletedParagraph.Count;
+                                revCount = 0;
+                                revCountHeader = 0;
+                                revCountFooter = 0;
 
                                 // look through the main changes
                                 foreach (var item in tempParagraphChanged)
                                 {
                                     revCount++;
-                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wParaFormatChange);
+                                    totalRevCount++;
+                                    lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wParaFormatChange);
                                 }
 
                                 foreach (var item in tempDeletedParagraph)
                                 {
                                     revCount++;
-                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wParaDeleted);
+                                    totalRevCount++;
+                                    lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wParaDeleted);
                                 }
 
                                 foreach (var item in tempRunChanged)
                                 {
                                     revCount++;
-                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wRunFormatChange);
+                                    totalRevCount++;
+                                    lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wRunFormatChange);
                                 }
 
                                 foreach (var item in tempDeleted)
                                 {
                                     revCount++;
-                                    lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wDeletion + item.InnerText);
+                                    totalRevCount++;
+                                    lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wDeletion + item.InnerText);
                                 }
 
                                 foreach (var item in tempInserted)
@@ -353,7 +374,8 @@ namespace Office_File_Explorer.WinForms
                                         foreach (var textRun in textRuns)
                                         {
                                             revCount++;
-                                            lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wInsertion + textRun.InnerText);
+                                            totalRevCount++;
+                                            lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wInsertion + textRun.InnerText);
                                         }
                                     }
                                 }
@@ -372,25 +394,29 @@ namespace Office_File_Explorer.WinForms
                                     foreach (var item in tempHdrParagraphChanged)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wParaFormatChange);
+                                        totalRevCount++;
+                                        lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wParaFormatChange);
                                     }
 
                                     foreach (var item in tempHdrDeletedParagraph)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wParaDeleted);
+                                        totalRevCount++;
+                                        lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wParaDeleted);
                                     }
 
                                     foreach (var item in tempHdrRunChanged)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wRunFormatChange);
+                                        totalRevCount++;
+                                        lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wRunFormatChange);
                                     }
 
                                     foreach (var item in tempHdrDeleted)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wDeletion + item.InnerText);
+                                        totalRevCount++;
+                                        lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wDeletion + item.InnerText);
                                     }
 
                                     foreach (var item in tempHdrInserted)
@@ -403,7 +429,8 @@ namespace Office_File_Explorer.WinForms
                                             foreach (var textRun in textRuns)
                                             {
                                                 revCount++;
-                                                lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wInsertion + textRun.InnerText);
+                                                totalRevCount++;
+                                                lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wInsertion + textRun.InnerText);
                                             }
                                         }
                                     }
@@ -421,25 +448,29 @@ namespace Office_File_Explorer.WinForms
                                     foreach (var item in tempFtrParagraphChanged)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wParaFormatChange);
+                                        totalRevCount++;
+                                        lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wParaFormatChange);
                                     }
 
                                     foreach (var item in tempFtrDeletedParagraph)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wParaDeleted);
+                                        totalRevCount++;
+                                        lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wParaDeleted);
                                     }
 
                                     foreach (var item in tempFtrRunChanged)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wRunFormatChange);
+                                        totalRevCount++;
+                                        lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wRunFormatChange);
                                     }
 
                                     foreach (var item in tempFtrDeleted)
                                     {
                                         revCount++;
-                                        lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wDeletion + item.InnerText);
+                                        totalRevCount++;
+                                        lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wDeletion + item.InnerText);
                                     }
 
                                     foreach (var item in tempFtrInserted)
@@ -452,17 +483,18 @@ namespace Office_File_Explorer.WinForms
                                             foreach (var textRun in textRuns)
                                             {
                                                 revCount++;
-                                                lbRevisions.Items.Add(revCount + Strings.wPeriod + s + Strings.wInsertion + textRun.InnerText);
+                                                totalRevCount++;
+                                                lbRevisions.Items.Add(totalRevCount + Strings.wPeriod + s + Strings.wInsertion + textRun.InnerText);
                                             }
                                         }
                                     }
                                 }                                
                             }
-                        }
 
-                        if (revCount + revCountHeader + revCountFooter == 0)
-                        {
-                            lbRevisions.Items.Add("No tracked changes in the document.");
+                            if (revCount + revCountHeader + revCountFooter == 0)
+                            {
+                                lbRevisions.Items.Add(s + " has no tracked changes in the document.");
+                            }
                         }
                     }
                     else
