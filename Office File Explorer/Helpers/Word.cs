@@ -53,22 +53,25 @@ namespace Office_File_Explorer.Helpers
                 // still not sure why that happens, ongoing debugging to figure that out
                 // until then, if I just save at each loop and then keep running the code until the bookmark count is 0
                 // they all eventually get deleted
-                foreach (BookmarkStart bs in bkStartList)
+                if (Properties.Settings.Default.DeleteOnlyCommentBookmarks == false)
                 {
-                    bs.Remove();
-                    fSuccess = true;
+                    foreach (BookmarkStart bs in bkStartList)
+                    {
+                        bs.Remove();
+                        fSuccess = true;
+                    }
+
+                    document.Save();
+
+                    foreach (BookmarkEnd be in bkEndList)
+                    {
+                        be.Remove();
+                        fSuccess = true;
+                    }
+
+                    document.Save();
                 }
-
-                document.Save();
-
-                foreach (BookmarkEnd be in bkEndList)
-                {
-                    be.Remove();
-                    fSuccess = true;
-                }
-
-                document.Save();
-
+                
                 // now check for bookmarks in comments
                 if (document.MainDocumentPart.WordprocessingCommentsPart is not null)
                 {
@@ -92,9 +95,13 @@ namespace Office_File_Explorer.Helpers
                     }
                 }
 
-                bkCount += bkStartList.Count();
+                if (Properties.Settings.Default.DeleteOnlyCommentBookmarks == false)
+                {
+                    bkCount += bkStartList.Count();
+                    bkCount += bkEndList.Count();
+                }
+                                
                 bkCount += bkStartCommentList.Count();
-                bkCount += bkEndList.Count();
                 bkCount += bkEndCommentList.Count();
 
                 if (fSuccess)

@@ -179,11 +179,13 @@ namespace Office_File_Explorer.WinForms
                 {
                     cbAuthors.Enabled = false;
                     lbRevisions.Enabled = false;
+                    BtnAcceptChanges.Enabled = false;
                     lbRevisions.Items.Clear();
                 }
                 else
                 {
                     cbAuthors.Enabled = true;
+                    cbAuthors.Items.Clear();
                     lbRevisions.Enabled = true;
                     BtnAcceptChanges.Enabled = true;
 

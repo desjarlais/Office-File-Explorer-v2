@@ -53,6 +53,11 @@ namespace Office_File_Explorer.WinForms
             {
                 ckbBackupOnOpen.Checked = true;
             }
+
+            if (Properties.Settings.Default.DeleteOnlyCommentBookmarks == true)
+            {
+                ckbDeleteOnlyCommentBookmarks.Checked = true;
+            }
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -64,6 +69,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.DeleteCopiesOnExit = ckbDeleteOnExit.Checked;
             Properties.Settings.Default.CheckZipItemCorrupt = ckbZipItemCorrupt.Checked;
             Properties.Settings.Default.BackupOnOpen = ckbBackupOnOpen.Checked;
+            Properties.Settings.Default.DeleteOnlyCommentBookmarks = ckbDeleteOnlyCommentBookmarks.Checked;
             Properties.Settings.Default.ClientID = tbxClientID.Text;
             Properties.Settings.Default.MySite = tbxSiteURL.Text;
 

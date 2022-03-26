@@ -142,5 +142,17 @@ namespace Office_File_Explorer.Properties {
                 this["MySite"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DeleteOnlyCommentBookmarks {
+            get {
+                return ((bool)(this["DeleteOnlyCommentBookmarks"]));
+            }
+            set {
+                this["DeleteOnlyCommentBookmarks"] = value;
+            }
+        }
     }
 }

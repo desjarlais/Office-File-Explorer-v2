@@ -52,6 +52,7 @@ namespace Office_File_Explorer.WinForms
             this.tbxTenant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.ckbDeleteOnlyCommentBookmarks = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -61,6 +62,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckbDeleteOnlyCommentBookmarks);
             this.groupBox1.Controls.Add(this.ckbFixGroupedShapes);
             this.groupBox1.Controls.Add(this.ckbListRsids);
             this.groupBox1.Controls.Add(this.ckbRemoveFallbackTags);
@@ -279,6 +281,16 @@ namespace Office_File_Explorer.WinForms
             this.label1.TabIndex = 0;
             this.label1.Text = "Client ID: ";
             // 
+            // ckbDeleteOnlyCommentBookmarks
+            // 
+            this.ckbDeleteOnlyCommentBookmarks.AutoSize = true;
+            this.ckbDeleteOnlyCommentBookmarks.Location = new System.Drawing.Point(19, 91);
+            this.ckbDeleteOnlyCommentBookmarks.Name = "ckbDeleteOnlyCommentBookmarks";
+            this.ckbDeleteOnlyCommentBookmarks.Size = new System.Drawing.Size(224, 19);
+            this.ckbDeleteOnlyCommentBookmarks.TabIndex = 4;
+            this.ckbDeleteOnlyCommentBookmarks.Text = "Delete Only Bookmarks In Comments";
+            this.ckbDeleteOnlyCommentBookmarks.UseVisualStyleBackColor = true;
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -338,5 +350,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbxSiteURL;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox ckbDeleteOnlyCommentBookmarks;
     }
 }
