@@ -657,7 +657,6 @@ namespace Office_File_Explorer.Helpers
                     foreach (O.Vml.Shape shape in document.MainDocumentPart.Document.Body.Descendants<O.Vml.Shape>())
                     {
                         bool isGroupedShape = false;
-                        count++;
                         foreach (var item in groupedShapes)
                         {
                             if (item == shape.Id)
@@ -668,6 +667,7 @@ namespace Office_File_Explorer.Helpers
 
                         if (isGroupedShape == false)
                         {
+                            count++;
                             tList.Add(count + Strings.wPeriod + shape.Id + Strings.wArrow + Strings.shpVml);
                         }
                     }
@@ -700,6 +700,13 @@ namespace Office_File_Explorer.Helpers
                     {
                         count++;
                         tList.Add(count + Strings.shpShape);
+                    }
+
+                    foreach (A.Pictures.Picture picture in document.MainDocumentPart.Document.Body.Descendants<A.Pictures.Picture>())
+                    {
+                        count++;
+                        tList.Add(count + Strings.wPeriod + picture.NonVisualPictureProperties.NonVisualDrawingProperties.Name 
+                            + Strings.wArrow + picture.NonVisualPictureProperties.NonVisualDrawingProperties.Description + Strings.wArrow + Strings.pptPicture);
                     }
 
                     foreach (A.Diagrams.Shape3D shape in document.MainDocumentPart.Document.Body.Descendants<A.Diagrams.Shape3D>())
