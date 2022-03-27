@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Windows.Forms;
 
@@ -125,6 +126,9 @@ namespace Office_File_Explorer.Helpers
         public const string errorUnableToFixDocument = "ERROR: Unable to fix document.";
         public const string shpOfficeDrawing = ". Office Drawing";
         public const string shpVml = "Vml Shape";
+        public const string shpVmlRectangle = "Vml Rectangle";
+        public const string shpGroupSpaces = "    ";
+        public const string shpGroup = "Vml Group";
         public const string shpMath = ". Math Shape";
         public const string shpDrawingDgm = ". Drawing Diagram Shape";
         public const string shpChartDraw = ". Chart Drawing Shape";

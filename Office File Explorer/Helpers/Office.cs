@@ -23,6 +23,7 @@ using O = DocumentFormat.OpenXml;
 using AO = DocumentFormat.OpenXml.Office.Drawing;
 using A = DocumentFormat.OpenXml.Drawing;
 using Path = System.IO.Path;
+using System.Reflection;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -592,7 +593,7 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetShapes(string path, string fileType)
         {
             List<string> tList = new List<string>();
-
+            List<string> groupedShapes = new List<string>();
             int count = 0;
 
             if (fileType == Strings.oAppWord)
@@ -600,6 +601,29 @@ namespace Office_File_Explorer.Helpers
                 // with Word, we can just run through the entire body and get the shapes
                 using (WordprocessingDocument document = WordprocessingDocument.Open(path, false))
                 {
+                    foreach (O.Vml.Group group in document.MainDocumentPart.Document.Body.Descendants<O.Vml.Group>())
+                    {
+                        count++;
+                        tList.Add(count + Strings.wPeriod + group.Id + Strings.wArrow + Strings.shpGroup);
+                        foreach (var gItem in group)
+                        {
+                            if (gItem.GetType().ToString() == "DocumentFormat.OpenXml.Vml.Shape")
+                            {
+                                count++;
+                                PropertyInfo prop = gItem.GetType().GetProperty("Id");
+                                tList.Add(count + Strings.wPeriod + Strings.shpGroupSpaces + prop.GetValue(gItem) + Strings.wArrow + Strings.shpVml);
+                                groupedShapes.Add(prop.GetValue(gItem).ToString());
+                            }
+                            else if (gItem.GetType().ToString() == "DocumentFormat.OpenXml.Vml.Rectangle")
+                            {
+                                count++;
+                                PropertyInfo prop = gItem.GetType().GetProperty("Id");
+                                tList.Add(count + Strings.wPeriod + Strings.shpGroupSpaces + prop.GetValue(gItem) + Strings.wArrow + Strings.shpVmlRectangle);
+                                groupedShapes.Add(prop.GetValue(gItem).ToString());
+                            }
+                        }
+                    }
+
                     foreach (ChartPart c in document.MainDocumentPart.ChartParts)
                     {
                         count++;
@@ -612,10 +636,40 @@ namespace Office_File_Explorer.Helpers
                         tList.Add(count + Strings.shpOfficeDrawing);
                     }
 
+                    foreach (O.Vml.Rectangle rectangle in document.MainDocumentPart.Document.Body.Descendants<O.Vml.Rectangle>())
+                    {
+                        bool isGroupedShape = false;
+                        count++;
+                        foreach (var item in groupedShapes)
+                        {
+                            if (item == rectangle.Id)
+                            {
+                                isGroupedShape = true;
+                            }
+                        }
+
+                        if (isGroupedShape == false)
+                        {
+                            tList.Add(count + Strings.wPeriod + rectangle.Id + Strings.wArrow + Strings.shpVmlRectangle);
+                        }
+                    }
+
                     foreach (O.Vml.Shape shape in document.MainDocumentPart.Document.Body.Descendants<O.Vml.Shape>())
                     {
+                        bool isGroupedShape = false;
                         count++;
-                        tList.Add(count + Strings.wPeriod + shape.Id + Strings.wArrow + Strings.shpVml);
+                        foreach (var item in groupedShapes)
+                        {
+                            if (item == shape.Id)
+                            {
+                                isGroupedShape = true;
+                            }
+                        }
+
+                        if (isGroupedShape == false)
+                        {
+                            tList.Add(count + Strings.wPeriod + shape.Id + Strings.wArrow + Strings.shpVml);
+                        }
                     }
 
                     foreach (O.Math.Shape shape in document.MainDocumentPart.Document.Body.Descendants<O.Math.Shape>())
