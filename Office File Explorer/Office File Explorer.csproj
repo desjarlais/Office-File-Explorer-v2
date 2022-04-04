@@ -20,9 +20,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.15.0" />
-    <PackageReference Include="Microsoft.Graph" Version="4.19.0" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.42.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
+    <PackageReference Include="Microsoft.Graph" Version="4.23.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.42.1" />
   </ItemGroup>
 
   <ItemGroup>

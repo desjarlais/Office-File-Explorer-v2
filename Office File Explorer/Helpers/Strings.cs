@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Windows.Forms;
 
@@ -7,6 +6,12 @@ namespace Office_File_Explorer.Helpers
 {
     public class Strings
     {
+        // char values
+        public const char dblQuote = '"';
+        public const char lessThan = '<';
+        public const char greaterThan = '>';
+        public const char backslash = '/';
+
         // byte values
         public const string bZero = "0";
         public const string bP = "80";
@@ -193,6 +198,7 @@ namespace Office_File_Explorer.Helpers
         public const string dfowTableGrid = "DocumentFormat.OpenXml.Wordprocessing.TableGrid";
         public const string dfowTableCell = "DocumentFormat.OpenXml.Wordprocessing.TableCell";
         public const string dfowTableRow = "DocumentFormat.OpenXml.Wordprocessing.TableRow";
+        public const string dfowAttachedTemplate = "DocumentFormat.OpenXml.Wordprocessing.AttachedTemplate";
 
         // powerpoint sdk refs (DocumentFormat.OpenXml.Presentation = dfop)
         public const string dfopNVSP = "DocumentFormat.OpenXml.Presentation.NonVisualShapeProperties";

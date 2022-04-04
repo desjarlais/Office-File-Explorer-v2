@@ -911,7 +911,7 @@ namespace Office_File_Explorer
                         {
                             if (Word.RemoveHeadersFooters(lblFilePath.Text) == true)
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Deleted Headers and Footers", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Headers and Footers Deleted", string.Empty);
                             }
                             else
                             {
@@ -923,7 +923,7 @@ namespace Office_File_Explorer
                         {
                             if (Word.RemoveComments(lblFilePath.Text) == true)
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Deleted Comments", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Comments Deleted", string.Empty);
                             }
                             else
                             {
@@ -935,7 +935,7 @@ namespace Office_File_Explorer
                         {
                             if (Word.RemoveEndnotes(lblFilePath.Text) == true)
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Deleted Endnotes", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Endnotes Deleted", string.Empty);
                             }
                             else
                             {
@@ -947,7 +947,7 @@ namespace Office_File_Explorer
                         {
                             if (Word.RemoveFootnotes(lblFilePath.Text) == true)
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Deleted Footnotes", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Footnotes Deleted", string.Empty);
                             }
                             else
                             {
@@ -974,7 +974,7 @@ namespace Office_File_Explorer
                         {
                             if (Word.DeleteHiddenText(lblFilePath.Text) == true)
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Deleted Hidden Text", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Hidden Text Deleted", string.Empty);
                             }
                             else
                             {
@@ -986,7 +986,7 @@ namespace Office_File_Explorer
                         {
                             if (Word.RemoveBreaks(lblFilePath.Text))
                             {
-                                LogInformation(LogInfoType.ClearAndAdd, "Deleted Page Breaks", string.Empty);
+                                LogInformation(LogInfoType.ClearAndAdd, "Page Breaks Deleted", string.Empty);
                             }
                             else
                             {
@@ -1084,7 +1084,7 @@ namespace Office_File_Explorer
                                         // if we are changing to Normal, delete the attachtemplate id ref
                                         foreach (OpenXmlElement oe in dsp.Settings)
                                         {
-                                            if (oe.ToString() == "DocumentFormat.OpenXml.Wordprocessing.AttachedTemplate")
+                                            if (oe.ToString() == Strings.dfowAttachedTemplate)
                                             {
                                                 oe.Remove();
                                                 isFileChanged = true;
@@ -1100,7 +1100,7 @@ namespace Office_File_Explorer
                                 }
                                 else
                                 {
-                                    LstDisplay.Items.Add("** No Changed Made To Attached Template **");
+                                    LstDisplay.Items.Add("** No Changes Made To Attached Template **");
                                 }
                             }
                         }
@@ -1320,7 +1320,7 @@ namespace Office_File_Explorer
                                     string strOutputFileName = strOutputPath + Path.GetFileNameWithoutExtension(strOriginalFile) + Strings.wFixedFileParentheses + strFileExtension;
 
                                     // run the command to convert the file "excelcnv.exe -nme -oice "strict-file-path" "converted-file-path""
-                                    string cParams = " -nme -oice " + '"' + lblFilePath.Text + '"' + Strings.wSpaceChar + '"' + strOutputFileName + '"';
+                                    string cParams = " -nme -oice " + Strings.dblQuote + lblFilePath.Text + Strings.dblQuote + Strings.wSpaceChar + Strings.dblQuote + strOutputFileName + Strings.dblQuote;
                                     var proc = Process.Start(excelcnvPath, cParams);
                                     proc.Close();
                                     LstDisplay.Items.Add(Strings.fileConvertSuccessful);
