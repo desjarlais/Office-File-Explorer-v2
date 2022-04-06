@@ -849,11 +849,13 @@ namespace Office_File_Explorer.WinForms
         {
             try
             {
+                Cursor = Cursors.WaitCursor;
                 lstOutput.Items.Clear();
 
                 foreach (string f in files)
                 {
-                    if (WordFixes.FixContentControlNamespaces(f))
+                    if (WordFixes.FixContentControlNamespaces(f) || WordFixes.FixContentControlNamespacesInHeader(f) || 
+                        WordFixes.FixContentControlNamespacesInFooter(f))
                     {
                         lstOutput.Items.Add(f + " : Quick Part Updated");
                     }

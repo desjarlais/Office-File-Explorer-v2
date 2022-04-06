@@ -1144,7 +1144,8 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.UpdateCcNamespaceGuid)
                         {
-                            if (WordFixes.FixContentControlNamespaces(lblFilePath.Text))
+                            if (WordFixes.FixContentControlNamespaces(lblFilePath.Text) || WordFixes.FixContentControlNamespacesInHeader(lblFilePath.Text) ||
+                                WordFixes.FixContentControlNamespacesInFooter(lblFilePath.Text))
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Quick Part Namespaces Updated", string.Empty);
                             }
