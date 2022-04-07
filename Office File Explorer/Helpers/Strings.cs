@@ -52,7 +52,9 @@ namespace Office_File_Explorer.Helpers
         public const string wProperties = "Properties";
         public const string wCoreProperties = "coreProperties";
         public const string wAllAuthors = "* All Authors *";
-
+        public const string wXmlNsStart = "xmlns:";
+        public const string wSPCustomXmlProperties = "p:properties";
+        public const string wSPDocManagement = "documentManagement";
 
         public const string wCompany = "Company";
         public const string wCreator = "creator";

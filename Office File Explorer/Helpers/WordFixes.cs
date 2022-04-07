@@ -110,11 +110,11 @@ namespace Office_File_Explorer.Helpers
                             // loop through the metadata and get the uri's
                             foreach (XmlNode xNode in xDoc.ChildNodes)
                             {
-                                if (xNode.Name == "p:properties")
+                                if (xNode.Name == Strings.wSPCustomXmlProperties)
                                 {
                                     foreach (XmlNode xNode2 in xNode.ChildNodes)
                                     {
-                                        if (xNode2.Name == "documentManagement")
+                                        if (xNode2.Name == Strings.wSPDocManagement)
                                         {
                                             // loop each custom xml and find the name that matches the xpath from the content control
                                             // check the val of the custom xml ns with the prefixmapping ns value
@@ -175,11 +175,11 @@ namespace Office_File_Explorer.Helpers
                                         string[] prefixMappings = oxa.Value.Split(' ');
                                         foreach (string s in prefixMappings)
                                         {
-                                            if (s.StartsWith("xmlns:" + oldNs))
+                                            if (s.StartsWith(Strings.wXmlNsStart + oldNs))
                                             {
                                                 // prep the namespaces 
-                                                string oldNamespace = "xmlns:" + oldNs + "=" + oldGuid;
-                                                string newNamespace = "xmlns:" + oldNs + "='" + newGuid + "'";
+                                                string oldNamespace = Strings.wXmlNsStart + oldNs + Strings.wEqualNoSpace + oldGuid;
+                                                string newNamespace = Strings.wXmlNsStart + oldNs + "='" + newGuid + "'";
 
                                                 // create the databinding object that will replace the old value
                                                 DataBinding db = new DataBinding();
@@ -213,6 +213,11 @@ namespace Office_File_Explorer.Helpers
             return corruptionFound;
         }
 
+        /// <summary>
+        /// same as FixContentControlNamespaces but checks the header
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixContentControlNamespacesInHeader(string filePath)
         {
             corruptionFound = false;
@@ -301,11 +306,11 @@ namespace Office_File_Explorer.Helpers
                                 // loop through the metadata and get the uri's
                                 foreach (XmlNode xNode in xDoc.ChildNodes)
                                 {
-                                    if (xNode.Name == "p:properties")
+                                    if (xNode.Name == Strings.wSPCustomXmlProperties)
                                     {
                                         foreach (XmlNode xNode2 in xNode.ChildNodes)
                                         {
-                                            if (xNode2.Name == "documentManagement")
+                                            if (xNode2.Name == Strings.wSPDocManagement)
                                             {
                                                 // loop each custom xml and find the name that matches the xpath from the content control
                                                 // check the val of the custom xml ns with the prefixmapping ns value
@@ -324,7 +329,7 @@ namespace Office_File_Explorer.Helpers
                                                                 {
                                                                     foreach (string pm in prefixMappingList)
                                                                     {
-                                                                        if (pm.StartsWith("xmlns:" + clientNs[0]))
+                                                                        if (pm.StartsWith(Strings.wXmlNsStart + clientNs[0]))
                                                                         {
                                                                             string[] serverNs = pm.Split('=');
                                                                             string newServerNs = serverNs[1].Replace("'", string.Empty);
@@ -366,11 +371,11 @@ namespace Office_File_Explorer.Helpers
                                             string[] prefixMappings = oxa.Value.Split(' ');
                                             foreach (string s in prefixMappings)
                                             {
-                                                if (s.StartsWith("xmlns:" + oldNs))
+                                                if (s.StartsWith(Strings.wXmlNsStart + oldNs))
                                                 {
                                                     // prep the namespaces 
-                                                    string oldNamespace = "xmlns:" + oldNs + "=" + oldGuid;
-                                                    string newNamespace = "xmlns:" + oldNs + "='" + newGuid + "'";
+                                                    string oldNamespace = Strings.wXmlNsStart + oldNs + Strings.wEqualNoSpace + oldGuid;
+                                                    string newNamespace = Strings.wXmlNsStart + oldNs + "='" + newGuid + "'";
 
                                                     // create the databinding object that will replace the old value
                                                     DataBinding db = new DataBinding();
@@ -405,6 +410,11 @@ namespace Office_File_Explorer.Helpers
             return corruptionFound;
         }
 
+        /// <summary>
+        /// same as FixContentControlNamespaces but checks the footer
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixContentControlNamespacesInFooter(string filePath)
         {
             corruptionFound = false;
@@ -493,11 +503,11 @@ namespace Office_File_Explorer.Helpers
                                 // loop through the metadata and get the uri's
                                 foreach (XmlNode xNode in xDoc.ChildNodes)
                                 {
-                                    if (xNode.Name == "p:properties")
+                                    if (xNode.Name == Strings.wSPCustomXmlProperties)
                                     {
                                         foreach (XmlNode xNode2 in xNode.ChildNodes)
                                         {
-                                            if (xNode2.Name == "documentManagement")
+                                            if (xNode2.Name == Strings.wSPDocManagement)
                                             {
                                                 // loop each custom xml and find the name that matches the xpath from the content control
                                                 // check the val of the custom xml ns with the prefixmapping ns value
@@ -516,7 +526,7 @@ namespace Office_File_Explorer.Helpers
                                                                 {
                                                                     foreach (string pm in prefixMappingList)
                                                                     {
-                                                                        if (pm.StartsWith("xmlns:" + clientNs[0]))
+                                                                        if (pm.StartsWith(Strings.wXmlNsStart + clientNs[0]))
                                                                         {
                                                                             string[] serverNs = pm.Split('=');
                                                                             string newServerNs = serverNs[1].Replace("'", string.Empty);
@@ -558,11 +568,11 @@ namespace Office_File_Explorer.Helpers
                                             string[] prefixMappings = oxa.Value.Split(' ');
                                             foreach (string s in prefixMappings)
                                             {
-                                                if (s.StartsWith("xmlns:" + oldNs))
+                                                if (s.StartsWith(Strings.wXmlNsStart + oldNs))
                                                 {
                                                     // prep the namespaces 
-                                                    string oldNamespace = "xmlns:" + oldNs + "=" + oldGuid;
-                                                    string newNamespace = "xmlns:" + oldNs + "='" + newGuid + "'";
+                                                    string oldNamespace = Strings.wXmlNsStart + oldNs + Strings.wEqualNoSpace + oldGuid;
+                                                    string newNamespace = Strings.wXmlNsStart + oldNs + "='" + newGuid + "'";
 
                                                     // create the databinding object that will replace the old value
                                                     DataBinding db = new DataBinding();
