@@ -837,8 +837,7 @@ namespace Office_File_Explorer.Helpers
                     Document doc = wdDoc.MainDocumentPart.Document;
 
                     // Remove references to the headers and footers.
-                    var headers =
-                      doc.Descendants<HeaderReference>().ToList();
+                    var headers = doc.Descendants<HeaderReference>().ToList();
                     foreach (var header in headers)
                     {
                         header.Parent.RemoveChild(header);
@@ -914,19 +913,29 @@ namespace Office_File_Explorer.Helpers
                 {
                     StringBuilder sb = new StringBuilder();
                     int fCount = 0;
+                    int beginLevel = 0;
 
                     foreach (string s in fieldCharList)
                     {
                         if (s == Strings.wBegin)
                         {
+                            beginLevel++;
                             continue;
                         }
                         else if (s == Strings.wEnd)
                         {
-                            // display the field code values
-                            fCount++;
-                            ltFieldCodes.Add(fCount + Strings.wPeriod + sb);
-                            sb.Clear();
+                            if (beginLevel > 1)
+                            {
+                                beginLevel--;
+                            }
+                            else
+                            {
+                                // display the field code values
+                                fCount++;
+                                ltFieldCodes.Add(fCount + Strings.wPeriod + sb);
+                                sb.Clear();
+                                beginLevel = 0;
+                            }
                         }
                         else
                         {
@@ -938,6 +947,208 @@ namespace Office_File_Explorer.Helpers
                     {
                         fCount++;
                         ltFieldCodes.Add(fCount + Strings.wPeriod + s);
+                    }
+                }
+            }
+
+            return ltFieldCodes;
+        }
+
+        public static List<string> LstFieldCodesInHeader(string fPath)
+        {
+            List<string> ltFieldCodes = new List<string>();
+
+            using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
+            {
+                foreach (HeaderPart hp in package.MainDocumentPart.HeaderParts)
+                {
+                    IEnumerable<Run> rList = hp.Header.Descendants<Run>();
+                    IEnumerable<Paragraph> pList = hp.Header.Descendants<Paragraph>();
+
+                    List<string> fieldCharList = new List<string>();
+                    List<string> fieldCodeList = new List<string>();
+
+                    foreach (Run r in rList)
+                    {
+                        foreach (OpenXmlElement oxe in r.ChildElements)
+                        {
+                            if (oxe.LocalName == "fldChar")
+                            {
+                                FieldChar fc = new FieldChar();
+                                fc = (FieldChar)oxe;
+                                if (fc.FieldCharType == Strings.wBegin)
+                                {
+                                    fieldCharList.Add(Strings.wBegin);
+                                }
+                                else if (fc.FieldCharType == Strings.wEnd)
+                                {
+                                    fieldCharList.Add(Strings.wEnd);
+                                }
+                            }
+                            else if (oxe.LocalName == "instrText")
+                            {
+                                fieldCharList.Add(oxe.InnerText);
+                            }
+                        }
+                    }
+
+                    foreach (Paragraph p in pList)
+                    {
+                        foreach (OpenXmlElement oxe in p.ChildElements)
+                        {
+                            if (oxe.LocalName == "fldSimple")
+                            {
+                                SimpleField sf = new SimpleField();
+                                sf = (SimpleField)oxe;
+                                fieldCodeList.Add(sf.Instruction);
+                            }
+                        }
+                    }
+
+                    if (fieldCharList.Count == 0 && fieldCodeList.Count == 0)
+                    {
+                        return ltFieldCodes;
+                    }
+                    else
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        int fCount = 0;
+                        int beginLevel = 0;
+
+                        foreach (string s in fieldCharList)
+                        {
+                            if (s == Strings.wBegin)
+                            {
+                                beginLevel++;
+                                continue;
+                            }
+                            else if (s == Strings.wEnd)
+                            {
+                                if (beginLevel > 1)
+                                {
+                                    beginLevel--;
+                                }
+                                else
+                                {
+                                    // display the field code values
+                                    fCount++;
+                                    ltFieldCodes.Add(fCount + Strings.wPeriod + sb);
+                                    sb.Clear();
+                                    beginLevel = 0;
+                                }
+                            }
+                            else
+                            {
+                                sb.Append(s);
+                            }
+                        }
+
+                        foreach (string s in fieldCodeList)
+                        {
+                            fCount++;
+                            ltFieldCodes.Add(fCount + Strings.wPeriod + s);
+                        }
+                    }
+                }
+            }
+
+            return ltFieldCodes;
+        }
+
+        public static List<string> LstFieldCodesInFooter(string fPath)
+        {
+            List<string> ltFieldCodes = new List<string>();
+
+            using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
+            {
+                foreach (FooterPart fp in package.MainDocumentPart.FooterParts)
+                {
+                    IEnumerable<Run> rList = fp.Footer.Descendants<Run>();
+                    IEnumerable<Paragraph> pList = fp.Footer.Descendants<Paragraph>();
+
+                    List<string> fieldCharList = new List<string>();
+                    List<string> fieldCodeList = new List<string>();
+
+                    foreach (Run r in rList)
+                    {
+                        foreach (OpenXmlElement oxe in r.ChildElements)
+                        {
+                            if (oxe.LocalName == "fldChar")
+                            {
+                                FieldChar fc = new FieldChar();
+                                fc = (FieldChar)oxe;
+                                if (fc.FieldCharType == Strings.wBegin)
+                                {
+                                    fieldCharList.Add(Strings.wBegin);
+                                }
+                                else if (fc.FieldCharType == Strings.wEnd)
+                                {
+                                    fieldCharList.Add(Strings.wEnd);
+                                }
+                            }
+                            else if (oxe.LocalName == "instrText")
+                            {
+                                fieldCharList.Add(oxe.InnerText);
+                            }
+                        }
+                    }
+
+                    foreach (Paragraph p in pList)
+                    {
+                        foreach (OpenXmlElement oxe in p.ChildElements)
+                        {
+                            if (oxe.LocalName == "fldSimple")
+                            {
+                                SimpleField sf = new SimpleField();
+                                sf = (SimpleField)oxe;
+                                fieldCodeList.Add(sf.Instruction);
+                            }
+                        }
+                    }
+
+                    if (fieldCharList.Count == 0 && fieldCodeList.Count == 0)
+                    {
+                        return ltFieldCodes;
+                    }
+                    else
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        int fCount = 0;
+                        int beginLevel = 0;
+
+                        foreach (string s in fieldCharList)
+                        {
+                            if (s == Strings.wBegin)
+                            {
+                                beginLevel++;
+                                continue;
+                            }
+                            else if (s == Strings.wEnd)
+                            {
+                                if (beginLevel > 1)
+                                {
+                                    beginLevel--;
+                                }
+                                else
+                                {
+                                    // display the field code values
+                                    fCount++;
+                                    ltFieldCodes.Add(fCount + Strings.wPeriod + sb);
+                                    sb.Clear();
+                                    beginLevel = 0;
+                                }
+                            }
+                            else
+                            {
+                                sb.Append(s);
+                            }
+                        }
+
+                        foreach (string s in fieldCodeList)
+                        {
+                            fCount++;
+                            ltFieldCodes.Add(fCount + Strings.wPeriod + s);
+                        }
                     }
                 }
             }

@@ -636,6 +636,10 @@ namespace Office_File_Explorer
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wFldCodes + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstFieldCodes(lblFilePath.Text), Strings.wFldCodes);
+                            LstDisplay.Items.Add(" ** Header Field Codes **");
+                            DisplayListContents(Word.LstFieldCodesInHeader(lblFilePath.Text), Strings.wFldCodes);
+                            LstDisplay.Items.Add(" ** Footer Field Codes **");
+                            DisplayListContents(Word.LstFieldCodesInFooter(lblFilePath.Text), Strings.wFldCodes);
                         }
 
                         if (cmds.HasFlag(AppUtilities.WordViewCmds.Tables))
