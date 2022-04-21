@@ -34,15 +34,17 @@ namespace Office_File_Explorer.WinForms
             this.txbResult = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.BtnParseLicense = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // txbEncoded
             // 
-            this.txbEncoded.Location = new System.Drawing.Point(11, 27);
+            this.txbEncoded.Location = new System.Drawing.Point(11, 34);
             this.txbEncoded.Multiline = true;
             this.txbEncoded.Name = "txbEncoded";
             this.txbEncoded.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbEncoded.Size = new System.Drawing.Size(666, 197);
+            this.txbEncoded.Size = new System.Drawing.Size(666, 190);
             this.txbEncoded.TabIndex = 0;
             this.txbEncoded.TextChanged += new System.EventHandler(this.TxbEncoded_TextChanged);
             // 
@@ -73,11 +75,26 @@ namespace Office_File_Explorer.WinForms
             this.label2.TabIndex = 3;
             this.label2.Text = "Base64 Decoded Text";
             // 
+            // BtnParseLicense
+            // 
+            this.BtnParseLicense.Location = new System.Drawing.Point(552, 5);
+            this.BtnParseLicense.Name = "BtnParseLicense";
+            this.BtnParseLicense.Size = new System.Drawing.Size(124, 23);
+            this.BtnParseLicense.TabIndex = 4;
+            this.BtnParseLicense.Text = "Parse License File";
+            this.BtnParseLicense.UseVisualStyleBackColor = true;
+            this.BtnParseLicense.Click += new System.EventHandler(this.BtnParseLicense_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // FrmBase64
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(688, 542);
+            this.Controls.Add(this.BtnParseLicense);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txbResult);
@@ -102,5 +119,7 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.TextBox txbResult;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button BtnParseLicense;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -40,6 +41,27 @@ namespace Office_File_Explorer.WinForms
             if (e.KeyCode == Keys.Escape)
             {
                 Close();
+            }
+        }
+
+        private void BtnParseLicense_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fDialog = new OpenFileDialog
+            {
+                Title = "Select Office 365 License File.",
+                Filter = "License Files | *.*",
+                RestoreDirectory = true,
+                InitialDirectory = @"%userprofile%"
+            };
+
+            if (fDialog.ShowDialog() == DialogResult.OK && Path.GetExtension(fDialog.FileName) == string.Empty)
+            {
+                string text = File.ReadAllText(fDialog.FileName);
+                txbResult.Text = Base64Decode(text);
+            }
+            else
+            {
+                txbResult.Text = "Not A Valid License File!";
             }
         }
     }

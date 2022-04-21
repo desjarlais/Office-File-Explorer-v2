@@ -491,8 +491,15 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
+        /// <summary>
+        /// standard search and replace of text
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="find"></param>
+        /// <param name="replace"></param>
         public static void SearchAndReplace(string document, string find, string replace)
         {
+            // if the custom xml option is enabled, only do search and replace in custom xml parts
             if (Properties.Settings.Default.SearchAndReplaceCustomXml)
             {
                 using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(document, true))
