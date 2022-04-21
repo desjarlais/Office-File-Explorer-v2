@@ -35,5 +35,8 @@
     <Setting Name="DeleteOnlyCommentBookmarks" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="SearchAndReplaceCustomXml" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

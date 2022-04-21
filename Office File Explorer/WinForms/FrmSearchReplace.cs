@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms
@@ -24,6 +17,7 @@ namespace Office_File_Explorer.WinForms
                 f.FindTextProperty = tbFind.Text;
                 f.ReplaceTextProperty = tbReplace.Text;
             }
+            Close();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)

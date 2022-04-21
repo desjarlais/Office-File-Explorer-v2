@@ -31,6 +31,8 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSettings));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ckbChooseGuidForNamespaceFix = new System.Windows.Forms.CheckBox();
+            this.ckbDeleteOnlyCommentBookmarks = new System.Windows.Forms.CheckBox();
             this.ckbFixGroupedShapes = new System.Windows.Forms.CheckBox();
             this.ckbListRsids = new System.Windows.Forms.CheckBox();
             this.ckbRemoveFallbackTags = new System.Windows.Forms.CheckBox();
@@ -52,7 +54,6 @@ namespace Office_File_Explorer.WinForms
             this.tbxTenant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.ckbDeleteOnlyCommentBookmarks = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -62,6 +63,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckbChooseGuidForNamespaceFix);
             this.groupBox1.Controls.Add(this.ckbDeleteOnlyCommentBookmarks);
             this.groupBox1.Controls.Add(this.ckbFixGroupedShapes);
             this.groupBox1.Controls.Add(this.ckbListRsids);
@@ -72,6 +74,26 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Corrupt Document";
+            // 
+            // ckbChooseGuidForNamespaceFix
+            // 
+            this.ckbChooseGuidForNamespaceFix.AutoSize = true;
+            this.ckbChooseGuidForNamespaceFix.Location = new System.Drawing.Point(19, 116);
+            this.ckbChooseGuidForNamespaceFix.Name = "ckbChooseGuidForNamespaceFix";
+            this.ckbChooseGuidForNamespaceFix.Size = new System.Drawing.Size(199, 19);
+            this.ckbChooseGuidForNamespaceFix.TabIndex = 4;
+            this.ckbChooseGuidForNamespaceFix.Text = "Search And Replace Custom Xml";
+            this.ckbChooseGuidForNamespaceFix.UseVisualStyleBackColor = true;
+            // 
+            // ckbDeleteOnlyCommentBookmarks
+            // 
+            this.ckbDeleteOnlyCommentBookmarks.AutoSize = true;
+            this.ckbDeleteOnlyCommentBookmarks.Location = new System.Drawing.Point(19, 91);
+            this.ckbDeleteOnlyCommentBookmarks.Name = "ckbDeleteOnlyCommentBookmarks";
+            this.ckbDeleteOnlyCommentBookmarks.Size = new System.Drawing.Size(224, 19);
+            this.ckbDeleteOnlyCommentBookmarks.TabIndex = 4;
+            this.ckbDeleteOnlyCommentBookmarks.Text = "Delete Only Bookmarks In Comments";
+            this.ckbDeleteOnlyCommentBookmarks.UseVisualStyleBackColor = true;
             // 
             // ckbFixGroupedShapes
             // 
@@ -281,16 +303,6 @@ namespace Office_File_Explorer.WinForms
             this.label1.TabIndex = 0;
             this.label1.Text = "Client ID: ";
             // 
-            // ckbDeleteOnlyCommentBookmarks
-            // 
-            this.ckbDeleteOnlyCommentBookmarks.AutoSize = true;
-            this.ckbDeleteOnlyCommentBookmarks.Location = new System.Drawing.Point(19, 91);
-            this.ckbDeleteOnlyCommentBookmarks.Name = "ckbDeleteOnlyCommentBookmarks";
-            this.ckbDeleteOnlyCommentBookmarks.Size = new System.Drawing.Size(224, 19);
-            this.ckbDeleteOnlyCommentBookmarks.TabIndex = 4;
-            this.ckbDeleteOnlyCommentBookmarks.Text = "Delete Only Bookmarks In Comments";
-            this.ckbDeleteOnlyCommentBookmarks.UseVisualStyleBackColor = true;
-            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -351,5 +363,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.TextBox tbxSiteURL;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox ckbDeleteOnlyCommentBookmarks;
+        private System.Windows.Forms.CheckBox ckbChooseGuidForNamespaceFix;
     }
 }
