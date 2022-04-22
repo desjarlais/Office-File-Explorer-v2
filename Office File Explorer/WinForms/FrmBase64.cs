@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 
@@ -48,7 +49,7 @@ namespace Office_File_Explorer.WinForms
         {
             OpenFileDialog fDialog = new OpenFileDialog
             {
-                Title = "Select Office 365 License File.",
+                Title = "Select License File.",
                 Filter = "License Files | *.*",
                 RestoreDirectory = true,
                 InitialDirectory = @"%userprofile%"
@@ -56,8 +57,10 @@ namespace Office_File_Explorer.WinForms
 
             if (fDialog.ShowDialog() == DialogResult.OK && Path.GetExtension(fDialog.FileName) == string.Empty)
             {
-                string text = File.ReadAllText(fDialog.FileName);
-                txbResult.Text = Base64Decode(text);
+                // display decoded value
+                byte[] bytes = File.ReadAllBytes(fDialog.FileName);
+                string text = Encoding.Unicode.GetString(bytes);
+                txbResult.Text = text;
             }
             else
             {
