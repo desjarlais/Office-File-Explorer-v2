@@ -81,7 +81,7 @@ namespace Office_File_Explorer.WinForms
             this.BtnParseLicense.Name = "BtnParseLicense";
             this.BtnParseLicense.Size = new System.Drawing.Size(124, 23);
             this.BtnParseLicense.TabIndex = 4;
-            this.BtnParseLicense.Text = "Parse License File";
+            this.BtnParseLicense.Text = "Open License File";
             this.BtnParseLicense.UseVisualStyleBackColor = true;
             this.BtnParseLicense.Click += new System.EventHandler(this.BtnParseLicense_Click);
             // 

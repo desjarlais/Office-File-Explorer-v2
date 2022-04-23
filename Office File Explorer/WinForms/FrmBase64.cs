@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 
@@ -45,6 +44,11 @@ namespace Office_File_Explorer.WinForms
             }
         }
 
+        /// <summary>
+        /// user will select the license file, then parse the first "License" portion and decode it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnParseLicense_Click(object sender, EventArgs e)
         {
             OpenFileDialog fDialog = new OpenFileDialog
@@ -57,10 +61,16 @@ namespace Office_File_Explorer.WinForms
 
             if (fDialog.ShowDialog() == DialogResult.OK && Path.GetExtension(fDialog.FileName) == string.Empty)
             {
-                // display decoded value
+                // get the decoded value from the file
                 byte[] bytes = File.ReadAllBytes(fDialog.FileName);
                 string text = Encoding.Unicode.GetString(bytes);
-                txbResult.Text = text;
+
+                // remove initial 12 chars, then the last " char before adding the first split into the encoded textbox
+                // the TextChanged event should handle decoding the value
+                string newtext = text.Remove(0, 12);
+                newtext = newtext.Replace('"', ' ');
+                string[] result = newtext.Split(new char[] { ',' });
+                txbEncoded.Text = result[0];
             }
             else
             {
