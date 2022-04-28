@@ -414,7 +414,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// this is used to output content to the listbox
+        /// output content to the listbox
         /// </summary>
         /// <param name="output">the list of content to display</param>
         /// <param name="type">the type of content to display</param>
@@ -1867,7 +1867,7 @@ namespace Office_File_Explorer
                     }
                 }
 
-                // need to reset the globals
+                // reset the globals
                 IsFixed = false;
                 IsRegularXmlTag = false;
                 FixedFallback = string.Empty;

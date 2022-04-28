@@ -58,11 +58,6 @@ namespace Office_File_Explorer.WinForms
             {
                 ckbDeleteOnlyCommentBookmarks.Checked = true;
             }
-
-            if (Properties.Settings.Default.SearchAndReplaceCustomXml == true)
-            {
-                ckbChooseGuidForNamespaceFix.Checked = true;
-            }
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -77,7 +72,6 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.DeleteOnlyCommentBookmarks = ckbDeleteOnlyCommentBookmarks.Checked;
             Properties.Settings.Default.ClientID = tbxClientID.Text;
             Properties.Settings.Default.MySite = tbxSiteURL.Text;
-            Properties.Settings.Default.SearchAndReplaceCustomXml = ckbChooseGuidForNamespaceFix.Checked;
 
             if (rdoSAX.Checked == true)
             {

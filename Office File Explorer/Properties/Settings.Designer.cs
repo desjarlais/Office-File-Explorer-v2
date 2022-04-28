@@ -154,17 +154,5 @@ namespace Office_File_Explorer.Properties {
                 this["DeleteOnlyCommentBookmarks"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SearchAndReplaceCustomXml {
-            get {
-                return ((bool)(this["SearchAndReplaceCustomXml"]));
-            }
-            set {
-                this["SearchAndReplaceCustomXml"] = value;
-            }
-        }
     }
 }

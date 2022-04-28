@@ -499,46 +499,20 @@ namespace Office_File_Explorer.Helpers
         /// <param name="replace"></param>
         public static void SearchAndReplace(string document, string find, string replace)
         {
-            // if the custom xml option is enabled, only do search and replace in custom xml parts
-            if (Properties.Settings.Default.SearchAndReplaceCustomXml)
+            using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(document, true))
             {
-                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(document, true))
+                string docText = null;
+                using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
                 {
-                    string docText = null;
-                    foreach (CustomXmlPart cxp in wordDoc.MainDocumentPart.CustomXmlParts)
-                    {
-                        using (StreamReader sr = new StreamReader(cxp.GetStream()))
-                        {
-                            docText = sr.ReadToEnd();
-                        }
-
-                        Regex regexText = new Regex(find);
-                        docText = regexText.Replace(docText, replace);
-
-                        using (StreamWriter sw = new StreamWriter(cxp.GetStream(FileMode.Create)))
-                        {
-                            sw.Write(docText);
-                        }
-                    }
+                    docText = sr.ReadToEnd();
                 }
-            }
-            else
-            {
-                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(document, true))
+
+                Regex regexText = new Regex(find);
+                docText = regexText.Replace(docText, replace);
+
+                using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
                 {
-                    string docText = null;
-                    using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
-                    {
-                        docText = sr.ReadToEnd();
-                    }
-
-                    Regex regexText = new Regex(find);
-                    docText = regexText.Replace(docText, replace);
-
-                    using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
-                    {
-                        sw.Write(docText);
-                    }
+                    sw.Write(docText);
                 }
             }
         }

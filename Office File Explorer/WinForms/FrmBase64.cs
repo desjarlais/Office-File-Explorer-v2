@@ -45,7 +45,8 @@ namespace Office_File_Explorer.WinForms
         }
 
         /// <summary>
-        /// user will select the license file, then parse the first "License" portion and decode it
+        /// Office 365 uses a file with no extension in the user profile for license information
+        /// parse the first "License" portion of the encoded value and decode it
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -63,13 +64,12 @@ namespace Office_File_Explorer.WinForms
             {
                 // get the decoded value from the file
                 byte[] bytes = File.ReadAllBytes(fDialog.FileName);
-                string text = Encoding.Unicode.GetString(bytes);
 
                 // remove initial 12 chars, then the last " char before adding the first split into the encoded textbox
                 // the TextChanged event should handle decoding the value
-                string newtext = text.Remove(0, 12);
-                newtext = newtext.Replace('"', ' ');
-                string[] result = newtext.Split(new char[] { ',' });
+                string encodedText = Encoding.Unicode.GetString(bytes).Remove(0, 12);
+                encodedText = encodedText.Replace('"', ' ');
+                string[] result = encodedText.Split(new char[] { ',' });
                 txbEncoded.Text = result[0];
             }
             else
