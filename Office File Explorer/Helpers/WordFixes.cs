@@ -19,6 +19,34 @@ namespace Office_File_Explorer.Helpers
         static bool corruptionFound = false;
 
         /// <summary>
+        /// table rows need at least one child element, besides table row props
+        /// if a table does not have any child elements, that row is corrupt and the doc is malformed
+        /// this function will remove those bad rows
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixTableRowCorruption(string filePath)
+        {
+            corruptionFound = false;
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+            {
+                IEnumerable<TableRow> tRows = document.MainDocumentPart.Document.Descendants<TableRow>();
+
+                foreach (TableRow tRow in tRows)
+                {
+                    if (tRow.ChildElements.Count == 0)
+                    {
+                        tRow.Remove();
+                        corruptionFound = true;
+                    }
+                }
+            }
+
+            return corruptionFound;
+        }
+
+        /// <summary>
         /// there are SharePoint(SP) migration scenarios as well as SP Copy To style scenarios where a document will move from one doc library to another
         /// this causes the guid associated with the mapped content control/quick part to change
         /// the custom xml item.xml file will get this new guid, but the document and its content controls will not get this update

@@ -58,7 +58,6 @@ namespace Office_File_Explorer.WinForms
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.rdoFixDataDescriptorW);
-            this.groupBox1.Controls.Add(this.rdoTryAllFixesW);
             this.groupBox1.Controls.Add(this.rdoFixMathAccentsW);
             this.groupBox1.Controls.Add(this.rdoFixContentControlsW);
             this.groupBox1.Controls.Add(this.rdoFixCommentHyperlinksW);
@@ -71,7 +70,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.rdoFixBookmarksW);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(369, 185);
+            this.groupBox1.Size = new System.Drawing.Size(369, 181);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Document";
@@ -92,7 +91,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.rdoTryAllFixesW.AutoSize = true;
             this.rdoTryAllFixesW.Enabled = false;
-            this.rdoTryAllFixesW.Location = new System.Drawing.Point(6, 160);
+            this.rdoTryAllFixesW.Location = new System.Drawing.Point(12, 199);
             this.rdoTryAllFixesW.Name = "rdoTryAllFixesW";
             this.rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
             this.rdoTryAllFixesW.TabIndex = 9;
@@ -166,10 +165,10 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixTablePropsW.Enabled = false;
             this.rdoFixTablePropsW.Location = new System.Drawing.Point(193, 97);
             this.rdoFixTablePropsW.Name = "rdoFixTablePropsW";
-            this.rdoFixTablePropsW.Size = new System.Drawing.Size(126, 19);
+            this.rdoFixTablePropsW.Size = new System.Drawing.Size(119, 19);
             this.rdoFixTablePropsW.TabIndex = 4;
             this.rdoFixTablePropsW.TabStop = true;
-            this.rdoFixTablePropsW.Text = "Fix Table Properties";
+            this.rdoFixTablePropsW.Text = "Fix Corrupt Tables";
             this.rdoFixTablePropsW.UseVisualStyleBackColor = true;
             // 
             // rdoFixListTemplatesW
@@ -226,7 +225,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.rdoFixNotesPageSizeP);
             this.groupBox2.Location = new System.Drawing.Point(387, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(201, 156);
+            this.groupBox2.Size = new System.Drawing.Size(201, 181);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PowerPoint Document";
@@ -260,7 +259,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.rdoFixStrictX);
             this.groupBox3.Location = new System.Drawing.Point(594, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(172, 156);
+            this.groupBox3.Size = new System.Drawing.Size(172, 181);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Excel Document";
@@ -279,7 +278,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(609, 174);
+            this.BtnOk.Location = new System.Drawing.Point(609, 199);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -289,7 +288,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(690, 174);
+            this.BtnCancel.Location = new System.Drawing.Point(690, 199);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 2;
@@ -301,9 +300,10 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(777, 204);
+            this.ClientSize = new System.Drawing.Size(777, 231);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnOk);
+            this.Controls.Add(this.rdoTryAllFixesW);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -320,6 +320,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

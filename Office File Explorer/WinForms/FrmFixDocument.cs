@@ -139,11 +139,11 @@ namespace Office_File_Explorer.WinForms
 
             if (rdoFixTablePropsW.Checked || tryAllFixes == true)
             {
-                if (WordFixes.FixTableGridProps(filePath) == true)
+                if (WordFixes.FixTableGridProps(filePath) == true || WordFixes.FixTableRowCorruption(filePath) == true)
                 {
                     SetCorruptionChecked(Strings.wTableProps);
                     isFileFixed = true;
-                    featureFixed.Add("Table Properties Fixed");
+                    featureFixed.Add("Table Corruption Fixed");
                 }
             }
 
