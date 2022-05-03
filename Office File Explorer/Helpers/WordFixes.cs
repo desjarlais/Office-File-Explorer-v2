@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.IO;
+using Office_File_Explorer.WinForms;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -46,6 +47,101 @@ namespace Office_File_Explorer.Helpers
             return corruptionFound;
         }
 
+        public static bool FixSharePointCustomXmlGuids(string filePath)
+        {
+            corruptionFound = false;
+
+            List<string> guids = new List<string>();
+            List<string> guidList = new List<string>();
+            string docMgmtUri = string.Empty;
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+            {
+                foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
+                {
+                    XmlDocument xDoc = new XmlDocument();
+
+                    // need to load as a stream to get around a .net bug where using GetStream wasn't closing out properly
+                    // this allows me to close the stream manually to avoid the exception
+                    Stream stream = cxp.GetStream();
+                    xDoc.Load(stream);
+
+                    if (xDoc.DocumentElement.NamespaceURI == Strings.schemaMetadataProperties)
+                    {
+                        // loop through the metadata and get the uri's
+                        foreach (XmlNode xNode in xDoc.ChildNodes)
+                        {
+                            if (xNode.Name == Strings.wSPCustomXmlProperties)
+                            {
+                                foreach (XmlNode xNode2 in xNode.ChildNodes)
+                                {
+                                    if (xNode2.Name == Strings.wSPDocManagement)
+                                    {
+                                        foreach (XmlNode xNode3 in xNode2.ChildNodes)
+                                        {
+                                            foreach (XmlAttribute xa in xNode3.Attributes)
+                                            {
+                                                if (xa.LocalName == "xmlns")
+                                                {
+                                                    guids.Add(xa.Value);
+                                                    docMgmtUri = cxp.Uri.ToString();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    stream.Close();
+                    guidList = guids.Distinct().ToList();
+                }
+            }
+
+            using (var f = new FrmSPCustomXmlGuids(guidList))
+            {
+                var result = f.ShowDialog();
+
+                if (f.newGuid != string.Empty)
+                {
+                    using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+                    {
+                        foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
+                        {
+                            if (cxp.Uri.ToString() == docMgmtUri)
+                            {
+                                string docText = null;
+                                using (StreamReader sr = new StreamReader(cxp.GetStream()))
+                                {
+                                    docText = sr.ReadToEnd();
+                                }
+
+                                Regex regexText = new Regex("[({]?[a-fA-F0-9]{8}[-]?([a-fA-F0-9]{4}[-]?){3}[a-fA-F0-9]{12}[})]?");
+                                foreach (Match m in regexText.Matches(docText))
+                                {
+                                    docText = docText.Replace(m.Value, f.newGuid);
+                                }
+                                
+                                using (StreamWriter sw = new StreamWriter(cxp.GetStream(FileMode.Create)))
+                                {
+                                    sw.Write(docText);
+                                    corruptionFound = true;
+                                }
+                            }
+                        }
+
+                        if (corruptionFound)
+                        {
+                            document.Save();
+                        }
+                    }
+                }
+            }
+
+            return corruptionFound;
+        }
+
         /// <summary>
         /// there are SharePoint(SP) migration scenarios as well as SP Copy To style scenarios where a document will move from one doc library to another
         /// this causes the guid associated with the mapped content control/quick part to change
@@ -58,6 +154,15 @@ namespace Office_File_Explorer.Helpers
         {
             corruptionFound = false;
             bool mismatchNamespaceFound;
+
+            // make sure guids are correct in SP custom xml first
+            if (Properties.Settings.Default.FixSPCustomXmlGuids)
+            {
+                if (FixSharePointCustomXmlGuids(filePath))
+                {
+                    corruptionFound = true;
+                }
+            }
 
             using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
             {
@@ -86,7 +191,6 @@ namespace Office_File_Explorer.Helpers
                     List<string> xPathList = new List<string>();
                     
                     mismatchNamespaceFound = false;
-                    corruptionFound = false;
 
                     SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
 

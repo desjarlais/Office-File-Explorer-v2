@@ -53,6 +53,7 @@ namespace Office_File_Explorer.WinForms
             this.tbxTenant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.ckbFixSPCustomXmlGuid = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -62,6 +63,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckbFixSPCustomXmlGuid);
             this.groupBox1.Controls.Add(this.ckbDeleteOnlyCommentBookmarks);
             this.groupBox1.Controls.Add(this.ckbFixGroupedShapes);
             this.groupBox1.Controls.Add(this.ckbListRsids);
@@ -291,6 +293,16 @@ namespace Office_File_Explorer.WinForms
             this.label1.TabIndex = 0;
             this.label1.Text = "Client ID: ";
             // 
+            // ckbFixSPCustomXmlGuid
+            // 
+            this.ckbFixSPCustomXmlGuid.AutoSize = true;
+            this.ckbFixSPCustomXmlGuid.Location = new System.Drawing.Point(19, 116);
+            this.ckbFixSPCustomXmlGuid.Name = "ckbFixSPCustomXmlGuid";
+            this.ckbFixSPCustomXmlGuid.Size = new System.Drawing.Size(203, 19);
+            this.ckbFixSPCustomXmlGuid.TabIndex = 4;
+            this.ckbFixSPCustomXmlGuid.Text = "Fix SharePoint Custom Xml Guids";
+            this.ckbFixSPCustomXmlGuid.UseVisualStyleBackColor = true;
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -351,5 +363,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.TextBox tbxSiteURL;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox ckbDeleteOnlyCommentBookmarks;
+        private System.Windows.Forms.CheckBox ckbFixSPCustomXmlGuid;
     }
 }

@@ -58,6 +58,11 @@ namespace Office_File_Explorer.WinForms
             {
                 ckbDeleteOnlyCommentBookmarks.Checked = true;
             }
+
+            if (Properties.Settings.Default.FixSPCustomXmlGuids == true)
+            {
+                ckbFixSPCustomXmlGuid.Checked = true;
+            }
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -72,6 +77,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.DeleteOnlyCommentBookmarks = ckbDeleteOnlyCommentBookmarks.Checked;
             Properties.Settings.Default.ClientID = tbxClientID.Text;
             Properties.Settings.Default.MySite = tbxSiteURL.Text;
+            Properties.Settings.Default.FixSPCustomXmlGuids = ckbFixSPCustomXmlGuid.Checked;
 
             if (rdoSAX.Checked == true)
             {
