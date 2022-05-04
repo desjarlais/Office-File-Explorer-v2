@@ -47,6 +47,12 @@ namespace Office_File_Explorer.Helpers
             return corruptionFound;
         }
 
+        /// <summary>
+        /// Unknown scenario exists where the backend custom xml guids for columns from SharePoint are different
+        /// this fix will populate a list of guids so the user can choose which one to use for the rest of the custom xml
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixSharePointCustomXmlGuids(string filePath)
         {
             corruptionFound = false;
@@ -101,6 +107,7 @@ namespace Office_File_Explorer.Helpers
 
             using (var f = new FrmSPCustomXmlGuids(guidList))
             {
+                // ask the user for the guid to replace the existing values with
                 var result = f.ShowDialog();
 
                 if (f.newGuid != string.Empty)
@@ -117,23 +124,23 @@ namespace Office_File_Explorer.Helpers
                                     docText = sr.ReadToEnd();
                                 }
 
+                                // find each guid and replace it with the user selected value
                                 Regex regexText = new Regex("[({]?[a-fA-F0-9]{8}[-]?([a-fA-F0-9]{4}[-]?){3}[a-fA-F0-9]{12}[})]?");
                                 foreach (Match m in regexText.Matches(docText))
                                 {
                                     docText = docText.Replace(m.Value, f.newGuid);
-                                }
-                                
-                                using (StreamWriter sw = new StreamWriter(cxp.GetStream(FileMode.Create)))
-                                {
-                                    sw.Write(docText);
                                     corruptionFound = true;
                                 }
+                                
+                                if (corruptionFound)
+                                {
+                                    using (StreamWriter sw = new StreamWriter(cxp.GetStream(FileMode.Create)))
+                                    {
+                                        sw.Write(docText);
+                                    }
+                                    document.Save();
+                                }
                             }
-                        }
-
-                        if (corruptionFound)
-                        {
-                            document.Save();
                         }
                     }
                 }

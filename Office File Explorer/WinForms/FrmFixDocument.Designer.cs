@@ -32,7 +32,6 @@ namespace Office_File_Explorer.WinForms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
-            this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
             this.rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
             this.rdoFixContentControlsW = new System.Windows.Forms.RadioButton();
             this.rdoFixCommentHyperlinksW = new System.Windows.Forms.RadioButton();
@@ -43,6 +42,7 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixEndnotesW = new System.Windows.Forms.RadioButton();
             this.rdoFixRevisionsW = new System.Windows.Forms.RadioButton();
             this.rdoFixBookmarksW = new System.Windows.Forms.RadioButton();
+            this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.rdoFixNotesPageSizeCustomP = new System.Windows.Forms.RadioButton();
             this.rdoFixNotesPageSizeP = new System.Windows.Forms.RadioButton();
@@ -59,6 +59,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.groupBox1.Controls.Add(this.rdoFixDataDescriptorW);
             this.groupBox1.Controls.Add(this.rdoFixMathAccentsW);
+            this.groupBox1.Controls.Add(this.rdoTryAllFixesW);
             this.groupBox1.Controls.Add(this.rdoFixContentControlsW);
             this.groupBox1.Controls.Add(this.rdoFixCommentHyperlinksW);
             this.groupBox1.Controls.Add(this.rdoFixHyperlinksW);
@@ -70,7 +71,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.rdoFixBookmarksW);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(369, 181);
+            this.groupBox1.Size = new System.Drawing.Size(369, 210);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Document";
@@ -86,18 +87,6 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixDataDescriptorW.TabStop = true;
             this.rdoFixDataDescriptorW.Text = "Fix Corrupt Zip Item";
             this.rdoFixDataDescriptorW.UseVisualStyleBackColor = true;
-            // 
-            // rdoTryAllFixesW
-            // 
-            this.rdoTryAllFixesW.AutoSize = true;
-            this.rdoTryAllFixesW.Enabled = false;
-            this.rdoTryAllFixesW.Location = new System.Drawing.Point(12, 199);
-            this.rdoTryAllFixesW.Name = "rdoTryAllFixesW";
-            this.rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
-            this.rdoTryAllFixesW.TabIndex = 9;
-            this.rdoTryAllFixesW.TabStop = true;
-            this.rdoTryAllFixesW.Text = "Try All Fixes";
-            this.rdoTryAllFixesW.UseVisualStyleBackColor = true;
             // 
             // rdoFixMathAccentsW
             // 
@@ -219,6 +208,18 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixBookmarksW.Text = "Fix Bookmarks";
             this.rdoFixBookmarksW.UseVisualStyleBackColor = true;
             // 
+            // rdoTryAllFixesW
+            // 
+            this.rdoTryAllFixesW.AutoSize = true;
+            this.rdoTryAllFixesW.Enabled = false;
+            this.rdoTryAllFixesW.Location = new System.Drawing.Point(6, 185);
+            this.rdoTryAllFixesW.Name = "rdoTryAllFixesW";
+            this.rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
+            this.rdoTryAllFixesW.TabIndex = 9;
+            this.rdoTryAllFixesW.TabStop = true;
+            this.rdoTryAllFixesW.Text = "Try All Fixes";
+            this.rdoTryAllFixesW.UseVisualStyleBackColor = true;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.rdoFixNotesPageSizeCustomP);
@@ -303,7 +304,6 @@ namespace Office_File_Explorer.WinForms
             this.ClientSize = new System.Drawing.Size(777, 231);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnOk);
-            this.Controls.Add(this.rdoTryAllFixesW);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -320,7 +320,6 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
