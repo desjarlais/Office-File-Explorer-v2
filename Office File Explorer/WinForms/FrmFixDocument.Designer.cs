@@ -33,6 +33,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
             this.rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
+            this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
             this.rdoFixContentControlsW = new System.Windows.Forms.RadioButton();
             this.rdoFixCommentHyperlinksW = new System.Windows.Forms.RadioButton();
             this.rdoFixHyperlinksW = new System.Windows.Forms.RadioButton();
@@ -42,7 +43,6 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixEndnotesW = new System.Windows.Forms.RadioButton();
             this.rdoFixRevisionsW = new System.Windows.Forms.RadioButton();
             this.rdoFixBookmarksW = new System.Windows.Forms.RadioButton();
-            this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.rdoFixNotesPageSizeCustomP = new System.Windows.Forms.RadioButton();
             this.rdoFixNotesPageSizeP = new System.Windows.Forms.RadioButton();
@@ -99,6 +99,18 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixMathAccentsW.TabStop = true;
             this.rdoFixMathAccentsW.Text = "Fix Corrupt Math Equations";
             this.rdoFixMathAccentsW.UseVisualStyleBackColor = true;
+            // 
+            // rdoTryAllFixesW
+            // 
+            this.rdoTryAllFixesW.AutoSize = true;
+            this.rdoTryAllFixesW.Enabled = false;
+            this.rdoTryAllFixesW.Location = new System.Drawing.Point(6, 185);
+            this.rdoTryAllFixesW.Name = "rdoTryAllFixesW";
+            this.rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
+            this.rdoTryAllFixesW.TabIndex = 9;
+            this.rdoTryAllFixesW.TabStop = true;
+            this.rdoTryAllFixesW.Text = "Try All Fixes";
+            this.rdoTryAllFixesW.UseVisualStyleBackColor = true;
             // 
             // rdoFixContentControlsW
             // 
@@ -208,25 +220,13 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixBookmarksW.Text = "Fix Bookmarks";
             this.rdoFixBookmarksW.UseVisualStyleBackColor = true;
             // 
-            // rdoTryAllFixesW
-            // 
-            this.rdoTryAllFixesW.AutoSize = true;
-            this.rdoTryAllFixesW.Enabled = false;
-            this.rdoTryAllFixesW.Location = new System.Drawing.Point(6, 185);
-            this.rdoTryAllFixesW.Name = "rdoTryAllFixesW";
-            this.rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
-            this.rdoTryAllFixesW.TabIndex = 9;
-            this.rdoTryAllFixesW.TabStop = true;
-            this.rdoTryAllFixesW.Text = "Try All Fixes";
-            this.rdoTryAllFixesW.UseVisualStyleBackColor = true;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.rdoFixNotesPageSizeCustomP);
             this.groupBox2.Controls.Add(this.rdoFixNotesPageSizeP);
             this.groupBox2.Location = new System.Drawing.Point(387, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(201, 181);
+            this.groupBox2.Size = new System.Drawing.Size(201, 210);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PowerPoint Document";
@@ -279,7 +279,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(609, 199);
+            this.BtnOk.Location = new System.Drawing.Point(594, 199);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -289,9 +289,9 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(690, 199);
+            this.BtnCancel.Location = new System.Drawing.Point(675, 199);
             this.BtnCancel.Name = "BtnCancel";
-            this.BtnCancel.Size = new System.Drawing.Size(75, 23);
+            this.BtnCancel.Size = new System.Drawing.Size(90, 23);
             this.BtnCancel.TabIndex = 2;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;

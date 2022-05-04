@@ -5,8 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>Office_File_Explorer</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.0.1.37</AssemblyVersion>
-    <FileVersion>2.0.1.37</FileVersion>
+    <AssemblyVersion>2.0.1.38</AssemblyVersion>
+    <FileVersion>2.0.1.38</FileVersion>
     <Version>2.0.1</Version>
     <PackageIcon>Office2013.ico</PackageIcon>
     <PackageIconUrl />
