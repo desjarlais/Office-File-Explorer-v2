@@ -5,8 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>Office_File_Explorer</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.0.1.38</AssemblyVersion>
-    <FileVersion>2.0.1.38</FileVersion>
+    <AssemblyVersion>2.0.1.39</AssemblyVersion>
+    <FileVersion>2.0.1.39</FileVersion>
     <Version>2.0.1</Version>
     <PackageIcon>Office2013.ico</PackageIcon>
     <PackageIconUrl />
@@ -21,8 +21,8 @@
 
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
-    <PackageReference Include="Microsoft.Graph" Version="4.23.0" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.42.1" />
+    <PackageReference Include="Microsoft.Graph" Version="4.27.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.43.2" />
   </ItemGroup>
 
   <ItemGroup>

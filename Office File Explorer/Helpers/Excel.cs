@@ -84,21 +84,75 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
-        public static List<string> GetLinks(string path)
+        public static bool RemoveLink(string path, string uri)
+        {
+            fSuccess = false;
+
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
+            {
+                WorkbookPart wbPart = excelDoc.WorkbookPart;
+
+                if (wbPart.ExternalWorkbookParts.Count() == 0)
+                {
+                    return fSuccess;
+                }
+
+            DeleteLinkStart:
+                foreach (ExternalWorkbookPart extWbPart in wbPart.ExternalWorkbookParts)
+                {
+                    foreach (ExternalRelationship er in extWbPart.ExternalRelationships)
+                    {
+                        extWbPart.DeleteExternalRelationship(er);
+
+                        if (extWbPart.ExternalLink.Parent != null && er.Uri.ToString() == uri)
+                        {
+                            extWbPart.ExternalLink.Remove();
+                            fSuccess = true;
+                            return fSuccess;
+                        }
+                        goto DeleteLinkStart;
+                    }
+                }
+
+                if (fSuccess)
+                {
+                    excelDoc.WorkbookPart.Workbook.Save();
+                }
+            }
+
+            return fSuccess;
+        }
+
+        public static List<string> GetLinks(string path, bool addItemCount)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            try
             {
-                WorkbookPart wbPart = excelDoc.WorkbookPart;
-                int ExtRelCount = 0;
-
-                foreach (ExternalWorkbookPart extWbPart in wbPart.ExternalWorkbookParts)
+                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
                 {
-                    ExtRelCount++;
-                    ExternalRelationship extRel = extWbPart.ExternalRelationships.ElementAt(0);
-                    tList.Add(ExtRelCount + Strings.wPeriod + extWbPart.ExternalRelationships.ElementAt(0).Uri);
+                    WorkbookPart wbPart = excelDoc.WorkbookPart;
+                    int ExtRelCount = 0;
+
+                    foreach (ExternalWorkbookPart extWbPart in wbPart.ExternalWorkbookParts)
+                    {
+                        ExtRelCount++;
+                        ExternalRelationship extRel = extWbPart.ExternalRelationships.ElementAt(0);
+
+                        if (addItemCount)
+                        {
+                            tList.Add(ExtRelCount + Strings.wPeriod + extWbPart.ExternalRelationships.ElementAt(0).Uri);
+                        }
+                        else
+                        {
+                            tList.Add(extWbPart.ExternalRelationships.ElementAt(0).Uri.ToString());
+                        }
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                tList.Clear();
             }
 
             return tList;

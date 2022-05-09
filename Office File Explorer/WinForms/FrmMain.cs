@@ -682,7 +682,7 @@ namespace Office_File_Explorer
                         if (cmds.HasFlag(AppUtilities.ExcelViewCmds.Links))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wLinks + Strings.wHeadingEnd);
-                            DisplayListContents(Excel.GetLinks(lblFilePath.Text), Strings.wLinks);
+                            DisplayListContents(Excel.GetLinks(lblFilePath.Text, true), Strings.wLinks);
                         }
 
                         if (cmds.HasFlag(AppUtilities.ExcelViewCmds.Comments))
@@ -1183,7 +1183,17 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelLink)
                         {
-                            // todo
+                            using (var fDelLink = new FrmExcelDelLink(lblFilePath.Text))
+                            {
+                                if (fDelLink.fHasLinks)
+                                {
+                                    fDelLink.ShowDialog();
+                                    if (fDelLink.DialogResult == DialogResult.OK)
+                                    {
+                                        LogInformation(LogInfoType.ClearAndAdd, "Hyperlink Deleted", string.Empty);
+                                    }
+                                }
+                            }
                         }
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelLinks)

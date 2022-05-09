@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWordModify));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoDelBookmarks = new System.Windows.Forms.RadioButton();
             this.rdoUpdateNamespaces = new System.Windows.Forms.RadioButton();
             this.rdoRemoveCustomTitleProp = new System.Windows.Forms.RadioButton();
             this.rdoRemovePII = new System.Windows.Forms.RadioButton();
@@ -48,7 +49,6 @@ namespace Office_File_Explorer.WinForms
             this.rdoDelHF = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoDelBookmarks = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,6 +76,17 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Content to Modify";
+            // 
+            // rdoDelBookmarks
+            // 
+            this.rdoDelBookmarks.AutoSize = true;
+            this.rdoDelBookmarks.Location = new System.Drawing.Point(211, 194);
+            this.rdoDelBookmarks.Name = "rdoDelBookmarks";
+            this.rdoDelBookmarks.Size = new System.Drawing.Size(120, 19);
+            this.rdoDelBookmarks.TabIndex = 2;
+            this.rdoDelBookmarks.TabStop = true;
+            this.rdoDelBookmarks.Text = "Delete Bookmarks";
+            this.rdoDelBookmarks.UseVisualStyleBackColor = true;
             // 
             // rdoUpdateNamespaces
             // 
@@ -248,7 +259,7 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 0;
-            this.BtnOk.Text = "Ok";
+            this.BtnOk.Text = "OK";
             this.BtnOk.UseVisualStyleBackColor = true;
             this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
             // 
@@ -261,17 +272,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
-            // 
-            // rdoDelBookmarks
-            // 
-            this.rdoDelBookmarks.AutoSize = true;
-            this.rdoDelBookmarks.Location = new System.Drawing.Point(211, 194);
-            this.rdoDelBookmarks.Name = "rdoDelBookmarks";
-            this.rdoDelBookmarks.Size = new System.Drawing.Size(120, 19);
-            this.rdoDelBookmarks.TabIndex = 2;
-            this.rdoDelBookmarks.TabStop = true;
-            this.rdoDelBookmarks.Text = "Delete Bookmarks";
-            this.rdoDelBookmarks.UseVisualStyleBackColor = true;
             // 
             // FrmWordModify
             // 

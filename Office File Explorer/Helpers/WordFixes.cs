@@ -162,7 +162,9 @@ namespace Office_File_Explorer.Helpers
             corruptionFound = false;
             bool mismatchNamespaceFound;
 
-            // make sure guids are correct in SP custom xml first
+            // hiding this behind a setting, but if enabled, make sure guids are correct in SP custom xml first
+            // this should only need to happen here and not in the header/footer functions
+            // once the custom xml is updated, those later functions will just pull in the corrected guids
             if (Properties.Settings.Default.FixSPCustomXmlGuids)
             {
                 if (FixSharePointCustomXmlGuids(filePath))
