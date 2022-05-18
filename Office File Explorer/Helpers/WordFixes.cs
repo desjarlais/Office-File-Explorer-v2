@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
+using System.Reflection;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -40,6 +41,97 @@ namespace Office_File_Explorer.Helpers
                     {
                         tRow.Remove();
                         corruptionFound = true;
+                    }
+                }
+            }
+
+            return corruptionFound;
+        }
+
+        public static bool FixContentControlUsingCustomXmlGuid(string filePath)
+        {
+            corruptionFound = false;
+
+            Dictionary<string,string> customXmlGuids = new Dictionary<string, string>();
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+            {
+                // first, populate the list of name->guids
+                foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
+                {
+                    XmlDocument xDoc = new XmlDocument();
+
+                    // need to load as a stream to get around a .net bug where using GetStream wasn't closing out properly
+                    // this allows me to close the stream manually to avoid the exception
+                    Stream stream = cxp.GetStream();
+                    xDoc.Load(stream);
+
+                    if (xDoc.DocumentElement.NamespaceURI == Strings.schemaMetadataProperties)
+                    {
+                        // loop through the metadata and get the uri's
+                        foreach (XmlNode xNode in xDoc.ChildNodes)
+                        {
+                            if (xNode.Name == Strings.wSPCustomXmlProperties)
+                            {
+                                foreach (XmlNode xNode2 in xNode.ChildNodes)
+                                {
+                                    if (xNode2.Name == Strings.wSPDocManagement)
+                                    {
+                                        foreach (XmlNode xNode3 in xNode2.ChildNodes)
+                                        {
+                                            foreach (XmlAttribute xa in xNode3.Attributes)
+                                            {
+                                                if (xa.LocalName == "xmlns")
+                                                {
+                                                    customXmlGuids.Add(xa.OwnerElement.Name, xa.Value);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    stream.Close();
+                }
+
+                // loop content controls and if the name and guid are different, use the dictionary value from custom xml
+                foreach (var cc in document.ContentControls())
+                {
+                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
+                    string pNameVal = string.Empty;
+
+                    foreach (OpenXmlElement oxe in props.ChildElements)
+                    {                        
+                        if (oxe.LocalName == "tag")
+                        {
+                            // get the prop name
+                            PropertyInfo pName = oxe.GetType().GetProperty("Val");
+                            pNameVal = pName.GetValue(oxe).ToString();
+                        }
+                        else if (oxe.GetType().ToString() == Strings.dfowDataBinding)
+                        {
+                            foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
+                            {
+                                if (oxa.LocalName == "prefixMappings")
+                                {
+                                    string[] prefixMappings = oxa.Value.Split(' ');
+                                    foreach (string s in prefixMappings)
+                                    {
+                                        foreach (var cxg in customXmlGuids)
+                                        {
+                                            if (cxg.Key.ToString() != s)
+                                            {
+                                                // clone the node and give it a new mapping
+
+                                                corruptionFound = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -165,6 +257,7 @@ namespace Office_File_Explorer.Helpers
             // hiding this behind a setting, but if enabled, make sure guids are correct in SP custom xml first
             // this should only need to happen here and not in the header/footer functions
             // once the custom xml is updated, those later functions will just pull in the corrected guids
+            FixContentControlUsingCustomXmlGuid(filePath);
             if (Properties.Settings.Default.FixSPCustomXmlGuids)
             {
                 if (FixSharePointCustomXmlGuids(filePath))

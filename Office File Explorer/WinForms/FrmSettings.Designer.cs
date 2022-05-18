@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSettings));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ckbFixSPCustomXmlGuid = new System.Windows.Forms.CheckBox();
             this.ckbDeleteOnlyCommentBookmarks = new System.Windows.Forms.CheckBox();
             this.ckbFixGroupedShapes = new System.Windows.Forms.CheckBox();
             this.ckbListRsids = new System.Windows.Forms.CheckBox();
@@ -53,7 +54,7 @@ namespace Office_File_Explorer.WinForms
             this.tbxTenant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.ckbFixSPCustomXmlGuid = new System.Windows.Forms.CheckBox();
+            this.cbkUseCustomXmlGuid = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -63,6 +64,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cbkUseCustomXmlGuid);
             this.groupBox1.Controls.Add(this.ckbFixSPCustomXmlGuid);
             this.groupBox1.Controls.Add(this.ckbDeleteOnlyCommentBookmarks);
             this.groupBox1.Controls.Add(this.ckbFixGroupedShapes);
@@ -70,10 +72,20 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.ckbRemoveFallbackTags);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(287, 141);
+            this.groupBox1.Size = new System.Drawing.Size(287, 275);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Corrupt Document";
+            // 
+            // ckbFixSPCustomXmlGuid
+            // 
+            this.ckbFixSPCustomXmlGuid.AutoSize = true;
+            this.ckbFixSPCustomXmlGuid.Location = new System.Drawing.Point(19, 116);
+            this.ckbFixSPCustomXmlGuid.Name = "ckbFixSPCustomXmlGuid";
+            this.ckbFixSPCustomXmlGuid.Size = new System.Drawing.Size(203, 19);
+            this.ckbFixSPCustomXmlGuid.TabIndex = 4;
+            this.ckbFixSPCustomXmlGuid.Text = "Fix SharePoint Custom Xml Guids";
+            this.ckbFixSPCustomXmlGuid.UseVisualStyleBackColor = true;
             // 
             // ckbDeleteOnlyCommentBookmarks
             // 
@@ -120,7 +132,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.ckbResetNotes);
             this.groupBox2.Location = new System.Drawing.Point(305, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(238, 141);
+            this.groupBox2.Size = new System.Drawing.Size(238, 63);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PowerPoint Options";
@@ -140,9 +152,9 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.ckbBackupOnOpen);
             this.groupBox3.Controls.Add(this.ckbZipItemCorrupt);
             this.groupBox3.Controls.Add(this.ckbDeleteOnExit);
-            this.groupBox3.Location = new System.Drawing.Point(12, 159);
+            this.groupBox3.Location = new System.Drawing.Point(305, 187);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(287, 100);
+            this.groupBox3.Size = new System.Drawing.Size(238, 100);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "App Settings";
@@ -162,9 +174,9 @@ namespace Office_File_Explorer.WinForms
             this.ckbZipItemCorrupt.AutoSize = true;
             this.ckbZipItemCorrupt.Location = new System.Drawing.Point(19, 48);
             this.ckbZipItemCorrupt.Name = "ckbZipItemCorrupt";
-            this.ckbZipItemCorrupt.Size = new System.Drawing.Size(238, 19);
+            this.ckbZipItemCorrupt.Size = new System.Drawing.Size(191, 19);
             this.ckbZipItemCorrupt.TabIndex = 3;
-            this.ckbZipItemCorrupt.Text = "Check For Zip Item Corruption On Open";
+            this.ckbZipItemCorrupt.Text = "Check Zip Corruption On Open";
             this.ckbZipItemCorrupt.UseVisualStyleBackColor = true;
             // 
             // ckbDeleteOnExit
@@ -181,7 +193,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.groupBox4.Controls.Add(this.rdoSAX);
             this.groupBox4.Controls.Add(this.rdoDOM);
-            this.groupBox4.Location = new System.Drawing.Point(306, 159);
+            this.groupBox4.Location = new System.Drawing.Point(305, 81);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(238, 100);
             this.groupBox4.TabIndex = 0;
@@ -212,7 +224,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(387, 387);
+            this.BtnOk.Location = new System.Drawing.Point(387, 415);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -222,7 +234,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(468, 387);
+            this.BtnCancel.Location = new System.Drawing.Point(468, 415);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 2;
@@ -238,7 +250,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox5.Controls.Add(this.tbxTenant);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.label1);
-            this.groupBox5.Location = new System.Drawing.Point(12, 265);
+            this.groupBox5.Location = new System.Drawing.Point(12, 293);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(531, 116);
             this.groupBox5.TabIndex = 3;
@@ -293,21 +305,21 @@ namespace Office_File_Explorer.WinForms
             this.label1.TabIndex = 0;
             this.label1.Text = "Client ID: ";
             // 
-            // ckbFixSPCustomXmlGuid
+            // cbkUseCustomXmlGuid
             // 
-            this.ckbFixSPCustomXmlGuid.AutoSize = true;
-            this.ckbFixSPCustomXmlGuid.Location = new System.Drawing.Point(19, 116);
-            this.ckbFixSPCustomXmlGuid.Name = "ckbFixSPCustomXmlGuid";
-            this.ckbFixSPCustomXmlGuid.Size = new System.Drawing.Size(203, 19);
-            this.ckbFixSPCustomXmlGuid.TabIndex = 4;
-            this.ckbFixSPCustomXmlGuid.Text = "Fix SharePoint Custom Xml Guids";
-            this.ckbFixSPCustomXmlGuid.UseVisualStyleBackColor = true;
+            this.cbkUseCustomXmlGuid.AutoSize = true;
+            this.cbkUseCustomXmlGuid.Location = new System.Drawing.Point(19, 141);
+            this.cbkUseCustomXmlGuid.Name = "cbkUseCustomXmlGuid";
+            this.cbkUseCustomXmlGuid.Size = new System.Drawing.Size(260, 19);
+            this.cbkUseCustomXmlGuid.TabIndex = 5;
+            this.cbkUseCustomXmlGuid.Text = "Fix Content Control Using Custom Xml Guid";
+            this.cbkUseCustomXmlGuid.UseVisualStyleBackColor = true;
             // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 420);
+            this.ClientSize = new System.Drawing.Size(546, 446);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnOk);
@@ -364,5 +376,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox ckbDeleteOnlyCommentBookmarks;
         private System.Windows.Forms.CheckBox ckbFixSPCustomXmlGuid;
+        private System.Windows.Forms.CheckBox cbkUseCustomXmlGuid;
     }
 }

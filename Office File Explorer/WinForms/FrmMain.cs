@@ -1344,7 +1344,7 @@ namespace Office_File_Explorer
                                 }
                                 else
                                 {
-                                    LstDisplay.Items.Add("** File Is Not Strict Open Xml Format **");
+                                    LstDisplay.Items.Add("** File Is Not Open Xml Format (Strict) **");
                                 }
                             }
                             catch (Exception ex)
