@@ -170,12 +170,12 @@ namespace Office_File_Explorer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseCustomXmlGuid {
+        public bool UseContentControlListID {
             get {
-                return ((bool)(this["UseCustomXmlGuid"]));
+                return ((bool)(this["UseContentControlListID"]));
             }
             set {
-                this["UseCustomXmlGuid"] = value;
+                this["UseContentControlListID"] = value;
             }
         }
     }

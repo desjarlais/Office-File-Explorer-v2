@@ -13,6 +13,8 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
+using DocumentFormat.OpenXml.Office.Word;
+using System.Net.NetworkInformation;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -48,15 +50,99 @@ namespace Office_File_Explorer.Helpers
             return corruptionFound;
         }
 
-        public static bool FixContentControlUsingCustomXmlGuid(string filePath)
+        /// <summary>
+        /// special circumstance where the content control value has the correct SharePoint guid
+        /// the custom xml however is wrong, so this will compare those values and always use the content control
+        /// which is essentially the exact opposite of FixContentControlNamespaces
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixSharePointGuidUsingContentControlGuid(string filePath)
         {
             corruptionFound = false;
 
-            Dictionary<string,string> customXmlGuids = new Dictionary<string, string>();
+            Dictionary<string,string> contentControlGuids = new Dictionary<string, string>();
+            List<string> pMappingList = new List<string>();
 
             using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
             {
-                // first, populate the list of name->guids
+                // loop content controls and get the xpath and prefix mapping for the namespace as a list
+                foreach (var cc in document.ContentControls())
+                {
+                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
+                    string ccName = string.Empty;
+                    string ccGuid = string.Empty;
+                    string ccNs = string.Empty;
+
+                    foreach (OpenXmlElement oxe in props.ChildElements)
+                    {
+                        // get the cc name
+                        if (oxe.LocalName == "alias")
+                        {
+                            PropertyInfo prop = oxe.GetType().GetProperty("Val");
+                            ccName = prop.GetValue(oxe).ToString();
+                        }
+
+                        // get details from the databinding tag
+                        if (oxe.GetType().ToString() == Strings.dfowDataBinding)
+                        {
+                            foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
+                            {
+                                // get the guids
+                                if (oxa.LocalName == "prefixMappings")
+                                {
+                                    string[] prefixMappings = oxa.Value.Split(' ');
+                                    foreach (string s in prefixMappings)
+                                    {
+                                        // parse out the namespace number
+                                        pMappingList.Add(s);
+                                    }
+                                }
+
+                                // get the ns number
+                                if (oxa.LocalName == "xpath")
+                                {
+                                    string[] xpathVal = oxa.Value.Split('/');
+                                    foreach (string s in xpathVal)
+                                    {
+                                        if (s.Contains(ccName))
+                                        {
+                                            // parse out the ns value
+                                            string[] ns = s.Split(':');
+                                            ccNs = ns[0];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // loop the guids and find the guid based on ns #
+                    bool nameExists = false;
+                    foreach (var pm in pMappingList)
+                    {
+                        string index = "xmlns:" + ccNs + "=";
+                        if (pm.StartsWith("xmlns:" + ccNs))
+                        {
+                            // parse out the guid
+                            ccGuid = pm.Substring(index.Length, pm.Length - index.Length);
+                            foreach (var g in contentControlGuids)
+                            {
+                                if (g.Key == ccName)
+                                {
+                                    nameExists = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (nameExists == false)
+                    {
+                        contentControlGuids.Add(ccName, ccGuid);
+                    }
+                }
+
+                // loop custom xml and compare with content control value
                 foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
                 {
                     XmlDocument xDoc = new XmlDocument();
@@ -83,7 +169,16 @@ namespace Office_File_Explorer.Helpers
                                             {
                                                 if (xa.LocalName == "xmlns")
                                                 {
-                                                    customXmlGuids.Add(xa.OwnerElement.Name, xa.Value);
+                                                    // loop the list and update the guid with the correct value from the content control
+                                                    foreach (var ccg in contentControlGuids)
+                                                    {
+                                                        if (xa.OwnerElement.LocalName == ccg.Key && xa.NamespaceURI != ccg.Value)
+                                                        {
+                                                            // clone the element and update the guid
+                                                            XmlNode xnClone = xNode3;
+
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -94,45 +189,6 @@ namespace Office_File_Explorer.Helpers
                     }
 
                     stream.Close();
-                }
-
-                // loop content controls and if the name and guid are different, use the dictionary value from custom xml
-                foreach (var cc in document.ContentControls())
-                {
-                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
-                    string pNameVal = string.Empty;
-
-                    foreach (OpenXmlElement oxe in props.ChildElements)
-                    {                        
-                        if (oxe.LocalName == "tag")
-                        {
-                            // get the prop name
-                            PropertyInfo pName = oxe.GetType().GetProperty("Val");
-                            pNameVal = pName.GetValue(oxe).ToString();
-                        }
-                        else if (oxe.GetType().ToString() == Strings.dfowDataBinding)
-                        {
-                            foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
-                            {
-                                if (oxa.LocalName == "prefixMappings")
-                                {
-                                    string[] prefixMappings = oxa.Value.Split(' ');
-                                    foreach (string s in prefixMappings)
-                                    {
-                                        foreach (var cxg in customXmlGuids)
-                                        {
-                                            if (cxg.Key.ToString() != s)
-                                            {
-                                                // clone the node and give it a new mapping
-
-                                                corruptionFound = true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
 
@@ -256,14 +312,19 @@ namespace Office_File_Explorer.Helpers
 
             // hiding this behind a setting, but if enabled, make sure guids are correct in SP custom xml first
             // this should only need to happen here and not in the header/footer functions
-            // once the custom xml is updated, those later functions will just pull in the corrected guids
-            FixContentControlUsingCustomXmlGuid(filePath);
+            // once the custom xml is updated, those later functions will just pull in the corrected guids            
             if (Properties.Settings.Default.FixSPCustomXmlGuids)
             {
                 if (FixSharePointCustomXmlGuids(filePath))
                 {
                     corruptionFound = true;
                 }
+            }
+
+            // another check hidden behind a setting for times when the content control has the correct guid
+            if (Properties.Settings.Default.UseContentControlListID)
+            {
+                FixSharePointGuidUsingContentControlGuid(filePath);
             }
 
             using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))

@@ -64,7 +64,7 @@ namespace Office_File_Explorer.WinForms
                 ckbFixSPCustomXmlGuid.Checked = true;
             }
 
-            if (Properties.Settings.Default.UseCustomXmlGuid == true)
+            if (Properties.Settings.Default.UseContentControlListID == true)
             {
                 cbkUseCustomXmlGuid.Checked = true;
             }
@@ -83,7 +83,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.ClientID = tbxClientID.Text;
             Properties.Settings.Default.MySite = tbxSiteURL.Text;
             Properties.Settings.Default.FixSPCustomXmlGuids = ckbFixSPCustomXmlGuid.Checked;
-            Properties.Settings.Default.UseCustomXmlGuid = cbkUseCustomXmlGuid.Checked;
+            Properties.Settings.Default.UseContentControlListID = cbkUseCustomXmlGuid.Checked;
 
             if (rdoSAX.Checked == true)
             {

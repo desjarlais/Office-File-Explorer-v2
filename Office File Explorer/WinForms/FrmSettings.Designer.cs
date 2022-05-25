@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSettings));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbkUseCustomXmlGuid = new System.Windows.Forms.CheckBox();
             this.ckbFixSPCustomXmlGuid = new System.Windows.Forms.CheckBox();
             this.ckbDeleteOnlyCommentBookmarks = new System.Windows.Forms.CheckBox();
             this.ckbFixGroupedShapes = new System.Windows.Forms.CheckBox();
@@ -54,7 +55,6 @@ namespace Office_File_Explorer.WinForms
             this.tbxTenant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.cbkUseCustomXmlGuid = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -76,6 +76,16 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Corrupt Document";
+            // 
+            // cbkUseCustomXmlGuid
+            // 
+            this.cbkUseCustomXmlGuid.AutoSize = true;
+            this.cbkUseCustomXmlGuid.Location = new System.Drawing.Point(19, 141);
+            this.cbkUseCustomXmlGuid.Name = "cbkUseCustomXmlGuid";
+            this.cbkUseCustomXmlGuid.Size = new System.Drawing.Size(169, 19);
+            this.cbkUseCustomXmlGuid.TabIndex = 5;
+            this.cbkUseCustomXmlGuid.Text = "Use Content Control List ID";
+            this.cbkUseCustomXmlGuid.UseVisualStyleBackColor = true;
             // 
             // ckbFixSPCustomXmlGuid
             // 
@@ -304,16 +314,6 @@ namespace Office_File_Explorer.WinForms
             this.label1.Size = new System.Drawing.Size(58, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "Client ID: ";
-            // 
-            // cbkUseCustomXmlGuid
-            // 
-            this.cbkUseCustomXmlGuid.AutoSize = true;
-            this.cbkUseCustomXmlGuid.Location = new System.Drawing.Point(19, 141);
-            this.cbkUseCustomXmlGuid.Name = "cbkUseCustomXmlGuid";
-            this.cbkUseCustomXmlGuid.Size = new System.Drawing.Size(260, 19);
-            this.cbkUseCustomXmlGuid.TabIndex = 5;
-            this.cbkUseCustomXmlGuid.Text = "Fix Content Control Using Custom Xml Guid";
-            this.cbkUseCustomXmlGuid.UseVisualStyleBackColor = true;
             // 
             // FrmSettings
             // 
