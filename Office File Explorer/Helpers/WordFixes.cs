@@ -15,6 +15,7 @@ using Office_File_Explorer.WinForms;
 using System.Reflection;
 using DocumentFormat.OpenXml.Office.Word;
 using System.Net.NetworkInformation;
+using System.Xml.Linq;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -149,8 +150,16 @@ namespace Office_File_Explorer.Helpers
 
                     // need to load as a stream to get around a .net bug where using GetStream wasn't closing out properly
                     // this allows me to close the stream manually to avoid the exception
-                    Stream stream = cxp.GetStream();
-                    xDoc.Load(stream);
+                    Stream sRW = cxp.GetStream(FileMode.Open, FileAccess.ReadWrite);
+                    string docText = null;
+                    using (StreamReader sr = new StreamReader(sRW))
+                    {
+                        docText = sr.ReadToEnd();
+                    }
+                    sRW.Close();
+
+                    Stream sRO = cxp.GetStream(FileMode.Open, FileAccess.Read);
+                    xDoc.Load(sRO);
 
                     if (xDoc.DocumentElement.NamespaceURI == Strings.schemaMetadataProperties)
                     {
@@ -172,11 +181,22 @@ namespace Office_File_Explorer.Helpers
                                                     // loop the list and update the guid with the correct value from the content control
                                                     foreach (var ccg in contentControlGuids)
                                                     {
-                                                        if (xa.OwnerElement.LocalName == ccg.Key && xa.NamespaceURI != ccg.Value)
+                                                        string nsValue = ccg.Value.Replace("'", string.Empty);
+                                                        if (xa.OwnerElement.LocalName == ccg.Key)
                                                         {
-                                                            // clone the element and update the guid
-                                                            XmlNode xnClone = xNode3;
-
+                                                            if (xa.Value != nsValue)
+                                                            {
+                                                                string tagName = "<" + xa.OwnerElement.LocalName + " xmlns=" + '"';
+                                                                Regex regexTagName = new Regex(tagName + xa.Value);
+                                                                foreach (Match m in regexTagName.Matches(docText))
+                                                                {
+                                                                    if (!m.Value.Contains(ccg.Value))
+                                                                    {
+                                                                        docText = docText.Replace(m.Value, tagName + nsValue);
+                                                                        corruptionFound = true;
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -188,7 +208,15 @@ namespace Office_File_Explorer.Helpers
                         }
                     }
 
-                    stream.Close();
+                    sRO.Close();
+                    if (corruptionFound)
+                    {
+                        using (StreamWriter sw = new StreamWriter(cxp.GetStream(FileMode.Create)))
+                        {
+                            sw.Write(docText);
+                        }
+                        document.Save();
+                    }
                 }
             }
 
