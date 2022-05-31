@@ -158,24 +158,36 @@ namespace Office_File_Explorer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool FixSPCustomXmlGuids {
-            get {
-                return ((bool)(this["FixSPCustomXmlGuids"]));
-            }
-            set {
-                this["FixSPCustomXmlGuids"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool UseContentControlListID {
             get {
                 return ((bool)(this["UseContentControlListID"]));
             }
             set {
                 this["UseContentControlListID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseUserSelectedCCGuid {
+            get {
+                return ((bool)(this["UseUserSelectedCCGuid"]));
+            }
+            set {
+                this["UseUserSelectedCCGuid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseSharePointGuid {
+            get {
+                return ((bool)(this["UseSharePointGuid"]));
+            }
+            set {
+                this["UseSharePointGuid"] = value;
             }
         }
     }

@@ -13,9 +13,6 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
-using DocumentFormat.OpenXml.Office.Word;
-using System.Net.NetworkInformation;
-using System.Xml.Linq;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -339,22 +336,20 @@ namespace Office_File_Explorer.Helpers
             bool mismatchNamespaceFound;
 
             // hiding this behind a setting, but if enabled, make sure guids are correct in SP custom xml first
-            // this should only need to happen here and not in the header/footer functions
-            // once the custom xml is updated, those later functions will just pull in the corrected guids            
-            if (Properties.Settings.Default.FixSPCustomXmlGuids)
+            // this should only happen here and not in the header/footer functions
+            // once the custom xml is updated, those later functions will just pull in the corrected guids
+            if (Properties.Settings.Default.UseSharePointGuid == false)
             {
-                if (FixSharePointCustomXmlGuids(filePath))
+                if (Properties.Settings.Default.UseContentControlListID)
                 {
-                    corruptionFound = true;
+                    corruptionFound = FixSharePointGuidUsingContentControlGuid(filePath);
+                }
+                else if (Properties.Settings.Default.UseUserSelectedCCGuid)
+                {
+                    corruptionFound = FixSharePointCustomXmlGuids(filePath);
                 }
             }
-
-            // another check hidden behind a setting for times when the content control has the correct guid
-            if (Properties.Settings.Default.UseContentControlListID)
-            {
-                FixSharePointGuidUsingContentControlGuid(filePath);
-            }
-
+            
             using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
             {
                 string newGuid = string.Empty;
@@ -380,7 +375,7 @@ namespace Office_File_Explorer.Helpers
 
                     List<string> prefixMappingList = new List<string>();
                     List<string> xPathList = new List<string>();
-                    
+
                     mismatchNamespaceFound = false;
 
                     SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
@@ -410,7 +405,7 @@ namespace Office_File_Explorer.Helpers
                                         xPathList.Add(s);
                                     }
                                 }
-                                
+
                                 if (oxa.LocalName == "storeItemID")
                                 {
                                     oldStoreItemID = oxa.Value;
@@ -532,7 +527,7 @@ namespace Office_File_Explorer.Helpers
                     document.Save();
                 }
             }
-            
+
             return corruptionFound;
         }
 

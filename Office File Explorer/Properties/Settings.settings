@@ -35,10 +35,13 @@
     <Setting Name="DeleteOnlyCommentBookmarks" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="FixSPCustomXmlGuids" Type="System.Boolean" Scope="User">
+    <Setting Name="UseContentControlListID" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="UseContentControlListID" Type="System.Boolean" Scope="User">
+    <Setting Name="UseUserSelectedCCGuid" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UseSharePointGuid" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

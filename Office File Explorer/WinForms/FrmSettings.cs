@@ -59,14 +59,17 @@ namespace Office_File_Explorer.WinForms
                 ckbDeleteOnlyCommentBookmarks.Checked = true;
             }
 
-            if (Properties.Settings.Default.FixSPCustomXmlGuids == true)
-            {
-                ckbFixSPCustomXmlGuid.Checked = true;
-            }
-
             if (Properties.Settings.Default.UseContentControlListID == true)
             {
-                cbkUseCustomXmlGuid.Checked = true;
+                rdoUseCCGuid.Checked = true;
+            }
+            else if (Properties.Settings.Default.UseSharePointGuid == true)
+            {
+                rdoUseSPGuid.Checked = true;
+            }
+            else
+            {
+                rdoUserSelectedCC.Checked = true;
             }
         }
 
@@ -82,10 +85,35 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.DeleteOnlyCommentBookmarks = ckbDeleteOnlyCommentBookmarks.Checked;
             Properties.Settings.Default.ClientID = tbxClientID.Text;
             Properties.Settings.Default.MySite = tbxSiteURL.Text;
-            Properties.Settings.Default.FixSPCustomXmlGuids = ckbFixSPCustomXmlGuid.Checked;
-            Properties.Settings.Default.UseContentControlListID = cbkUseCustomXmlGuid.Checked;
 
-            if (rdoSAX.Checked == true)
+            if (rdoUseCCGuid.Checked)
+            {
+                Properties.Settings.Default.UseContentControlListID = true;
+            }
+            else
+            {
+                Properties.Settings.Default.UseContentControlListID = false;
+            }
+            
+            if (rdoUserSelectedCC.Checked)
+            {
+                Properties.Settings.Default.UseUserSelectedCCGuid = true;
+            }
+            else
+            {
+                Properties.Settings.Default.UseUserSelectedCCGuid = false;
+            }
+
+            if (rdoUseSPGuid.Checked)
+            {
+                Properties.Settings.Default.UseSharePointGuid = true;
+            }
+            else
+            {
+                Properties.Settings.Default.UseSharePointGuid = false;
+            }
+
+            if (rdoSAX.Checked)
             {
                 Properties.Settings.Default.ListCellValuesSax = true;
             }
