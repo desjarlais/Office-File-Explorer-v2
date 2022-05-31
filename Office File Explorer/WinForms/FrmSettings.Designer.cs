@@ -55,8 +55,8 @@ namespace Office_File_Explorer.WinForms
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
-            this.rdoUseCCGuid = new System.Windows.Forms.RadioButton();
             this.rdoUseSPGuid = new System.Windows.Forms.RadioButton();
+            this.rdoUseCCGuid = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -313,22 +313,11 @@ namespace Office_File_Explorer.WinForms
             this.rdoUserSelectedCC.AutoSize = true;
             this.rdoUserSelectedCC.Location = new System.Drawing.Point(6, 72);
             this.rdoUserSelectedCC.Name = "rdoUserSelectedCC";
-            this.rdoUserSelectedCC.Size = new System.Drawing.Size(234, 19);
+            this.rdoUserSelectedCC.Size = new System.Drawing.Size(214, 19);
             this.rdoUserSelectedCC.TabIndex = 5;
             this.rdoUserSelectedCC.TabStop = true;
-            this.rdoUserSelectedCC.Text = "Use User Selected Content Control Guid";
+            this.rdoUserSelectedCC.Text = "Use User Selected Custom Xml Guid";
             this.rdoUserSelectedCC.UseVisualStyleBackColor = true;
-            // 
-            // rdoUseCCGuid
-            // 
-            this.rdoUseCCGuid.AutoSize = true;
-            this.rdoUseCCGuid.Location = new System.Drawing.Point(6, 47);
-            this.rdoUseCCGuid.Name = "rdoUseCCGuid";
-            this.rdoUseCCGuid.Size = new System.Drawing.Size(161, 19);
-            this.rdoUseCCGuid.TabIndex = 4;
-            this.rdoUseCCGuid.TabStop = true;
-            this.rdoUseCCGuid.Text = "Use Content Control Guid";
-            this.rdoUseCCGuid.UseVisualStyleBackColor = true;
             // 
             // rdoUseSPGuid
             // 
@@ -340,6 +329,17 @@ namespace Office_File_Explorer.WinForms
             this.rdoUseSPGuid.TabStop = true;
             this.rdoUseSPGuid.Text = "Use SharePoint Custom Xml Guid";
             this.rdoUseSPGuid.UseVisualStyleBackColor = true;
+            // 
+            // rdoUseCCGuid
+            // 
+            this.rdoUseCCGuid.AutoSize = true;
+            this.rdoUseCCGuid.Location = new System.Drawing.Point(6, 47);
+            this.rdoUseCCGuid.Name = "rdoUseCCGuid";
+            this.rdoUseCCGuid.Size = new System.Drawing.Size(161, 19);
+            this.rdoUseCCGuid.TabIndex = 4;
+            this.rdoUseCCGuid.TabStop = true;
+            this.rdoUseCCGuid.Text = "Use Content Control Guid";
+            this.rdoUseCCGuid.UseVisualStyleBackColor = true;
             // 
             // FrmSettings
             // 

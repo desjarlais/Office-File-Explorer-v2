@@ -226,7 +226,7 @@ namespace Office_File_Explorer.Helpers
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static bool FixSharePointCustomXmlGuids(string filePath)
+        public static bool FixSharePointWithUserSelectedCustomXmlGuids(string filePath)
         {
             corruptionFound = false;
 
@@ -337,19 +337,21 @@ namespace Office_File_Explorer.Helpers
 
             // hiding this behind a setting, but if enabled, make sure guids are correct in SP custom xml first
             // this should only happen here and not in the header/footer functions
+            // batch comes here first also, so this will work for both single and batch corrections
             // once the custom xml is updated, those later functions will just pull in the corrected guids
             if (Properties.Settings.Default.UseSharePointGuid == false)
             {
-                if (Properties.Settings.Default.UseContentControlListID)
+                if (Properties.Settings.Default.UseContentControlGuid)
                 {
                     corruptionFound = FixSharePointGuidUsingContentControlGuid(filePath);
                 }
                 else if (Properties.Settings.Default.UseUserSelectedCCGuid)
                 {
-                    corruptionFound = FixSharePointCustomXmlGuids(filePath);
+                    corruptionFound = FixSharePointWithUserSelectedCustomXmlGuids(filePath);
                 }
             }
             
+            // now that we have the custom xml updated, if needed, check the content controls
             using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
             {
                 string newGuid = string.Empty;

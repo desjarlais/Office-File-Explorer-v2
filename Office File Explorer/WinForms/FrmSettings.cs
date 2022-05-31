@@ -59,7 +59,7 @@ namespace Office_File_Explorer.WinForms
                 ckbDeleteOnlyCommentBookmarks.Checked = true;
             }
 
-            if (Properties.Settings.Default.UseContentControlListID == true)
+            if (Properties.Settings.Default.UseContentControlGuid == true)
             {
                 rdoUseCCGuid.Checked = true;
             }
@@ -88,11 +88,11 @@ namespace Office_File_Explorer.WinForms
 
             if (rdoUseCCGuid.Checked)
             {
-                Properties.Settings.Default.UseContentControlListID = true;
+                Properties.Settings.Default.UseContentControlGuid = true;
             }
             else
             {
-                Properties.Settings.Default.UseContentControlListID = false;
+                Properties.Settings.Default.UseContentControlGuid = false;
             }
             
             if (rdoUserSelectedCC.Checked)

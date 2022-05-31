@@ -158,12 +158,12 @@ namespace Office_File_Explorer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseContentControlListID {
+        public bool UseContentControlGuid {
             get {
-                return ((bool)(this["UseContentControlListID"]));
+                return ((bool)(this["UseContentControlGuid"]));
             }
             set {
-                this["UseContentControlListID"] = value;
+                this["UseContentControlGuid"] = value;
             }
         }
         

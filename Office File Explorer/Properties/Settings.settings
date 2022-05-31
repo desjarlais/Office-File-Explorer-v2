@@ -35,7 +35,7 @@
     <Setting Name="DeleteOnlyCommentBookmarks" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="UseContentControlListID" Type="System.Boolean" Scope="User">
+    <Setting Name="UseContentControlGuid" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="UseUserSelectedCCGuid" Type="System.Boolean" Scope="User">
