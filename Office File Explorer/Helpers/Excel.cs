@@ -45,9 +45,46 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
+        public static bool RemoveEmbeddedLinks(string path)
+        {
+            fSuccess = false;
+
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
+            {
+                foreach (WorksheetPart wsPart in excelDoc.WorkbookPart.WorksheetParts)
+                {
+                    IEnumerable<EmbeddedObjectProperties> eopList = wsPart.Worksheet.Descendants<EmbeddedObjectProperties>();
+                    foreach (EmbeddedObjectProperties eop in eopList)
+                    {
+                        eop.Remove();
+                        fSuccess = true;
+                    }
+
+                    IEnumerable<OleObject> oleObjectList = wsPart.Worksheet.Descendants<OleObject>();
+                    foreach (OleObject oo in oleObjectList)
+                    {
+                        oo.Remove();
+                        fSuccess = true;
+                    }
+                }
+
+                if (fSuccess)
+                {
+                    excelDoc.Save();
+                }
+            }
+
+            return fSuccess;
+        }
+
         public static bool RemoveLinks(string path)
         {
             fSuccess = false;
+
+            if (RemoveEmbeddedLinks(path))
+            {
+                fSuccess = true;
+            }
 
             using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
             {

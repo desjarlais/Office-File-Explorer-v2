@@ -21,8 +21,8 @@
 
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
-    <PackageReference Include="Microsoft.Graph" Version="4.27.0" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.43.2" />
+    <PackageReference Include="Microsoft.Graph" Version="4.29.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.44.0" />
   </ItemGroup>
 
   <ItemGroup>

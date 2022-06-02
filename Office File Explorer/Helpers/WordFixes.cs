@@ -144,10 +144,7 @@ namespace Office_File_Explorer.Helpers
                 foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
                 {
                     XmlDocument xDoc = new XmlDocument();
-
-                    // need to load as a stream to get around a .net bug where using GetStream wasn't closing out properly
-                    // this allows me to close the stream manually to avoid the exception
-                    Stream sRW = cxp.GetStream(FileMode.Open, FileAccess.ReadWrite);
+                    Stream sRW = cxp.GetStream(FileMode.Open, FileAccess.Read);
                     string docText = null;
                     using (StreamReader sr = new StreamReader(sRW))
                     {
@@ -566,7 +563,7 @@ namespace Office_File_Explorer.Helpers
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
                 // there is a scenario where accents are added to the subscript node, not oMath
-                // accent is not allowed is subscript elements
+                // accent is not allowed in subscript elements
                 foreach (OM.Subscript sSub in myDoc.MainDocumentPart.Document.Descendants<OM.Subscript>())
                 {
                     // loop through the subscript elements and if "acc" is found, delete it
@@ -590,12 +587,16 @@ namespace Office_File_Explorer.Helpers
             return corruptionFound;
         }
 
+        /// <summary>
+        /// plain text content controls can't have any nested content controls
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixContentControls(string filePath)
         {
             corruptionFound = false;
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
-                // plain text content controls can't have any nested content controls
                 foreach (var cc in myDoc.ContentControls())
                 {
                     bool plainTextControl = false;
@@ -635,6 +636,11 @@ namespace Office_File_Explorer.Helpers
             return corruptionFound;
         }
 
+        /// <summary>
+        /// check for shape in a hyperlink, in a comment, which is not allowed
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixShapeInComment(string filePath)
         {
             corruptionFound = false;
@@ -646,7 +652,6 @@ namespace Office_File_Explorer.Helpers
                     return corruptionFound;
                 }
 
-                // check for shape in a hyperlink, in a comment, which is not allowed
                 foreach (Comment cm in myDoc.MainDocumentPart.WordprocessingCommentsPart.Comments)
                 {
                     IEnumerable<Hyperlink> hLinks = cm.Descendants<Hyperlink>();
@@ -717,6 +722,11 @@ namespace Office_File_Explorer.Helpers
             return corruptionFound;
         }
 
+        /// <summary>
+        /// check for scenarios where a hyperlink is in the wrong part of a field code, which is not allowed
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixHyperlinks(string filePath)
         {
             bool fileChanged = false;
@@ -747,7 +757,7 @@ namespace Office_File_Explorer.Helpers
                         {
                             // keep track of previous run so we can get the right start position
                             // you could just use the first "begin" field code, but fixing it back up later is more challenging
-                            // if we grab the begins root run, it makes this much easier
+                            // if we grab the begin root run, it makes this much easier
                             elementCount++;
                             if (oxe.GetType().Name == "Run")
                             {
@@ -872,6 +882,11 @@ namespace Office_File_Explorer.Helpers
             return fileChanged;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixCommentFieldCodes(string filePath)
         {
             bool isFileChanged = false;
@@ -979,6 +994,11 @@ namespace Office_File_Explorer.Helpers
             return isFileChanged;
         }
 
+        /// <summary>
+        /// this is used to fix orphaned comment references
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixMissingCommentRefs(string filePath)
         {
             bool saveFile = false;
@@ -1064,6 +1084,11 @@ namespace Office_File_Explorer.Helpers
             return saveFile;
         }
 
+        /// <summary>
+        /// tables can only have one table grid per table, this will fix that scenario
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixTableGridProps(string filePath)
         {
             bool tblModified = false;
@@ -1141,6 +1166,11 @@ namespace Office_File_Explorer.Helpers
             return tblModified;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixRevisions(string filePath)
         {
             bool isFixed = false;
@@ -1198,6 +1228,14 @@ namespace Office_File_Explorer.Helpers
             return isFixed;
         }
 
+        /// <summary>
+        /// fix orphaned list templates in files
+        /// this typically happens when you add and then remove some bullet/numbering in a document
+        /// after removing the bullet for example, the list template (style) still exists in the file
+        /// it will not get re-used however if you add a bullet later with the same data which orphans the style
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool FixListTemplates(string filePath)
         {
             bool orphanedListTemplatesFound = false;
