@@ -11,9 +11,6 @@ using Microsoft.Identity.Client;
 // app refs
 using Office_File_Explorer.Helpers;
 
-// Microsoft Graph refs
-
-
 //.NET refs
 using System;
 using System.Collections.Generic;

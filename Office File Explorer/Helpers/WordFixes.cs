@@ -119,8 +119,8 @@ namespace Office_File_Explorer.Helpers
                     bool nameExists = false;
                     foreach (var pm in pMappingList)
                     {
-                        string index = "xmlns:" + ccNs + "=";
-                        if (pm.StartsWith("xmlns:" + ccNs))
+                        string index = Strings.wXmlNsStart + ccNs + "=";
+                        if (pm.StartsWith(Strings.wXmlNsStart + ccNs))
                         {
                             // parse out the guid
                             ccGuid = pm.Substring(index.Length, pm.Length - index.Length);
@@ -320,11 +320,6 @@ namespace Office_File_Explorer.Helpers
             }
 
             return corruptionFound;
-        }
-
-        public static void FixContentControlNamespaceGuid()
-        {
-
         }
 
         /// <summary>
@@ -665,7 +660,7 @@ namespace Office_File_Explorer.Helpers
                             IEnumerable<Run> runs = h.Descendants<Run>();
                             if (runs.Any())
                             {
-                                // if there is an e1o in the run, delete the run
+                                // if there is an E1o in the run, delete the run
                                 foreach (Run r in runs)
                                 {
                                     if (r.Descendants<AlternateContent>().Any())
