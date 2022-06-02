@@ -854,8 +854,7 @@ namespace Office_File_Explorer.WinForms
 
                 foreach (string f in files)
                 {
-                    if (WordFixes.FixContentControlNamespaces(f) || WordFixes.FixContentControlNamespacesInHeader(f) || 
-                        WordFixes.FixContentControlNamespacesInFooter(f))
+                    if (WordFixes.FixContentControlNamespaces(f))
                     {
                         lstOutput.Items.Add(f + " : Quick Part Updated");
                     }
