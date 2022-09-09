@@ -100,6 +100,8 @@ namespace Office_File_Explorer
             BtnViewCustomUI.Enabled = false;
             BtnValidateDoc.Enabled = false;
             BtnExcelSheetViewer.Enabled = false;
+            BtnRemoveCustomFileProps.Enabled = false;
+            BtnRemoveCustomXmlParts.Enabled = false;
         }
 
         public void EnableUI()
@@ -113,6 +115,8 @@ namespace Office_File_Explorer
             BtnDocProps.Enabled = true;
             BtnViewCustomUI.Enabled = true;
             BtnValidateDoc.Enabled = true;
+            BtnRemoveCustomXmlParts.Enabled = true;
+            BtnRemoveCustomFileProps.Enabled = true;
         }
 
         public void CopyAllItems()
@@ -305,7 +309,7 @@ namespace Office_File_Explorer
                 {
                     using (SpreadsheetDocument document = SpreadsheetDocument.Open(file, false))
                     {
-                        // try to get the localname of the workbook.xml file if it fails, its not an Excel file
+                        // try to get the localname of the workbook.xml and file if it fails, its not an Excel file
                         StrOfficeApp = Strings.oAppExcel;
                         body = document.WorkbookPart.Workbook.LocalName;
                         fSuccess = true;
@@ -437,13 +441,17 @@ namespace Office_File_Explorer
             LstDisplay.Items.Add(string.Empty);
         }
 
+        /// <summary>
+        /// update the node buffer for BtnFixCorruptDoc_Click logic
+        /// </summary>
+        /// <param name="input"></param>
         public static void Node(char input)
         {
             sbNodeBuffer.Append(input);
         }
 
         /// <summary>
-        /// this function loops through all nodes parsed out from Step 1
+        /// this function loops through all nodes parsed out from Step 1 in BtnFixCorruptDoc_Click
         /// check each node and add fallback tags only to the list
         /// </summary>
         /// <param name="originalText"></param>
@@ -523,6 +531,13 @@ namespace Office_File_Explorer
             return val;
         }
 
+        /// <summary>
+        /// there are scenarios where things like "Fixed" or "Copy" need to be appended to the file name
+        /// this function helps facilitate that by taking the file as is and the scenario text and combining them
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="TextToAdd"></param>
+        /// <returns></returns>
         public static string AddTextToFileName(string fileName, string TextToAdd)
         {
             string dir = Path.GetDirectoryName(fileName) + "\\";
@@ -531,6 +546,9 @@ namespace Office_File_Explorer
             return newFileName;
         }
 
+        /// <summary>
+        /// minor cleanup before the app exits
+        /// </summary>
         public static void AppExitWork()
         {
             try
@@ -1979,6 +1997,20 @@ namespace Office_File_Explorer
             {
                 var result = f.ShowDialog();
             }
+        }
+
+        private void BtnRemoveCustomFileProps_Click(object sender, EventArgs e)
+        {
+            Office.RemoveCustomDocProperties(lblFilePath.Text, lblFileType.Text);
+            LstDisplay.Items.Clear();
+            LstDisplay.Items.Add("Custom File Properties Removed.");
+        }
+
+        private void BtnRemoveCustomXmlParts_Click(object sender, EventArgs e)
+        {
+            Office.RemoveCustomXmlParts(lblFilePath.Text, lblFileType.Text);
+            LstDisplay.Items.Clear();
+            LstDisplay.Items.Add("Custom Xml Parts Removed.");
         }
     }
 }

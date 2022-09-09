@@ -47,6 +47,8 @@ namespace Office_File_Explorer
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.BtnRemoveCustomXmlParts = new System.Windows.Forms.Button();
+            this.BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
             this.BtnExcelSheetViewer = new System.Windows.Forms.Button();
             this.BtnValidateDoc = new System.Windows.Forms.Button();
             this.BtnViewCustomUI = new System.Windows.Forms.Button();
@@ -82,7 +84,7 @@ namespace Office_File_Explorer
             this.helpToolStripMenuItem});
             this.mnuMainMenu.Location = new System.Drawing.Point(0, 0);
             this.mnuMainMenu.Name = "mnuMainMenu";
-            this.mnuMainMenu.Size = new System.Drawing.Size(904, 24);
+            this.mnuMainMenu.Size = new System.Drawing.Size(924, 24);
             this.mnuMainMenu.TabIndex = 0;
             this.mnuMainMenu.Text = "menuStrip1";
             // 
@@ -204,6 +206,8 @@ namespace Office_File_Explorer
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.BtnRemoveCustomXmlParts);
+            this.groupBox1.Controls.Add(this.BtnRemoveCustomFileProps);
             this.groupBox1.Controls.Add(this.BtnExcelSheetViewer);
             this.groupBox1.Controls.Add(this.BtnValidateDoc);
             this.groupBox1.Controls.Add(this.BtnViewCustomUI);
@@ -222,16 +226,36 @@ namespace Office_File_Explorer
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 24);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(904, 136);
+            this.groupBox1.Size = new System.Drawing.Size(924, 136);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Document Information";
             // 
+            // BtnRemoveCustomXmlParts
+            // 
+            this.BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(769, 74);
+            this.BtnRemoveCustomXmlParts.Name = "BtnRemoveCustomXmlParts";
+            this.BtnRemoveCustomXmlParts.Size = new System.Drawing.Size(143, 23);
+            this.BtnRemoveCustomXmlParts.TabIndex = 13;
+            this.BtnRemoveCustomXmlParts.Text = "Remove Custom Xml";
+            this.BtnRemoveCustomXmlParts.UseVisualStyleBackColor = true;
+            this.BtnRemoveCustomXmlParts.Click += new System.EventHandler(this.BtnRemoveCustomXmlParts_Click);
+            // 
+            // BtnRemoveCustomFileProps
+            // 
+            this.BtnRemoveCustomFileProps.Location = new System.Drawing.Point(721, 103);
+            this.BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
+            this.BtnRemoveCustomFileProps.Size = new System.Drawing.Size(191, 23);
+            this.BtnRemoveCustomFileProps.TabIndex = 12;
+            this.BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
+            this.BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
+            this.BtnRemoveCustomFileProps.Click += new System.EventHandler(this.BtnRemoveCustomFileProps_Click);
+            // 
             // BtnExcelSheetViewer
             // 
-            this.BtnExcelSheetViewer.Location = new System.Drawing.Point(746, 74);
+            this.BtnExcelSheetViewer.Location = new System.Drawing.Point(637, 74);
             this.BtnExcelSheetViewer.Name = "BtnExcelSheetViewer";
-            this.BtnExcelSheetViewer.Size = new System.Drawing.Size(146, 23);
+            this.BtnExcelSheetViewer.Size = new System.Drawing.Size(126, 23);
             this.BtnExcelSheetViewer.TabIndex = 11;
             this.BtnExcelSheetViewer.Text = "Excel Sheet Viewer";
             this.BtnExcelSheetViewer.UseVisualStyleBackColor = true;
@@ -239,7 +263,7 @@ namespace Office_File_Explorer
             // 
             // BtnValidateDoc
             // 
-            this.BtnValidateDoc.Location = new System.Drawing.Point(605, 103);
+            this.BtnValidateDoc.Location = new System.Drawing.Point(580, 103);
             this.BtnValidateDoc.Name = "BtnValidateDoc";
             this.BtnValidateDoc.Size = new System.Drawing.Size(135, 23);
             this.BtnValidateDoc.TabIndex = 10;
@@ -249,9 +273,9 @@ namespace Office_File_Explorer
             // 
             // BtnViewCustomUI
             // 
-            this.BtnViewCustomUI.Location = new System.Drawing.Point(605, 74);
+            this.BtnViewCustomUI.Location = new System.Drawing.Point(522, 74);
             this.BtnViewCustomUI.Name = "BtnViewCustomUI";
-            this.BtnViewCustomUI.Size = new System.Drawing.Size(135, 23);
+            this.BtnViewCustomUI.Size = new System.Drawing.Size(109, 23);
             this.BtnViewCustomUI.TabIndex = 4;
             this.BtnViewCustomUI.Text = "View Custom UI";
             this.BtnViewCustomUI.UseVisualStyleBackColor = true;
@@ -259,9 +283,9 @@ namespace Office_File_Explorer
             // 
             // BtnFixCorruptDoc
             // 
-            this.BtnFixCorruptDoc.Location = new System.Drawing.Point(423, 74);
+            this.BtnFixCorruptDoc.Location = new System.Drawing.Point(369, 74);
             this.BtnFixCorruptDoc.Name = "BtnFixCorruptDoc";
-            this.BtnFixCorruptDoc.Size = new System.Drawing.Size(176, 23);
+            this.BtnFixCorruptDoc.Size = new System.Drawing.Size(147, 23);
             this.BtnFixCorruptDoc.TabIndex = 9;
             this.BtnFixCorruptDoc.Text = "Fix Corrupt Document";
             this.BtnFixCorruptDoc.UseVisualStyleBackColor = true;
@@ -269,7 +293,7 @@ namespace Office_File_Explorer
             // 
             // BtnCustomXml
             // 
-            this.BtnCustomXml.Location = new System.Drawing.Point(316, 103);
+            this.BtnCustomXml.Location = new System.Drawing.Point(290, 103);
             this.BtnCustomXml.Name = "BtnCustomXml";
             this.BtnCustomXml.Size = new System.Drawing.Size(126, 23);
             this.BtnCustomXml.TabIndex = 8;
@@ -279,7 +303,7 @@ namespace Office_File_Explorer
             // 
             // BtnDocProps
             // 
-            this.BtnDocProps.Location = new System.Drawing.Point(142, 103);
+            this.BtnDocProps.Location = new System.Drawing.Point(116, 103);
             this.BtnDocProps.Name = "BtnDocProps";
             this.BtnDocProps.Size = new System.Drawing.Size(168, 23);
             this.BtnDocProps.TabIndex = 7;
@@ -291,7 +315,7 @@ namespace Office_File_Explorer
             // 
             this.BtnViewImages.Location = new System.Drawing.Point(3, 103);
             this.BtnViewImages.Name = "BtnViewImages";
-            this.BtnViewImages.Size = new System.Drawing.Size(133, 23);
+            this.BtnViewImages.Size = new System.Drawing.Size(107, 23);
             this.BtnViewImages.TabIndex = 6;
             this.BtnViewImages.Text = "View Images";
             this.BtnViewImages.UseVisualStyleBackColor = true;
@@ -317,7 +341,7 @@ namespace Office_File_Explorer
             // 
             // BtnSearchAndReplace
             // 
-            this.BtnSearchAndReplace.Location = new System.Drawing.Point(448, 103);
+            this.BtnSearchAndReplace.Location = new System.Drawing.Point(423, 103);
             this.BtnSearchAndReplace.Name = "BtnSearchAndReplace";
             this.BtnSearchAndReplace.Size = new System.Drawing.Size(151, 23);
             this.BtnSearchAndReplace.TabIndex = 1;
@@ -327,9 +351,9 @@ namespace Office_File_Explorer
             // 
             // BtnFixDocument
             // 
-            this.BtnFixDocument.Location = new System.Drawing.Point(281, 74);
+            this.BtnFixDocument.Location = new System.Drawing.Point(255, 74);
             this.BtnFixDocument.Name = "BtnFixDocument";
-            this.BtnFixDocument.Size = new System.Drawing.Size(136, 23);
+            this.BtnFixDocument.Size = new System.Drawing.Size(108, 23);
             this.BtnFixDocument.TabIndex = 3;
             this.BtnFixDocument.Text = "Fix Document";
             this.BtnFixDocument.UseVisualStyleBackColor = true;
@@ -346,7 +370,7 @@ namespace Office_File_Explorer
             // 
             // BtnModifyContent
             // 
-            this.BtnModifyContent.Location = new System.Drawing.Point(142, 74);
+            this.BtnModifyContent.Location = new System.Drawing.Point(116, 74);
             this.BtnModifyContent.Name = "BtnModifyContent";
             this.BtnModifyContent.Size = new System.Drawing.Size(133, 23);
             this.BtnModifyContent.TabIndex = 2;
@@ -367,7 +391,7 @@ namespace Office_File_Explorer
             // 
             this.BtnViewContents.Location = new System.Drawing.Point(3, 74);
             this.BtnViewContents.Name = "BtnViewContents";
-            this.BtnViewContents.Size = new System.Drawing.Size(133, 23);
+            this.BtnViewContents.Size = new System.Drawing.Size(107, 23);
             this.BtnViewContents.TabIndex = 0;
             this.BtnViewContents.Text = "View Contents";
             this.BtnViewContents.UseVisualStyleBackColor = true;
@@ -379,7 +403,7 @@ namespace Office_File_Explorer
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 160);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(904, 389);
+            this.groupBox2.Size = new System.Drawing.Size(924, 389);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Output";
@@ -393,7 +417,7 @@ namespace Office_File_Explorer
             this.LstDisplay.ItemHeight = 15;
             this.LstDisplay.Location = new System.Drawing.Point(3, 19);
             this.LstDisplay.Name = "LstDisplay";
-            this.LstDisplay.Size = new System.Drawing.Size(898, 367);
+            this.LstDisplay.Size = new System.Drawing.Size(918, 367);
             this.LstDisplay.TabIndex = 0;
             // 
             // contextMenuStrip1
@@ -432,7 +456,7 @@ namespace Office_File_Explorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(904, 549);
+            this.ClientSize = new System.Drawing.Size(924, 549);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.mnuMainMenu);
@@ -493,6 +517,8 @@ namespace Office_File_Explorer
         private System.Windows.Forms.Button BtnValidateDoc;
         private System.Windows.Forms.ToolStripMenuItem openFileBackupFolderToolStripMenuItem;
         private System.Windows.Forms.Button BtnExcelSheetViewer;
+        private System.Windows.Forms.Button BtnRemoveCustomFileProps;
+        private System.Windows.Forms.Button BtnRemoveCustomXmlParts;
     }
 }
 

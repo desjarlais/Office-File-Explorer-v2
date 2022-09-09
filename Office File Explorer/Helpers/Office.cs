@@ -24,6 +24,8 @@ using AO = DocumentFormat.OpenXml.Office.Drawing;
 using A = DocumentFormat.OpenXml.Drawing;
 using Path = System.IO.Path;
 using System.Reflection;
+using System.Reflection.Metadata;
+using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -334,6 +336,79 @@ namespace Office_File_Explorer.Helpers
                     using (StreamWriter streamWriter = new StreamWriter(themePart.GetStream(FileMode.Create)))
                     {
                         streamWriter.Write(streamReader.ReadToEnd());
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove the file "custom.xml" from the "docProps" folder of the file
+        /// This contains all custom props added in the file properties tab under "Custom"
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="app"></param>
+        public static void RemoveCustomDocProperties(string path, string app)
+        {
+            if (app == Strings.oAppWord)
+            {
+                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
+                {
+                    wordDoc.DeletePart(wordDoc.CustomFilePropertiesPart);
+                }
+            }
+            else if (app == Strings.oAppPowerPoint)
+            {
+                using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
+                {
+                    presDoc.DeletePart(presDoc.CustomFilePropertiesPart);
+                }
+            }
+            else
+            {
+                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
+                {
+                    excelDoc.DeletePart(excelDoc.CustomFilePropertiesPart);
+                }
+            }
+        }
+
+        /// <summary>
+        /// this removes the custom xml folder
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="app"></param>
+        public static void RemoveCustomXmlParts(string path, string app)
+        {
+            if (app == Strings.oAppWord)
+            {
+                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
+                {
+                    foreach (CustomXmlPart cxp in wordDoc.MainDocumentPart.CustomXmlParts)
+                    {
+                        wordDoc.MainDocumentPart.DeletePart(cxp);
+                        wordDoc.Save();
+                    }
+                }
+            }
+            else if (app == Strings.oAppPowerPoint)
+            {
+                using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
+                {
+                    foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
+                    {
+                        presDoc.PresentationPart.DeletePart(cxp);
+                        presDoc.Save();
+                    }
+                }
+            }
+            else
+            {
+                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
+                {
+                    foreach (CustomXmlPart cxp in excelDoc.WorkbookPart.CustomXmlParts)
+                    {
+                        excelDoc.WorkbookPart.DeletePart(cxp);
+                        excelDoc.Save();
                     }
                 }
             }

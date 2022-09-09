@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -347,6 +348,18 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
+        public static Sheets GetAllWorksheets(string fileName)
+        {
+            Sheets theSheets = null;
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, false))
+            {
+                WorkbookPart wbPart = document.WorkbookPart;
+                theSheets = wbPart.Workbook.Sheets;
+            }
+            return theSheets;
+        }
+
         public static List<Worksheet> GetWorkSheets(string fileName, bool fileIsEditable)
         {
             List<Worksheet> returnVal = new List<Worksheet>();
@@ -360,6 +373,26 @@ namespace Office_File_Explorer.Helpers
             }
 
             return returnVal;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="worksheetName"></param>
+        /// <returns></returns>
+        public static bool ExportWorksheet(string fileName, string worksheetName)
+        {
+            fSuccess = false;
+
+            // 1. make a copy of the file
+            // 2. open the copy
+            // 3. loop each worksheet and delete
+            // 4. ...unless the worksheet is the passed in value, which you want to keep
+
+            //File newBookCopy = File.Copy(fileName, AddTextToFileName()
+
+            return fSuccess;
         }
 
         public static List<string> GetSharedStrings(string path)
