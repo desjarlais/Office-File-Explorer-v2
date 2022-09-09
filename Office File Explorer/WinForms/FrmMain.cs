@@ -524,7 +524,7 @@ namespace Office_File_Explorer
         public static List<string> CfpList(CustomFilePropertiesPart part)
         {
             List<string> val = new List<string>();
-            foreach (CustomDocumentProperty cdp in part.RootElement)
+            foreach (CustomDocumentProperty cdp in part.RootElement.Cast<CustomDocumentProperty>())
             {
                 val.Add(cdp.Name + Strings.wColonBuffer + cdp.InnerText);
             }
@@ -870,8 +870,7 @@ namespace Office_File_Explorer
             }
 
             Office.SearchAndReplace(lblFilePath.Text, findText, replaceText);
-            LstDisplay.Items.Clear();
-            LstDisplay.Items.Add("** Search and Replace Finished **");
+            LogInformation(LogInfoType.ClearAndAdd, "** Search and Replace Finished **", string.Empty);
         }
 
         private void BtnFixDocument_Click(object sender, EventArgs e)
@@ -904,8 +903,7 @@ namespace Office_File_Explorer
                     // if it was cancelled, do nothing
                     if (f.corruptionChecked != "Cancel")
                     {
-                        LstDisplay.Items.Clear();
-                        LstDisplay.Items.Add("No Corruption Found");
+                        LogInformation(LogInfoType.ClearAndAdd, "No Corruption Found", string.Empty);
                     }
                 }
             }
@@ -2002,15 +2000,13 @@ namespace Office_File_Explorer
         private void BtnRemoveCustomFileProps_Click(object sender, EventArgs e)
         {
             Office.RemoveCustomDocProperties(lblFilePath.Text, lblFileType.Text);
-            LstDisplay.Items.Clear();
-            LstDisplay.Items.Add("Custom File Properties Removed.");
+            LogInformation(LogInfoType.ClearAndAdd, "Custom File Properties Removed.", string.Empty);
         }
 
         private void BtnRemoveCustomXmlParts_Click(object sender, EventArgs e)
         {
             Office.RemoveCustomXmlParts(lblFilePath.Text, lblFileType.Text);
-            LstDisplay.Items.Clear();
-            LstDisplay.Items.Add("Custom Xml Parts Removed.");
+            LogInformation(LogInfoType.ClearAndAdd, "Custom Xml Parts Removed.", string.Empty);
         }
     }
 }
