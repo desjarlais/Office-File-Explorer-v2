@@ -233,7 +233,7 @@ namespace Office_File_Explorer
             // 
             // BtnRemoveCustomXmlParts
             // 
-            this.BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(769, 74);
+            this.BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(525, 107);
             this.BtnRemoveCustomXmlParts.Name = "BtnRemoveCustomXmlParts";
             this.BtnRemoveCustomXmlParts.Size = new System.Drawing.Size(143, 23);
             this.BtnRemoveCustomXmlParts.TabIndex = 13;
@@ -243,9 +243,9 @@ namespace Office_File_Explorer
             // 
             // BtnRemoveCustomFileProps
             // 
-            this.BtnRemoveCustomFileProps.Location = new System.Drawing.Point(721, 103);
+            this.BtnRemoveCustomFileProps.Location = new System.Drawing.Point(674, 107);
             this.BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
-            this.BtnRemoveCustomFileProps.Size = new System.Drawing.Size(191, 23);
+            this.BtnRemoveCustomFileProps.Size = new System.Drawing.Size(175, 23);
             this.BtnRemoveCustomFileProps.TabIndex = 12;
             this.BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
             this.BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
@@ -253,7 +253,7 @@ namespace Office_File_Explorer
             // 
             // BtnExcelSheetViewer
             // 
-            this.BtnExcelSheetViewer.Location = new System.Drawing.Point(637, 74);
+            this.BtnExcelSheetViewer.Location = new System.Drawing.Point(653, 78);
             this.BtnExcelSheetViewer.Name = "BtnExcelSheetViewer";
             this.BtnExcelSheetViewer.Size = new System.Drawing.Size(126, 23);
             this.BtnExcelSheetViewer.TabIndex = 11;
@@ -263,7 +263,7 @@ namespace Office_File_Explorer
             // 
             // BtnValidateDoc
             // 
-            this.BtnValidateDoc.Location = new System.Drawing.Point(580, 103);
+            this.BtnValidateDoc.Location = new System.Drawing.Point(785, 78);
             this.BtnValidateDoc.Name = "BtnValidateDoc";
             this.BtnValidateDoc.Size = new System.Drawing.Size(135, 23);
             this.BtnValidateDoc.TabIndex = 10;
@@ -273,7 +273,7 @@ namespace Office_File_Explorer
             // 
             // BtnViewCustomUI
             // 
-            this.BtnViewCustomUI.Location = new System.Drawing.Point(522, 74);
+            this.BtnViewCustomUI.Location = new System.Drawing.Point(538, 78);
             this.BtnViewCustomUI.Name = "BtnViewCustomUI";
             this.BtnViewCustomUI.Size = new System.Drawing.Size(109, 23);
             this.BtnViewCustomUI.TabIndex = 4;
@@ -283,7 +283,7 @@ namespace Office_File_Explorer
             // 
             // BtnFixCorruptDoc
             // 
-            this.BtnFixCorruptDoc.Location = new System.Drawing.Point(369, 74);
+            this.BtnFixCorruptDoc.Location = new System.Drawing.Point(233, 107);
             this.BtnFixCorruptDoc.Name = "BtnFixCorruptDoc";
             this.BtnFixCorruptDoc.Size = new System.Drawing.Size(147, 23);
             this.BtnFixCorruptDoc.TabIndex = 9;
@@ -293,7 +293,7 @@ namespace Office_File_Explorer
             // 
             // BtnCustomXml
             // 
-            this.BtnCustomXml.Location = new System.Drawing.Point(290, 103);
+            this.BtnCustomXml.Location = new System.Drawing.Point(406, 78);
             this.BtnCustomXml.Name = "BtnCustomXml";
             this.BtnCustomXml.Size = new System.Drawing.Size(126, 23);
             this.BtnCustomXml.TabIndex = 8;
@@ -303,7 +303,7 @@ namespace Office_File_Explorer
             // 
             // BtnDocProps
             // 
-            this.BtnDocProps.Location = new System.Drawing.Point(116, 103);
+            this.BtnDocProps.Location = new System.Drawing.Point(232, 78);
             this.BtnDocProps.Name = "BtnDocProps";
             this.BtnDocProps.Size = new System.Drawing.Size(168, 23);
             this.BtnDocProps.TabIndex = 7;
@@ -313,7 +313,7 @@ namespace Office_File_Explorer
             // 
             // BtnViewImages
             // 
-            this.BtnViewImages.Location = new System.Drawing.Point(3, 103);
+            this.BtnViewImages.Location = new System.Drawing.Point(119, 78);
             this.BtnViewImages.Name = "BtnViewImages";
             this.BtnViewImages.Size = new System.Drawing.Size(107, 23);
             this.BtnViewImages.TabIndex = 6;
@@ -341,9 +341,9 @@ namespace Office_File_Explorer
             // 
             // BtnSearchAndReplace
             // 
-            this.BtnSearchAndReplace.Location = new System.Drawing.Point(423, 103);
+            this.BtnSearchAndReplace.Location = new System.Drawing.Point(386, 107);
             this.BtnSearchAndReplace.Name = "BtnSearchAndReplace";
-            this.BtnSearchAndReplace.Size = new System.Drawing.Size(151, 23);
+            this.BtnSearchAndReplace.Size = new System.Drawing.Size(133, 23);
             this.BtnSearchAndReplace.TabIndex = 1;
             this.BtnSearchAndReplace.Text = "Search and Replace";
             this.BtnSearchAndReplace.UseVisualStyleBackColor = true;
@@ -351,7 +351,7 @@ namespace Office_File_Explorer
             // 
             // BtnFixDocument
             // 
-            this.BtnFixDocument.Location = new System.Drawing.Point(255, 74);
+            this.BtnFixDocument.Location = new System.Drawing.Point(119, 107);
             this.BtnFixDocument.Name = "BtnFixDocument";
             this.BtnFixDocument.Size = new System.Drawing.Size(108, 23);
             this.BtnFixDocument.TabIndex = 3;
@@ -370,9 +370,9 @@ namespace Office_File_Explorer
             // 
             // BtnModifyContent
             // 
-            this.BtnModifyContent.Location = new System.Drawing.Point(116, 74);
+            this.BtnModifyContent.Location = new System.Drawing.Point(6, 107);
             this.BtnModifyContent.Name = "BtnModifyContent";
-            this.BtnModifyContent.Size = new System.Drawing.Size(133, 23);
+            this.BtnModifyContent.Size = new System.Drawing.Size(107, 23);
             this.BtnModifyContent.TabIndex = 2;
             this.BtnModifyContent.Text = "Modify Contents";
             this.BtnModifyContent.UseVisualStyleBackColor = true;
@@ -383,13 +383,13 @@ namespace Office_File_Explorer
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 19);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 15);
+            this.label1.Size = new System.Drawing.Size(28, 15);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Path: ";
+            this.label1.Text = "File:";
             // 
             // BtnViewContents
             // 
-            this.BtnViewContents.Location = new System.Drawing.Point(3, 74);
+            this.BtnViewContents.Location = new System.Drawing.Point(6, 78);
             this.BtnViewContents.Name = "BtnViewContents";
             this.BtnViewContents.Size = new System.Drawing.Size(107, 23);
             this.BtnViewContents.TabIndex = 0;
