@@ -25,7 +25,7 @@ namespace Office_File_Explorer.Helpers
 
 		private static void GenerateCallback(XmlNode node, StringBuilder result)
 		{
-			if (node.Attributes != null)
+			if (node.Attributes is not null)
 			{
 				foreach (XmlAttribute attribute in node.Attributes)
 				{
@@ -46,7 +46,7 @@ namespace Office_File_Explorer.Helpers
 						result.Append(controlID + " " + attribute.Name);
 					}
 
-					result.Append("\n");
+					result.Append('\n');
 					result.Append(callback);
 					result.Append("\n\n");
 				}

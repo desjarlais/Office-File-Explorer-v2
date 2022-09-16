@@ -143,6 +143,9 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// majority of open file logic is here
+        /// </summary>
         public void OpenOfficeDocument()
         {
             try
@@ -253,7 +256,6 @@ namespace Office_File_Explorer
                     LstDisplay.Items.Clear();
                     LstDisplay.Items.Add(output);
                     LstDisplay.Items.Add(ex);
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, DateTime.Now.ToString());
                     FileUtilities.WriteToLog(Strings.fLogFilePath, output);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, ex);
                     break;
