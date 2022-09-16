@@ -175,6 +175,7 @@ namespace Office_File_Explorer
                             LstDisplay.Items.Add("  - file encrypted");
                             LstDisplay.Items.Add("  - file password protected");
                             LstDisplay.Items.Add("  - not a valid Open Xml file");
+                            DisableUI();
                         }
                         else
                         {
