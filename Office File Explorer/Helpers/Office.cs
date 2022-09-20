@@ -3,7 +3,6 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.CustomProperties;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.VariantTypes;
-using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Validation;
 
@@ -24,7 +23,6 @@ using AO = DocumentFormat.OpenXml.Office.Drawing;
 using A = DocumentFormat.OpenXml.Drawing;
 using Path = System.IO.Path;
 using System.Reflection;
-using System.Reflection.Metadata;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 
 namespace Office_File_Explorer.Helpers
@@ -32,6 +30,7 @@ namespace Office_File_Explorer.Helpers
     class Office
     {
         public static List<int> corruptByteIndexes = new List<int>();
+        public static bool isFixed;
 
         // custom document property types
         public enum PropertyTypes : int
@@ -347,8 +346,10 @@ namespace Office_File_Explorer.Helpers
         /// </summary>
         /// <param name="path"></param>
         /// <param name="app"></param>
-        public static void RemoveCustomDocProperties(string path, string app)
+        public static bool RemoveCustomDocProperties(string path, string app)
         {
+            isFixed = false;
+
             if (app == Strings.oAppWord)
             {
                 using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
@@ -370,6 +371,9 @@ namespace Office_File_Explorer.Helpers
                     excelDoc.DeletePart(excelDoc.CustomFilePropertiesPart);
                 }
             }
+
+            isFixed = true;
+            return isFixed;
         }
 
         /// <summary>
@@ -377,8 +381,9 @@ namespace Office_File_Explorer.Helpers
         /// </summary>
         /// <param name="path"></param>
         /// <param name="app"></param>
-        public static void RemoveCustomXmlParts(string path, string app)
+        public static bool RemoveCustomXmlParts(string path, string app)
         {
+            isFixed = false;
             if (app == Strings.oAppWord)
             {
                 using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
@@ -412,6 +417,9 @@ namespace Office_File_Explorer.Helpers
                     }
                 }
             }
+
+            isFixed = true;
+            return isFixed;
         }
 
         /// <summary>

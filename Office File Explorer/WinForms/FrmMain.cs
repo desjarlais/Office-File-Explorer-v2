@@ -2002,14 +2002,50 @@ namespace Office_File_Explorer
 
         private void BtnRemoveCustomFileProps_Click(object sender, EventArgs e)
         {
-            Office.RemoveCustomDocProperties(lblFilePath.Text, lblFileType.Text);
-            LogInformation(LogInfoType.ClearAndAdd, "Custom File Properties Removed.", string.Empty);
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                if (Office.RemoveCustomDocProperties(lblFilePath.Text, lblFileType.Text))
+                {
+                    LogInformation(LogInfoType.ClearAndAdd, "Custom File Properties Removed.", string.Empty);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogInformation(LogInfoType.LogException, "Remove Custom Doc Props Failed", ex.Message);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         private void BtnRemoveCustomXmlParts_Click(object sender, EventArgs e)
         {
-            Office.RemoveCustomXmlParts(lblFilePath.Text, lblFileType.Text);
-            LogInformation(LogInfoType.ClearAndAdd, "Custom Xml Parts Removed.", string.Empty);
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                if (Office.RemoveCustomXmlParts(lblFilePath.Text, lblFileType.Text))
+                {
+                    LogInformation(LogInfoType.ClearAndAdd, "Custom Xml Parts Removed.", string.Empty);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogInformation(LogInfoType.LogException, "Remove Custom Xml Failed", ex.Message);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
     }
 }
