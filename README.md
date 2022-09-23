@@ -29,6 +29,7 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Fix content control namespaces
 * Fix document corruptions (bookmarks, revisions, endnotes, list templates, table properties, comments, hyperlinks, content controls, math formulas)
 * Remove PII
+* View Sensitivity Labeled files (credit to https://github.com/ironfede/openmcdf for the heavy lifting parsing the compound file format)
 
 ### Excel
 * List function to display (links, comments, worksheets, hidden rows & columns, shared strings, connections, defined names, hyperlinks)
