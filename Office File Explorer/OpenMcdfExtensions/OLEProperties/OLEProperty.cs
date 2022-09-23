@@ -1,0 +1,57 @@
+﻿using Microsoft.Graph.ExternalConnectors;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
+{
+    public class OLEProperty
+    {
+        private OLEPropertiesContainer container;
+
+        internal OLEProperty(OLEPropertiesContainer container)
+        {
+            this.container = container;
+        }
+
+        public string PropertyName
+        {
+            get { return DecodePropertyIdentifier(); }
+        }
+
+        private string DecodePropertyIdentifier()
+        {
+            return PropertyIdentifier.GetDescription(this.container.ContainerType, this.container.PropertyNames);
+        }
+
+        //public string Description { get { return description; }
+        public uint PropertyIdentifier { get; internal set; }
+
+        public VTPropertyType VTType
+        {
+            get;
+            internal set;
+        }
+
+        public object Value
+        {
+            get;
+            set;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as OLEProperty;
+            if (other == null) return false;
+
+            return other.PropertyIdentifier == this.PropertyIdentifier;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)this.PropertyIdentifier;
+        }
+    }
+}

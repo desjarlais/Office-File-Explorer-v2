@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Packaging;
 
 // App refs
 using Office_File_Explorer.Helpers;
+using Office_File_Explorer.OpenMcdf;
 using Office_File_Explorer.WinForms;
 
 // .NET refs
@@ -20,6 +21,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
+using File = System.IO.File;
 
 namespace Office_File_Explorer
 {
@@ -29,6 +31,9 @@ namespace Office_File_Explorer
         private string findText;
         private string replaceText;
         private string fromChangeTemplate;
+
+        // openmcdf globals
+        private FileStream fs;
         
         private static string StrCopiedFileName = string.Empty;
         private static string StrOfficeApp = string.Empty;
@@ -143,6 +148,18 @@ namespace Office_File_Explorer
             }
         }
 
+        public void OpenEncryptedOfficeDocument(string fileName, bool enableCommit)
+        {
+            fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);
+
+            FrmEncryptedFile cForm = new FrmEncryptedFile(fs, true)
+            {
+                Owner = this
+            };
+            cForm.ShowDialog();
+        }
+
+
         /// <summary>
         /// majority of open file logic is here
         /// </summary>
@@ -179,6 +196,8 @@ namespace Office_File_Explorer
                             LstDisplay.Items.Add("  - file password protected");
                             LstDisplay.Items.Add("  - not a valid Open Xml file");
                             DisableUI();
+
+                            OpenEncryptedOfficeDocument(lblFilePath.Text, true);
                         }
                         else
                         {
@@ -1580,6 +1599,11 @@ namespace Office_File_Explorer
             cFrm.ShowDialog();
         }
 
+        /// <summary>
+        /// Fix for some known issues where math xml tags are in the wrong order
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnFixCorruptDoc_Click(object sender, EventArgs e)
         {
             try
