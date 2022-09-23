@@ -43,6 +43,7 @@ namespace Office_File_Explorer.WinForms
             this.ckbSubfolders = new System.Windows.Forms.CheckBox();
             this.lstOutput = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.BtnResetBulletMargins = new System.Windows.Forms.Button();
             this.BtnRemoveCustomTitle = new System.Windows.Forms.Button();
             this.BtnFixComments = new System.Windows.Forms.Button();
             this.BtnRemovePII = new System.Windows.Forms.Button();
@@ -126,14 +127,14 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Location = new System.Drawing.Point(238, 28);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(726, 64);
+            this.groupBox2.Size = new System.Drawing.Size(769, 64);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Folder Location";
             // 
             // BtnBrowseFolder
             // 
-            this.BtnBrowseFolder.Location = new System.Drawing.Point(594, 25);
+            this.BtnBrowseFolder.Location = new System.Drawing.Point(635, 25);
             this.BtnBrowseFolder.Name = "BtnBrowseFolder";
             this.BtnBrowseFolder.Size = new System.Drawing.Size(126, 23);
             this.BtnBrowseFolder.TabIndex = 2;
@@ -145,7 +146,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.tbFolderPath.Location = new System.Drawing.Point(46, 26);
             this.tbFolderPath.Name = "tbFolderPath";
-            this.tbFolderPath.Size = new System.Drawing.Size(542, 23);
+            this.tbFolderPath.Size = new System.Drawing.Size(583, 23);
             this.tbFolderPath.TabIndex = 1;
             // 
             // label1
@@ -164,14 +165,14 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.Controls.Add(this.lstOutput);
             this.groupBox3.Location = new System.Drawing.Point(12, 98);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(952, 285);
+            this.groupBox3.Size = new System.Drawing.Size(995, 285);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Files";
             // 
             // BtnCopyOutput
             // 
-            this.BtnCopyOutput.Location = new System.Drawing.Point(817, 254);
+            this.BtnCopyOutput.Location = new System.Drawing.Point(861, 254);
             this.BtnCopyOutput.Name = "BtnCopyOutput";
             this.BtnCopyOutput.Size = new System.Drawing.Size(126, 23);
             this.BtnCopyOutput.TabIndex = 2;
@@ -196,11 +197,12 @@ namespace Office_File_Explorer.WinForms
             this.lstOutput.ItemHeight = 15;
             this.lstOutput.Location = new System.Drawing.Point(3, 19);
             this.lstOutput.Name = "lstOutput";
-            this.lstOutput.Size = new System.Drawing.Size(940, 229);
+            this.lstOutput.Size = new System.Drawing.Size(984, 229);
             this.lstOutput.TabIndex = 0;
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.BtnResetBulletMargins);
             this.groupBox4.Controls.Add(this.BtnRemoveCustomTitle);
             this.groupBox4.Controls.Add(this.BtnFixComments);
             this.groupBox4.Controls.Add(this.BtnRemovePII);
@@ -220,10 +222,20 @@ namespace Office_File_Explorer.WinForms
             this.groupBox4.Controls.Add(this.BtnAddCustomProps);
             this.groupBox4.Location = new System.Drawing.Point(12, 383);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(952, 118);
+            this.groupBox4.Size = new System.Drawing.Size(995, 118);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Batch Commands";
+            // 
+            // BtnResetBulletMargins
+            // 
+            this.BtnResetBulletMargins.Location = new System.Drawing.Point(838, 80);
+            this.BtnResetBulletMargins.Name = "BtnResetBulletMargins";
+            this.BtnResetBulletMargins.Size = new System.Drawing.Size(149, 23);
+            this.BtnResetBulletMargins.TabIndex = 2;
+            this.BtnResetBulletMargins.Text = "Reset Bullet Tab Margins";
+            this.BtnResetBulletMargins.UseVisualStyleBackColor = true;
+            this.BtnResetBulletMargins.Click += new System.EventHandler(this.BtnResetBulletMargins_Click);
             // 
             // BtnRemoveCustomTitle
             // 
@@ -249,7 +261,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.BtnRemovePII.Location = new System.Drawing.Point(838, 22);
             this.BtnRemovePII.Name = "BtnRemovePII";
-            this.BtnRemovePII.Size = new System.Drawing.Size(105, 23);
+            this.BtnRemovePII.Size = new System.Drawing.Size(149, 23);
             this.BtnRemovePII.TabIndex = 14;
             this.BtnRemovePII.Text = "Remove PII";
             this.BtnRemovePII.UseVisualStyleBackColor = true;
@@ -269,7 +281,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.BtnChangeTheme.Location = new System.Drawing.Point(838, 51);
             this.BtnChangeTheme.Name = "BtnChangeTheme";
-            this.BtnChangeTheme.Size = new System.Drawing.Size(105, 23);
+            this.BtnChangeTheme.Size = new System.Drawing.Size(149, 23);
             this.BtnChangeTheme.TabIndex = 12;
             this.BtnChangeTheme.Text = "Change Theme";
             this.BtnChangeTheme.UseVisualStyleBackColor = true;
@@ -403,7 +415,7 @@ namespace Office_File_Explorer.WinForms
             this.DisplayDrivesToolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(967, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1017, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -433,7 +445,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(967, 513);
+            this.ClientSize = new System.Drawing.Size(1017, 513);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
@@ -499,5 +511,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.ToolStripButton LoginLogoutToolStripButton;
         private System.Windows.Forms.ToolStripLabel LoggedInUserToolStripLabel;
         private System.Windows.Forms.ToolStripButton DisplayDrivesToolStripButton;
+        private System.Windows.Forms.Button BtnResetBulletMargins;
     }
 }

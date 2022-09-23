@@ -148,6 +148,7 @@ namespace Office_File_Explorer
             }
         }
 
+        [Obsolete]
         public void OpenEncryptedOfficeDocument(string fileName, bool enableCommit)
         {
             fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);

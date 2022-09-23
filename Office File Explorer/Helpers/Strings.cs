@@ -122,6 +122,7 @@ namespace Office_File_Explorer.Helpers
         public const string nonEmptyId = "Target Id cannot be empty.";
         public const string duplicateId = "OOXML part Id <1> already exists.";
         public const string pptNotesSizeReset = "Notes Page Size Reset.";
+        public const string pptResetBulletMargins = "Bullet Margins Reset";
         public const string fileDoesNotExist = "** File does not exist **";
         public const string themeFileAdded = "Theme File Added.";
         public const string unableToDownloadUpdate = "Unable to download update.";

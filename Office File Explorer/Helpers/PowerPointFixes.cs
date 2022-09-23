@@ -649,5 +649,35 @@ namespace Office_File_Explorer.Helpers
                 }
             }
         }
+
+        /// <summary>
+        /// Reset the left margin for the paragraph properties
+        /// Seen some files where all margins are set to 0
+        /// this means tabs will not work for bullets/numbering
+        /// well, it technically is working, if they all are 0 
+        /// pressing tab has nowhere to go so it looks like it isn't working
+        /// this will reset the levels to default values
+        /// </summary>
+        /// <param name="pDoc">oxml doc to change</param>
+        public static void ResetBulletMargins(PresentationDocument pDoc)
+        {
+            // Get the presentation part of document
+            PresentationPart presentationPart = pDoc.PresentationPart;
+
+            if (presentationPart != null)
+            {
+                Presentation p = presentationPart.Presentation;
+                p.DefaultTextStyle.Level1ParagraphProperties.LeftMargin = 0;
+                p.DefaultTextStyle.Level2ParagraphProperties.LeftMargin = 457200;
+                p.DefaultTextStyle.Level3ParagraphProperties.LeftMargin = 914400;
+                p.DefaultTextStyle.Level4ParagraphProperties.LeftMargin = 1371600;
+                p.DefaultTextStyle.Level5ParagraphProperties.LeftMargin = 1828800;
+                p.DefaultTextStyle.Level6ParagraphProperties.LeftMargin = 2286000;
+                p.DefaultTextStyle.Level7ParagraphProperties.LeftMargin = 2743200;
+                p.DefaultTextStyle.Level8ParagraphProperties.LeftMargin = 3200400;
+                p.DefaultTextStyle.Level9ParagraphProperties.LeftMargin = 3657600;
+            }
+            pDoc.Save();
+        }
     }
 }

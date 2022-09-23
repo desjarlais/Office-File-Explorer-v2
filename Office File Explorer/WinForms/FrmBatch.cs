@@ -123,6 +123,7 @@ namespace Office_File_Explorer.WinForms
             BtnUpdateNamespaces.Enabled = false;
             BtnFixComments.Enabled = false;
             BtnRemoveCustomTitle.Enabled = false;
+            BtnResetBulletMargins.Enabled = false;
         }
 
         public void EnableUI()
@@ -164,6 +165,7 @@ namespace Office_File_Explorer.WinForms
                 BtnRemovePII.Enabled = true;
                 BtnRemovePIIOnSave.Enabled = true;
                 BtnFixNotesPage.Enabled = true;
+                BtnResetBulletMargins.Enabled = true;
             }
 
             if (rdoExcel.Checked == true)
@@ -1855,6 +1857,34 @@ namespace Office_File_Explorer.WinForms
             if (e.KeyCode == Keys.Escape)
             {
                 Close();
+            }
+        }
+
+        private void BtnResetBulletMargins_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+            Cursor = Cursors.WaitCursor;
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    using (PresentationDocument document = PresentationDocument.Open(f, true))
+                    {
+                        PowerPointFixes.ResetBulletMargins(document);
+                        lstOutput.Items.Add(f + Strings.wArrow + Strings.pptResetBulletMargins);
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.pptResetBulletMargins);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
             }
         }
     }
