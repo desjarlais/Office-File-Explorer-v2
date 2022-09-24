@@ -11,7 +11,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions
 
         public StreamDecorator(CFStream cfstream)
         {
-            this.cfStream = cfstream;
+            cfStream = cfstream;
         }
 
         public override bool CanRead
@@ -65,7 +65,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions
             if (position >= cfStream.Size)
                 return 0;
 
-            count = this.cfStream.Read(buffer, position, offset, count);
+            count = cfStream.Read(buffer, position, offset, count);
             position += count;
             return count;
         }
@@ -90,14 +90,13 @@ namespace Office_File_Explorer.OpenMcdfExtensions
             return position;
         }
 
-        public override void SetLength(long value)
-        {
-            this.cfStream.Resize(value);
-        }
+        public override void SetLength(long value) => cfStream.Resize(value);
 
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override void Write(byte[] buffer, int offset, int count)
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
-            this.cfStream.Write(buffer, position, offset, count);
+            cfStream.Write(buffer, position, offset, count);
             position += count;
         }
 

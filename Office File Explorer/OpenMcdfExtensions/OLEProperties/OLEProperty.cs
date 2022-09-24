@@ -1,11 +1,4 @@
-﻿using Microsoft.Graph.ExternalConnectors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
+﻿namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 {
     public class OLEProperty
     {

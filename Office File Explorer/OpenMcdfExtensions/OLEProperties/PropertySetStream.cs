@@ -1,11 +1,7 @@
-﻿using Microsoft.Graph.ExternalConnectors;
-using Office_File_Explorer.OpenMcdfExtensions.OLEProperties.Interfaces;
+﻿using Office_File_Explorer.OpenMcdfExtensions.OLEProperties.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 {
@@ -156,8 +152,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             //}
 
             int size0 = (int)(bw.BaseStream.Position - oc0.OffsetPS);
-
-
 
             if (NumPropertySets == 2)
             {

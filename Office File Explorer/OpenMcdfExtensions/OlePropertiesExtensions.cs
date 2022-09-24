@@ -1,10 +1,5 @@
 ﻿using Office_File_Explorer.OpenMcdf;
 using Office_File_Explorer.OpenMcdfExtensions.OLEProperties;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdfExtensions
 {

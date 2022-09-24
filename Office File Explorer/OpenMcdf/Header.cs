@@ -177,13 +177,7 @@ namespace Office_File_Explorer.OpenMcdf
             get { return difat; }
         }
 
-
-        public Header()
-            : this(3)
-        {
-
-        }
-
+        public Header() : this(3) { }
 
         public Header(ushort version)
         {
@@ -191,27 +185,21 @@ namespace Office_File_Explorer.OpenMcdf
             switch (version)
             {
                 case 3:
-                    this.majorVersion = 3;
-                    this.sectorShift = 0x0009;
+                    majorVersion = 3;
+                    sectorShift = 0x0009;
                     break;
-
                 case 4:
-                    this.majorVersion = 4;
-                    this.sectorShift = 0x000C;
+                    majorVersion = 4;
+                    sectorShift = 0x000C;
                     break;
-
                 default:
                     throw new CFException("Invalid Compound File Format version");
-
-
             }
 
             for (int i = 0; i < 109; i++)
             {
                 difat[i] = Sector.FREESECT;
             }
-
-
         }
 
         public void Write(Stream stream)
@@ -276,16 +264,15 @@ namespace Office_File_Explorer.OpenMcdf
 
             for (int i = 0; i < 109; i++)
             {
-                this.DIFAT[i] = rw.ReadInt32();
+                DIFAT[i] = rw.ReadInt32();
             }
 
             rw.Close();
         }
 
-
         private void CheckVersion()
         {
-            if (this.majorVersion != 3 && this.majorVersion != 4)
+            if (majorVersion != 3 && majorVersion != 4)
                 throw new CFFileFormatException("Unsupported Binary File Format version: OpenMcdf only supports Compound Files with major version equal to 3 or 4 ");
         }
 

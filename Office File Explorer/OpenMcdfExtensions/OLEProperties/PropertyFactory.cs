@@ -127,6 +127,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             {
             }
         }
+
         private class VT_I1_Property : TypedPropertyValue<sbyte>
         {
             public VT_I1_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
@@ -242,7 +243,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 bw.Write(pValue);
             }
         }
-
         private class VT_I4_Property : TypedPropertyValue<int>
         {
             public VT_I4_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
@@ -278,7 +278,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 bw.Write(pValue);
             }
         }
-
         private class VT_INT_Property : TypedPropertyValue<int>
         {
             public VT_INT_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
@@ -314,7 +313,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 bw.Write(pValue);
             }
         }
-
 
         private class VT_R4_Property : TypedPropertyValue<float>
         {
@@ -481,7 +479,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             {
                 Decimal d;
 
-
                 br.ReadInt16(); // wReserved
                 byte scale = br.ReadByte();
                 byte sign = br.ReadByte();
@@ -611,6 +608,5 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
         }
 
         #endregion
-
     }
 }

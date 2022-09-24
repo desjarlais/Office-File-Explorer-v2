@@ -20,17 +20,11 @@ namespace RedBlackTree
 {
     public class RBTreeException : Exception
     {
-        public RBTreeException(String msg)
-            : base(msg)
-        {
-        }
+        public RBTreeException(string msg) : base(msg) { }
     }
     public class RBTreeDuplicatedItemException : RBTreeException
     {
-        public RBTreeDuplicatedItemException(String msg)
-            : base(msg)
-        {
-        }
+        public RBTreeDuplicatedItemException(string msg) : base(msg) { }
     }
 
     public enum Color { RED = 0, BLACK = 1 }
@@ -310,7 +304,7 @@ namespace RedBlackTree
         {
             deletedAlt = null;
             IRBNode n = LookupNode(template);
-            template = n;
+            //template = n;
             if (n == null)
                 return;  // Key not found, do nothing
             if (n.Left != null && n.Right != null)
@@ -455,7 +449,6 @@ namespace RedBlackTree
             {
                 DoVisitTree(action, walker.Right);
             }
-
         }
 
         internal void VisitTreeNodes(Action<IRBNode> action)
@@ -566,7 +559,7 @@ namespace RedBlackTree
         }
 
         internal event Action<IRBNode> NodeInserted;
-        internal event Action<IRBNode, NodeOperation> NodeOperation;
+        //internal event Action<IRBNode, NodeOperation> NodeOperation;
     }
 
     internal enum NodeOperation

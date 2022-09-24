@@ -162,15 +162,12 @@ namespace Office_File_Explorer.OpenMcdf
                         if (disposing)
                         {
                             // Call from user code...
-
-
                         }
 
                         this.data = null;
                         this.dirtyFlag = false;
                         this.id = Sector.ENDOFCHAIN;
                         this.size = 0;
-
                     }
                 }
             }
@@ -178,7 +175,6 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 _disposed = true;
             }
-
         }
 
         #region IDisposable Members

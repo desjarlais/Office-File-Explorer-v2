@@ -57,18 +57,18 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (stgType == StgType.StgStorage)
             {
-                this.creationDate = BitConverter.GetBytes((DateTime.Now.ToFileTime()));
-                this.StartSetc = ZERO;
+                creationDate = BitConverter.GetBytes((DateTime.Now.ToFileTime()));
+                StartSetc = ZERO;
             }
 
             if (stgType == StgType.StgInvalid)
             {
-                this.StartSetc = ZERO;
+                StartSetc = ZERO;
             }
 
             if (name != String.Empty)
             {
-                this.SetEntryName(name);
+                SetEntryName(name);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Office_File_Explorer.OpenMcdf
         {
             if (entryName != null && entryName.Length > 0)
             {
-                return Encoding.Unicode.GetString(entryName).Remove((this.nameLength - 1) / 2);
+                return Encoding.Unicode.GetString(entryName).Remove((nameLength - 1) / 2);
             }
             else
                 return String.Empty;
@@ -101,23 +101,15 @@ namespace Office_File_Explorer.OpenMcdf
             if (entryName == String.Empty)
             {
                 this.entryName = new byte[64];
-                this.nameLength = 0;
+                nameLength = 0;
             }
             else
             {
-                if (
-                    entryName.Contains(@"\") ||
-                    entryName.Contains(@"/") ||
-                    entryName.Contains(@":") ||
-                    entryName.Contains(@"!")
-
-                    )
+                if (entryName.Contains(@"\") || entryName.Contains(@"/") || entryName.Contains(@":") || entryName.Contains(@"!"))
                     throw new CFException("Invalid character in entry: the characters '\\', '/', ':','!' cannot be used in entry name");
 
                 if (entryName.Length > 31)
                     throw new CFException("Entry name MUST NOT exceed 31 characters");
-
-
 
                 byte[] newName = null;
                 byte[] temp = Encoding.Unicode.GetBytes(entryName);
@@ -127,7 +119,7 @@ namespace Office_File_Explorer.OpenMcdf
                 newName[temp.Length + 1] = 0x00;
 
                 this.entryName = newName;
-                this.nameLength = (ushort)(temp.Length + 2);
+                nameLength = (ushort)(temp.Length + 2);
             }
         }
 
@@ -191,8 +183,7 @@ namespace Office_File_Explorer.OpenMcdf
             set { child = value; }
         }
 
-        private Guid storageCLSID
-            = Guid.Empty;
+        private Guid storageCLSID = Guid.Empty;
 
         public Guid StorageCLSID
         {
@@ -202,7 +193,7 @@ namespace Office_File_Explorer.OpenMcdf
             }
             set
             {
-                this.storageCLSID = value;
+                storageCLSID = value;
             }
         }
 
@@ -268,27 +259,25 @@ namespace Office_File_Explorer.OpenMcdf
             }
         }
 
-
         public int CompareTo(object obj)
         {
-
             IDirectoryEntry otherDir = obj as IDirectoryEntry;
 
             if (otherDir == null)
                 throw new CFException("Invalid casting: compared object does not implement IDirectorEntry interface");
 
-            if (this.NameLength > otherDir.NameLength)
+            if (NameLength > otherDir.NameLength)
             {
                 return THIS_IS_GREATER;
             }
-            else if (this.NameLength < otherDir.NameLength)
+            else if (NameLength < otherDir.NameLength)
             {
                 return OTHER_IS_GREATER;
             }
             else
             {
-                String thisName = Encoding.Unicode.GetString(this.EntryName, 0, this.NameLength);
-                String otherName = Encoding.Unicode.GetString(otherDir.EntryName, 0, otherDir.NameLength);
+                string thisName = Encoding.Unicode.GetString(EntryName, 0, NameLength);
+                string otherName = Encoding.Unicode.GetString(otherDir.EntryName, 0, otherDir.NameLength);
 
                 for (int z = 0; z < thisName.Length; z++)
                 {
@@ -310,7 +299,7 @@ namespace Office_File_Explorer.OpenMcdf
 
         public override bool Equals(object obj)
         {
-            return this.CompareTo(obj) == 0;
+            return CompareTo(obj) == 0;
         }
 
         /// <summary>
@@ -332,7 +321,7 @@ namespace Office_File_Explorer.OpenMcdf
 
         public override int GetHashCode()
         {
-            return (int)fnv_hash(this.entryName);
+            return (int)fnv_hash(entryName);
         }
 
         public void Write(Stream stream)
@@ -512,7 +501,7 @@ namespace Office_File_Explorer.OpenMcdf
             return parent != null ? Parent.Sibling() : null;
         }
 
-        internal static IDirectoryEntry New(String name, StgType stgType, IList<IDirectoryEntry> dirRepository)
+        internal static IDirectoryEntry New(string name, StgType stgType, IList<IDirectoryEntry> dirRepository)
         {
             DirectoryEntry de = null;
             if (dirRepository != null)
@@ -528,7 +517,7 @@ namespace Office_File_Explorer.OpenMcdf
             return de;
         }
 
-        internal static IDirectoryEntry Mock(String name, StgType stgType)
+        internal static IDirectoryEntry Mock(string name, StgType stgType)
         {
             DirectoryEntry de = new DirectoryEntry(name, stgType, null);
 
@@ -562,33 +551,29 @@ namespace Office_File_Explorer.OpenMcdf
             return de;
         }
 
-
-
-
         public override string ToString()
         {
-            return this.Name + " [" + this.sid + "]" + (this.stgType == StgType.StgStream ? "Stream" : "Storage");
+            return Name + " [" + sid + "]" + (stgType == StgType.StgStream ? "Stream" : "Storage");
         }
-
 
         public void AssignValueTo(RedBlackTree.IRBNode other)
         {
             DirectoryEntry d = other as DirectoryEntry;
 
-            d.SetEntryName(this.GetEntryName());
+            d.SetEntryName(GetEntryName());
 
-            d.creationDate = new byte[this.creationDate.Length];
-            this.creationDate.CopyTo(d.creationDate, 0);
+            d.creationDate = new byte[creationDate.Length];
+            creationDate.CopyTo(d.creationDate, 0);
 
-            d.modifyDate = new byte[this.modifyDate.Length];
-            this.modifyDate.CopyTo(d.modifyDate, 0);
+            d.modifyDate = new byte[modifyDate.Length];
+            modifyDate.CopyTo(d.modifyDate, 0);
 
-            d.size = this.size;
-            d.startSetc = this.startSetc;
-            d.stateBits = this.stateBits;
-            d.stgType = this.stgType;
-            d.storageCLSID = new Guid(this.storageCLSID.ToByteArray());
-            d.Child = this.Child;
+            d.size = size;
+            d.startSetc = startSetc;
+            d.stateBits = stateBits;
+            d.stgType = stgType;
+            d.storageCLSID = new Guid(storageCLSID.ToByteArray());
+            d.Child = Child;
         }
     }
 }

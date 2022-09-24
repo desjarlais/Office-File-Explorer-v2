@@ -18,13 +18,12 @@ namespace Office_File_Explorer.OpenMcdf
     /// </summary>
     public class CFStream : CFItem
     {
-        internal CFStream(CompoundFile compoundFile, IDirectoryEntry dirEntry)
-            : base(compoundFile)
+        internal CFStream(CompoundFile compoundFile, IDirectoryEntry dirEntry) : base(compoundFile)
         {
             if (dirEntry == null || dirEntry.SID < 0)
                 throw new CFException("Attempting to add a CFStream using an unitialized directory");
 
-            this.DirEntry = dirEntry;
+            DirEntry = dirEntry;
         }
 
         /// <summary>
@@ -40,13 +39,12 @@ namespace Office_File_Explorer.OpenMcdf
         /// </example>
         /// <param name="data">Data bytes to write to this stream</param>
         /// <remarks>Existing associated data will be lost after method invocation</remarks>
-        [Obsolete]
         public void SetData(Byte[] data)
         {
             CheckDisposed();
 
-            this.CompoundFile.FreeData(this);
-            this.CompoundFile.WriteData(this, data);
+            CompoundFile.FreeData(this);
+            CompoundFile.WriteData(this, data);
         }
 
 
@@ -57,10 +55,9 @@ namespace Office_File_Explorer.OpenMcdf
         /// <param name="position">Position into the stream object to start writing from</param>
         /// <remarks>Current stream will be extended to receive data buffer over 
         /// its current size</remarks>
-        [Obsolete]
         public void Write(byte[] data, long position)
         {
-            this.Write(data, position, 0, data.Length);
+            Write(data, position, 0, data.Length);
         }
 
         /// <summary>
@@ -74,11 +71,10 @@ namespace Office_File_Explorer.OpenMcdf
         /// <param name="count">The number of bytes to be written to the current <see cref="T:OpenMcdf.CFStream">CFStream</see> </param>
         /// <remarks>Current stream will be extended to receive data buffer over 
         /// its current size.</remarks>
-        [Obsolete]
         internal void Write(byte[] data, long position, int offset, int count)
         {
             CheckDisposed();
-            this.CompoundFile.WriteData(this, data, position, offset, count);
+            CompoundFile.WriteData(this, data, position, offset, count);
         }
 
         /// <summary>
@@ -104,17 +100,16 @@ namespace Office_File_Explorer.OpenMcdf
         /// Append data can also be invoked on streams with no data in order
         /// to simplify its use inside loops.
         /// </remarks>
-        [Obsolete]
         public void Append(Byte[] data)
         {
             CheckDisposed();
-            if (this.Size > 0)
+            if (Size > 0)
             {
-                this.CompoundFile.AppendData(this, data);
+                CompoundFile.AppendData(this, data);
             }
             else
             {
-                this.CompoundFile.WriteData(this, data);
+                CompoundFile.WriteData(this, data);
             }
         }
 
@@ -136,9 +131,8 @@ namespace Office_File_Explorer.OpenMcdf
         {
             CheckDisposed();
 
-            return this.CompoundFile.GetData(this);
+            return CompoundFile.GetData(this);
         }
-
 
         /// <summary>
         /// Read <paramref name="count"/> bytes associated with the stream object, starting from
@@ -170,10 +164,8 @@ namespace Office_File_Explorer.OpenMcdf
         public int Read(byte[] buffer, long position, int count)
         {
             CheckDisposed();
-            return this.CompoundFile.ReadData(this, position, buffer, 0, count);
+            return CompoundFile.ReadData(this, position, buffer, 0, count);
         }
-
-
 
         /// <summary>
         /// Read <paramref name="count"/> bytes associated with the stream object, starting from
@@ -206,7 +198,7 @@ namespace Office_File_Explorer.OpenMcdf
         internal int Read(byte[] buffer, long position, int offset, int count)
         {
             CheckDisposed();
-            return this.CompoundFile.ReadData(this, position, buffer, offset, count);
+            return CompoundFile.ReadData(this, position, buffer, offset, count);
         }
 
 
@@ -218,7 +210,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// Input stream will NOT be closed after method invocation.
         /// Existing associated data will be deleted.
         /// </remarks>
-        [Obsolete]
         public void CopyFrom(Stream input)
         {
             CheckDisposed();
@@ -231,7 +222,7 @@ namespace Office_File_Explorer.OpenMcdf
             }
 
             input.Read(buffer, 0, (int)input.Length);
-            this.SetData(buffer);
+            SetData(buffer);
         }
 
 
@@ -239,10 +230,9 @@ namespace Office_File_Explorer.OpenMcdf
         /// Resize stream padding with zero if enlarging, trimming data if reducing size.
         /// </summary>
         /// <param name="length">New length to assign to this stream</param>
-        [Obsolete]
         public void Resize(long length)
         {
-            this.CompoundFile.SetStreamLength(this, length);
+            CompoundFile.SetStreamLength(this, length);
         }
     }
 }

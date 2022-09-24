@@ -148,18 +148,18 @@ namespace Office_File_Explorer
             }
         }
 
-        [Obsolete]
         public void OpenEncryptedOfficeDocument(string fileName, bool enableCommit)
         {
             fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);
 
+#pragma warning disable CS0612 // Type or member is obsolete
             FrmEncryptedFile cForm = new FrmEncryptedFile(fs, true)
             {
                 Owner = this
             };
+#pragma warning restore CS0612 // Type or member is obsolete
             cForm.ShowDialog();
         }
-
 
         /// <summary>
         /// majority of open file logic is here

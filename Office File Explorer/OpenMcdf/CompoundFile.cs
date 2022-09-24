@@ -17,6 +17,7 @@ namespace Office_File_Explorer.OpenMcdf
 {
     internal class CFItemComparer : IComparer<CFItem>
     {
+        [Obsolete]
         public int Compare(CFItem x, CFItem y)
         {
             // X CompareTo Y : X > Y --> 1 ; X < Y  --> -1
@@ -279,15 +280,15 @@ namespace Office_File_Explorer.OpenMcdf
         /// </example>
         public CompoundFile(CFSVersion cfsVersion, CFSConfiguration configFlags)
         {
-            this.configuration = configFlags;
+            configuration = configFlags;
 
             bool sectorRecycle = configFlags.HasFlag(CFSConfiguration.SectorRecycle);
             bool eraseFreeSectors = configFlags.HasFlag(CFSConfiguration.EraseFreeSectors);
 
-            this.header = new Header((ushort)cfsVersion);
+            header = new Header((ushort)cfsVersion);
 
             if (cfsVersion == CFSVersion.Ver_4)
-                this.sectors.OnVer3SizeLimitReached += new Ver3SizeLimitReached(OnSizeLimitReached);
+                sectors.OnVer3SizeLimitReached += new Ver3SizeLimitReached(OnSizeLimitReached);
 
             this.sectorRecycle = sectorRecycle;
 
@@ -336,9 +337,9 @@ namespace Office_File_Explorer.OpenMcdf
         [Obsolete]
         public CompoundFile(String fileName)
         {
-            this.sectorRecycle = false;
-            this.updateMode = CFSUpdateMode.ReadOnly;
-            this.eraseFreeSectors = false;
+            sectorRecycle = false;
+            updateMode = CFSUpdateMode.ReadOnly;
+            eraseFreeSectors = false;
 
             LoadFile(fileName);
 
@@ -374,11 +375,11 @@ namespace Office_File_Explorer.OpenMcdf
         [Obsolete]
         public CompoundFile(String fileName, CFSUpdateMode updateMode, CFSConfiguration configParameters)
         {
-            this.configuration = configParameters;
-            this.validationExceptionEnabled = !configParameters.HasFlag(CFSConfiguration.NoValidationException);
-            this.sectorRecycle = configParameters.HasFlag(CFSConfiguration.SectorRecycle);
+            configuration = configParameters;
+            validationExceptionEnabled = !configParameters.HasFlag(CFSConfiguration.NoValidationException);
+            sectorRecycle = configParameters.HasFlag(CFSConfiguration.SectorRecycle);
             this.updateMode = updateMode;
-            this.eraseFreeSectors = configParameters.HasFlag(CFSConfiguration.EraseFreeSectors);
+            eraseFreeSectors = configParameters.HasFlag(CFSConfiguration.EraseFreeSectors);
 
             LoadFile(fileName);
 
@@ -423,11 +424,11 @@ namespace Office_File_Explorer.OpenMcdf
         [Obsolete]
         public CompoundFile(Stream stream, CFSUpdateMode updateMode, CFSConfiguration configParameters)
         {
-            this.configuration = configParameters;
-            this.validationExceptionEnabled = !configParameters.HasFlag(CFSConfiguration.NoValidationException);
-            this.sectorRecycle = configParameters.HasFlag(CFSConfiguration.SectorRecycle);
-            this.eraseFreeSectors = configParameters.HasFlag(CFSConfiguration.EraseFreeSectors);
-            this.closeStream = !configParameters.HasFlag(CFSConfiguration.LeaveOpen);
+            configuration = configParameters;
+            validationExceptionEnabled = !configParameters.HasFlag(CFSConfiguration.NoValidationException);
+            sectorRecycle = configParameters.HasFlag(CFSConfiguration.SectorRecycle);
+            eraseFreeSectors = configParameters.HasFlag(CFSConfiguration.EraseFreeSectors);
+            closeStream = !configParameters.HasFlag(CFSConfiguration.LeaveOpen);
 
             this.updateMode = updateMode;
             LoadStream(stream);
@@ -482,7 +483,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// only if the supporting stream has been opened in 
         /// <see cref="T:OpenMcdf.UpdateMode">Update mode</see>.
         /// </remarks>
-        [Obsolete]
         public void Commit()
         {
             Commit(false);
@@ -504,7 +504,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// the supporting stream has been opened in 
         /// <see cref="T:OpenMcdf.UpdateMode">Update mode</see>.
         /// </remarks>
-        [Obsolete]
         public void Commit(bool releaseMemory)
         {
             if (_disposed)
@@ -513,8 +512,6 @@ namespace Office_File_Explorer.OpenMcdf
             if (updateMode != CFSUpdateMode.Update)
                 throw new CFInvalidOperation("Cannot commit data in Read-Only update mode");
 
-            //try
-            //{
 #if !FLAT_WRITE
 
             int sId = -1;
@@ -537,7 +534,6 @@ namespace Office_File_Explorer.OpenMcdf
             for (int i = 0; i < sectors.Count; i++)
             {
 #if FLAT_WRITE
-
                 //Note:
                 //Here sectors should not be loaded dynamically because
                 //if they are null it means that no change has involved them;
@@ -567,15 +563,8 @@ namespace Office_File_Explorer.OpenMcdf
                     s = null;
                     sectors[i] = null;
                 }
-
-
-
 #else
-               
-
                 Sector s = sectors[i] as Sector;
-
-
                 if (s != null && s.DirtyFlag && flushingQueue.Count < (int)(buffer.Length / sSize))
                 {
                     //First of a block of contiguous sectors, mark id, start enqueuing
@@ -587,8 +576,6 @@ namespace Office_File_Explorer.OpenMcdf
                     }
 
                     flushingQueue.Enqueue(s);
-
-
                 }
                 else
                 {
@@ -617,10 +604,7 @@ namespace Office_File_Explorer.OpenMcdf
                     sourceStream.Seek(((long)sSize + (long)sId * (long)sSize), SeekOrigin.Begin);
                     sourceStream.Write(buffer, 0, sCount * sSize);
 
-               
-
                     //Console.WriteLine("W - " + (int)(sCount * sSize ));
-
                 }
 #endif
             }
@@ -662,12 +646,6 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (releaseMemory)
                 GC.Collect();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new CFException("Internal error while committing data", ex);
-            //}
         }
 
         /// <summary>
@@ -678,17 +656,17 @@ namespace Office_File_Explorer.OpenMcdf
         {
             try
             {
-                this.header = new Header();
-                this.directoryEntries = new List<IDirectoryEntry>();
+                header = new Header();
+                directoryEntries = new List<IDirectoryEntry>();
 
-                this.sourceStream = stream;
+                sourceStream = stream;
 
                 header.Read(stream);
 
                 int n_sector = Ceiling(((double)(stream.Length - GetSectorSize()) / (double)GetSectorSize()));
 
                 if (stream.Length > 0x7FFFFF0)
-                    this._transactionLockAllocated = true;
+                    _transactionLockAllocated = true;
 
 
                 sectors = new SectorCollection();
@@ -700,7 +678,7 @@ namespace Office_File_Explorer.OpenMcdf
 
                 LoadDirectories();
 
-                this.rootStorage
+                rootStorage
                     = new CFStorage(this, directoryEntries[0]);
             }
             catch (Exception)
@@ -721,7 +699,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             try
             {
-                if (this.updateMode == CFSUpdateMode.ReadOnly)
+                if (updateMode == CFSUpdateMode.ReadOnly)
                 {
                     fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
@@ -743,7 +721,6 @@ namespace Office_File_Explorer.OpenMcdf
             }
         }
 
-        [Obsolete]
         private void LoadStream(Stream stream)
         {
             if (stream == null)
@@ -767,7 +744,6 @@ namespace Office_File_Explorer.OpenMcdf
             get { return sourceStream != null; }
         }
 
-        [Obsolete]
         private void PersistMiniStreamToStream(List<Sector> miniSectorChain)
         {
             List<Sector> miniStream = GetSectorChain(RootEntry.StartSetc, SectorType.Normal);
@@ -776,7 +752,7 @@ namespace Office_File_Explorer.OpenMcdf
                 = new StreamView(
                     miniStream,
                     GetSectorSize(),
-                    this.rootStorage.Size,
+                    rootStorage.Size,
                     null,
                     sourceStream);
 
@@ -798,7 +774,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// for the new or updated mini sector chain.
         /// </summary>
         /// <param name="sectorChain">The new MINI sector chain</param>
-        [Obsolete]
         private void AllocateMiniSectorChain(List<Sector> sectorChain)
         {
             List<Sector> miniFAT = GetSectorChain(header.FirstMiniFATSectorID, SectorType.Normal);
@@ -811,7 +786,7 @@ namespace Office_File_Explorer.OpenMcdf
                     GetSectorSize(),
                     header.MiniFATSectorsNumber * Sector.MINISECTOR_SIZE,
                     null,
-                    this.sourceStream,
+                    sourceStream,
                     true
                     );
 
@@ -819,7 +794,7 @@ namespace Office_File_Explorer.OpenMcdf
                 = new StreamView(
                     miniStream,
                     GetSectorSize(),
-                    this.rootStorage.Size,
+                    rootStorage.Size,
                     null,
                     sourceStream);
 
@@ -834,11 +809,11 @@ namespace Office_File_Explorer.OpenMcdf
                 {
                     // Allocate, position ministream at the end of already allocated
                     // ministream's sectors
-                    miniStreamView.Seek(this.rootStorage.Size + Sector.MINISECTOR_SIZE, SeekOrigin.Begin);
+                    miniStreamView.Seek(rootStorage.Size + Sector.MINISECTOR_SIZE, SeekOrigin.Begin);
                     //miniStreamView.Write(s.GetData(), 0, Sector.MINISECTOR_SIZE);
                     s.Id = (int)(miniStreamView.Position - Sector.MINISECTOR_SIZE) / Sector.MINISECTOR_SIZE;
 
-                    this.rootStorage.DirEntry.Size = miniStreamView.Length;
+                    rootStorage.DirEntry.Size = miniStreamView.Length;
                 }
             }
 
@@ -863,13 +838,12 @@ namespace Office_File_Explorer.OpenMcdf
             //Update HEADER and root storage when ministream changes
             if (miniFAT.Count > 0)
             {
-                this.rootStorage.DirEntry.StartSetc = miniStream[0].Id;
+                rootStorage.DirEntry.StartSetc = miniStream[0].Id;
                 header.MiniFATSectorsNumber = (uint)miniFAT.Count;
                 header.FirstMiniFATSectorID = miniFAT[0].Id;
             }
         }
 
-        [Obsolete]
         internal void FreeData(CFStream stream)
         {
             if (stream.Size == 0)
@@ -880,25 +854,23 @@ namespace Office_File_Explorer.OpenMcdf
             if (stream.Size < header.MinSizeStandardStream)
             {
                 sectorChain = GetSectorChain(stream.DirEntry.StartSetc, SectorType.Mini);
-                FreeMiniChain(sectorChain, this.eraseFreeSectors);
+                FreeMiniChain(sectorChain, eraseFreeSectors);
             }
             else
             {
                 sectorChain = GetSectorChain(stream.DirEntry.StartSetc, SectorType.Normal);
-                FreeChain(sectorChain, this.eraseFreeSectors);
+                FreeChain(sectorChain, eraseFreeSectors);
             }
 
             stream.DirEntry.StartSetc = Sector.ENDOFCHAIN;
             stream.DirEntry.Size = 0;
         }
 
-        [Obsolete]
         private void FreeChain(List<Sector> sectorChain, bool zeroSector)
         {
             FreeChain(sectorChain, 0, zeroSector);
         }
 
-        [Obsolete]
         private void FreeChain(List<Sector> sectorChain, int nth_sector_to_remove, bool zeroSector)
         {
             // Dummy zero buffer
@@ -936,13 +908,11 @@ namespace Office_File_Explorer.OpenMcdf
             }
         }
 
-        [Obsolete]
         private void FreeMiniChain(List<Sector> sectorChain, bool zeroSector)
         {
             FreeMiniChain(sectorChain, 0, zeroSector);
         }
 
-        [Obsolete]
         private void FreeMiniChain(List<Sector> sectorChain, int nth_sector_to_remove, bool zeroSector)
         {
             byte[] ZEROED_MINI_SECTOR = new byte[Sector.MINISECTOR_SIZE];
@@ -955,7 +925,7 @@ namespace Office_File_Explorer.OpenMcdf
                 = new StreamView(miniFAT, GetSectorSize(), header.MiniFATSectorsNumber * Sector.MINISECTOR_SIZE, null, sourceStream);
 
             StreamView miniStreamView
-                = new StreamView(miniStream, GetSectorSize(), this.rootStorage.Size, null, sourceStream);
+                = new StreamView(miniStream, GetSectorSize(), rootStorage.Size, null, sourceStream);
 
             // Set updated/new sectors within the ministream ----------
             if (zeroSector)
@@ -1000,7 +970,7 @@ namespace Office_File_Explorer.OpenMcdf
             //Update HEADER and root storage when ministream changes
             if (miniFAT.Count > 0)
             {
-                this.rootStorage.DirEntry.StartSetc = miniStream[0].Id;
+                rootStorage.DirEntry.StartSetc = miniStream[0].Id;
                 header.MiniFATSectorsNumber = (uint)miniFAT.Count;
                 header.FirstMiniFATSectorID = miniFAT[0].Id;
             }
@@ -1011,7 +981,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// for the new or updated sector chain (Normal or Mini sectors)
         /// </summary>
         /// <param name="sectorChain">The new or updated normal or mini sector chain</param>
-        [Obsolete]
         private void SetSectorChain(List<Sector> sectorChain)
         {
             if (sectorChain == null || sectorChain.Count == 0)
@@ -1057,7 +1026,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// <summary>
         /// Check for transaction lock sector addition and mark it in the FAT.
         /// </summary>
-        [Obsolete]
         private void CheckForLockSector()
         {
             //If transaction lock has been added and not yet allocated in the FAT...
@@ -1078,7 +1046,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// for the new or updated FAT sector chain.
         /// </summary>
         /// <param name="sectorChain">The new or updated generic sector chain</param>
-        [Obsolete]
         private void AllocateFATSectorChain(List<Sector> sectorChain)
         {
             List<Sector> fatSectors = GetSectorChain(-1, SectorType.FAT);
@@ -1116,7 +1083,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// Setup the DIFAT sector chain
         /// </summary>
         /// <param name="FATsectorChain">A FAT sector chain</param>
-        [Obsolete]
         private void AllocateDIFATSectorChain(List<Sector> FATsectorChain)
         {
             // Get initial sector's count
@@ -1177,8 +1143,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             List<Sector> difatSectors = GetSectorChain(-1, SectorType.DIFAT);
 
-            StreamView difatStream
-                = new StreamView(difatSectors, GetSectorSize(), sourceStream);
+            StreamView difatStream = new StreamView(difatSectors, GetSectorSize(), sourceStream);
 
             // Write DIFAT Sectors (if required)
             // Save room for the following chaining
@@ -1198,7 +1163,6 @@ namespace Office_File_Explorer.OpenMcdf
                     }
 
                     difatStream.Write(BitConverter.GetBytes(FATsectorChain[i].Id), 0, sizeof(int));
-
                 }
             }
 
@@ -1214,7 +1178,6 @@ namespace Office_File_Explorer.OpenMcdf
             }
 
             header.DIFATSectorsNumber = (uint)nDIFATSectors;
-
 
             // Chain first sector
             if (difatStream.BaseSectorChain != null && difatStream.BaseSectorChain.Count > 0)
@@ -1268,7 +1231,6 @@ namespace Office_File_Explorer.OpenMcdf
             header.FATSectorsNumber = fatSv.BaseSectorChain.Count;
         }
 
-
         /// <summary>
         /// Get the DIFAT Sector chain
         /// </summary>
@@ -1311,10 +1273,10 @@ namespace Office_File_Explorer.OpenMcdf
 
                     if (validationCount < 0)
                     {
-                        if (this.closeStream)
+                        if (closeStream)
                             Close();
 
-                        if (this.validationExceptionEnabled)
+                        if (validationExceptionEnabled)
                             throw new CFCorruptedFileException("DIFAT sectors count mismatched. Corrupted compound file");
                     }
 
@@ -1336,7 +1298,7 @@ namespace Office_File_Explorer.OpenMcdf
 
         private void EnsureUniqueSectorIndex(int nextSecID, HashSet<int> processedSectors)
         {
-            if (processedSectors.Contains(nextSecID) && this.validationExceptionEnabled)
+            if (processedSectors.Contains(nextSecID) && validationExceptionEnabled)
             {
                 throw new CFCorruptedFileException("The file is corrupted.");
             }
@@ -1348,7 +1310,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// Get the FAT sector chain
         /// </summary>
         /// <returns>List of FAT sectors</returns>
-        [Obsolete]
         private List<Sector> GetFatSectorChain()
         {
             int N_HEADER_FAT_ENTRY = 109; //Number of FAT sectors id in the header
@@ -1386,9 +1347,7 @@ namespace Office_File_Explorer.OpenMcdf
             if (difatSectors.Count > 0)
             {
                 HashSet<int> processedSectors = new HashSet<int>();
-                StreamView difatStream
-                    = new StreamView
-                        (
+                StreamView difatStream = new StreamView(
                         difatSectors,
                         GetSectorSize(),
                         header.FATSectorsNumber > N_HEADER_FAT_ENTRY ?
@@ -1451,19 +1410,16 @@ namespace Office_File_Explorer.OpenMcdf
         /// </summary>
         /// <param name="secID">First SecID of the required chain</param>
         /// <returns>A list of sectors</returns>
-        [Obsolete]
         private List<Sector> GetNormalSectorChain(int secID)
         {
-            List<Sector> result
-                   = new List<Sector>();
+            List<Sector> result = new List<Sector>();
 
             int nextSecID = secID;
 
             List<Sector> fatSectors = GetFatSectorChain();
             HashSet<int> processedSectors = new HashSet<int>();
 
-            StreamView fatStream
-                = new StreamView(fatSectors, GetSectorSize(), fatSectors.Count * GetSectorSize(), null, sourceStream);
+            StreamView fatStream = new StreamView(fatSectors, GetSectorSize(), fatSectors.Count * GetSectorSize(), null, sourceStream);
 
             while (true)
             {
@@ -1491,9 +1447,7 @@ namespace Office_File_Explorer.OpenMcdf
 
                 EnsureUniqueSectorIndex(next, processedSectors);
                 nextSecID = next;
-
             }
-
 
             return result;
         }
@@ -1503,11 +1457,9 @@ namespace Office_File_Explorer.OpenMcdf
         /// </summary>
         /// <param name="secID">First SecID of the required chain</param>
         /// <returns>A list of mini sectors (64 bytes)</returns>
-        [Obsolete]
         private List<Sector> GetMiniSectorChain(int secID)
         {
-            List<Sector> result
-                  = new List<Sector>();
+            List<Sector> result = new List<Sector>();
 
             if (secID != Sector.ENDOFCHAIN)
             {
@@ -1516,15 +1468,9 @@ namespace Office_File_Explorer.OpenMcdf
                 List<Sector> miniFAT = GetNormalSectorChain(header.FirstMiniFATSectorID);
                 List<Sector> miniStream = GetNormalSectorChain(RootEntry.StartSetc);
 
-                StreamView miniFATView
-                    = new StreamView(miniFAT, GetSectorSize(), header.MiniFATSectorsNumber * Sector.MINISECTOR_SIZE, null, sourceStream);
-
-                StreamView miniStreamView =
-                    new StreamView(miniStream, GetSectorSize(), rootStorage.Size, null, sourceStream);
-
+                StreamView miniFATView = new StreamView(miniFAT, GetSectorSize(), header.MiniFATSectorsNumber * Sector.MINISECTOR_SIZE, null, sourceStream);
+                StreamView miniStreamView = new StreamView(miniStream, GetSectorSize(), rootStorage.Size, null, sourceStream);
                 BinaryReader miniFATReader = new BinaryReader(miniFATView);
-
-                nextSecID = secID;
 
                 HashSet<int> processedSectors = new HashSet<int>();
 
@@ -1564,7 +1510,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// <returns>A list of Sectors as the result of their concatenation</returns>
         internal List<Sector> GetSectorChain(int secID, SectorType chainType)
         {
-
             switch (chainType)
             {
                 case SectorType.DIFAT:
@@ -1623,7 +1568,7 @@ namespace Office_File_Explorer.OpenMcdf
         {
             get
             {
-                return (CFSVersion)this.header.MajorVersion;
+                return (CFSVersion)header.MajorVersion;
             }
         }
 
@@ -1635,7 +1580,7 @@ namespace Office_File_Explorer.OpenMcdf
         /// <param name="sid">Sid of the directory to invalidate</param>
         internal void ResetDirectoryEntry(int sid)
         {
-            directoryEntries[sid].SetEntryName(String.Empty);
+            directoryEntries[sid].SetEntryName(string.Empty);
             directoryEntries[sid].Left = null;
             directoryEntries[sid].Right = null;
             directoryEntries[sid].Parent = null;
@@ -1648,8 +1593,6 @@ namespace Office_File_Explorer.OpenMcdf
             directoryEntries[sid].CreationDate = new byte[8];
             directoryEntries[sid].ModifyDate = new byte[8];
         }
-
-
 
         //internal class NodeFactory : IRBTreeDeserializer<CFItem>
         //{
@@ -1681,11 +1624,9 @@ namespace Office_File_Explorer.OpenMcdf
         //        node.Value.DirEntry.RightSibling = from.DirEntry.RightSibling;
         //}
 
-
         internal RBTree GetChildrenTree(int sid)
         {
             RBTree bst = new RBTree();
-
 
             // Load children from their original tree.
             DoLoadChildren(bst, directoryEntries[sid]);
@@ -1709,7 +1650,6 @@ namespace Office_File_Explorer.OpenMcdf
 
             return bst;
         }
-
 
         private void DoLoadChildren(RBTree bst, IDirectoryEntry de)
         {
@@ -1741,8 +1681,6 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (de.LeftSibling != DirectoryEntry.NOSTREAM)
             {
-
-
                 // If there're more left siblings load them...
                 DoLoadSiblings(bst, directoryEntries[de.LeftSibling]);
                 //NullifyChildNodes(directoryEntries[de.LeftSibling]);
@@ -1787,7 +1725,7 @@ namespace Office_File_Explorer.OpenMcdf
                 // if this siblings id does not overflow current list
                 if (sid >= directoryEntries.Count)
                 {
-                    if (this.validationExceptionEnabled)
+                    if (validationExceptionEnabled)
                     {
                         //this.Close();
                         throw new CFCorruptedFileException("A Directory Entry references the non-existent sid number " + sid.ToString());
@@ -1799,7 +1737,7 @@ namespace Office_File_Explorer.OpenMcdf
                 //if this sibling is valid...
                 if (directoryEntries[sid].StgType == StgType.StgInvalid)
                 {
-                    if (this.validationExceptionEnabled)
+                    if (validationExceptionEnabled)
                     {
                         //this.Close();
                         throw new CFCorruptedFileException("A Directory Entry has a valid reference to an Invalid Storage Type directory [" + sid + "]");
@@ -1810,8 +1748,7 @@ namespace Office_File_Explorer.OpenMcdf
 
                 if (!Enum.IsDefined(typeof(StgType), directoryEntries[sid].StgType))
                 {
-
-                    if (this.validationExceptionEnabled)
+                    if (validationExceptionEnabled)
                     {
                         //this.Close();
                         throw new CFCorruptedFileException("A Directory Entry has an invalid Storage Type");
@@ -1851,14 +1788,13 @@ namespace Office_File_Explorer.OpenMcdf
                 IDirectoryEntry de = DirectoryEntry.New(String.Empty, StgType.StgInvalid, directoryEntries);
 
                 //We are not inserting dirs. Do not use 'InsertNewDirectoryEntry'
-                de.Read(dirReader, this.Version);
+                de.Read(dirReader, Version);
             }
         }
 
         /// <summary>
         ///  Commit directory entries change on the Current Source stream
         /// </summary>
-        [Obsolete]
         private void CommitDirectory()
         {
             const int DIRECTORY_SIZE = 128;
@@ -1907,9 +1843,7 @@ namespace Office_File_Explorer.OpenMcdf
         /// </summary>
         /// <param name="fileName">File name to write the compound file to</param>
         /// <exception cref="T:OpenMcdf.CFException">Raised if destination file is not seekable</exception>
-
-        [Obsolete]
-        public void Save(String fileName)
+        public void Save(string fileName)
         {
             if (_disposed)
                 throw new CFException("Compound File closed: cannot save data");
@@ -1932,7 +1866,6 @@ namespace Office_File_Explorer.OpenMcdf
 
                 if (fs != null)
                     fs.Close();
-
             }
         }
 
@@ -1960,7 +1893,6 @@ namespace Office_File_Explorer.OpenMcdf
         ///    cf.Close();
         /// </code>
         /// </example>
-        [Obsolete]
         public void Save(Stream stream)
         {
             if (_disposed)
@@ -1995,9 +1927,7 @@ namespace Office_File_Explorer.OpenMcdf
                         //sectors[i] = s;
                     }
 
-
                     stream.Write(s.GetData(), 0, sSize);
-
                     //s.ReleaseData();
 
                 }
@@ -2017,7 +1947,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// </summary>
         /// <param name="sType">Type of sector to look for</param>
         /// <returns>A Queue of available sectors or minisectors already allocated</returns>
-        [Obsolete]
         internal Queue<Sector> FindFreeSectors(SectorType sType)
         {
             Queue<Sector> freeList = new Queue<Sector>();
@@ -2053,11 +1982,8 @@ namespace Office_File_Explorer.OpenMcdf
             else
             {
                 List<Sector> miniFAT = GetSectorChain(header.FirstMiniFATSectorID, SectorType.Normal);
-
                 StreamView miniFATView = new StreamView(miniFAT, GetSectorSize(), header.MiniFATSectorsNumber * Sector.MINISECTOR_SIZE, null, sourceStream);
-
                 List<Sector> miniStream = GetSectorChain(RootEntry.StartSetc, SectorType.Normal);
-
                 StreamView miniStreamView = new StreamView(miniStream, GetSectorSize(), rootStorage.Size, null, sourceStream);
 
                 int idx = 0;
@@ -2105,7 +2031,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// </summary>
         /// <param name="cfItem"></param>
         /// <param name="length"></param>
-        [Obsolete]
         internal void SetStreamLength(CFItem cfItem, long length)
         {
             if (cfItem.Size == length)
@@ -2175,7 +2100,7 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 if (delta > 0) // Enlarging stream...
                 {
-                    if (this.sectorRecycle)
+                    if (sectorRecycle)
                         freeList = FindFreeSectors(newSectorType); // Collect available free sectors
 
                     sv = new StreamView(sectorChain, newSectorSize, length, freeList, sourceStream);
@@ -2189,9 +2114,9 @@ namespace Office_File_Explorer.OpenMcdf
                     int nSec = (int)Math.Floor(((double)(Math.Abs(delta)) / newSectorSize)); //number of sectors to mark as free
 
                     if (newSectorSize == Sector.MINISECTOR_SIZE)
-                        FreeMiniChain(sectorChain, nSec, this.eraseFreeSectors);
+                        FreeMiniChain(sectorChain, nSec, eraseFreeSectors);
                     else
-                        FreeChain(sectorChain, nSec, this.eraseFreeSectors);
+                        FreeChain(sectorChain, nSec, eraseFreeSectors);
                 }
 
                 if (sectorChain.Count > 0)
@@ -2212,7 +2137,7 @@ namespace Office_File_Explorer.OpenMcdf
 
                 // Collect available MINI free sectors
 
-                if (this.sectorRecycle)
+                if (sectorRecycle)
                     freeList = FindFreeSectors(SectorType.Mini);
 
                 sv = new StreamView(oldChain, oldSectorSize, oldSize, null, sourceStream);
@@ -2242,7 +2167,7 @@ namespace Office_File_Explorer.OpenMcdf
                 destSv.Write(buf, 0, (int)toRead);
 
                 //Free old chain
-                FreeChain(oldChain, this.eraseFreeSectors);
+                FreeChain(oldChain, eraseFreeSectors);
 
                 //Set up destination chain
                 AllocateMiniSectorChain(destSv.BaseSectorChain);
@@ -2266,7 +2191,7 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 // Transition Mini chain -> Normal chain
 
-                if (this.sectorRecycle)
+                if (sectorRecycle)
                     freeList = FindFreeSectors(SectorType.Normal); // Collect available Normal free sectors
 
                 sv = new StreamView(oldChain, oldSectorSize, oldSize, null, sourceStream);
@@ -2292,7 +2217,7 @@ namespace Office_File_Explorer.OpenMcdf
 
                 //Free old mini chain
                 int oldChainCount = oldChain.Count;
-                FreeMiniChain(oldChain, this.eraseFreeSectors);
+                FreeMiniChain(oldChain, eraseFreeSectors);
 
                 //Set up normal destination chain
                 AllocateSectorChain(destSv.BaseSectorChain);
@@ -2311,13 +2236,11 @@ namespace Office_File_Explorer.OpenMcdf
             }
         }
 
-        [Obsolete]
         internal void WriteData(CFItem cfItem, long position, byte[] buffer)
         {
             WriteData(cfItem, buffer, position, 0, buffer.Length);
         }
 
-        [Obsolete]
         internal void WriteData(CFItem cfItem, byte[] buffer, long position, int offset, int count)
         {
 
@@ -2371,7 +2294,6 @@ namespace Office_File_Explorer.OpenMcdf
             throw new NotImplementedException();
         }
 
-        [Obsolete]
         internal int ReadData(CFStream cFStream, long position, byte[] buffer, int count)
         {
             if (count > buffer.Length)
@@ -2389,10 +2311,8 @@ namespace Office_File_Explorer.OpenMcdf
             }
             else
             {
-
                 sView = new StreamView(GetSectorChain(de.StartSetc, SectorType.Normal), GetSectorSize(), de.Size, null, sourceStream);
             }
-
 
             sView.Seek(position, SeekOrigin.Begin);
             int result = sView.Read(buffer, 0, count);
@@ -2412,22 +2332,18 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (de.Size < header.MinSizeStandardStream)
             {
-                sView
-                    = new StreamView(GetSectorChain(de.StartSetc, SectorType.Mini), Sector.MINISECTOR_SIZE, de.Size, null, sourceStream);
+                sView = new StreamView(GetSectorChain(de.StartSetc, SectorType.Mini), Sector.MINISECTOR_SIZE, de.Size, null, sourceStream);
             }
             else
             {
-
                 sView = new StreamView(GetSectorChain(de.StartSetc, SectorType.Normal), GetSectorSize(), de.Size, null, sourceStream);
             }
-
 
             sView.Seek(position, SeekOrigin.Begin);
             int result = sView.Read(buffer, offset, count);
 
             return result;
         }
-
 
         internal byte[] GetData(CFStream cFStream)
         {
@@ -2444,9 +2360,7 @@ namespace Office_File_Explorer.OpenMcdf
             if (de.Size < header.MinSizeStandardStream)
             {
 
-                StreamView miniView
-                    = new StreamView(GetSectorChain(de.StartSetc, SectorType.Mini), Sector.MINISECTOR_SIZE, de.Size, null, sourceStream);
-
+                StreamView miniView = new StreamView(GetSectorChain(de.StartSetc, SectorType.Mini), Sector.MINISECTOR_SIZE, de.Size, null, sourceStream);
                 BinaryReader br = new BinaryReader(miniView);
 
                 result = br.ReadBytes((int)de.Size);
@@ -2455,17 +2369,14 @@ namespace Office_File_Explorer.OpenMcdf
             }
             else
             {
-                StreamView sView
-                    = new StreamView(GetSectorChain(de.StartSetc, SectorType.Normal), GetSectorSize(), de.Size, null, sourceStream);
-
+                StreamView sView = new StreamView(GetSectorChain(de.StartSetc, SectorType.Normal), GetSectorSize(), de.Size, null, sourceStream);
                 result = new byte[(int)de.Size];
-
                 sView.Read(result, 0, result.Length);
-
             }
 
             return result;
         }
+
         public byte[] GetDataBySID(int sid)
         {
             if (_disposed)
@@ -2478,16 +2389,14 @@ namespace Office_File_Explorer.OpenMcdf
                 IDirectoryEntry de = directoryEntries[sid];
                 if (de.Size < header.MinSizeStandardStream)
                 {
-                    StreamView miniView
-                        = new StreamView(GetSectorChain(de.StartSetc, SectorType.Mini), Sector.MINISECTOR_SIZE, de.Size, null, sourceStream);
+                    StreamView miniView = new StreamView(GetSectorChain(de.StartSetc, SectorType.Mini), Sector.MINISECTOR_SIZE, de.Size, null, sourceStream);
                     BinaryReader br = new BinaryReader(miniView);
                     result = br.ReadBytes((int)de.Size);
                     br.Close();
                 }
                 else
                 {
-                    StreamView sView
-                        = new StreamView(GetSectorChain(de.StartSetc, SectorType.Normal), GetSectorSize(), de.Size, null, sourceStream);
+                    StreamView sView = new StreamView(GetSectorChain(de.StartSetc, SectorType.Normal), GetSectorSize(), de.Size, null, sourceStream);
                     result = new byte[(int)de.Size];
                     sView.Read(result, 0, result.Length);
                 }
@@ -2498,6 +2407,7 @@ namespace Office_File_Explorer.OpenMcdf
             }
             return result;
         }
+        
         public Guid getGuidBySID(int sid)
         {
             if (_disposed)
@@ -2507,6 +2417,7 @@ namespace Office_File_Explorer.OpenMcdf
             IDirectoryEntry de = directoryEntries[sid];
             return de.StorageCLSID;
         }
+        
         public Guid getGuidForStream(int sid)
         {
             if (_disposed)
@@ -2535,7 +2446,6 @@ namespace Office_File_Explorer.OpenMcdf
             return i > 0 ? i : 0;
         }
 
-
         internal void InvalidateDirectoryEntry(int sid)
         {
             if (sid >= directoryEntries.Count)
@@ -2544,7 +2454,6 @@ namespace Office_File_Explorer.OpenMcdf
             ResetDirectoryEntry(sid);
         }
 
-        [Obsolete]
         internal void FreeAssociatedData(int sid)
         {
             // Clear the associated stream (or ministream) if required
@@ -2553,12 +2462,12 @@ namespace Office_File_Explorer.OpenMcdf
                 if (directoryEntries[sid].Size < header.MinSizeStandardStream)
                 {
                     List<Sector> miniChain = GetSectorChain(directoryEntries[sid].StartSetc, SectorType.Mini);
-                    FreeMiniChain(miniChain, this.eraseFreeSectors);
+                    FreeMiniChain(miniChain, eraseFreeSectors);
                 }
                 else
                 {
                     List<Sector> chain = GetSectorChain(directoryEntries[sid].StartSetc, SectorType.Normal);
-                    FreeChain(chain, this.eraseFreeSectors);
+                    FreeChain(chain, eraseFreeSectors);
                 }
             }
         }
@@ -2593,9 +2502,12 @@ namespace Office_File_Explorer.OpenMcdf
         ///    }
         /// </code>
         /// </example>
+        
         public void Close()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             Close(true);
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         private bool closeStream = true;
@@ -2644,19 +2556,19 @@ namespace Office_File_Explorer.OpenMcdf
                                 sectors = null;
                             }
 
-                            this.rootStorage = null; // Some problem releasing resources...
-                            this.header = null;
-                            this.directoryEntries.Clear();
-                            this.directoryEntries = null;
-                            this.fileName = null;
+                            rootStorage = null; // Some problem releasing resources...
+                            header = null;
+                            directoryEntries.Clear();
+                            directoryEntries = null;
+                            fileName = null;
                             //this.lockObject = null;
 #if !FLAT_WRITE
                             this.buffer = null;
 #endif
                         }
 
-                        if (this.sourceStream != null && closeStream && !configuration.HasFlag(CFSConfiguration.LeaveOpen))
-                            this.sourceStream.Close();
+                        if (sourceStream != null && closeStream && !configuration.HasFlag(CFSConfiguration.LeaveOpen))
+                            sourceStream.Close();
                     }
                 }
             }
@@ -2710,8 +2622,6 @@ namespace Office_File_Explorer.OpenMcdf
             return result;
         }
 
-
-
         /// <summary>
         /// Get a list of all entries with a given name contained in the document.
         /// </summary>
@@ -2764,7 +2674,6 @@ namespace Office_File_Explorer.OpenMcdf
             return directoryEntries[id].StgType;
         }
 
-
         /// <summary>
         /// Compress free space by removing unallocated sectors from compound file
         /// effectively reducing stream or file size.
@@ -2801,7 +2710,6 @@ namespace Office_File_Explorer.OpenMcdf
         ///
         /// </code>
         /// </example>
-        [Obsolete]
         public static void ShrinkCompoundFile(Stream s)
         {
             CompoundFile cf = new CompoundFile(s);
@@ -2831,7 +2739,9 @@ namespace Office_File_Explorer.OpenMcdf
                 s.SetLength(tmpMS.Length);
 
                 tmpMS.Close();
+#pragma warning disable CS0618 // Type or member is obsolete
                 cf.Close(false);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
         }
 
@@ -2870,7 +2780,6 @@ namespace Office_File_Explorer.OpenMcdf
         ///
         /// </code>
         /// </example>
-        [Obsolete]
         public static void ShrinkCompoundFile(String fileName)
         {
             FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.ReadWrite);

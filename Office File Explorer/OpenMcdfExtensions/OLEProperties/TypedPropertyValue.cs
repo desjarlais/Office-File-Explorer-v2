@@ -32,7 +32,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         public TypedPropertyValue(VTPropertyType vtType, bool isVariant = false)
         {
-            this._VTType = vtType;
+            _VTType = vtType;
             dim = CheckPropertyDimensions(vtType);
             this.isVariant = isVariant;
         }
@@ -69,17 +69,16 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         public abstract T ReadScalarValue(System.IO.BinaryReader br);
 
-
         public void Read(System.IO.BinaryReader br)
         {
             long currentPos = br.BaseStream.Position;
             int size = 0;
             int m = 0;
 
-            switch (this.PropertyDimensions)
+            switch (PropertyDimensions)
             {
                 case PropertyDimensions.IsScalar:
-                    this.propertyValue = ReadScalarValue(br);
+                    propertyValue = ReadScalarValue(br);
                     size = (int)(br.BaseStream.Position - currentPos);
 
                     m = (int)size % 4;
@@ -101,7 +100,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                         res.Add(s);
                     }
 
-                    this.propertyValue = res;
+                    propertyValue = res;
                     size = (int)(br.BaseStream.Position - currentPos);
 
                     m = (int)size % 4;
@@ -122,14 +121,14 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             int m = 0;
             bool needsPadding = HasPadding();
 
-            switch (this.PropertyDimensions)
+            switch (PropertyDimensions)
             {
                 case PropertyDimensions.IsScalar:
 
                     bw.Write((ushort)_VTType);
                     bw.Write((ushort)0);
 
-                    WriteScalarValue(bw, (T)this.propertyValue);
+                    WriteScalarValue(bw, (T)propertyValue);
                     size = (int)(bw.BaseStream.Position - currentPos);
                     m = (int)size % 4;
 
@@ -142,11 +141,11 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
                     bw.Write((ushort)_VTType);
                     bw.Write((ushort)0);
-                    bw.Write((uint)((List<T>)this.propertyValue).Count);
+                    bw.Write((uint)((List<T>)propertyValue).Count);
 
-                    for (int i = 0; i < ((List<T>)this.propertyValue).Count; i++)
+                    for (int i = 0; i < ((List<T>)propertyValue).Count; i++)
                     {
-                        WriteScalarValue(bw, ((List<T>)this.propertyValue)[i]);
+                        WriteScalarValue(bw, ((List<T>)propertyValue)[i]);
                     }
 
                     size = (int)(bw.BaseStream.Position - currentPos);
@@ -160,12 +159,12 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
         }
         private bool HasPadding()
         {
-            VTPropertyType vt = (VTPropertyType)((ushort)this.VTType & 0x00FF);
+            VTPropertyType vt = (VTPropertyType)((ushort)VTType & 0x00FF);
 
             switch (vt)
             {
                 case VTPropertyType.VT_LPSTR:
-                    if (this.IsVariant) return false;
+                    if (IsVariant) return false;
                     if (dim == PropertyDimensions.IsVector) return false;
                     break;
                 case VTPropertyType.VT_VARIANT_VECTOR:

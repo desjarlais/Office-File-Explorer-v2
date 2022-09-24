@@ -1,13 +1,9 @@
-﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
-using Microsoft.Graph.ExternalConnectors;
-using Office_File_Explorer.OpenMcdf;
+﻿using Office_File_Explorer.OpenMcdf;
 using Office_File_Explorer.OpenMcdfExtensions.OLEProperties.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 {
@@ -80,7 +76,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 Behavior = Behavior.CaseInsensitive
             };
 
-            this.ContainerType = containerType;
+            ContainerType = containerType;
         }
 
         internal OLEPropertiesContainer(CFStream cfStream)
@@ -93,21 +89,20 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             switch (pStream.FMTID0.ToString("B").ToUpperInvariant())
             {
                 case "{F29F85E0-4FF9-1068-AB91-08002B27B3D9}":
-                    this.ContainerType = ContainerType.SummaryInfo;
+                    ContainerType = ContainerType.SummaryInfo;
                     break;
                 case "{D5CDD502-2E9C-101B-9397-08002B2CF9AE}":
-                    this.ContainerType = ContainerType.DocumentSummaryInfo;
+                    ContainerType = ContainerType.DocumentSummaryInfo;
                     break;
                 default:
-                    this.ContainerType = ContainerType.AppSpecific;
+                    ContainerType = ContainerType.AppSpecific;
                     break;
             }
 
-
-            this.PropertyNames = (Dictionary<uint, string>)pStream.PropertySet0.Properties
+            PropertyNames = (Dictionary<uint, string>)pStream.PropertySet0.Properties
                 .Where(p => p.PropertyType == PropertyType.DictionaryProperty).FirstOrDefault();
 
-            this.Context = new PropertyContext()
+            Context = new PropertyContext()
             {
                 CodePage = pStream.PropertySet0.PropertyContext.CodePage
             };
@@ -134,8 +129,8 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
             if (pStream.NumPropertySets == 2)
             {
-                UserDefinedProperties = new OLEPropertiesContainer(this.Context.CodePage, ContainerType.UserDefinedProperties);
-                this.HasUserDefinedProperties = true;
+                UserDefinedProperties = new OLEPropertiesContainer(Context.CodePage, ContainerType.UserDefinedProperties);
+                HasUserDefinedProperties = true;
 
                 UserDefinedProperties.ContainerType = ContainerType.UserDefinedProperties;
 
@@ -179,7 +174,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             return op;
         }
 
-
         public void AddProperty(OLEProperty property)
         {
             //throw new NotImplementedException("API Unstable - Work in progress - Milestone 2.3.0.0");
@@ -213,7 +207,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
                 NumPropertySets = 1,
 
-                FMTID0 = this.ContainerType == ContainerType.SummaryInfo ? new Guid("{F29F85E0-4FF9-1068-AB91-08002B27B3D9}") : new Guid("{D5CDD502-2E9C-101B-9397-08002B2CF9AE}"),
+                FMTID0 = ContainerType == ContainerType.SummaryInfo ? new Guid("{F29F85E0-4FF9-1068-AB91-08002B27B3D9}") : new Guid("{D5CDD502-2E9C-101B-9397-08002B2CF9AE}"),
                 Offset0 = 0,
 
                 FMTID1 = Guid.Empty,
@@ -221,22 +215,22 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
                 PropertySet0 = new PropertySet
                 {
-                    NumProperties = (uint)this.Properties.Count(),
+                    NumProperties = (uint)Properties.Count(),
                     PropertyIdentifierAndOffsets = new List<PropertyIdentifierAndOffset>(),
                     Properties = new List<Interfaces.IProperty>(),
-                    PropertyContext = this.Context
+                    PropertyContext = Context
                 }
             };
 
-            foreach (var op in this.Properties)
+            foreach (var op in Properties)
             {
-                ITypedPropertyValue p = PropertyFactory.Instance.NewProperty(op.VTType, this.Context.CodePage);
+                ITypedPropertyValue p = PropertyFactory.Instance.NewProperty(op.VTType, Context.CodePage);
                 p.Value = op.Value;
                 ps.PropertySet0.Properties.Add(p);
                 ps.PropertySet0.PropertyIdentifierAndOffsets.Add(new PropertyIdentifierAndOffset() { PropertyIdentifier = op.PropertyIdentifier, Offset = 0 });
             }
 
-            ps.PropertySet0.NumProperties = (uint)this.Properties.Count();
+            ps.PropertySet0.NumProperties = (uint)Properties.Count();
 
             if (HasUserDefinedProperties)
             {
@@ -244,7 +238,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
                 ps.PropertySet1 = new PropertySet
                 {
-                    NumProperties = (uint)this.UserDefinedProperties.Properties.Count(),
+                    NumProperties = (uint)UserDefinedProperties.Properties.Count(),
                     PropertyIdentifierAndOffsets = new List<PropertyIdentifierAndOffset>(),
                     Properties = new List<Interfaces.IProperty>(),
                     PropertyContext = UserDefinedProperties.Context
@@ -253,7 +247,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 ps.FMTID1 = new Guid("{D5CDD502-2E9C-101B-9397-08002B2CF9AE}");
                 ps.Offset1 = 0;
 
-                foreach (var op in this.Properties)
+                foreach (var op in Properties)
                 {
                     ITypedPropertyValue p = PropertyFactory.Instance.NewProperty(op.VTType, ps.PropertySet1.PropertyContext.CodePage);
                     p.Value = op.Value;

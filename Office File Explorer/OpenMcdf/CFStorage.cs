@@ -6,10 +6,8 @@
  * 
  * The Initial Developer of the Original Code is Federico Blaseotto.*/
 
-
 using System;
 using System.Collections.Generic;
-using System.IO;
 using RedBlackTree;
 
 namespace Office_File_Explorer.OpenMcdf
@@ -56,14 +54,10 @@ namespace Office_File_Explorer.OpenMcdf
                 // Lazy loading of children tree.
                 if (children == null)
                 {
-                    //if (this.CompoundFile.HasSourceStream)
-                    //{
-                    children = LoadChildren(this.DirEntry.SID);
-                    //}
-                    //else
+                    children = LoadChildren(DirEntry.SID);
                     if (children == null)
                     {
-                        children = this.CompoundFile.CreateNewTree();
+                        children = CompoundFile.CreateNewTree();
                     }
                 }
 
@@ -83,17 +77,17 @@ namespace Office_File_Explorer.OpenMcdf
             if (dirEntry == null || dirEntry.SID < 0)
                 throw new CFException("Attempting to create a CFStorage using an unitialized directory");
 
-            this.DirEntry = dirEntry;
+            DirEntry = dirEntry;
         }
 
         private RBTree LoadChildren(int SID)
         {
-            RBTree childrenTree = this.CompoundFile.GetChildrenTree(SID);
+            RBTree childrenTree = CompoundFile.GetChildrenTree(SID);
 
             if (childrenTree.Root != null)
-                this.DirEntry.Child = (childrenTree.Root as IDirectoryEntry).SID;
+                DirEntry.Child = (childrenTree.Root as IDirectoryEntry).SID;
             else
-                this.DirEntry.Child = DirectoryEntry.NOSTREAM;
+                DirEntry.Child = DirectoryEntry.NOSTREAM;
 
             return childrenTree;
         }
@@ -122,16 +116,16 @@ namespace Office_File_Explorer.OpenMcdf
         ///  
         /// </code>
         /// </example>
-        public CFStream AddStream(String streamName)
+        public CFStream AddStream(string streamName)
         {
             CheckDisposed();
 
-            if (String.IsNullOrEmpty(streamName))
+            if (string.IsNullOrEmpty(streamName))
                 throw new CFException("Stream name cannot be null or empty");
 
 
 
-            IDirectoryEntry dirEntry = DirectoryEntry.TryNew(streamName, StgType.StgStream, this.CompoundFile.GetDirectories());
+            IDirectoryEntry dirEntry = DirectoryEntry.TryNew(streamName, StgType.StgStream, CompoundFile.GetDirectories());
 
             // Add new Stream directory entry
             //cfo = new CFStream(this.CompoundFile, streamName);
@@ -139,19 +133,19 @@ namespace Office_File_Explorer.OpenMcdf
             try
             {
                 // Add object to Siblings tree
-                this.Children.Insert(dirEntry);
+                Children.Insert(dirEntry);
 
                 //... and set the root of the tree as new child of the current item directory entry
-                this.DirEntry.Child = (Children.Root as IDirectoryEntry).SID;
+                DirEntry.Child = (Children.Root as IDirectoryEntry).SID;
             }
             catch (RBTreeException)
             {
                 CompoundFile.ResetDirectoryEntry(dirEntry.SID);
 
-                throw new CFDuplicatedItemException("An entry with name '" + streamName + "' is already present in storage '" + this.Name + "' ");
+                throw new CFDuplicatedItemException("An entry with name '" + streamName + "' is already present in storage '" + Name + "' ");
             }
 
-            return new CFStream(this.CompoundFile, dirEntry);
+            return new CFStream(CompoundFile, dirEntry);
         }
 
 
@@ -184,7 +178,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (Children.TryLookup(tmp, out outDe) && (((IDirectoryEntry)outDe).StgType == StgType.StgStream))
             {
-                return new CFStream(this.CompoundFile, (IDirectoryEntry)outDe);
+                return new CFStream(CompoundFile, (IDirectoryEntry)outDe);
             }
             else
             {
@@ -221,21 +215,18 @@ namespace Office_File_Explorer.OpenMcdf
             try
             {
                 CheckDisposed();
-
                 IDirectoryEntry tmp = DirectoryEntry.Mock(streamName, StgType.StgStream);
-
                 IRBNode outDe = null;
 
                 if (Children.TryLookup(tmp, out outDe) && (((IDirectoryEntry)outDe).StgType == StgType.StgStream))
                 {
-                    cfStream = new CFStream(this.CompoundFile, (IDirectoryEntry)outDe);
+                    cfStream = new CFStream(CompoundFile, (IDirectoryEntry)outDe);
                     result = true;
                 }
             }
             catch (CFDisposedException)
             {
                 result = false;
-
             }
 
             return result;
@@ -262,22 +253,15 @@ namespace Office_File_Explorer.OpenMcdf
         /// </code>
         /// </example>
         [Obsolete("Please use TryGetStream(string, out cfStream) instead.")]
-        public CFStream TryGetStream(String streamName)
+        public CFStream TryGetStream(string streamName)
         {
             CheckDisposed();
-
             IDirectoryEntry tmp = DirectoryEntry.Mock(streamName, StgType.StgStream);
-
-            //if (children == null)
-            //{
-            //    children = compoundFile.GetChildrenTree(SID);
-            //}
-
             IRBNode outDe = null;
 
             if (Children.TryLookup(tmp, out outDe) && (((IDirectoryEntry)outDe).StgType == StgType.StgStream))
             {
-                return new CFStream(this.CompoundFile, (IDirectoryEntry)outDe);
+                return new CFStream(CompoundFile, (IDirectoryEntry)outDe);
             }
             else
             {
@@ -314,7 +298,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (Children.TryLookup(template, out outDe) && ((IDirectoryEntry)outDe).StgType == StgType.StgStorage)
             {
-                return new CFStorage(this.CompoundFile, outDe as IDirectoryEntry);
+                return new CFStorage(CompoundFile, outDe as IDirectoryEntry);
             }
             else
             {
@@ -341,7 +325,7 @@ namespace Office_File_Explorer.OpenMcdf
         /// </code>
         /// </example>
         [Obsolete("Please use TryGetStorage(string, out cfStorage) instead.")]
-        public CFStorage TryGetStorage(String storageName)
+        public CFStorage TryGetStorage(string storageName)
         {
             CheckDisposed();
 
@@ -350,7 +334,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (Children.TryLookup(template, out outDe) && ((IDirectoryEntry)outDe).StgType == StgType.StgStorage)
             {
-                return new CFStorage(this.CompoundFile, outDe as IDirectoryEntry);
+                return new CFStorage(CompoundFile, outDe as IDirectoryEntry);
             }
             else
             {
@@ -378,7 +362,7 @@ namespace Office_File_Explorer.OpenMcdf
         /// cf.Close();
         /// </code>
         /// </example>
-        public bool TryGetStorage(String storageName, out CFStorage cfStorage)
+        public bool TryGetStorage(string storageName, out CFStorage cfStorage)
         {
             bool result = false;
             cfStorage = null;
@@ -392,7 +376,7 @@ namespace Office_File_Explorer.OpenMcdf
 
                 if (Children.TryLookup(template, out outDe) && ((IDirectoryEntry)outDe).StgType == StgType.StgStorage)
                 {
-                    cfStorage = new CFStorage(this.CompoundFile, outDe as IDirectoryEntry);
+                    cfStorage = new CFStorage(CompoundFile, outDe as IDirectoryEntry);
                     result = true;
                 }
 
@@ -430,16 +414,16 @@ namespace Office_File_Explorer.OpenMcdf
         ///  
         /// </code>
         /// </example>
-        public CFStorage AddStorage(String storageName)
+        public CFStorage AddStorage(string storageName)
         {
             CheckDisposed();
 
-            if (String.IsNullOrEmpty(storageName))
+            if (string.IsNullOrEmpty(storageName))
                 throw new CFException("Stream name cannot be null or empty");
 
             // Add new Storage directory entry
             IDirectoryEntry cfo
-                = DirectoryEntry.New(storageName, StgType.StgStorage, this.CompoundFile.GetDirectories());
+                = DirectoryEntry.New(storageName, StgType.StgStorage, CompoundFile.GetDirectories());
 
             //this.CompoundFile.InsertNewDirectoryEntry(cfo);
 
@@ -452,13 +436,13 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 CompoundFile.ResetDirectoryEntry(cfo.SID);
                 cfo = null;
-                throw new CFDuplicatedItemException("An entry with name '" + storageName + "' is already present in storage '" + this.Name + "' ");
+                throw new CFDuplicatedItemException("An entry with name '" + storageName + "' is already present in storage '" + Name + "' ");
             }
 
             IDirectoryEntry childrenRoot = Children.Root as IDirectoryEntry;
-            this.DirEntry.Child = childrenRoot.SID;
+            DirEntry.Child = childrenRoot.SID;
 
-            return new CFStorage(this.CompoundFile, cfo);
+            return new CFStorage(CompoundFile, cfo);
         }
 
         /// <summary>
@@ -491,17 +475,16 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (action != null)
             {
-                List<IRBNode> subStorages
-                    = new List<IRBNode>();
+                List<IRBNode> subStorages = new List<IRBNode>();
 
                 Action<IRBNode> internalAction =
                     delegate (IRBNode targetNode)
                     {
                         IDirectoryEntry d = targetNode as IDirectoryEntry;
                         if (d.StgType == StgType.StgStream)
-                            action(new CFStream(this.CompoundFile, d));
+                            action(new CFStream(CompoundFile, d));
                         else
-                            action(new CFStorage(this.CompoundFile, d));
+                            action(new CFStorage(CompoundFile, d));
 
                         if (d.Child != DirectoryEntry.NOSTREAM)
                             subStorages.Add(targetNode);
@@ -509,13 +492,13 @@ namespace Office_File_Explorer.OpenMcdf
                         return;
                     };
 
-                this.Children.VisitTreeNodes(internalAction);
+                Children.VisitTreeNodes(internalAction);
 
                 if (recursive && subStorages.Count > 0)
                     foreach (IRBNode n in subStorages)
                     {
                         IDirectoryEntry d = n as IDirectoryEntry;
-                        (new CFStorage(this.CompoundFile, d)).VisitEntries(action, recursive);
+                        (new CFStorage(CompoundFile, d)).VisitEntries(action, recursive);
                     }
             }
         }
@@ -544,7 +527,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             IRBNode foundObj = null;
 
-            this.Children.TryLookup(tmp, out foundObj);
+            Children.TryLookup(tmp, out foundObj);
 
             if (foundObj == null)
                 throw new CFItemNotFound("Entry named [" + entryName + "] was not found");
@@ -558,7 +541,7 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 case StgType.StgStorage:
 
-                    CFStorage temp = new CFStorage(this.CompoundFile, ((IDirectoryEntry)foundObj));
+                    CFStorage temp = new CFStorage(CompoundFile, ((IDirectoryEntry)foundObj));
 
                     // This is a storage. we have to remove children items first
                     foreach (IRBNode de in temp.Children)
@@ -567,17 +550,14 @@ namespace Office_File_Explorer.OpenMcdf
                         temp.Delete(ded.Name);
                     }
 
-
-
-
                     // ...then we Remove storage item from children tree...
-                    this.Children.Delete(foundObj, out altDel);
+                    Children.Delete(foundObj, out altDel);
 
                     // ...after which we need to rethread the root of siblings tree...
-                    if (this.Children.Root != null)
-                        this.DirEntry.Child = (this.Children.Root as IDirectoryEntry).SID;
+                    if (Children.Root != null)
+                        DirEntry.Child = (Children.Root as IDirectoryEntry).SID;
                     else
-                        this.DirEntry.Child = DirectoryEntry.NOSTREAM;
+                        DirEntry.Child = DirectoryEntry.NOSTREAM;
 
                     // ...and remove directory (storage) entry
 
@@ -586,7 +566,7 @@ namespace Office_File_Explorer.OpenMcdf
                         foundObj = altDel;
                     }
 
-                    this.CompoundFile.InvalidateDirectoryEntry(((IDirectoryEntry)foundObj).SID);
+                    CompoundFile.InvalidateDirectoryEntry(((IDirectoryEntry)foundObj).SID);
 
                     break;
 
@@ -596,13 +576,13 @@ namespace Office_File_Explorer.OpenMcdf
                     CompoundFile.FreeAssociatedData((foundObj as IDirectoryEntry).SID);
 
                     // Remove item from children tree
-                    this.Children.Delete(foundObj, out altDel);
+                    Children.Delete(foundObj, out altDel);
 
                     // Rethread the root of siblings tree...
-                    if (this.Children.Root != null)
-                        this.DirEntry.Child = (this.Children.Root as IDirectoryEntry).SID;
+                    if (Children.Root != null)
+                        DirEntry.Child = (Children.Root as IDirectoryEntry).SID;
                     else
-                        this.DirEntry.Child = DirectoryEntry.NOSTREAM;
+                        DirEntry.Child = DirectoryEntry.NOSTREAM;
 
                     // Delete operation could possibly have cloned a directory, changing its SID.
                     // Invalidate the ACTUALLY deleted directory.
@@ -611,9 +591,7 @@ namespace Office_File_Explorer.OpenMcdf
                         foundObj = altDel;
                     }
 
-                    this.CompoundFile.InvalidateDirectoryEntry(((IDirectoryEntry)foundObj).SID);
-
-
+                    CompoundFile.InvalidateDirectoryEntry(((IDirectoryEntry)foundObj).SID);
 
                     break;
             }
@@ -636,11 +614,11 @@ namespace Office_File_Explorer.OpenMcdf
             else throw new CFItemNotFound("Item " + oldItemName + " not found in Storage");
 
             children = null;
-            children = LoadChildren(this.DirEntry.SID); //Rethread
+            children = LoadChildren(DirEntry.SID); //Rethread
 
             if (children == null)
             {
-                children = this.CompoundFile.CreateNewTree();
+                children = CompoundFile.CreateNewTree();
             }
         }
     }

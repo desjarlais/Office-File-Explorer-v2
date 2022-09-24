@@ -1,10 +1,7 @@
 ﻿using Office_File_Explorer.OpenMcdfExtensions.OLEProperties.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 {
@@ -16,7 +13,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
         {
             this.codePage = codePage;
             this.entries = new Dictionary<uint, string>();
-
         }
 
         public PropertyType PropertyType

@@ -9,7 +9,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
     public class PropertyContext
     {
-
         public Int32 CodePage { get; set; }
         public Behavior Behavior { get; set; }
         public UInt32 Locale { get; set; }

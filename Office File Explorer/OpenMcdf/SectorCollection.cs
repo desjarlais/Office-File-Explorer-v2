@@ -48,8 +48,6 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 sizeLimitReached = true;
                 OnVer3SizeLimitReached();
-
-
             }
         }
 
@@ -127,9 +125,7 @@ namespace Office_File_Explorer.OpenMcdf
         public void Add(Sector item)
         {
             DoCheckSizeLimitReached();
-
             add(item);
-
         }
 
         public void Clear()
@@ -193,7 +189,7 @@ namespace Office_File_Explorer.OpenMcdf
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             for (int i = 0; i < largeArraySlices.Count; i++)
             {

@@ -55,9 +55,6 @@ namespace Office_File_Explorer.OpenMcdf
             adjustLength(length, availableSectors);
         }
 
-
-
-
         public List<Sector> BaseSectorChain
         {
             get { return sectorChain; }
@@ -163,13 +160,7 @@ namespace Office_File_Explorer.OpenMcdf
                 {
                     nToRead = sectorSize;
 
-                    Buffer.BlockCopy(
-                        sectorChain[secIndex].GetData(),
-                        0,
-                        buffer,
-                        offset + nRead,
-                        nToRead
-                        );
+                    Buffer.BlockCopy(sectorChain[secIndex].GetData(), 0, buffer, offset + nRead, nToRead);
 
                     nRead += nToRead;
                     secIndex++;
@@ -182,13 +173,7 @@ namespace Office_File_Explorer.OpenMcdf
                 {
                     if (secIndex > sectorChain.Count) throw new CFCorruptedFileException("The file is probably corrupted.");
 
-                    Buffer.BlockCopy(
-                        sectorChain[secIndex].GetData(),
-                        0,
-                        buffer,
-                        offset + nRead,
-                        nToRead
-                        );
+                    Buffer.BlockCopy(sectorChain[secIndex].GetData(), 0, buffer, offset + nRead, nToRead);
 
                     nRead += nToRead;
                 }
@@ -200,7 +185,6 @@ namespace Office_File_Explorer.OpenMcdf
             }
             else
                 return 0;
-
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -378,7 +362,6 @@ namespace Office_File_Explorer.OpenMcdf
                 }
 
                 position += count;
-
             }
         }
     }
