@@ -130,7 +130,6 @@ namespace Office_File_Explorer.OpenMcdf
         public Byte[] GetData()
         {
             CheckDisposed();
-
             return CompoundFile.GetData(this);
         }
 

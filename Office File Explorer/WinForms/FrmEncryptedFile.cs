@@ -1,5 +1,6 @@
 ﻿/// the code for opening the structured compound file format was mostly taken from here https://github.com/ironfede/openmcdf
 
+using Office_File_Explorer.Helpers;
 using Office_File_Explorer.OpenMcdf;
 using System;
 using System.IO;
@@ -88,11 +89,24 @@ namespace Office_File_Explorer.WinForms
                 tvEncryptedContents.SelectedNode = n;
 
                 // The tag property contains the underlying CFItem.
-                CFItem target = (CFItem)n.Tag;
+                //CFItem target = (CFItem)n.Tag;
                 CFStream targetStream = n.Tag as CFStream;
                 if (targetStream != null)
                 {
-                    TxbOutput.Text = Encoding.ASCII.GetString(targetStream.GetData());
+                    //TxbOutput.Text = Encoding.Default.GetString(targetStream.GetData());
+                    byte[] buffer = new byte[targetStream.Size];
+                    targetStream.Read(buffer, 0, buffer.Length);
+
+                    StringBuilder sb = new StringBuilder();
+                    foreach (byte b in buffer)
+                    {
+                        if (b != 0)
+                        {
+                            sb.Append(AppUtilities.ConvertHexToAscii(b.ToString()));
+                        }
+                    }
+
+                    TxbOutput.Text = sb.ToString();
                 }
             }
         }
