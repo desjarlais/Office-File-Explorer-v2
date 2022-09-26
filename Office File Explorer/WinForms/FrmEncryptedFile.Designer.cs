@@ -30,6 +30,7 @@
         {
             this.tvEncryptedContents = new System.Windows.Forms.TreeView();
             this.TxbOutput = new System.Windows.Forms.TextBox();
+            this.BtnSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tvEncryptedContents
@@ -49,11 +50,22 @@
             this.TxbOutput.Size = new System.Drawing.Size(598, 245);
             this.TxbOutput.TabIndex = 1;
             // 
+            // BtnSave
+            // 
+            this.BtnSave.Location = new System.Drawing.Point(535, 493);
+            this.BtnSave.Name = "BtnSave";
+            this.BtnSave.Size = new System.Drawing.Size(75, 23);
+            this.BtnSave.TabIndex = 2;
+            this.BtnSave.Text = "Save";
+            this.BtnSave.UseVisualStyleBackColor = true;
+            this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            // 
             // FrmEncryptedFile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(622, 499);
+            this.ClientSize = new System.Drawing.Size(622, 524);
+            this.Controls.Add(this.BtnSave);
             this.Controls.Add(this.TxbOutput);
             this.Controls.Add(this.tvEncryptedContents);
             this.Name = "FrmEncryptedFile";
@@ -68,5 +80,6 @@
 
         private System.Windows.Forms.TreeView tvEncryptedContents;
         private System.Windows.Forms.TextBox TxbOutput;
+        private System.Windows.Forms.Button BtnSave;
     }
 }

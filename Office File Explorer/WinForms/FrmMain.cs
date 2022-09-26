@@ -198,7 +198,7 @@ namespace Office_File_Explorer
                             LstDisplay.Items.Add("  - not a valid Open Xml file");
                             DisableUI();
 
-                            OpenEncryptedOfficeDocument(lblFilePath.Text, true);
+                            structuredStorageViewerToolStripMenuItem.Enabled = true;
                         }
                         else
                         {
@@ -869,6 +869,7 @@ namespace Office_File_Explorer
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            structuredStorageViewerToolStripMenuItem.Enabled = false;
             DisableUI();
             EnableUI();
             OpenOfficeDocument();
@@ -2071,6 +2072,11 @@ namespace Office_File_Explorer
             {
                 Cursor = Cursors.Default;
             }
+        }
+
+        private void structuredStorageViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenEncryptedOfficeDocument(lblFilePath.Text, true);
         }
     }
 }

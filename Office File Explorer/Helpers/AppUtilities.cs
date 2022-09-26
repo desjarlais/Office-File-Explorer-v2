@@ -131,9 +131,9 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
-        public static string ConvertHexToAscii(string hexCode)
+        public static string ConvertByteToText(string byteCode)
         {
-            switch (hexCode)
+            switch (byteCode)
             {
                 case "32": return " ";
                 case "33": return "!";

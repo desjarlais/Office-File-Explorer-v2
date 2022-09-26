@@ -59,8 +59,7 @@ namespace Office_File_Explorer.OpenMcdf
     [Serializable]
     public class CFFileFormatException : CFException
     {
-        public CFFileFormatException()
-            : base() { }
+        public CFFileFormatException() : base() { }
 
         protected CFFileFormatException(SerializationInfo info, StreamingContext context)
             : base(info, context) { }
@@ -122,8 +121,7 @@ namespace Office_File_Explorer.OpenMcdf
     [Serializable]
     public class CFDuplicatedItemException : CFException
     {
-        public CFDuplicatedItemException()
-            : base() { }
+        public CFDuplicatedItemException() : base() { }
 
         protected CFDuplicatedItemException(SerializationInfo info, StreamingContext context)
             : base(info, context) { }
@@ -144,8 +142,7 @@ namespace Office_File_Explorer.OpenMcdf
     [Serializable]
     public class CFCorruptedFileException : CFException
     {
-        public CFCorruptedFileException()
-            : base() { }
+        public CFCorruptedFileException() : base() { }
 
         protected CFCorruptedFileException(SerializationInfo info, StreamingContext context)
             : base(info, context) { }

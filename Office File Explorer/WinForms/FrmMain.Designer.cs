@@ -43,6 +43,7 @@ namespace Office_File_Explorer
             this.batchFileProcessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clipboardViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.base64DecoderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.structuredStorageViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,7 +104,7 @@ namespace Office_File_Explorer
             // 
             // openToolStripMenuItem
             // 
-            this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
+            this.openToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.OpenFile;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.openToolStripMenuItem.Text = "O&pen";
@@ -111,7 +112,7 @@ namespace Office_File_Explorer
             // 
             // openErrorLogToolStripMenuItem
             // 
-            this.openErrorLogToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.ErrorSummary_16x;
+            this.openErrorLogToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.ErrorSummary;
             this.openErrorLogToolStripMenuItem.Name = "openErrorLogToolStripMenuItem";
             this.openErrorLogToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.openErrorLogToolStripMenuItem.Text = "Open Error Log";
@@ -127,7 +128,7 @@ namespace Office_File_Explorer
             // 
             // settingsToolStripMenuItem
             // 
-            this.settingsToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Settings_16x;
+            this.settingsToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.settingsToolStripMenuItem.Text = "&Settings";
@@ -150,24 +151,25 @@ namespace Office_File_Explorer
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.batchFileProcessingToolStripMenuItem,
             this.clipboardViewerToolStripMenuItem,
-            this.base64DecoderToolStripMenuItem});
+            this.base64DecoderToolStripMenuItem,
+            this.structuredStorageViewerToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // batchFileProcessingToolStripMenuItem
             // 
-            this.batchFileProcessingToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.BatchFile_16x;
+            this.batchFileProcessingToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.OpenDocumentGroup;
             this.batchFileProcessingToolStripMenuItem.Name = "batchFileProcessingToolStripMenuItem";
-            this.batchFileProcessingToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.batchFileProcessingToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.batchFileProcessingToolStripMenuItem.Text = "Batch File Processing";
             this.batchFileProcessingToolStripMenuItem.Click += new System.EventHandler(this.BatchFileProcessingToolStripMenuItem_Click);
             // 
             // clipboardViewerToolStripMenuItem
             // 
-            this.clipboardViewerToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.ASX_Copy_blue_16x;
+            this.clipboardViewerToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Copy;
             this.clipboardViewerToolStripMenuItem.Name = "clipboardViewerToolStripMenuItem";
-            this.clipboardViewerToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.clipboardViewerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.clipboardViewerToolStripMenuItem.Text = "Clipboard Viewer";
             this.clipboardViewerToolStripMenuItem.Click += new System.EventHandler(this.ClipboardViewerToolStripMenuItem_Click);
             // 
@@ -175,9 +177,18 @@ namespace Office_File_Explorer
             // 
             this.base64DecoderToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Strings_7959_0;
             this.base64DecoderToolStripMenuItem.Name = "base64DecoderToolStripMenuItem";
-            this.base64DecoderToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.base64DecoderToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.base64DecoderToolStripMenuItem.Text = "Base64 Decoder";
             this.base64DecoderToolStripMenuItem.Click += new System.EventHandler(this.Base64DecoderToolStripMenuItem_Click);
+            // 
+            // structuredStorageViewerToolStripMenuItem
+            // 
+            this.structuredStorageViewerToolStripMenuItem.Enabled = false;
+            this.structuredStorageViewerToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.BinaryFile;
+            this.structuredStorageViewerToolStripMenuItem.Name = "structuredStorageViewerToolStripMenuItem";
+            this.structuredStorageViewerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.structuredStorageViewerToolStripMenuItem.Text = "Structured Storage Viewer";
+            this.structuredStorageViewerToolStripMenuItem.Click += new System.EventHandler(this.structuredStorageViewerToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -190,17 +201,17 @@ namespace Office_File_Explorer
             // 
             // aboutToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Dialog_16x;
+            this.aboutToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.AboutBox;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // feedbackToolStripMenuItem
             // 
-            this.feedbackToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.FeedbackBubble_16x;
+            this.feedbackToolStripMenuItem.Image = global::Office_File_Explorer.Properties.Resources.Feedback;
             this.feedbackToolStripMenuItem.Name = "feedbackToolStripMenuItem";
-            this.feedbackToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.feedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.feedbackToolStripMenuItem.Text = "Feedback";
             this.feedbackToolStripMenuItem.Click += new System.EventHandler(this.FeedbackToolStripMenuItem_Click);
             // 
@@ -235,7 +246,7 @@ namespace Office_File_Explorer
             // 
             this.BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(525, 107);
             this.BtnRemoveCustomXmlParts.Name = "BtnRemoveCustomXmlParts";
-            this.BtnRemoveCustomXmlParts.Size = new System.Drawing.Size(143, 23);
+            this.BtnRemoveCustomXmlParts.Size = new System.Drawing.Size(134, 23);
             this.BtnRemoveCustomXmlParts.TabIndex = 13;
             this.BtnRemoveCustomXmlParts.Text = "Remove Custom Xml";
             this.BtnRemoveCustomXmlParts.UseVisualStyleBackColor = true;
@@ -243,9 +254,9 @@ namespace Office_File_Explorer
             // 
             // BtnRemoveCustomFileProps
             // 
-            this.BtnRemoveCustomFileProps.Location = new System.Drawing.Point(674, 107);
+            this.BtnRemoveCustomFileProps.Location = new System.Drawing.Point(665, 107);
             this.BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
-            this.BtnRemoveCustomFileProps.Size = new System.Drawing.Size(175, 23);
+            this.BtnRemoveCustomFileProps.Size = new System.Drawing.Size(157, 23);
             this.BtnRemoveCustomFileProps.TabIndex = 12;
             this.BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
             this.BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
@@ -519,6 +530,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.Button BtnExcelSheetViewer;
         private System.Windows.Forms.Button BtnRemoveCustomFileProps;
         private System.Windows.Forms.Button BtnRemoveCustomXmlParts;
+        private System.Windows.Forms.ToolStripMenuItem structuredStorageViewerToolStripMenuItem;
     }
 }
 

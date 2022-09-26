@@ -6,6 +6,7 @@
  * 
  * The Initial Developer of the Original Code is Federico Blaseotto.*/
 
+using System;
 using System.IO;
 
 namespace Office_File_Explorer.OpenMcdf
@@ -13,9 +14,8 @@ namespace Office_File_Explorer.OpenMcdf
     internal class Header
     {
         //0 8 Compound document file identifier: D0H CFH 11H E0H A1H B1H 1AH E1H
-        private byte[] headerSignature
-            = new byte[] { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
-
+        private byte[] headerSignature = new byte[] { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
+        
         public byte[] HeaderSignature
         {
             get { return headerSignature; }
@@ -273,7 +273,7 @@ namespace Office_File_Explorer.OpenMcdf
         private void CheckVersion()
         {
             if (majorVersion != 3 && majorVersion != 4)
-                throw new CFFileFormatException("Unsupported Binary File Format version: OpenMcdf only supports Compound Files with major version equal to 3 or 4 ");
+                throw new CFFileFormatException("Unsupported Binary File Format version: Only Compound Files with major version equal to 3 or 4 are supported.");
         }
 
         /// <summary>

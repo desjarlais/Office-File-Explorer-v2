@@ -12,6 +12,7 @@ namespace Office_File_Explorer.WinForms
     public partial class FrmEncryptedFile : Form
     {
         private CompoundFile cf;
+        private CFStream cfStream;
 
         [Obsolete]
         public FrmEncryptedFile(FileStream fs, bool enableCommit)
@@ -90,25 +91,29 @@ namespace Office_File_Explorer.WinForms
 
                 // The tag property contains the underlying CFItem.
                 //CFItem target = (CFItem)n.Tag;
-                CFStream targetStream = n.Tag as CFStream;
-                if (targetStream != null)
+                cfStream = n.Tag as CFStream;
+                if (cfStream != null)
                 {
-                    //TxbOutput.Text = Encoding.Default.GetString(targetStream.GetData());
-                    byte[] buffer = new byte[targetStream.Size];
-                    targetStream.Read(buffer, 0, buffer.Length);
+                    byte[] buffer = new byte[cfStream.Size];
+                    cfStream.Read(buffer, 0, buffer.Length);
 
                     StringBuilder sb = new StringBuilder();
                     foreach (byte b in buffer)
                     {
                         if (b != 0)
                         {
-                            sb.Append(AppUtilities.ConvertHexToAscii(b.ToString()));
+                            sb.Append(AppUtilities.ConvertByteToText(b.ToString()));
                         }
                     }
-
+                    
                     TxbOutput.Text = sb.ToString();
                 }
             }
+        }
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            cfStream.Write(Encoding.Default.GetBytes(TxbOutput.Text), 0);
         }
     }
 }

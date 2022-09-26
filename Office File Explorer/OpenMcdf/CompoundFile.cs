@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 using RedBlackTree;
 
 namespace Office_File_Explorer.OpenMcdf
@@ -335,7 +336,7 @@ namespace Office_File_Explorer.OpenMcdf
         /// to achieve the best reading/writing performance in most common scenarios.
         /// </remarks>
         [Obsolete]
-        public CompoundFile(String fileName)
+        public CompoundFile(string fileName)
         {
             sectorRecycle = false;
             updateMode = CFSUpdateMode.ReadOnly;
@@ -373,7 +374,7 @@ namespace Office_File_Explorer.OpenMcdf
         /// </code>
         /// </example>
         [Obsolete]
-        public CompoundFile(String fileName, CFSUpdateMode updateMode, CFSConfiguration configParameters)
+        public CompoundFile(string fileName, CFSUpdateMode updateMode, CFSConfiguration configParameters)
         {
             configuration = configParameters;
             validationExceptionEnabled = !configParameters.HasFlag(CFSConfiguration.NoValidationException);
@@ -381,8 +382,15 @@ namespace Office_File_Explorer.OpenMcdf
             this.updateMode = updateMode;
             eraseFreeSectors = configParameters.HasFlag(CFSConfiguration.EraseFreeSectors);
 
-            LoadFile(fileName);
-
+            try
+            {
+                LoadFile(fileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
             DIFAT_SECTOR_FAT_ENTRIES_COUNT = (GetSectorSize() / 4) - 1;
             FAT_SECTOR_ENTRIES_COUNT = (GetSectorSize() / 4);
         }
@@ -658,9 +666,7 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 header = new Header();
                 directoryEntries = new List<IDirectoryEntry>();
-
                 sourceStream = stream;
-
                 header.Read(stream);
 
                 int n_sector = Ceiling(((double)(stream.Length - GetSectorSize()) / (double)GetSectorSize()));
@@ -668,9 +674,7 @@ namespace Office_File_Explorer.OpenMcdf
                 if (stream.Length > 0x7FFFFF0)
                     _transactionLockAllocated = true;
 
-
                 sectors = new SectorCollection();
-                //sectors = new ArrayList();
                 for (int i = 0; i < n_sector; i++)
                 {
                     sectors.Add(null);
@@ -678,21 +682,18 @@ namespace Office_File_Explorer.OpenMcdf
 
                 LoadDirectories();
 
-                rootStorage
-                    = new CFStorage(this, directoryEntries[0]);
+                rootStorage = new CFStorage(this, directoryEntries[0]);
             }
             catch (Exception)
             {
                 if (stream != null && closeStream)
                     stream.Close();
-
                 throw;
             }
         }
 
         private void LoadFile(string fileName)
         {
-
             this.fileName = fileName;
 
             FileStream fs = null;
@@ -716,7 +717,6 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 if (fs != null)
                     fs.Close();
-
                 throw;
             }
         }
@@ -748,13 +748,7 @@ namespace Office_File_Explorer.OpenMcdf
         {
             List<Sector> miniStream = GetSectorChain(RootEntry.StartSetc, SectorType.Normal);
 
-            StreamView miniStreamView
-                = new StreamView(
-                    miniStream,
-                    GetSectorSize(),
-                    rootStorage.Size,
-                    null,
-                    sourceStream);
+            StreamView miniStreamView = new StreamView(miniStream, GetSectorSize(), rootStorage.Size, null, sourceStream);
 
             for (int i = 0; i < miniSectorChain.Count; i++)
             {
@@ -780,24 +774,10 @@ namespace Office_File_Explorer.OpenMcdf
 
             List<Sector> miniStream = GetSectorChain(RootEntry.StartSetc, SectorType.Normal);
 
-            StreamView miniFATView
-                = new StreamView(
-                    miniFAT,
-                    GetSectorSize(),
-                    header.MiniFATSectorsNumber * Sector.MINISECTOR_SIZE,
-                    null,
-                    sourceStream,
-                    true
-                    );
+            StreamView miniFATView = new StreamView(miniFAT, GetSectorSize(), header.MiniFATSectorsNumber * Sector.MINISECTOR_SIZE,
+                    null, sourceStream, true);
 
-            StreamView miniStreamView
-                = new StreamView(
-                    miniStream,
-                    GetSectorSize(),
-                    rootStorage.Size,
-                    null,
-                    sourceStream);
-
+            StreamView miniStreamView = new StreamView(miniStream, GetSectorSize(), rootStorage.Size, null, sourceStream);
 
             // Set updated/new sectors within the ministream
             // We are writing data in a NORMAL Sector chain.
@@ -1314,11 +1294,9 @@ namespace Office_File_Explorer.OpenMcdf
         {
             int N_HEADER_FAT_ENTRY = 109; //Number of FAT sectors id in the header
 
-            List<Sector> result
-               = new List<Sector>();
+            List<Sector> result = new List<Sector>();
 
-            int nextSecID
-               = Sector.ENDOFCHAIN;
+            int nextSecID = Sector.ENDOFCHAIN;
 
             List<Sector> difatSectors = GetDifatSectorChain();
 
@@ -1358,8 +1336,6 @@ namespace Office_File_Explorer.OpenMcdf
                         );
 
                 byte[] nextDIFATSectorBuffer = new byte[4];
-
-
 
                 int i = 0;
 
@@ -1635,18 +1611,6 @@ namespace Office_File_Explorer.OpenMcdf
             //bst.Print();
             //bst.Print();
             //Trace.WriteLine("#### After rethreading");
-
-            return bst;
-        }
-
-        private RBTree DoLoadChildrenTrusted(IDirectoryEntry de)
-        {
-            RBTree bst = null;
-
-            if (de.Child != DirectoryEntry.NOSTREAM)
-            {
-                bst = new RBTree(directoryEntries[de.Child]);
-            }
 
             return bst;
         }
@@ -2134,7 +2098,6 @@ namespace Office_File_Explorer.OpenMcdf
             else if (transitionToMini)                          //############## TRANSITION TO MINISTREAM
             {
                 // Transition Normal chain -> Mini chain
-
                 // Collect available MINI free sectors
 
                 if (sectorRecycle)
@@ -2587,8 +2550,7 @@ namespace Office_File_Explorer.OpenMcdf
             }
         }
 
-        private List<IDirectoryEntry> directoryEntries
-            = new List<IDirectoryEntry>();
+        private List<IDirectoryEntry> directoryEntries = new List<IDirectoryEntry>();
 
         internal IList<IDirectoryEntry> GetDirectories()
         {
