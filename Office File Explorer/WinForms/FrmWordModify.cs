@@ -94,6 +94,11 @@ namespace Office_File_Explorer.WinForms
                 wdModCmd = AppUtilities.WordModifyCmds.DelBookmarks;
             }
 
+            if (RdoRemoveDuplicateAuthors.Checked)
+            {
+                wdModCmd = AppUtilities.WordModifyCmds.DelDupeAuthors;
+            }
+
             Close();
         }
 

@@ -113,6 +113,16 @@ namespace Office_File_Explorer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap disk {
+            get {
+                object obj = ResourceManager.GetObject("disk", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ErrorSummary {
             get {
                 object obj = ResourceManager.GetObject("ErrorSummary", resourceCulture);
@@ -186,6 +196,26 @@ namespace Office_File_Explorer.Properties {
         internal static System.Drawing.Bitmap filewindow {
             get {
                 object obj = ResourceManager.GetObject("filewindow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder {
+            get {
+                object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FolderOpened {
+            get {
+                object obj = ResourceManager.GetObject("FolderOpened", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -47,6 +47,7 @@
             this.TxbOutput.Location = new System.Drawing.Point(12, 242);
             this.TxbOutput.Multiline = true;
             this.TxbOutput.Name = "TxbOutput";
+            this.TxbOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.TxbOutput.Size = new System.Drawing.Size(598, 245);
             this.TxbOutput.TabIndex = 1;
             // 
@@ -68,6 +69,9 @@
             this.Controls.Add(this.BtnSave);
             this.Controls.Add(this.TxbOutput);
             this.Controls.Add(this.tvEncryptedContents);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmEncryptedFile";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Encrypted File Contents";

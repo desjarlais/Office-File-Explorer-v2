@@ -1,7 +1,9 @@
 ﻿// Open XML SDK refs
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.CustomProperties;
+using DocumentFormat.OpenXml.Office2013.Word;
 using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 // App refs
 using Office_File_Explorer.Helpers;
@@ -1207,6 +1209,31 @@ namespace Office_File_Explorer
                             else
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "No Bookmarks In Document", string.Empty);
+                            }
+                        }
+
+                        if (f.wdModCmd == AppUtilities.WordModifyCmds.DelDupeAuthors)
+                        {
+                            Dictionary<string, string> authors = new Dictionary<string, string>();
+
+                            using (WordprocessingDocument document = WordprocessingDocument.Open(lblFilePath.Text, true))
+                            {
+                                // check the peoplepart and list those authors
+                                WordprocessingPeoplePart peoplePart = document.MainDocumentPart.WordprocessingPeoplePart;
+                                if (peoplePart != null)
+                                {
+                                    foreach (Person person in peoplePart.People)
+                                    {
+                                        authors.Add(person.Author, person.PresenceInfo.UserId);
+                                    }
+                                }
+                            }
+
+                            
+
+                            using (var fDupe = new FrmDuplicateAuthors(authors))
+                            {
+                                var dupeResult = fDupe.ShowDialog();
                             }
                         }
                     }

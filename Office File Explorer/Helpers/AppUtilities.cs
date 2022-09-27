@@ -80,7 +80,8 @@ namespace Office_File_Explorer.Helpers
             RemovePII,
             RemoveCustomTitleProp,
             UpdateCcNamespaceGuid,
-            DelBookmarks
+            DelBookmarks,
+            DelDupeAuthors
         }
 
         public enum ExcelModifyCmds

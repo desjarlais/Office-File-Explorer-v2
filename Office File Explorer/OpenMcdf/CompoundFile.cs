@@ -2206,7 +2206,6 @@ namespace Office_File_Explorer.OpenMcdf
 
         internal void WriteData(CFItem cfItem, byte[] buffer, long position, int offset, int count)
         {
-
             if (buffer == null)
                 throw new CFInvalidOperation("Parameter [buffer] cannot be null");
 

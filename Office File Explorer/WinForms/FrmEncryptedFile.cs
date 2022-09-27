@@ -1,4 +1,4 @@
-﻿/// the code for opening the structured compound file format was mostly taken from here https://github.com/ironfede/openmcdf
+﻿// the code for opening the structured compound file format was mostly taken from here https://github.com/ironfede/openmcdf
 
 using Office_File_Explorer.Helpers;
 using Office_File_Explorer.OpenMcdf;
@@ -19,6 +19,11 @@ namespace Office_File_Explorer.WinForms
         {
             InitializeComponent();
 
+            // Load images
+            tvEncryptedContents.ImageList = new ImageList();
+            tvEncryptedContents.ImageList.Images.Add(Properties.Resources.folder);
+            tvEncryptedContents.ImageList.Images.Add(Properties.Resources.BinaryFile);
+
             //Load file
             if (enableCommit)
             {
@@ -29,6 +34,7 @@ namespace Office_File_Explorer.WinForms
                 cf = new CompoundFile(fs);
             }
             
+            // populate treeview
             tvEncryptedContents.Nodes.Clear();
             TreeNode root = null;
             root = tvEncryptedContents.Nodes.Add("Root Entry", "Root");
@@ -45,27 +51,22 @@ namespace Office_File_Explorer.WinForms
         {
             Action<CFItem> va = delegate (CFItem target)
             {
-                TreeNode temp = node.Nodes.Add(
-                    target.Name,
-                    target.Name + (target.IsStream ? " (" + target.Size + " bytes )" : "")
-                    );
-
+                TreeNode temp = node.Nodes.Add( target.Name, target.Name + (target.IsStream ? " (" + target.Size + " bytes )" : string.Empty));
                 temp.Tag = target;
-
+                
                 if (target.IsStream)
                 {
-
-                    //Stream
+                    // Stream
                     temp.ImageIndex = 1;
                     temp.SelectedImageIndex = 1;
                 }
                 else
                 {
-                    //Storage
+                    // Storage
                     temp.ImageIndex = 0;
                     temp.SelectedImageIndex = 0;
 
-                    //Recursion into the storage
+                    // Recursion into the storage
                     AddNodes(temp, (CFStorage)target);
                 }
             };
@@ -111,9 +112,21 @@ namespace Office_File_Explorer.WinForms
             }
         }
 
+        /// <summary>
+        /// write out any changes made in the textbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            cfStream.Write(Encoding.Default.GetBytes(TxbOutput.Text), 0);
+            // save the changes to the stream
+            cfStream.Write(Encoding.Default.GetBytes(TxbOutput.Text), 0, 0, Encoding.Default.GetByteCount(TxbOutput.Text));
+            cf.Commit();
+
+            // let the user know it worked and close the stream/form
+            MessageBox.Show("Stream saved.");
+            cf.Close();
+            Close();
         }
     }
 }

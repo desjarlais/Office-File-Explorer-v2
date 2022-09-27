@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWordModify));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.RdoRemoveDuplicateAuthors = new System.Windows.Forms.RadioButton();
             this.rdoDelBookmarks = new System.Windows.Forms.RadioButton();
             this.rdoUpdateNamespaces = new System.Windows.Forms.RadioButton();
             this.rdoRemoveCustomTitleProp = new System.Windows.Forms.RadioButton();
@@ -54,6 +55,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.RdoRemoveDuplicateAuthors);
             this.groupBox1.Controls.Add(this.rdoDelBookmarks);
             this.groupBox1.Controls.Add(this.rdoUpdateNamespaces);
             this.groupBox1.Controls.Add(this.rdoRemoveCustomTitleProp);
@@ -72,10 +74,21 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.rdoDelHF);
             this.groupBox1.Location = new System.Drawing.Point(12, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(392, 226);
+            this.groupBox1.Size = new System.Drawing.Size(392, 248);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Content to Modify";
+            // 
+            // RdoRemoveDuplicateAuthors
+            // 
+            this.RdoRemoveDuplicateAuthors.AutoSize = true;
+            this.RdoRemoveDuplicateAuthors.Location = new System.Drawing.Point(11, 219);
+            this.RdoRemoveDuplicateAuthors.Name = "RdoRemoveDuplicateAuthors";
+            this.RdoRemoveDuplicateAuthors.Size = new System.Drawing.Size(156, 19);
+            this.RdoRemoveDuplicateAuthors.TabIndex = 13;
+            this.RdoRemoveDuplicateAuthors.TabStop = true;
+            this.RdoRemoveDuplicateAuthors.Text = "Delete Duplicate Authors";
+            this.RdoRemoveDuplicateAuthors.UseVisualStyleBackColor = true;
             // 
             // rdoDelBookmarks
             // 
@@ -255,7 +268,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(245, 232);
+            this.BtnOk.Location = new System.Drawing.Point(245, 254);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 0;
@@ -265,7 +278,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(326, 232);
+            this.BtnCancel.Location = new System.Drawing.Point(326, 254);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 1;
@@ -277,7 +290,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(416, 267);
+            this.ClientSize = new System.Drawing.Size(416, 285);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.groupBox1);
@@ -317,5 +330,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoRemoveCustomTitleProp;
         private System.Windows.Forms.RadioButton rdoUpdateNamespaces;
         private System.Windows.Forms.RadioButton rdoDelBookmarks;
+        private System.Windows.Forms.RadioButton RdoRemoveDuplicateAuthors;
     }
 }
