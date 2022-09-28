@@ -14,7 +14,6 @@ namespace Office_File_Explorer.WinForms
         private CompoundFile cf;
         private CFStream cfStream;
 
-        [Obsolete]
         public FrmEncryptedFile(FileStream fs, bool enableCommit)
         {
             InitializeComponent();
@@ -127,6 +126,11 @@ namespace Office_File_Explorer.WinForms
             MessageBox.Show("Stream saved.");
             cf.Close();
             Close();
+        }
+
+        private void FrmEncryptedFile_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            cf.Close();
         }
     }
 }

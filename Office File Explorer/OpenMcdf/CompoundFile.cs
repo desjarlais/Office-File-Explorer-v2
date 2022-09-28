@@ -18,7 +18,6 @@ namespace Office_File_Explorer.OpenMcdf
 {
     internal class CFItemComparer : IComparer<CFItem>
     {
-        [Obsolete]
         public int Compare(CFItem x, CFItem y)
         {
             // X CompareTo Y : X > Y --> 1 ; X < Y  --> -1
@@ -303,9 +302,6 @@ namespace Office_File_Explorer.OpenMcdf
             //this.InsertNewDirectoryEntry(rootDir);
 
             rootStorage = new CFStorage(this, rootDir);
-
-
-            //
         }
 
 
@@ -335,7 +331,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// automatically recognized from the file. Sector recycle is turned off
         /// to achieve the best reading/writing performance in most common scenarios.
         /// </remarks>
-        [Obsolete]
         public CompoundFile(string fileName)
         {
             sectorRecycle = false;
@@ -373,7 +368,6 @@ namespace Office_File_Explorer.OpenMcdf
         ///
         /// </code>
         /// </example>
-        [Obsolete]
         public CompoundFile(string fileName, CFSUpdateMode updateMode, CFSConfiguration configParameters)
         {
             configuration = configParameters;
@@ -429,7 +423,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// </example>
         /// <exception cref="T:OpenMcdf.CFException">Raised when trying to open a non-seekable stream</exception>
         /// <exception cref="T:OpenMcdf.CFException">Raised stream is null</exception>
-        [Obsolete]
         public CompoundFile(Stream stream, CFSUpdateMode updateMode, CFSConfiguration configParameters)
         {
             configuration = configParameters;
@@ -478,9 +471,7 @@ namespace Office_File_Explorer.OpenMcdf
         }
 
         private CFSUpdateMode updateMode = CFSUpdateMode.ReadOnly;
-        private String fileName = String.Empty;
-
-
+        private string fileName = string.Empty;
 
         /// <summary>
         /// Commit data changes since the previously commit operation
@@ -500,7 +491,6 @@ namespace Office_File_Explorer.OpenMcdf
         private byte[] buffer = new byte[FLUSHING_BUFFER_MAX_SIZE];
         private Queue<Sector> flushingQueue = new Queue<Sector>(FLUSHING_QUEUE_SIZE);
 #endif
-
 
         /// <summary>
         /// Commit data changes since the previously commit operation
@@ -546,12 +536,12 @@ namespace Office_File_Explorer.OpenMcdf
                 //Here sectors should not be loaded dynamically because
                 //if they are null it means that no change has involved them;
 
-                Sector s = (Sector)sectors[i];
+                Sector s = sectors[i];
 
                 if (s != null && s.DirtyFlag)
                 {
                     if (gap)
-                        sourceStream.Seek((long)((long)(sSize) + (long)i * (long)sSize), SeekOrigin.Begin);
+                        sourceStream.Seek((long)(sSize) + (long)i * (long)sSize, SeekOrigin.Begin);
 
                     sourceStream.Write(s.GetData(), 0, sSize);
                     sourceStream.Flush();
@@ -669,7 +659,7 @@ namespace Office_File_Explorer.OpenMcdf
                 sourceStream = stream;
                 header.Read(stream);
 
-                int n_sector = Ceiling(((double)(stream.Length - GetSectorSize()) / (double)GetSectorSize()));
+                int n_sector = Ceiling((stream.Length - GetSectorSize()) / (double)GetSectorSize());
 
                 if (stream.Length > 0x7FFFFF0)
                     _transactionLockAllocated = true;
@@ -711,7 +701,6 @@ namespace Office_File_Explorer.OpenMcdf
                 }
 
                 Load(fs);
-
             }
             catch
             {
@@ -728,7 +717,6 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (!stream.CanSeek)
                 throw new CFException("Cannot load a non-seekable Stream");
-
 
             stream.Seek(0, SeekOrigin.Begin);
 
@@ -858,8 +846,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             List<Sector> FAT = GetSectorChain(-1, SectorType.FAT);
 
-            StreamView FATView
-                = new StreamView(FAT, GetSectorSize(), FAT.Count * GetSectorSize(), null, sourceStream);
+            StreamView FATView = new StreamView(FAT, GetSectorSize(), FAT.Count * GetSectorSize(), null, sourceStream);
 
             // Zeroes out sector data (if required)-------------
             if (zeroSector)
@@ -985,7 +972,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// <param name="sectorChain">The new or updated generic sector chain</param>
         private void AllocateSectorChain(List<Sector> sectorChain)
         {
-
             foreach (Sector s in sectorChain)
             {
                 if (s.Id == -1)
@@ -1044,7 +1030,6 @@ namespace Office_File_Explorer.OpenMcdf
 
             for (int i = 0; i < sectorChain.Count - 1; i++)
             {
-
                 Sector sN = sectorChain[i + 1];
                 Sector sC = sectorChain[i];
 
@@ -1260,7 +1245,7 @@ namespace Office_File_Explorer.OpenMcdf
                             throw new CFCorruptedFileException("DIFAT sectors count mismatched. Corrupted compound file");
                     }
 
-                    s = sectors[nextSecID] as Sector;
+                    s = sectors[nextSecID];
 
                     if (s == null)
                     {
@@ -1582,10 +1567,6 @@ namespace Office_File_Explorer.OpenMcdf
         internal RBTree CreateNewTree()
         {
             RBTree bst = new RBTree();
-            //bst.NodeInserted += OnNodeInsert;
-            //bst.NodeOperation += OnNodeOperation;
-            //bst.NodeDeleted += new Action<RBNode<CFItem>>(OnNodeDeleted);
-            //  bst.ValueAssignedAction += new Action<RBNode<CFItem>, CFItem>(OnValueAssigned);
             return bst;
         }
 
@@ -1600,24 +1581,20 @@ namespace Office_File_Explorer.OpenMcdf
         //        node.Value.DirEntry.RightSibling = from.DirEntry.RightSibling;
         //}
 
+        /// <summary>
+        /// Load children from their original tree.
+        /// </summary>
+        /// <param name="sid"></param>
+        /// <returns></returns>
         internal RBTree GetChildrenTree(int sid)
         {
-            RBTree bst = new RBTree();
-
-            // Load children from their original tree.
+            RBTree bst = new RBTree();            
             DoLoadChildren(bst, directoryEntries[sid]);
-            //bst = DoLoadChildrenTrusted(directoryEntries[sid]);
-
-            //bst.Print();
-            //bst.Print();
-            //Trace.WriteLine("#### After rethreading");
-
             return bst;
         }
 
         private void DoLoadChildren(RBTree bst, IDirectoryEntry de)
         {
-
             if (de.Child != DirectoryEntry.NOSTREAM)
             {
                 if (directoryEntries[de.Child].StgType == StgType.StgInvalid) return;
@@ -1800,7 +1777,6 @@ namespace Office_File_Explorer.OpenMcdf
                 header.DirectorySectorsNumber = directorySectors.Count;
             }
         }
-
 
         /// <summary>
         /// Saves the in-memory image of Compound File to a file.
@@ -2056,7 +2032,6 @@ namespace Office_File_Explorer.OpenMcdf
                 }
             }
 
-
             Queue<Sector> freeList = null;
             StreamView sv = null;
 
@@ -2309,7 +2284,6 @@ namespace Office_File_Explorer.OpenMcdf
 
         internal byte[] GetData(CFStream cFStream)
         {
-
             if (_disposed)
                 throw new CFDisposedException("Compound File closed: cannot access data");
 
@@ -2464,17 +2438,14 @@ namespace Office_File_Explorer.OpenMcdf
         ///    }
         /// </code>
         /// </example>
-        
+
         public void Close()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             Close(true);
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         private bool closeStream = true;
 
-        [Obsolete("Use flag LeaveOpen in CompoundFile constructor")]
         public void Close(bool closeStream)
         {
             this.closeStream = closeStream;
@@ -2538,7 +2509,6 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 _disposed = true;
             }
-
         }
 
         internal bool IsClosed
@@ -2560,7 +2530,6 @@ namespace Office_File_Explorer.OpenMcdf
         //{
         //    get { return directoryEntries; }
         //}
-
 
         internal IDirectoryEntry RootEntry
         {
@@ -2692,7 +2661,6 @@ namespace Office_File_Explorer.OpenMcdf
 
                 // If we were based on a writable stream, we update
                 // the stream and do reload from the compressed one...
-
                 s.Seek(0, SeekOrigin.Begin);
                 tmpMS.WriteTo(s);
 
@@ -2700,9 +2668,7 @@ namespace Office_File_Explorer.OpenMcdf
                 s.SetLength(tmpMS.Length);
 
                 tmpMS.Close();
-#pragma warning disable CS0618 // Type or member is obsolete
                 cf.Close(false);
-#pragma warning restore CS0618 // Type or member is obsolete
             }
         }
 

@@ -252,7 +252,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// cf.Close();
         /// </code>
         /// </example>
-        [Obsolete("Please use TryGetStream(string, out cfStream) instead.")]
         public CFStream TryGetStream(string streamName)
         {
             CheckDisposed();
@@ -324,7 +323,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// cf.Close();
         /// </code>
         /// </example>
-        [Obsolete("Please use TryGetStorage(string, out cfStorage) instead.")]
         public CFStorage TryGetStorage(string storageName)
         {
             CheckDisposed();

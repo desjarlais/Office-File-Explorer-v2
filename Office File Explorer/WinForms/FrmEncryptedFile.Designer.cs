@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmEncryptedFile));
             this.tvEncryptedContents = new System.Windows.Forms.TreeView();
             this.TxbOutput = new System.Windows.Forms.TextBox();
             this.BtnSave = new System.Windows.Forms.Button();
@@ -70,11 +71,13 @@
             this.Controls.Add(this.TxbOutput);
             this.Controls.Add(this.tvEncryptedContents);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmEncryptedFile";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Encrypted File Contents";
+            this.Text = "File Contents";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmEncryptedFile_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

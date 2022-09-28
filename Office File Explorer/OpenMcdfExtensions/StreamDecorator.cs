@@ -92,9 +92,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions
 
         public override void SetLength(long value) => cfStream.Resize(value);
 
-#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override void Write(byte[] buffer, int offset, int count)
-#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
             cfStream.Write(buffer, position, offset, count);
             position += count;
