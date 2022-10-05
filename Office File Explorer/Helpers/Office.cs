@@ -392,6 +392,7 @@ namespace Office_File_Explorer.Helpers
                     {
                         wordDoc.MainDocumentPart.DeletePart(cxp);
                         wordDoc.Save();
+                        isFixed = true;
                     }
                 }
             }
@@ -403,6 +404,7 @@ namespace Office_File_Explorer.Helpers
                     {
                         presDoc.PresentationPart.DeletePart(cxp);
                         presDoc.Save();
+                        isFixed = true;
                     }
                 }
             }
@@ -414,11 +416,11 @@ namespace Office_File_Explorer.Helpers
                     {
                         excelDoc.WorkbookPart.DeletePart(cxp);
                         excelDoc.Save();
+                        isFixed = true;
                     }
                 }
             }
 
-            isFixed = true;
             return isFixed;
         }
 

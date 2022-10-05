@@ -53,15 +53,14 @@ namespace Office_File_Explorer.WinForms
                 TreeNode temp = node.Nodes.Add( target.Name, target.Name + (target.IsStream ? " (" + target.Size + " bytes )" : string.Empty));
                 temp.Tag = target;
                 
+                // set images for treeview
                 if (target.IsStream)
                 {
-                    // Stream
                     temp.ImageIndex = 1;
                     temp.SelectedImageIndex = 1;
                 }
                 else
                 {
-                    // Storage
                     temp.ImageIndex = 0;
                     temp.SelectedImageIndex = 0;
 
@@ -76,38 +75,47 @@ namespace Office_File_Explorer.WinForms
 
         private void tvEncryptedContents_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-            {
-                Close();
-            }
+            if (e.KeyCode == Keys.Escape) { Close(); }
         }
 
         private void tvEncryptedContents_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            TreeNode n = tvEncryptedContents.GetNodeAt(e.X, e.Y);
-            if (n != null)
+            try
             {
-                tvEncryptedContents.SelectedNode = n;
-
-                // The tag property contains the underlying CFItem.
-                //CFItem target = (CFItem)n.Tag;
-                cfStream = n.Tag as CFStream;
-                if (cfStream != null)
+                Cursor = Cursors.WaitCursor;
+                TreeNode n = tvEncryptedContents.GetNodeAt(e.X, e.Y);
+                if (n != null)
                 {
-                    byte[] buffer = new byte[cfStream.Size];
-                    cfStream.Read(buffer, 0, buffer.Length);
+                    tvEncryptedContents.SelectedNode = n;
 
-                    StringBuilder sb = new StringBuilder();
-                    foreach (byte b in buffer)
+                    // The tag property contains the underlying CFItem.
+                    // CFItem target = (CFItem)n.Tag;
+                    cfStream = n.Tag as CFStream;
+                    if (cfStream != null)
                     {
-                        if (b != 0)
+                        byte[] buffer = new byte[cfStream.Size];
+                        cfStream.Read(buffer, 0, buffer.Length);
+
+                        StringBuilder sb = new StringBuilder();
+                        foreach (byte b in buffer)
                         {
-                            sb.Append(AppUtilities.ConvertByteToText(b.ToString()));
+                            if (b != 0)
+                            {
+                                sb.Append(AppUtilities.ConvertByteToText(b.ToString()));
+                            }
                         }
+
+                        TxbOutput.Text = sb.ToString();
                     }
-                    
-                    TxbOutput.Text = sb.ToString();
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "NodeMouseClick Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 
@@ -118,12 +126,12 @@ namespace Office_File_Explorer.WinForms
         /// <param name="e"></param>
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            // save the changes to the stream
+            // write the stream changes and save
             cfStream.Write(Encoding.Default.GetBytes(TxbOutput.Text), 0, 0, Encoding.Default.GetByteCount(TxbOutput.Text));
             cf.Commit();
 
-            // let the user know it worked and close the stream/form
-            MessageBox.Show("Stream saved.");
+            // let the user know it worked, then close the stream and form
+            MessageBox.Show("Stream saved.", "File Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cf.Close();
             Close();
         }

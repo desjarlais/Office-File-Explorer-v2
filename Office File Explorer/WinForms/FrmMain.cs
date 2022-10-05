@@ -130,10 +130,7 @@ namespace Office_File_Explorer
         {
             try
             {
-                if (LstDisplay.Items.Count <= 0)
-                {
-                    return;
-                }
+                if (LstDisplay.Items.Count <= 0) { return; }
 
                 StringBuilder buffer = new StringBuilder();
                 foreach (string s in LstDisplay.Items)
@@ -195,8 +192,9 @@ namespace Office_File_Explorer
                             LstDisplay.Items.Add("  - file encrypted");
                             LstDisplay.Items.Add("  - file password protected");
                             LstDisplay.Items.Add("  - not a valid Open Xml file");
+                            
+                            // setup UI for this type of file
                             DisableUI();
-
                             structuredStorageViewerToolStripMenuItem.Enabled = true;
                         }
                         else
@@ -2083,7 +2081,7 @@ namespace Office_File_Explorer
                 }
                 else
                 {
-                    throw new Exception();
+                    LogInformation(LogInfoType.ClearAndAdd, "Document Does Not Contain Custom Xml.", string.Empty);
                 }
             }
             catch (Exception ex)
