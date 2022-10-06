@@ -22,7 +22,7 @@
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.18.0" />
     <PackageReference Include="Microsoft.Graph" Version="5.0.0-preview.11" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.47.1" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.47.2" />
   </ItemGroup>
 
   <ItemGroup>

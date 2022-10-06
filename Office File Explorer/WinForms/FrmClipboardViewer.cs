@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -21,61 +20,24 @@ namespace Office_File_Explorer.WinForms
         private bool AutoRefresh;
         private IntPtr _chainedWnd = (IntPtr)0;
 
-        // win32 imports
-        [DllImport(Strings.user32)]
-        static extern IntPtr SetClipboardViewer(IntPtr hWndNewViewer);
-
-        [DllImport(Strings.user32)]
-        static extern IntPtr ChangeClipboardChain(IntPtr hWndRemove, IntPtr hWndNewNext);
-
-        [DllImport(Strings.user32)]
-        public static extern void SendMessage(IntPtr hwnd, uint wMsg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(Strings.user32, SetLastError = true)]
-        static extern bool OpenClipboard(IntPtr hWndNewOwner);
-
-        [DllImport(Strings.user32)]
-        static extern IntPtr GetClipboardData(uint uFormat);
-
-        [DllImport(Strings.user32, SetLastError = true)]
-        static extern bool CloseClipboard();
-
-        [DllImport(Strings.user32)]
-        private static extern int IsClipboardFormatAvailable(int wFormat);
-
-        [DllImport(Strings.user32, SetLastError = true)]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport(Strings.user32)]
-        static extern IntPtr GetClipboardOwner();
-
-        [DllImport(Strings.gdi32)]
-        static extern IntPtr CopyEnhMetaFile(IntPtr hemfSrc, string lpszFile);
-
-        [DllImport(Strings.gdi32)]
-        static extern bool DeleteEnhMetaFile(IntPtr hemf);
-
-        const int WM_DRAWCLIPBOARD = 0x0308;
-        const int WM_CHANGECBCHAIN = 0x030D;
-
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
-                case WM_DRAWCLIPBOARD:
+                case Win32.WM_DRAWCLIPBOARD:
                     if (AutoRefresh)
                     {
                         RefreshClipboard();
                     }
                     break;
-                case WM_CHANGECBCHAIN:
+                case Win32.WM_CHANGECBCHAIN:
                     if (m.WParam == _chainedWnd)
                     {
                         _chainedWnd = m.LParam;
                     }
                     else
                     {
-                        SendMessage(_chainedWnd, (uint)m.Msg, m.WParam, m.LParam);
+                        Win32.SendMessage(_chainedWnd, (uint)m.Msg, m.WParam, m.LParam);
                     }
                     break;
             }
@@ -238,9 +200,9 @@ namespace Office_File_Explorer.WinForms
         {
             string fileName = Environment.GetEnvironmentVariable("TEMP") + "\\" + Guid.NewGuid().ToString() + ".emf";
 
-            OpenClipboard(IntPtr.Zero);
-            IntPtr pointer = GetClipboardData(14);
-            IntPtr handle = CopyEnhMetaFile(pointer, fileName);
+            Win32.OpenClipboard(IntPtr.Zero);
+            IntPtr pointer = Win32.GetClipboardData(14);
+            IntPtr handle = Win32.CopyEnhMetaFile(pointer, fileName);
 
             Image image;
             using (Metafile metafile = new Metafile(fileName))
@@ -248,10 +210,10 @@ namespace Office_File_Explorer.WinForms
                 image = new Bitmap(metafile.Width, metafile.Height);
                 Graphics g = Graphics.FromImage(image);
                 g.DrawImage(metafile, 0, 0, image.Width, image.Height);
-                CloseClipboard();
+                Win32.CloseClipboard();
             }
 
-            DeleteEnhMetaFile(handle);
+            Win32.DeleteEnhMetaFile(handle);
             File.Delete(fileName);
             return image;
         }
@@ -292,12 +254,12 @@ namespace Office_File_Explorer.WinForms
         private void FrmClipboardViewer_Shown(object sender, EventArgs e)
         {
             RefreshClipboard();
-            _chainedWnd = SetClipboardViewer(this.Handle);
+            _chainedWnd = Win32.SetClipboardViewer(this.Handle);
         }
 
         private void FrmClipboardViewer_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ChangeClipboardChain(this.Handle, _chainedWnd);
+            Win32.ChangeClipboardChain(this.Handle, _chainedWnd);
         }
 
         private void LbClipFormats_SelectedIndexChanged(object sender, EventArgs e)
@@ -314,7 +276,7 @@ namespace Office_File_Explorer.WinForms
         {
             try
             {
-                uint threadID = GetWindowThreadProcessId(GetClipboardOwner(), out uint processID);
+                uint threadID = Win32.GetWindowThreadProcessId(Win32.GetClipboardOwner(), out uint processID);
                 string processOwnerName = Process.GetProcessById((int)processID).ProcessName;
                 MessageBox.Show("Process = " + processOwnerName, "Clipboard Owner", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

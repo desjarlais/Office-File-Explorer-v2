@@ -136,38 +136,38 @@ namespace Office_File_Explorer.Helpers
         {
             switch (byteCode)
             {
-                case "0": return null;
-                case "1": 
-                case "2": 
-                case "3": 
-                case "4": 
-                case "5": 
-                case "6": 
-                case "7": 
-                case "8": 
-                case "9": 
-                case "10": 
-                case "11": 
-                case "12": 
-                case "13": 
-                case "14": 
-                case "15": 
-                case "16": 
-                case "17": 
-                case "18": 
-                case "19": 
-                case "20": 
-                case "21": 
-                case "22": 
-                case "23": 
-                case "24": 
-                case "25": 
-                case "26": 
-                case "27": 
-                case "28": 
-                case "29": 
-                case "30": 
-                case "31": return ".";          // u001f
+                case "0": return null;          // u0000
+                case "1":                       // u0001 - show period "." for all non-printable characters
+                case "2":                       // u0002
+                case "3":                       // u0003
+                case "4":                       // u0004
+                case "5":                       // u0005
+                case "6":                       // u0006
+                case "7":                       // u0007
+                case "8":                       // u0008
+                case "9":                       // u0009
+                case "10":                      // u000a
+                case "11":                      // u000b
+                case "12":                      // u000c
+                case "13":                      // u000d
+                case "14":                      // u000e
+                case "15":                      // u000f
+                case "16":                      // u0010
+                case "17":                      // u0011
+                case "18":                      // u0012
+                case "19":                      // u0013
+                case "20":                      // u0014
+                case "21":                      // u0015
+                case "22":                      // u0016
+                case "23":                      // u0017
+                case "24":                      // u0018
+                case "25":                      // u0019
+                case "26":                      // u001a
+                case "27":                      // u001b
+                case "28":                      // u001c
+                case "29":                      // u001d
+                case "30":                      // u001e
+                case "31": return ".";          // u001f - printable characters
                 case "32": return " ";          // u0020
                 case "33": return "!";          // u0021
                 case "34": return "\"";         // u0022
@@ -264,7 +264,7 @@ namespace Office_File_Explorer.Helpers
                 case "125": return "}";         // u007d
                 case "126": return "~";         // u007e
                 case "127": return "DEL";       // u007f
-                case "128": return "€";         // u0080
+                case "128": return "€";         // u0080 extended ascii
                 case "129": return "\u0081";    // u0081
                 case "130": return "‚";         // u0082
                 case "131": return "ƒ";         // u0083
