@@ -6,6 +6,7 @@
  * 
  * The Initial Developer of the Original Code is Federico Blaseotto.*/
 
+using Office_File_Explorer.Helpers;
 using System;
 using System.Runtime.Serialization;
 
@@ -19,15 +20,11 @@ namespace Office_File_Explorer.OpenMcdf
     {
         public CFException() : base() { }
 
-        protected CFException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+        protected CFException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public CFException(string message)
-            : base(message, null) { }
+        public CFException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
-        public CFException(string message, Exception innerException)
-            : base(message, innerException) { }
-
+        public CFException(string message, Exception innerException) : base(message, innerException) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
     }
 
     /// <summary>
@@ -38,18 +35,13 @@ namespace Office_File_Explorer.OpenMcdf
     [Serializable]
     public class CFDisposedException : CFException
     {
-        public CFDisposedException()
-            : base() { }
+        public CFDisposedException() : base() { }
 
-        protected CFDisposedException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+        protected CFDisposedException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public CFDisposedException(string message)
-            : base(message, null) { }
+        public CFDisposedException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
-        public CFDisposedException(string message, Exception innerException)
-            : base(message, innerException) { }
-
+        public CFDisposedException(string message, Exception innerException) : base(message, innerException) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
     }
 
     /// <summary>
@@ -61,14 +53,11 @@ namespace Office_File_Explorer.OpenMcdf
     {
         public CFFileFormatException() : base() { }
 
-        protected CFFileFormatException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+        protected CFFileFormatException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public CFFileFormatException(string message)
-            : base(message, null) { }
+        public CFFileFormatException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
-        public CFFileFormatException(string message, Exception innerException)
-            : base(message, innerException) { }
+        public CFFileFormatException(string message, Exception innerException) : base(message, innerException) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
     }
 
     /// <summary>
@@ -78,17 +67,13 @@ namespace Office_File_Explorer.OpenMcdf
     [Serializable]
     public class CFItemNotFound : CFException
     {
-        protected CFItemNotFound(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+        protected CFItemNotFound(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public CFItemNotFound()
-            : base("Entry not found") { }
+        public CFItemNotFound() : base("Entry not found") { }
 
-        public CFItemNotFound(string message)
-            : base(message, null) { }
+        public CFItemNotFound(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
-        public CFItemNotFound(string message, Exception innerException)
-            : base(message, innerException) { }
+        public CFItemNotFound(string message, Exception innerException) : base(message, innerException) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
     }
 
     /// <summary>
@@ -97,17 +82,13 @@ namespace Office_File_Explorer.OpenMcdf
     [Serializable]
     public class CFInvalidOperation : CFException
     {
-        public CFInvalidOperation()
-           : base() { }
+        public CFInvalidOperation() : base() { }
 
-        protected CFInvalidOperation(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+        protected CFInvalidOperation(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public CFInvalidOperation(string message)
-            : base(message, null) { }
+        public CFInvalidOperation(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
-        public CFInvalidOperation(string message, Exception innerException)
-            : base(message, innerException) { }
+        public CFInvalidOperation(string message, Exception innerException) : base(message, innerException) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
     }
 
     /// <summary>
@@ -123,14 +104,11 @@ namespace Office_File_Explorer.OpenMcdf
     {
         public CFDuplicatedItemException() : base() { }
 
-        protected CFDuplicatedItemException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+        protected CFDuplicatedItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public CFDuplicatedItemException(string message)
-            : base(message, null) { }
+        public CFDuplicatedItemException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
-        public CFDuplicatedItemException(string message, Exception innerException)
-            : base(message, innerException) { }
+        public CFDuplicatedItemException(string message, Exception innerException) : base(message, innerException) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
     }
 
     /// <summary>
@@ -144,13 +122,10 @@ namespace Office_File_Explorer.OpenMcdf
     {
         public CFCorruptedFileException() : base() { }
 
-        protected CFCorruptedFileException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+        protected CFCorruptedFileException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public CFCorruptedFileException(string message)
-            : base(message, null) { }
+        public CFCorruptedFileException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
-        public CFCorruptedFileException(string message, Exception innerException)
-            : base(message, innerException) { }
+        public CFCorruptedFileException(string message, Exception innerException) : base(message, innerException) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
     }
 }

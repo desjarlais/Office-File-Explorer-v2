@@ -402,7 +402,6 @@ namespace Office_File_Explorer.Helpers
                 {
                     foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
                     {
-                        // todo: bug in open xml sdk?  deletepart does not delete the part, it stays in the file
                         presDoc.PresentationPart.DeletePart(cxp);
                         presDoc.Save();
                         isFixed = true;

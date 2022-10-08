@@ -119,11 +119,7 @@ namespace Office_File_Explorer.OpenMcdf
         public CFStream AddStream(string streamName)
         {
             CheckDisposed();
-
-            if (string.IsNullOrEmpty(streamName))
-                throw new CFException("Stream name cannot be null or empty");
-
-
+            if (string.IsNullOrEmpty(streamName)) throw new CFException("Stream name cannot be null or empty");
 
             IDirectoryEntry dirEntry = DirectoryEntry.TryNew(streamName, StgType.StgStream, CompoundFile.GetDirectories());
 
@@ -141,7 +137,6 @@ namespace Office_File_Explorer.OpenMcdf
             catch (RBTreeException)
             {
                 CompoundFile.ResetDirectoryEntry(dirEntry.SID);
-
                 throw new CFDuplicatedItemException("An entry with name '" + streamName + "' is already present in storage '" + Name + "' ");
             }
 

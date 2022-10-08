@@ -23,22 +23,31 @@ namespace Office_File_Explorer.WinForms
             tvEncryptedContents.ImageList.Images.Add(Properties.Resources.folder);
             tvEncryptedContents.ImageList.Images.Add(Properties.Resources.BinaryFile);
 
-            //Load file
-            if (enableCommit)
+            try
             {
-                cf = new CompoundFile(fs, CFSUpdateMode.Update, CFSConfiguration.SectorRecycle | CFSConfiguration.NoValidationException | CFSConfiguration.EraseFreeSectors);
+                //Load file
+                if (enableCommit)
+                {
+                    cf = new CompoundFile(fs, CFSUpdateMode.Update, CFSConfiguration.SectorRecycle | CFSConfiguration.NoValidationException | CFSConfiguration.EraseFreeSectors);
+                }
+                else
+                {
+                    cf = new CompoundFile(fs);
+                }
+
+                // populate treeview
+                tvEncryptedContents.Nodes.Clear();
+                TreeNode root = null;
+                root = tvEncryptedContents.Nodes.Add("Root Entry", "Root");
+                root.Tag = cf.RootStorage;
+                AddNodes(root, cf.RootStorage);
             }
-            else
+            catch (Exception ex)
             {
-                cf = new CompoundFile(fs);
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+                MessageBox.Show(ex.Message, "File Load Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
             }
-            
-            // populate treeview
-            tvEncryptedContents.Nodes.Clear();
-            TreeNode root = null;
-            root = tvEncryptedContents.Nodes.Add("Root Entry", "Root");
-            root.Tag = cf.RootStorage;
-            AddNodes(root, cf.RootStorage);
         }
 
         /// <summary>
@@ -138,7 +147,10 @@ namespace Office_File_Explorer.WinForms
 
         private void FrmEncryptedFile_FormClosing(object sender, FormClosingEventArgs e)
         {
-            cf.Close();
+            if (cf != null)
+            {
+                cf.Close();
+            }
         }
     }
 }

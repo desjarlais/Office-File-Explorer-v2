@@ -154,7 +154,15 @@ namespace Office_File_Explorer
             {
                 Owner = this
             };
-            cForm.ShowDialog();
+            
+            if (cForm.IsDisposed)
+            {
+                return;
+            }
+            else
+            {
+                cForm.ShowDialog();
+            }
         }
 
         /// <summary>

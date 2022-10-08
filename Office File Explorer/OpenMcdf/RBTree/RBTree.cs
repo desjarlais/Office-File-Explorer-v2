@@ -564,7 +564,6 @@ namespace RedBlackTree
 
     internal enum NodeOperation
     {
-        LeftAssigned, RightAssigned, ColorAssigned, ParentAssigned,
-        ValueAssigned
+        LeftAssigned, RightAssigned, ColorAssigned, ParentAssigned, ValueAssigned
     }
 }

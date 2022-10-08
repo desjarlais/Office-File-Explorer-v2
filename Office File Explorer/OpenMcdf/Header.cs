@@ -8,6 +8,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Office_File_Explorer.OpenMcdf
 {
@@ -242,12 +243,26 @@ namespace Office_File_Explorer.OpenMcdf
         {
             StreamRW rw = new StreamRW(stream);
 
+            // check signature
             headerSignature = rw.ReadBytes(8);
-            CheckSignature();
+            for (int i = 0; i < headerSignature.Length; i++)
+            {
+                if (headerSignature[i] != OLE_CFS_SIGNATURE[i])
+                {
+                    throw new CFFileFormatException("Invalid OLE structured storage file");
+                }
+            }
+
+            // check version
             clsid = rw.ReadBytes(16);
             minorVersion = rw.ReadUInt16();
             majorVersion = rw.ReadUInt16();
-            CheckVersion();
+
+            if (majorVersion != 3 && majorVersion != 4)
+            {
+                throw new CFFileFormatException("Unsupported Binary File Format version: Only Compound Files with major version equal to 3 or 4 are supported.");
+            }
+
             byteOrder = rw.ReadUInt16();
             sectorShift = rw.ReadUInt16();
             miniSectorShift = rw.ReadUInt16();
@@ -270,24 +285,9 @@ namespace Office_File_Explorer.OpenMcdf
             rw.Close();
         }
 
-        private void CheckVersion()
-        {
-            if (majorVersion != 3 && majorVersion != 4)
-                throw new CFFileFormatException("Unsupported Binary File Format version: Only Compound Files with major version equal to 3 or 4 are supported.");
-        }
-
         /// <summary>
         /// Structured Storage signature
         /// </summary>
         private byte[] OLE_CFS_SIGNATURE = new byte[] { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
-
-        private void CheckSignature()
-        {
-            for (int i = 0; i < headerSignature.Length; i++)
-            {
-                if (headerSignature[i] != OLE_CFS_SIGNATURE[i])
-                    throw new CFFileFormatException("Invalid OLE structured storage file");
-            }
-        }
     }
 }
