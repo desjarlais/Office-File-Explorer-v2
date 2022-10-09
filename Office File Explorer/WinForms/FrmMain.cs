@@ -3,11 +3,9 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.CustomProperties;
 using DocumentFormat.OpenXml.Office2013.Word;
 using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
 
 // App refs
 using Office_File_Explorer.Helpers;
-using Office_File_Explorer.OpenMcdf;
 using Office_File_Explorer.WinForms;
 
 // .NET refs
@@ -560,7 +558,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// there are scenarios where things like "Fixed" or "Copy" need to be appended to the file name
+        /// there are scenarios where strings like "Fixed" or "Copy" need to be appended to the file name
         /// this function helps facilitate that by taking the file as is and the scenario text and combining them
         /// </summary>
         /// <param name="fileName"></param>

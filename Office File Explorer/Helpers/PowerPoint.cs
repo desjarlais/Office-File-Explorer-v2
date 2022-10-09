@@ -11,7 +11,10 @@ using PShape = DocumentFormat.OpenXml.Presentation.Shape;
 using Drawing = DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml;
 using ShapeStyle = DocumentFormat.OpenXml.Presentation.ShapeStyle;
-using DocumentFormat.OpenXml.Office2013.Excel;
+using ModernComment = DocumentFormat.OpenXml.Office2021.PowerPoint.Comment;
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Office2021.PowerPoint.Comment;
+using Comment = DocumentFormat.OpenXml.Presentation.Comment;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -227,20 +230,40 @@ namespace Office_File_Explorer.Helpers
                 // first check legacy comments
                 foreach (SlidePart sPart in pPart.SlideParts)
                 {
+                    // legacy comments
                     SlideCommentsPart sCPart = sPart.SlideCommentsPart;
-                    if (sCPart is null)
+                    if (sCPart is not null)
                     {
-                        continue;
+                        foreach (Comment cmt in sCPart.CommentList)
+                        {
+                            commentCount++;
+                            tList.Add(commentCount + Strings.wPeriod + cmt.InnerText);
+                        }
                     }
 
-                    foreach (Comment cmt in sCPart.CommentList)
+                    // modern comments
+                    if (sPart.commentParts is not null)
                     {
-                        commentCount++;
-                        tList.Add(commentCount + Strings.wPeriod + cmt.InnerText);
+                        IEnumerable<PowerPointCommentPart> modernComments = sPart.commentParts;                        
+                        foreach (PowerPointCommentPart modernComment in modernComments)
+                        {
+                            foreach (ModernComment.Comment c in modernComment.CommentList)
+                            {
+                                string commentAuthor = string.Empty;
+                                foreach (ModernComment.Author a in pPart.authorsPart.AuthorList)
+                                {
+                                    if (a.Id == c.AuthorId)
+                                    {
+                                        commentAuthor = a.Name;
+                                    }
+                                }
+
+                                commentCount++;
+                                tList.Add(commentCount + Strings.wPeriod + "Author: " + commentAuthor + " Comment: " + c.InnerText);
+                            }
+                        }
                     }
                 }
-
-                // now check for modern comments
             }
 
             return tList;
