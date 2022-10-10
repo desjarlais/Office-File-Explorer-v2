@@ -75,10 +75,7 @@ namespace Office_File_Explorer.OpenMcdf
             get { return true; }
         }
 
-        public override void Flush()
-        {
-
-        }
+        public override void Flush() { }
 
         private long length;
 
@@ -99,9 +96,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             set
             {
-                if (position > length - 1)
-                    throw new ArgumentOutOfRangeException("value");
-
+                if (position > length - 1) throw new ArgumentOutOfRangeException("value");
                 position = value;
             }
         }

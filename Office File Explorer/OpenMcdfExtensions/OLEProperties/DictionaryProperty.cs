@@ -54,7 +54,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                     br.ReadByte();
                 }
             }
-
         }
 
         public void Write(BinaryWriter bw)
@@ -65,8 +64,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             {
                 bw.Write(kv.Key);
                 string s = kv.Value;
-                if (!s.EndsWith("\0"))
-                    s += "\0";
+                if (!s.EndsWith("\0")) s += "\0";
                 bw.Write(Encoding.GetEncoding(this.codePage).GetBytes(s));
             }
 

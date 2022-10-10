@@ -28,18 +28,12 @@ namespace Office_File_Explorer.OpenMcdf
     {
         private const int MAX_SECTOR_V4_COUNT_LOCK_RANGE = 524287; //0x7FFFFF00 for Version 4
         private const int SLICE_SIZE = 4096;
-
         private int count = 0;
 
-
         public event Ver3SizeLimitReached OnVer3SizeLimitReached;
-
         private List<ArrayList> largeArraySlices = new List<ArrayList>();
 
-        public SectorCollection()
-        {
-
-        }
+        public SectorCollection() { }
 
         private bool sizeLimitReached = false;
         private void DoCheckSizeLimitReached()
@@ -81,7 +75,6 @@ namespace Office_File_Explorer.OpenMcdf
                 }
                 else
                     throw new CFException("Argument Out of Range, possibly corrupted file", new ArgumentOutOfRangeException("index", index, "Argument out of range"));
-
             }
 
             set
@@ -136,7 +129,6 @@ namespace Office_File_Explorer.OpenMcdf
             }
 
             largeArraySlices.Clear();
-
             count = 0;
         }
 
@@ -174,7 +166,6 @@ namespace Office_File_Explorer.OpenMcdf
 
         public IEnumerator<Sector> GetEnumerator()
         {
-
             for (int i = 0; i < largeArraySlices.Count; i++)
             {
                 for (int j = 0; j < largeArraySlices[i].Count; j++)

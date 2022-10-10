@@ -98,9 +98,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions
             position += count;
         }
 
-        public override void Close()
-        {
-            // Do nothing
-        }
+        public override void Close() { }
     }
 }

@@ -227,7 +227,6 @@ namespace Office_File_Explorer.Helpers
                 PresentationPart pPart = presentationDocument.PresentationPart;
                 int commentCount = 0;
 
-                // first check legacy comments
                 foreach (SlidePart sPart in pPart.SlideParts)
                 {
                     // legacy comments
@@ -244,7 +243,7 @@ namespace Office_File_Explorer.Helpers
                     // modern comments
                     if (sPart.commentParts is not null)
                     {
-                        IEnumerable<PowerPointCommentPart> modernComments = sPart.commentParts;                        
+                        IEnumerable<PowerPointCommentPart> modernComments = sPart.commentParts;
                         foreach (PowerPointCommentPart modernComment in modernComments)
                         {
                             foreach (ModernComment.Comment c in modernComment.CommentList)

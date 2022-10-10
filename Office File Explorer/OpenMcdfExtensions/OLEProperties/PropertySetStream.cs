@@ -21,10 +21,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         //private SummaryInfoMap map;
 
-        public PropertySetStream()
-        {
-
-        }
+        public PropertySetStream() { }
 
         public void Read(System.IO.BinaryReader br)
         {
@@ -45,7 +42,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             PropertySet0 = new PropertySet();
             PropertySet0.Size = br.ReadUInt32();
             PropertySet0.NumProperties = br.ReadUInt32();
-
 
             // Read property offsets (P0)
             for (int i = 0; i < PropertySet0.NumProperties; i++)
@@ -125,7 +121,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 bw.Write(Offset1);
             }
 
-
             oc0.OffsetPS = (int)bw.BaseStream.Position;
             bw.Write(PropertySet0.Size);
             bw.Write(PropertySet0.NumProperties);
@@ -143,8 +138,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 PropertySet0.Properties[i].Write(bw);
             }
 
-            var padding0 = bw.BaseStream.Position % 4;
-
+            //var padding0 = bw.BaseStream.Position % 4;
             //if (padding0 > 0)
             //{
             //    for (int p = 0; p < padding0; p++)

@@ -41,12 +41,9 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private PropertyDimensions CheckPropertyDimensions(VTPropertyType vtType)
         {
-            if ((((ushort)vtType) & 0x1000) != 0)
-                return PropertyDimensions.IsVector;
-            else if ((((ushort)vtType) & 0x2000) != 0)
-                return PropertyDimensions.IsArray;
-            else
-                return PropertyDimensions.IsScalar;
+            if ((((ushort)vtType) & 0x1000) != 0) return PropertyDimensions.IsVector;
+            else if ((((ushort)vtType) & 0x2000) != 0) return PropertyDimensions.IsArray;
+            else return PropertyDimensions.IsScalar;
         }
 
         public virtual object Value

@@ -15,7 +15,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
         {
             get
             {
-
 #if NETSTANDARD2_0_OR_GREATER
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
@@ -23,10 +22,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             }
         }
 
-        private PropertyFactory()
-        {
-
-        }
+        private PropertyFactory() { }
 
         public ITypedPropertyValue NewProperty(VTPropertyType vType, int codePage, bool isVariant = false)
         {
@@ -113,35 +109,27 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_EMPTY_Property : TypedPropertyValue<object>
         {
-            public VT_EMPTY_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_EMPTY_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override object ReadScalarValue(System.IO.BinaryReader br)
+            public override object ReadScalarValue(BinaryReader br)
             {
                 return null;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, object pValue)
-            {
-            }
+            public override void WriteScalarValue(BinaryWriter bw, object pValue) { }
         }
 
         private class VT_I1_Property : TypedPropertyValue<sbyte>
         {
-            public VT_I1_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_I1_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override sbyte ReadScalarValue(System.IO.BinaryReader br)
+            public override sbyte ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadSByte();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, sbyte pValue)
+            public override void WriteScalarValue(BinaryWriter bw, sbyte pValue)
             {
                 bw.Write(pValue);
             }
@@ -149,18 +137,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_UI1_Property : TypedPropertyValue<byte>
         {
-            public VT_UI1_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_UI1_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override byte ReadScalarValue(System.IO.BinaryReader br)
+            public override byte ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadByte();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, byte pValue)
+            public override void WriteScalarValue(BinaryWriter bw, byte pValue)
             {
                 bw.Write(pValue);
             }
@@ -168,18 +153,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_UI4_Property : TypedPropertyValue<uint>
         {
-            public VT_UI4_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_UI4_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override uint ReadScalarValue(System.IO.BinaryReader br)
+            public override uint ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadUInt32();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, uint pValue)
+            public override void WriteScalarValue(BinaryWriter bw, uint pValue)
             {
                 bw.Write(pValue);
             }
@@ -187,18 +169,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_UI8_Property : TypedPropertyValue<ulong>
         {
-            public VT_UI8_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_UI8_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override ulong ReadScalarValue(System.IO.BinaryReader br)
+            public override ulong ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadUInt64();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, ulong pValue)
+            public override void WriteScalarValue(BinaryWriter bw, ulong pValue)
             {
                 bw.Write(pValue);
             }
@@ -206,56 +185,47 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_I2_Property : TypedPropertyValue<short>
         {
-            public VT_I2_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_I2_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override short ReadScalarValue(System.IO.BinaryReader br)
+            public override short ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadInt16();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, short pValue)
+            public override void WriteScalarValue(BinaryWriter bw, short pValue)
             {
                 bw.Write(pValue);
             }
         }
 
-
-
         private class VT_UI2_Property : TypedPropertyValue<ushort>
         {
-            public VT_UI2_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_UI2_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override ushort ReadScalarValue(System.IO.BinaryReader br)
+            public override ushort ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadUInt16();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, ushort pValue)
+            public override void WriteScalarValue(BinaryWriter bw, ushort pValue)
             {
                 bw.Write(pValue);
             }
         }
+
         private class VT_I4_Property : TypedPropertyValue<int>
         {
-            public VT_I4_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
-            }
+            public VT_I4_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            public override int ReadScalarValue(System.IO.BinaryReader br)
+            public override int ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadInt32();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, int pValue)
+            public override void WriteScalarValue(BinaryWriter bw, int pValue)
             {
                 bw.Write(pValue);
             }
@@ -263,34 +233,30 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_I8_Property : TypedPropertyValue<long>
         {
-            public VT_I8_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
-            }
+            public VT_I8_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            public override long ReadScalarValue(System.IO.BinaryReader br)
+            public override long ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadInt64();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, long pValue)
+            public override void WriteScalarValue(BinaryWriter bw, long pValue)
             {
                 bw.Write(pValue);
             }
         }
         private class VT_INT_Property : TypedPropertyValue<int>
         {
-            public VT_INT_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
-            }
+            public VT_INT_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            public override int ReadScalarValue(System.IO.BinaryReader br)
+            public override int ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadInt32();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, int pValue)
+            public override void WriteScalarValue(BinaryWriter bw, int pValue)
             {
                 bw.Write(pValue);
             }
@@ -298,17 +264,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_UINT_Property : TypedPropertyValue<uint>
         {
-            public VT_UINT_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
-            }
+            public VT_UINT_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            public override uint ReadScalarValue(System.IO.BinaryReader br)
+            public override uint ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadUInt32();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, uint pValue)
+            public override void WriteScalarValue(BinaryWriter bw, uint pValue)
             {
                 bw.Write(pValue);
             }
@@ -316,18 +280,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_R4_Property : TypedPropertyValue<float>
         {
-            public VT_R4_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_R4_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override float ReadScalarValue(System.IO.BinaryReader br)
+            public override float ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadSingle();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, float pValue)
+            public override void WriteScalarValue(BinaryWriter bw, float pValue)
             {
                 bw.Write(pValue);
             }
@@ -335,18 +296,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_R8_Property : TypedPropertyValue<double>
         {
-            public VT_R8_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_R8_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override double ReadScalarValue(System.IO.BinaryReader br)
+            public override double ReadScalarValue(BinaryReader br)
             {
                 var r = br.ReadDouble();
                 return r;
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, double pValue)
+            public override void WriteScalarValue(BinaryWriter bw, double pValue)
             {
                 bw.Write(pValue);
             }
@@ -354,20 +312,16 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_CY_Property : TypedPropertyValue<long>
         {
-            public VT_CY_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
-            }
+            public VT_CY_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            public override long ReadScalarValue(System.IO.BinaryReader br)
+            public override long ReadScalarValue(BinaryReader br)
             {
                 Int64 temp = br.ReadInt64();
-
                 var tmp = (temp /= 10000);
-
                 return (tmp);
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, long pValue)
+            public override void WriteScalarValue(BinaryWriter bw, long pValue)
             {
                 bw.Write(pValue * 10000);
             }
@@ -375,19 +329,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_DATE_Property : TypedPropertyValue<DateTime>
         {
-            public VT_DATE_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_DATE_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override DateTime ReadScalarValue(System.IO.BinaryReader br)
+            public override DateTime ReadScalarValue(BinaryReader br)
             {
                 Double temp = br.ReadDouble();
-
                 return DateTime.FromOADate(temp);
             }
 
-            public override void WriteScalarValue(System.IO.BinaryWriter bw, DateTime pValue)
+            public override void WriteScalarValue(BinaryWriter bw, DateTime pValue)
             {
                 bw.Write(pValue.ToOADate());
             }
@@ -403,7 +353,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 this.codePage = codePage;
             }
 
-            public override string ReadScalarValue(System.IO.BinaryReader br)
+            public override string ReadScalarValue(BinaryReader br)
             {
                 uint size = br.ReadUInt32();
                 data = br.ReadBytes((int)size);
@@ -422,7 +372,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
         }
         private class VT_LPWSTR_Property : TypedPropertyValue<string>
         {
-
             private byte[] data;
             private int codePage;
 
@@ -431,7 +380,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 this.codePage = codePage;
             }
 
-            public override string ReadScalarValue(System.IO.BinaryReader br)
+            public override string ReadScalarValue(BinaryReader br)
             {
                 uint nChars = br.ReadUInt32();
                 data = br.ReadBytes((int)(nChars * 2));  //WChar
@@ -448,16 +397,11 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_FILETIME_Property : TypedPropertyValue<DateTime>
         {
+            public VT_FILETIME_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            public VT_FILETIME_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
-
-            }
-
-            public override DateTime ReadScalarValue(System.IO.BinaryReader br)
+            public override DateTime ReadScalarValue(BinaryReader br)
             {
                 Int64 tmp = br.ReadInt64();
-
                 return DateTime.FromFileTime(tmp);
             }
 
@@ -469,13 +413,9 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_DECIMAL_Property : TypedPropertyValue<Decimal>
         {
+            public VT_DECIMAL_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            public VT_DECIMAL_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
-
-            }
-
-            public override Decimal ReadScalarValue(System.IO.BinaryReader br)
+            public override Decimal ReadScalarValue(BinaryReader br)
             {
                 Decimal d;
 
@@ -515,12 +455,9 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_BOOL_Property : TypedPropertyValue<bool>
         {
-            public VT_BOOL_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_BOOL_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override bool ReadScalarValue(System.IO.BinaryReader br)
+            public override bool ReadScalarValue(BinaryReader br)
             {
 
                 this.propertyValue = br.ReadUInt16() == (ushort)0xFFFF ? true : false;
@@ -536,12 +473,9 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private class VT_CF_Property : TypedPropertyValue<object>
         {
-            public VT_CF_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_CF_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override object ReadScalarValue(System.IO.BinaryReader br)
+            public override object ReadScalarValue(BinaryReader br)
             {
 
                 int size = br.ReadInt32();
@@ -553,19 +487,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             public override void WriteScalarValue(BinaryWriter bw, object pValue)
             {
                 byte[] r = pValue as byte[];
-                if (r != null)
-                    bw.Write(r);
+                if (r != null) bw.Write(r);
             }
         }
 
         private class VT_BLOB_Property : TypedPropertyValue<object>
         {
-            public VT_BLOB_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant)
-            {
+            public VT_BLOB_Property(VTPropertyType vType, bool isVariant) : base(vType, isVariant) { }
 
-            }
-
-            public override object ReadScalarValue(System.IO.BinaryReader br)
+            public override object ReadScalarValue(BinaryReader br)
             {
                 int size = br.ReadInt32();
                 byte[] data = br.ReadBytes(size);
@@ -575,8 +505,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             public override void WriteScalarValue(BinaryWriter bw, object pValue)
             {
                 byte[] r = pValue as byte[];
-                if (r != null)
-                    bw.Write(r);
+                if (r != null) bw.Write(r);
             }
         }
 
@@ -589,7 +518,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 this.codePage = codePage;
             }
 
-            public override object ReadScalarValue(System.IO.BinaryReader br)
+            public override object ReadScalarValue(BinaryReader br)
             {
                 VTPropertyType vType = (VTPropertyType)br.ReadUInt16();
                 br.ReadUInt16(); // Ushort Padding
@@ -602,7 +531,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             public override void WriteScalarValue(BinaryWriter bw, object pValue)
             {
                 ITypedPropertyValue p = (ITypedPropertyValue)pValue;
-
                 p.Write(bw);
             }
         }

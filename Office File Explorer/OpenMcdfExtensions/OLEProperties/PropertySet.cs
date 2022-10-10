@@ -16,8 +16,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         public uint NumProperties { get; set; }
 
-        List<PropertyIdentifierAndOffset> propertyIdentifierAndOffsets
-            = new List<PropertyIdentifierAndOffset>();
+        List<PropertyIdentifierAndOffset> propertyIdentifierAndOffsets = new List<PropertyIdentifierAndOffset>();
 
         public List<PropertyIdentifierAndOffset> PropertyIdentifierAndOffsets
         {

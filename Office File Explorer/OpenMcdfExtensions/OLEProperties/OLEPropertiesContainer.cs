@@ -123,7 +123,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                     Value = p.Value
                 };
 
-
                 properties.Add(op);
             }
 
@@ -142,7 +141,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
                     var p = (ITypedPropertyValue)pStream.PropertySet1.Properties[i];
                     var poi = pStream.PropertySet1.PropertyIdentifierAndOffsets[i];
-
                     var op = new OLEProperty(UserDefinedProperties);
 
                     op.VTType = p.VTType;
@@ -185,16 +183,12 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             //throw new NotImplementedException("API Unstable - Work in progress - Milestone 2.3.0.0");
             var toRemove = properties.Where(o => o.PropertyIdentifier == propertyIdentifier).FirstOrDefault();
 
-            if (toRemove != null)
-                properties.Remove(toRemove);
+            if (toRemove != null) properties.Remove(toRemove);
         }
 
 
         public void Save(CFStream cfStream)
         {
-            //throw new NotImplementedException("API Unstable - Work in progress - Milestone 2.3.0.0");
-            //properties.Sort((a, b) => a.PropertyIdentifier.CompareTo(b.PropertyIdentifier));
-
             Stream s = new StreamDecorator(cfStream);
             BinaryWriter bw = new BinaryWriter(s);
 
