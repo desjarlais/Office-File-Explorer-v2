@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.Helpers
@@ -116,6 +117,11 @@ namespace Office_File_Explorer.Helpers
         public const string wHeadingEnd = " ---";
         public const string wUsedIn = " -> Used in ";
 
+        // error messages
+        public const string errorUnableToFixDocument = "ERROR: Unable to fix document.";
+        public const string errorValidation = "Validation Errors";
+        public const string errorOpenWithSDK = "OpenWithSDK Error:";
+
         // app messages
         public const string doNotDeleteStyle = "DO NOT DELETE + ";
         public const string deleteStyle = "DELETE + ";
@@ -131,7 +137,6 @@ namespace Office_File_Explorer.Helpers
         public const string invalidTag = "Invalid Tag: ";
         public const string invalidFile = "Invalid File. Please select a valid document.";
         public const string replacedWith = "Replaced With: ";
-        public const string errorUnableToFixDocument = "ERROR: Unable to fix document.";
         public const string shpOfficeDrawing = ". Office Drawing";
         public const string shpVml = "Vml Shape";
         public const string shpVmlRectangle = "Vml Rectangle";
@@ -151,7 +156,6 @@ namespace Office_File_Explorer.Helpers
         public const string convertedTo = " converted to -> ";
         public const string wdDocumentXml = "/word/document.xml";
         public const string allAuthors = "* All Authors *";
-        public const string validationErrors = "Validation Errors";
 
         // file locations
         public static string fLogFilePath = Path.GetDirectoryName(Application.LocalUserAppDataPath) + "\\offexp.txt";

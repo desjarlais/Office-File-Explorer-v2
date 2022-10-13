@@ -6,6 +6,12 @@ using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using System.Xml;
+using System.Xml.Schema;
+using System.Reflection;
+using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -13,6 +19,8 @@ namespace Office_File_Explorer.WinForms
     {
         private CompoundFile cf;
         private CFStream cfStream;
+        static bool isValid;
+        public static List<string> validationErrors = new List<string>();
 
         public FrmEncryptedFile(FileStream fs, bool enableCommit)
         {
@@ -140,7 +148,7 @@ namespace Office_File_Explorer.WinForms
             cf.Commit();
 
             // let the user know it worked, then close the stream and form
-            MessageBox.Show("Stream saved.", "File Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Stream changes saved.", "File Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cf.Close();
             Close();
         }
@@ -150,6 +158,90 @@ namespace Office_File_Explorer.WinForms
             if (cf != null)
             {
                 cf.Close();
+            }
+        }
+
+        /// <summary>
+        /// validate the labelinfo stream xml
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnValidateXml_Click(object sender, EventArgs e)
+        {
+            isValid = true;
+            validationErrors.Clear();
+
+            // currently only validating labelinfo streams
+            if (tvEncryptedContents.SelectedNode.Name != "LabelInfo")
+            {
+                return;
+            }
+
+            // start validating the xml
+            try
+            {
+                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
+                var path = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).LocalPath;
+                XmlSchemaSet schema = new XmlSchemaSet();
+                schema.Add("", path + "\\Schemas\\LabelInfo.xsd");
+
+                var settings = new XmlReaderSettings();
+                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", path + "\\Schemas\\LabelInfo.xsd");
+                settings.ValidationType = ValidationType.Schema;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
+
+                using (TextReader textReader = new StringReader(TxbOutput.Text))
+                {
+                    XmlReader rd = XmlReader.Create(textReader, settings);
+                    XDocument doc = XDocument.Load(rd);
+                    doc.Validate(schema, eventHandler);
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+                MessageBox.Show(ex.Message, "Xml Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                isValid = false;
+            }
+            finally
+            {
+                if (isValid)
+                {
+                    MessageBox.Show("Xml Is Valid.", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    if (validationErrors.Count > 0)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        int errorCount = 0;
+                        foreach (string s in validationErrors)
+                        {
+                            errorCount++;
+                            sb.Append(errorCount + Strings.wPeriod + s + "\r\n");
+                        }
+
+                        MessageBox.Show(sb.ToString(), "Schema Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        static void ValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            isValid = false;
+            switch (e.Severity)
+            {
+                case XmlSeverityType.Error:
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
+                    validationErrors.Add(e.Message);
+                    break;
+                case XmlSeverityType.Warning:
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
+                    validationErrors.Add(e.Message);
+                    break;
             }
         }
     }

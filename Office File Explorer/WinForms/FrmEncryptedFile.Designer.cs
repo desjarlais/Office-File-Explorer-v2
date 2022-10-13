@@ -32,6 +32,7 @@
             this.tvEncryptedContents = new System.Windows.Forms.TreeView();
             this.TxbOutput = new System.Windows.Forms.TextBox();
             this.BtnSave = new System.Windows.Forms.Button();
+            this.BtnValidateXml = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tvEncryptedContents
@@ -54,19 +55,30 @@
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(535, 493);
+            this.BtnSave.Location = new System.Drawing.Point(507, 493);
             this.BtnSave.Name = "BtnSave";
-            this.BtnSave.Size = new System.Drawing.Size(75, 23);
+            this.BtnSave.Size = new System.Drawing.Size(103, 23);
             this.BtnSave.TabIndex = 2;
-            this.BtnSave.Text = "Save";
+            this.BtnSave.Text = "Save Changes";
             this.BtnSave.UseVisualStyleBackColor = true;
             this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            // 
+            // BtnValidateXml
+            // 
+            this.BtnValidateXml.Location = new System.Drawing.Point(393, 493);
+            this.BtnValidateXml.Name = "BtnValidateXml";
+            this.BtnValidateXml.Size = new System.Drawing.Size(108, 23);
+            this.BtnValidateXml.TabIndex = 3;
+            this.BtnValidateXml.Text = "Validate Xml";
+            this.BtnValidateXml.UseVisualStyleBackColor = true;
+            this.BtnValidateXml.Click += new System.EventHandler(this.BtnValidateXml_Click);
             // 
             // FrmEncryptedFile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(622, 524);
+            this.Controls.Add(this.BtnValidateXml);
             this.Controls.Add(this.BtnSave);
             this.Controls.Add(this.TxbOutput);
             this.Controls.Add(this.tvEncryptedContents);
@@ -88,5 +100,6 @@
         private System.Windows.Forms.TreeView tvEncryptedContents;
         private System.Windows.Forms.TextBox TxbOutput;
         private System.Windows.Forms.Button BtnSave;
+        private System.Windows.Forms.Button BtnValidateXml;
     }
 }

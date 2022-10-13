@@ -163,6 +163,15 @@ namespace Office_File_Explorer
             }
         }
 
+        public void DisplayNotValidFileFormatError()
+        {
+            LstDisplay.Items.Add("Unable to open file, possible causes are:");
+            LstDisplay.Items.Add("  - file corruption");
+            LstDisplay.Items.Add("  - file encrypted");
+            LstDisplay.Items.Add("  - file password protected");
+            LstDisplay.Items.Add("  - not a valid Open Xml file");
+        }
+
         /// <summary>
         /// majority of open file logic is here
         /// </summary>
@@ -193,13 +202,7 @@ namespace Office_File_Explorer
                         // if the file doesn't start with PK, we can stop trying to process it
                         if (!FileUtilities.IsZipArchiveFile(lblFilePath.Text))
                         {
-                            LstDisplay.Items.Add("Unable to open file, possible causes are:");
-                            LstDisplay.Items.Add("  - file corruption");
-                            LstDisplay.Items.Add("  - file encrypted");
-                            LstDisplay.Items.Add("  - file password protected");
-                            LstDisplay.Items.Add("  - not a valid Open Xml file");
-                            
-                            // setup UI for this type of file
+                            DisplayNotValidFileFormatError();
                             DisableUI();
                             structuredStorageViewerToolStripMenuItem.Enabled = true;
                         }
@@ -291,6 +294,9 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// add each package part to a global list
+        /// </summary>
         public void PopulatePackageParts()
         {
             pParts.Clear();
@@ -300,7 +306,6 @@ namespace Office_File_Explorer
                 {
                     foreach (ZipArchiveEntry zae in archive.Entries)
                     {
-                        // add part to list
                         pParts.Add(zae.FullName + Strings.wColonBuffer + FileUtilities.SizeSuffix(zae.Length));
                     }
                 }
@@ -427,13 +432,13 @@ namespace Office_File_Explorer
             }
             catch (InvalidOperationException ioe)
             {
-                LogInformation(LogInfoType.LogException, "OpenWithSDK Error:", ioe.Message);
-                LogInformation(LogInfoType.LogException, "OpenWithSDK Error:", ioe.StackTrace);
+                LogInformation(LogInfoType.LogException, Strings.errorOpenWithSDK, ioe.Message);
+                LogInformation(LogInfoType.LogException, Strings.errorOpenWithSDK, ioe.StackTrace);
             }
             catch (Exception ex)
             {
                 // if the file failed to open in the sdk, it is invalid or corrupt and we need to stop opening
-                LogInformation(LogInfoType.LogException, "OpenWithSDK Error:", ex.Message);
+                LogInformation(LogInfoType.LogException, Strings.errorOpenWithSDK, ex.Message);
             }
             finally
             {
@@ -928,7 +933,7 @@ namespace Office_File_Explorer
                 {
                     // if it wasn't cancelled, no corruption was found
                     // if it was cancelled, do nothing
-                    if (f.corruptionChecked != "Cancel")
+                    if (f.corruptionChecked != Strings.wCancel)
                     {
                         LogInformation(LogInfoType.ClearAndAdd, "No Corruption Found", string.Empty);
                     }
@@ -1905,12 +1910,8 @@ namespace Office_File_Explorer
             }
             catch (FileFormatException ffe)
             {
-                // list out the possible reasons for this type of exception
-                LstDisplay.Items.Add(Strings.errorUnableToFixDocument);
-                LstDisplay.Items.Add("   Possible Causes:");
-                LstDisplay.Items.Add("      - File may be password protected");
-                LstDisplay.Items.Add("      - File was renamed to the .docx extension, but is not an actual .docx file");
-                LstDisplay.Items.Add("      - Error = " + ffe.Message);
+                DisplayNotValidFileFormatError();
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "Corrupt Doc Exception = " + ffe.Message);
             }
             catch (Exception ex)
             {
@@ -2007,21 +2008,21 @@ namespace Office_File_Explorer
                 {
                     using (WordprocessingDocument myDoc = WordprocessingDocument.Open(lblFilePath.Text, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.validationErrors);
+                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else if (lblFileType.Text == Strings.oAppExcel)
                 {
                     using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(lblFilePath.Text, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.validationErrors);
+                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else if (lblFileType.Text == Strings.oAppPowerPoint)
                 {
                     using (PresentationDocument myDoc = PresentationDocument.Open(lblFilePath.Text, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.validationErrors);
+                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else

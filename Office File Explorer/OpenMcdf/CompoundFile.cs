@@ -439,7 +439,6 @@ namespace Office_File_Explorer.OpenMcdf
             FAT_SECTOR_ENTRIES_COUNT = (GetSectorSize() / 4);
         }
 
-
         /// <summary>
         /// Load an existing compound file from a stream.
         /// </summary>
@@ -541,14 +540,11 @@ namespace Office_File_Explorer.OpenMcdf
 
                 if (s != null && s.DirtyFlag)
                 {
-                    if (gap)
-                        sourceStream.Seek((long)(sSize) + (long)i * (long)sSize, SeekOrigin.Begin);
-
+                    if (gap) sourceStream.Seek((long)(sSize) + (long)i * (long)sSize, SeekOrigin.Begin);
                     sourceStream.Write(s.GetData(), 0, sSize);
                     sourceStream.Flush();
                     s.DirtyFlag = false;
                     gap = false;
-
                 }
                 else
                 {
@@ -557,7 +553,6 @@ namespace Office_File_Explorer.OpenMcdf
 
                 if (s != null && releaseMemory)
                 {
-
                     s.ReleaseData();
                     s = null;
                     sectors[i] = null;
@@ -1674,7 +1669,6 @@ namespace Office_File_Explorer.OpenMcdf
 
             StreamView dirReader = new StreamView(directoryChain, GetSectorSize(), directoryChain.Count * GetSectorSize(), null, sourceStream);
 
-
             while (dirReader.Position < directoryChain.Count * GetSectorSize())
             {
                 IDirectoryEntry de = DirectoryEntry.New(string.Empty, StgType.StgInvalid, directoryEntries);
@@ -1826,7 +1820,6 @@ namespace Office_File_Explorer.OpenMcdf
                 throw new CFException("Internal error while saving compound file to stream ", ex);
             }
         }
-
 
         /// <summary>
         /// Scan FAT o miniFAT for free sectors to reuse.
