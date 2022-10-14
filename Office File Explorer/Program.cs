@@ -18,8 +18,7 @@ namespace Office_File_Explorer
             // let the user know if we already exist.
             if (noInstanceCurrently == false)
             {
-                MessageBox.Show("The application is already running.", "Application Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("The application is already running.", "Application Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

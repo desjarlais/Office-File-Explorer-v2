@@ -109,55 +109,28 @@ namespace Office_File_Explorer.Helpers
 			}
 
 			attributeList.Add(callbackValue, callbackValue);
-
 			BaseCallbackType callbackType = MapToBase(callback);
 
 			switch (callbackType)
 			{
-				case BaseCallbackType.buttonOnAction:
-					return GenerateVoidCallback(callbackValue);
-
-				case BaseCallbackType.commandOnAction:
-					return GenerateVoidCommand(callbackValue);
-
-				case BaseCallbackType.toggleButtonOnAction:
-					return GenerateToggleButtonOnActionCallback(callbackValue);
-
-				case BaseCallbackType.galleryOnAction:
-					return GenerateItemVoidCallback(callbackValue);
-
-				case BaseCallbackType.comboBoxOnChange:
-					return GenerateVoidOnChangeCallback(callbackValue);
-
+				case BaseCallbackType.buttonOnAction: return GenerateVoidCallback(callbackValue);
+				case BaseCallbackType.commandOnAction: return GenerateVoidCommand(callbackValue);
+				case BaseCallbackType.toggleButtonOnAction: return GenerateToggleButtonOnActionCallback(callbackValue);
+				case BaseCallbackType.galleryOnAction: return GenerateItemVoidCallback(callbackValue);
+				case BaseCallbackType.comboBoxOnChange:	return GenerateVoidOnChangeCallback(callbackValue);
 				case BaseCallbackType.getBoolean:
 				case BaseCallbackType.getString:
 				case BaseCallbackType.getInt:
 				case BaseCallbackType.getImage:
-				case BaseCallbackType.getSize:
-					return GenerateReturnCallback(callbackValue);
-
+				case BaseCallbackType.getSize: return GenerateReturnCallback(callbackValue);
 				case BaseCallbackType.getItemString:
-				case BaseCallbackType.getItemImage:
-					return GenerateItemReturnCallback(callbackValue);
-
-				case BaseCallbackType.onLoad:
-					return GenerateOnLoadCallback(callbackValue);
-
-				case BaseCallbackType.onShow:
-					return GenerateOnShowCallback(callbackValue);
-
-				case BaseCallbackType.loadImage:
-					return GenerateLoadImageCallback(callbackValue);
-
-				case BaseCallbackType.getStyle:
-					return GenerateGetSlabStyleCallback(callbackValue);
-
-				case BaseCallbackType.unKnown:
-					return string.Empty;
-
-				case BaseCallbackType.notCallback:
-				default:
-					return string.Empty;
+				case BaseCallbackType.getItemImage: return GenerateItemReturnCallback(callbackValue);
+				case BaseCallbackType.onLoad: return GenerateOnLoadCallback(callbackValue);
+				case BaseCallbackType.onShow: return GenerateOnShowCallback(callbackValue);
+				case BaseCallbackType.loadImage: return GenerateLoadImageCallback(callbackValue);
+				case BaseCallbackType.getStyle: return GenerateGetSlabStyleCallback(callbackValue);
+				case BaseCallbackType.unKnown: return string.Empty;
+				default: return string.Empty;
 			}
 		}
 
@@ -224,35 +197,26 @@ namespace Office_File_Explorer.Helpers
 		{
 			switch (callback.Name)
 			{
-				case "onLoad":
-					return BaseCallbackType.onLoad;
+				case "onLoad": return BaseCallbackType.onLoad;
 				case "onShow":
-				case "onHide":
-					return BaseCallbackType.onShow;
-				case "loadImage":
-					return BaseCallbackType.loadImage;
+				case "onHide": return BaseCallbackType.onShow;
+				case "loadImage": return BaseCallbackType.loadImage;
 				case "onAction":
 					switch (callback.OwnerElement.Name)
 					{
 						case "dropDown":
-						case "gallery":
-							return BaseCallbackType.galleryOnAction;
-						case "command":
-							return BaseCallbackType.commandOnAction;
+						case "gallery": return BaseCallbackType.galleryOnAction;
+						case "command": return BaseCallbackType.commandOnAction;
 						case "toggleButton":
-						case "checkBox":
-							return BaseCallbackType.toggleButtonOnAction;
-						default:
-							return BaseCallbackType.buttonOnAction;
+						case "checkBox": return BaseCallbackType.toggleButtonOnAction;
+						default: return BaseCallbackType.buttonOnAction;
 					}
-				case "onChange":
-					return BaseCallbackType.comboBoxOnChange;
+				case "onChange": return BaseCallbackType.comboBoxOnChange;
 				case "getEnabled":
 				case "getVisible":
 				case "getPressed":
 				case "getShowLabel":
-				case "getShowImage":
-					return BaseCallbackType.getBoolean;
+				case "getShowImage": return BaseCallbackType.getBoolean;
 				case "getLabel":
 				case "getScreentip":
 				case "getSupertip":
@@ -264,30 +228,20 @@ namespace Office_File_Explorer.Helpers
 				case "getText":
 				case "getTitle":
 				case "getTarget":
-				case "getHelperText":
-					return BaseCallbackType.getString;
+				case "getHelperText": return BaseCallbackType.getString;
 				case "getItemLabel":
 				case "getItemTooltip":
-				case "getItemId":
-					return BaseCallbackType.getItemString;
-				case "getImage":
-					return BaseCallbackType.getImage;
-				case "getItemImage":
-					return BaseCallbackType.getItemImage;
+				case "getItemId": return BaseCallbackType.getItemString;
+				case "getImage": return BaseCallbackType.getImage;
+				case "getItemImage": return BaseCallbackType.getItemImage;
 				case "getItemCount":
 				case "getItemIndex":
 				case "getItemHeight":
 				case "getItemWidth":
-				case "getSelectedItemIndex":
-					return BaseCallbackType.getInt;
-
+				case "getSelectedItemIndex": return BaseCallbackType.getInt;
 				case "getSize":
-				case "getItemSize":
-					return BaseCallbackType.getSize;
-
-				case "getStyle":
-					return BaseCallbackType.getStyle;
-
+				case "getItemSize": return BaseCallbackType.getSize;
+				case "getStyle": return BaseCallbackType.getStyle;
 				default:
 					if (callback.Name.StartsWith("on") || callback.Name.StartsWith("get"))
 					{

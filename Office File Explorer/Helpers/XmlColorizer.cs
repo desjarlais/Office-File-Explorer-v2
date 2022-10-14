@@ -95,11 +95,11 @@ namespace Office_File_Explorer.Helpers
 					rtfText.Append(rtfDelimiter);
 					rtfText.Append(match.Groups["EqualSign"].Value);
 					rtfText.Append(rtfAttributeQuote);
-					rtfText.Append("\"");
+					rtfText.Append('"');
 					rtfText.Append(rtfAttributeValue);
 					rtfText.Append(match.Groups["Value"].Value);
 					rtfText.Append(rtfAttributeQuote);
-					rtfText.Append("\"");
+					rtfText.Append('"');
 
 					rtfText.Append(rtfDelimiter);
 					vCurrent = match.Index + match.Length;

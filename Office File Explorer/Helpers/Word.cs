@@ -339,7 +339,6 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
-
         /// <summary>
         /// Given a document name and an author name, accept all revisions by the specified author. 
         /// Pass an empty string for the author to accept all revisions.
@@ -479,7 +478,6 @@ namespace Office_File_Explorer.Helpers
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filename, true))
             {
                 MainDocumentPart mainPart = myDoc.MainDocumentPart;
-
                 List<Break> breaks = mainPart.Document.Descendants<Break>().ToList();
 
                 foreach (Break b in breaks)

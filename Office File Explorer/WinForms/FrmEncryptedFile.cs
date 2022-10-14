@@ -49,6 +49,7 @@ namespace Office_File_Explorer.WinForms
                 root = tvEncryptedContents.Nodes.Add("Root Entry", "Root");
                 root.Tag = cf.RootStorage;
                 AddNodes(root, cf.RootStorage);
+                tvEncryptedContents.ExpandAll();
             }
             catch (Exception ex)
             {
@@ -181,12 +182,12 @@ namespace Office_File_Explorer.WinForms
             try
             {
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
-                var path = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).LocalPath;
+                var xsdPath = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).LocalPath + "\\Schemas\\LabelInfo.xsd";
                 XmlSchemaSet schema = new XmlSchemaSet();
-                schema.Add("", path + "\\Schemas\\LabelInfo.xsd");
+                schema.Add(string.Empty, xsdPath);
 
                 var settings = new XmlReaderSettings();
-                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", path + "\\Schemas\\LabelInfo.xsd");
+                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", xsdPath);
                 settings.ValidationType = ValidationType.Schema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
@@ -201,6 +202,7 @@ namespace Office_File_Explorer.WinForms
             }
             catch (Exception ex)
             {
+                // if there were xml validation errors, display a message with those details
                 FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
                 MessageBox.Show(ex.Message, "Xml Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 isValid = false;
@@ -213,6 +215,7 @@ namespace Office_File_Explorer.WinForms
                 }
                 else
                 {
+                    // if there were schema errors, display them
                     if (validationErrors.Count > 0)
                     {
                         StringBuilder sb = new StringBuilder();
@@ -236,11 +239,11 @@ namespace Office_File_Explorer.WinForms
             {
                 case XmlSeverityType.Error:
                     FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
-                    validationErrors.Add(e.Message);
+                    validationErrors.Add("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
                     break;
                 case XmlSeverityType.Warning:
                     FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
-                    validationErrors.Add(e.Message);
+                    validationErrors.Add("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
                     break;
             }
         }

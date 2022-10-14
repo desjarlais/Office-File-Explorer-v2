@@ -216,25 +216,6 @@ namespace Office_File_Explorer.Helpers
 			tw.Close();
 		}
 
-		public OfficeApplications MapFileType(string extension)
-		{
-			extension = extension.ToLower();
-			if (extension.StartsWith(".do"))
-			{
-				return OfficeApplications.Word;
-			}
-			else if (extension.StartsWith(".xl"))
-			{
-				return OfficeApplications.Excel;
-			}
-			else if (extension.StartsWith(".pp"))
-			{
-				return OfficeApplications.PowerPoint;
-			}
-
-			return OfficeApplications.XML;
-		}
-
 		public List<TreeNode> GetImages(ImageList imageList, ContextMenuStrip ctxMenuStrip)
 		{
 			if (imageList is null)
@@ -451,13 +432,5 @@ namespace Office_File_Explorer.Helpers
 		RibbonX12,
 		RibbonX14,
 		LastEntry //Always Last
-	}
-
-	public enum OfficeApplications
-	{
-		Word,
-		Excel,
-		PowerPoint,
-		XML,
 	}
 }

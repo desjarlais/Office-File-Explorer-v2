@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -120,23 +121,6 @@ namespace Office_File_Explorer.Helpers
             using (StreamWriter sw = File.AppendText(fPath))
             {
                 sw.WriteLine(DateTime.Now + Strings.wColon + sOutput);
-            }
-        }
-
-        public static void WriteAllToLog(string fPath, StringBuilder sbOutput)
-        {
-            if (!File.Exists(fPath))
-            {
-                File.Create(fPath).Close();
-            }
-
-            using (StreamWriter sw = File.AppendText(fPath))
-            {
-                sw.Write(DateTime.Now + Strings.wColon + "\r\n");
-                foreach (var s in sbOutput.ToString())
-                {
-                    sw.WriteLine(s);
-                }
             }
         }
 

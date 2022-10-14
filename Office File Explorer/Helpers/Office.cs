@@ -121,33 +121,25 @@ namespace Office_File_Explorer.Helpers
                         newProp.VTFileTime = new VTFileTime(string.Format("{0:s}Z", Convert.ToDateTime(propertyValue)));
                         propSet = true;
                     }
-
                     break;
-
                 case PropertyTypes.NumberInteger:
                     if ((propertyValue) is int)
                     {
                         newProp.VTInt32 = new VTInt32(propertyValue.ToString());
                         propSet = true;
                     }
-
                     break;
-
                 case PropertyTypes.NumberDouble:
                     if (propertyValue is double)
                     {
                         newProp.VTFloat = new VTFloat(propertyValue.ToString());
                         propSet = true;
                     }
-
                     break;
-
                 case PropertyTypes.Text:
                     newProp.VTLPWSTR = new VTLPWSTR(propertyValue.ToString());
                     propSet = true;
-
                     break;
-
                 case PropertyTypes.YesNo:
                     if (propertyValue is bool)
                     {

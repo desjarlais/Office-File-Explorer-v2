@@ -23,13 +23,12 @@ namespace Office_File_Explorer.OpenMcdf
     internal class StreamView : Stream
     {
         private int sectorSize;
-
         private long position;
-
         private List<Sector> sectorChain;
         private Stream stream;
         private bool isFatStream = false;
         private List<Sector> freeSectors = new List<Sector>();
+
         public IEnumerable<Sector> FreeSectors
         {
             get { return freeSectors; }
