@@ -162,7 +162,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         public OLEProperty NewProperty(VTPropertyType vtPropertyType, uint propertyIdentifier, string propertyName = null)
         {
-            //throw new NotImplementedException("API Unstable - Work in progress - Milestone 2.3.0.0");
             var op = new OLEProperty(this)
             {
                 VTType = vtPropertyType,
@@ -174,13 +173,11 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         public void AddProperty(OLEProperty property)
         {
-            //throw new NotImplementedException("API Unstable - Work in progress - Milestone 2.3.0.0");
             properties.Add(property);
         }
 
         public void RemoveProperty(uint propertyIdentifier)
         {
-            //throw new NotImplementedException("API Unstable - Work in progress - Milestone 2.3.0.0");
             var toRemove = properties.Where(o => o.PropertyIdentifier == propertyIdentifier).FirstOrDefault();
 
             if (toRemove != null) properties.Remove(toRemove);
@@ -234,7 +231,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                 {
                     NumProperties = (uint)UserDefinedProperties.Properties.Count(),
                     PropertyIdentifierAndOffsets = new List<PropertyIdentifierAndOffset>(),
-                    Properties = new List<Interfaces.IProperty>(),
+                    Properties = new List<IProperty>(),
                     PropertyContext = UserDefinedProperties.Context
                 };
 

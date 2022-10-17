@@ -163,7 +163,7 @@ namespace Office_File_Explorer
             }
         }
 
-        public void DisplayNotValidFileFormatError()
+        public void DisplayInvalidFileFormatError()
         {
             LstDisplay.Items.Add("Unable to open file, possible causes are:");
             LstDisplay.Items.Add("  - file corruption");
@@ -202,7 +202,7 @@ namespace Office_File_Explorer
                         // if the file doesn't start with PK, we can stop trying to process it
                         if (!FileUtilities.IsZipArchiveFile(lblFilePath.Text))
                         {
-                            DisplayNotValidFileFormatError();
+                            DisplayInvalidFileFormatError();
                             DisableUI();
                             structuredStorageViewerToolStripMenuItem.Enabled = true;
                         }
@@ -1910,7 +1910,7 @@ namespace Office_File_Explorer
             }
             catch (FileFormatException ffe)
             {
-                DisplayNotValidFileFormatError();
+                DisplayInvalidFileFormatError();
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "Corrupt Doc Exception = " + ffe.Message);
             }
             catch (Exception ex)

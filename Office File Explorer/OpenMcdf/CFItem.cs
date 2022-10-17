@@ -49,9 +49,7 @@ namespace Office_File_Explorer.OpenMcdf
                 throw new CFDisposedException("Owner Compound file has been closed and owned items have been invalidated");
         }
 
-        protected CFItem()
-        {
-        }
+        protected CFItem() { }
 
         protected CFItem(CompoundFile compoundFile)
         {
@@ -70,7 +68,6 @@ namespace Office_File_Explorer.OpenMcdf
 
         internal int CompareTo(CFItem other)
         {
-
             return this.dirEntry.CompareTo(other.DirEntry);
         }
 
@@ -118,20 +115,20 @@ namespace Office_File_Explorer.OpenMcdf
         /// <summary>
         /// Get entity name
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
-                String n = this.dirEntry.GetEntryName();
+                string n = this.dirEntry.GetEntryName();
                 if (n != null && n.Length > 0)
                 {
                     return n.TrimEnd('\0');
                 }
                 else
-                    return String.Empty;
+                {
+                    return string.Empty;
+                }
             }
-
-
         }
 
         /// <summary>
@@ -259,7 +256,7 @@ namespace Office_File_Explorer.OpenMcdf
             if (this.dirEntry != null)
                 return "[" + this.dirEntry.LeftSibling + "," + this.dirEntry.SID + "," + this.dirEntry.RightSibling + "]" + " " + this.dirEntry.GetEntryName();
             else
-                return String.Empty;
+                return string.Empty;
         }
     }
 }

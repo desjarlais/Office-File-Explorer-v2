@@ -113,7 +113,6 @@ namespace Office_File_Explorer.Helpers
             switch (propertyType)
             {
                 case PropertyTypes.DateTime:
-
                     // Be sure you were passed a real date and if so, format in the correct way. 
                     // The date/time value passed in should represent a UTC date/time.
                     if ((propertyValue) is DateTime)
@@ -485,14 +484,12 @@ namespace Office_File_Explorer.Helpers
                 }
             }
 
-            // If anything goes wrong in this file handling,
-            // the code will raise an exception back to the caller.
             if (fileChanged)
             {
                 // Create the new filename.
                 newFileName = Path.ChangeExtension(fileName, fileExtension);
 
-                // If it already exists, it will be deleted!
+                // If it already exists, it will be deleted
                 if (File.Exists(newFileName))
                 {
                     File.Delete(newFileName);

@@ -74,7 +74,9 @@ namespace Office_File_Explorer.OpenMcdf
                     return (Sector)largeArraySlices[itemIndex][itemOffset];
                 }
                 else
+                {
                     throw new CFException("Argument Out of Range, possibly corrupted file", new ArgumentOutOfRangeException("index", index, "Argument out of range"));
+                }
             }
 
             set
@@ -87,7 +89,9 @@ namespace Office_File_Explorer.OpenMcdf
                     largeArraySlices[itemIndex][itemOffset] = value;
                 }
                 else
+                {
                     throw new ArgumentOutOfRangeException("index", index, "Argument out of range");
+                }
             }
         }
 

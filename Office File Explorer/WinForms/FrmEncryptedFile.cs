@@ -163,7 +163,7 @@ namespace Office_File_Explorer.WinForms
         }
 
         /// <summary>
-        /// validate the labelinfo stream xml
+        /// validate the labelinfo stream
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
