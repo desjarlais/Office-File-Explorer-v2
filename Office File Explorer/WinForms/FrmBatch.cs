@@ -1854,10 +1854,7 @@ namespace Office_File_Explorer.WinForms
 
         private void FrmBatch_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-            {
-                Close();
-            }
+            if (e.KeyCode == Keys.Escape) { Close(); }
         }
 
         private void BtnResetBulletMargins_Click(object sender, EventArgs e)

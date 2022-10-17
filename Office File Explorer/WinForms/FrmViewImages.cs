@@ -126,10 +126,7 @@ namespace Office_File_Explorer.WinForms
 
         private void FrmViewImages_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-            {
-                Close();
-            }
+            if (e.KeyCode == Keys.Escape) { Close(); }
         }
 
         public FrmViewImages(string path, string fType)

@@ -86,6 +86,7 @@
             this.Name = "FrmSPCustomXmlGuids";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Change SharePoint Custom Xml Guid";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmSPCustomXmlGuids_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

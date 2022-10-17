@@ -215,7 +215,7 @@ namespace Office_File_Explorer.WinForms
                 }
                 else
                 {
-                    // if there were schema errors, display them
+                    // display schema errors
                     if (validationErrors.Count > 0)
                     {
                         StringBuilder sb = new StringBuilder();

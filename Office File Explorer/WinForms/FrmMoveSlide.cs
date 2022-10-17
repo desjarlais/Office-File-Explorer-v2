@@ -44,10 +44,7 @@ namespace Office_File_Explorer.WinForms
 
         private void FrmMoveSlide_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-            {
-                Close();
-            }
+            if (e.KeyCode == Keys.Escape) { Close(); }
         }
     }
 }
