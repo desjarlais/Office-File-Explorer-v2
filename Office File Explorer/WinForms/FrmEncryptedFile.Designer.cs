@@ -33,6 +33,7 @@
             this.TxbOutput = new System.Windows.Forms.TextBox();
             this.BtnSave = new System.Windows.Forms.Button();
             this.BtnValidateXml = new System.Windows.Forms.Button();
+            this.BtnFixXml = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tvEncryptedContents
@@ -73,11 +74,22 @@
             this.BtnValidateXml.UseVisualStyleBackColor = true;
             this.BtnValidateXml.Click += new System.EventHandler(this.BtnValidateXml_Click);
             // 
+            // BtnFixXml
+            // 
+            this.BtnFixXml.Location = new System.Drawing.Point(12, 493);
+            this.BtnFixXml.Name = "BtnFixXml";
+            this.BtnFixXml.Size = new System.Drawing.Size(75, 23);
+            this.BtnFixXml.TabIndex = 4;
+            this.BtnFixXml.Text = "Fix Xml";
+            this.BtnFixXml.UseVisualStyleBackColor = true;
+            this.BtnFixXml.Click += new System.EventHandler(this.BtnFixXml_Click);
+            // 
             // FrmEncryptedFile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(622, 524);
+            this.Controls.Add(this.BtnFixXml);
             this.Controls.Add(this.BtnValidateXml);
             this.Controls.Add(this.BtnSave);
             this.Controls.Add(this.TxbOutput);
@@ -101,5 +113,6 @@
         private System.Windows.Forms.TextBox TxbOutput;
         private System.Windows.Forms.Button BtnSave;
         private System.Windows.Forms.Button BtnValidateXml;
+        private System.Windows.Forms.Button BtnFixXml;
     }
 }

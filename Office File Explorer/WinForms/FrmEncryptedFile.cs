@@ -12,6 +12,9 @@ using System.Xml.Schema;
 using System.Reflection;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
+using Microsoft.Graph.Models.Security;
+using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -169,6 +172,15 @@ namespace Office_File_Explorer.WinForms
         /// <param name="e"></param>
         private void BtnValidateXml_Click(object sender, EventArgs e)
         {
+            ValidateXml(true);
+        }
+
+        /// <summary>
+        /// populate the validation errors
+        /// </summary>
+        /// <param name="displayOnly">only display ui for validate xml button</param>
+        public void ValidateXml(bool displayOnly)
+        {
             isValid = true;
             validationErrors.Clear();
 
@@ -204,12 +216,17 @@ namespace Office_File_Explorer.WinForms
             {
                 // if there were xml validation errors, display a message with those details
                 FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
-                MessageBox.Show(ex.Message, "Xml Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+                if (displayOnly)
+                {
+                    MessageBox.Show(ex.Message, "Xml Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
                 isValid = false;
             }
             finally
             {
-                if (isValid)
+                if (isValid && displayOnly)
                 {
                     MessageBox.Show("Xml Is Valid.", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -226,12 +243,20 @@ namespace Office_File_Explorer.WinForms
                             sb.Append(errorCount + Strings.wPeriod + s + "\r\n");
                         }
 
-                        MessageBox.Show(sb.ToString(), "Schema Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (displayOnly)
+                        {
+                            MessageBox.Show(sb.ToString(), "Schema Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// write out schema validation errors
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         static void ValidationEventHandler(object sender, ValidationEventArgs e)
         {
             isValid = false;
@@ -245,6 +270,51 @@ namespace Office_File_Explorer.WinForms
                     FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
                     validationErrors.Add("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
                     break;
+            }
+        }
+
+        /// <summary>
+        /// attempt known fixes for corrupt / invalid labelinfo xml
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnFixXml_Click(object sender, EventArgs e)
+        {
+            // populate validation errors
+            ValidateXml(false);
+
+            // check existing validation errors against known corrupt labelinfo xml scenarios
+            if (validationErrors.Count > 0)
+            {
+                string valToReplace = string.Empty;
+
+                foreach (string s in validationErrors)
+                {
+                    // known issue fix - missing method attribute
+                    // sometimes the method is not written out use a simple find/replace to get it back in
+                    if (s.Contains("The required attribute 'method' is missing"))
+                    {
+                        TxbOutput.Text = TxbOutput.Text.Replace("enabled=\"1\"", "enabled=\"1\" method=\"Standard\"");
+                    }
+
+                    // known issue fix - siteid missing brackets
+                    // example siteId="11111111-1111-1111-1111-111111111111"
+                    // should be siteId="{11111111-1111-1111-1111-111111111111}"
+                    if (s.Contains("The 'siteId' attribute is invalid"))
+                    {
+                        // first we need to pull the full text of the siteId attribute
+                        string[] split = Regex.Split(TxbOutput.Text, @" +");
+                        foreach (string sp in split)
+                        {
+                            if (sp.StartsWith("siteId=") && sp.Contains('{') == false && sp.Contains('}') == false)
+                            {
+                                string[] replace = sp.Split('"');
+                                valToReplace = replace[0] + "\"{" + replace[1] + "}\"";
+                                TxbOutput.Text = TxbOutput.Text.Replace(sp, valToReplace);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
