@@ -191,7 +191,7 @@ namespace Office_File_Explorer.WinForms
             try
             {
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
-                var xsdPath = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).LocalPath + "\\Schemas\\LabelInfo.xsd";
+                var xsdPath = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).LocalPath + "\\LabelInfo.xsd";
                 XmlSchemaSet schema = new XmlSchemaSet();
                 schema.Add(string.Empty, xsdPath);
 
