@@ -10,11 +10,8 @@ using System.Xml.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Reflection;
-using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
-using Microsoft.Graph.Models.Security;
 using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.Bibliography;
 
 namespace Office_File_Explorer.WinForms
 {

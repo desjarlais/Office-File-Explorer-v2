@@ -55,7 +55,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Schemas\LabelInfo.xsd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
