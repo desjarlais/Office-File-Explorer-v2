@@ -5,9 +5,6 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-// Auth SDK's
-using Microsoft.Identity.Client;
-
 // app refs
 using Office_File_Explorer.Helpers;
 
@@ -19,15 +16,12 @@ using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Text;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
 
 // namespace refs
 using O = DocumentFormat.OpenXml;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -41,21 +35,10 @@ namespace Office_File_Explorer.WinForms
         public bool nodeChanged = false;
         public string fromChangeTemplate;
 
-        // graph globals
-        public IPublicClientApplication publicClientApp;
-        public static string[] Scopes = { "Files.Read" };
-        AuthenticationResult authResult;
-
         public FrmBatch()
         {
             InitializeComponent();
             DisableUI();
-
-            // init adal
-            //publicClientApp = PublicClientApplicationBuilder.Create(Properties.Settings.Default.ClientID)
-            //    .WithRedirectUri("http://localhost")
-            //    .WithAuthority(AzureCloudInstance.AzurePublic, "organizations")
-            //    .Build();
         }
 
         public string GetFileExtension()
@@ -1782,73 +1765,6 @@ namespace Office_File_Explorer.WinForms
             finally
             {
                 Cursor = Cursors.Default;
-            }
-        }
-
-        private void LoginLogoutToolStripButton_Click(object sender, EventArgs e)
-        {
-            Login();
-        }
-
-        public async void Login()
-        {
-            if (LoginLogoutToolStripButton.Text == "Login")
-            {
-                // get the user token
-                authResult = await publicClientApp.AcquireTokenInteractive(Scopes).ExecuteAsync();
-                LoggedInUserToolStripLabel.Text = await GetHttpContentWithToken(Strings.graphAPIEndpoint + "?select=" + Properties.Settings.Default.MySite, authResult.AccessToken);
-                DisplayBasicTokenInfo(authResult);
-            }
-            else
-            {
-                Logout();
-            }
-        }
-
-        public void Logout()
-        {
-            foreach (var user in publicClientApp.GetAccountsAsync().Result)
-            {
-                publicClientApp.RemoveAsync(user);
-            }
-
-            LoginLogoutToolStripButton.Text = "Login";
-            LoggedInUserToolStripLabel.Text = "Username: ";
-        }
-
-        /// <summary>
-        /// Perform an HTTP GET request to a URL using an HTTP Authorization header
-        /// </summary>
-        /// <param name="url">The URL</param>
-        /// <param name="token">The token</param>
-        /// <returns>String containing the results of the GET operation</returns>
-        public async Task<string> GetHttpContentWithToken(string url, string token)
-        {
-            var httpClient = new HttpClient();
-            HttpResponseMessage response;
-            try
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, url);
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                response = await httpClient.SendAsync(request);
-                var content = await response.Content.ReadAsStringAsync();
-                return content;
-            }
-            catch (Exception ex)
-            {
-                return ex.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Display basic information contained in the token
-        /// </summary>
-        private void DisplayBasicTokenInfo(AuthenticationResult authResult)
-        {
-            if (authResult != null)
-            {
-                LoggedInUserToolStripLabel.Text = "Username: " + authResult.Account.Username;
-                LoginLogoutToolStripButton.Text = "Logout";
             }
         }
 
