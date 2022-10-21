@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml;
 using System.Xml.Schema;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -191,55 +190,11 @@ namespace Office_File_Explorer.WinForms
             try
             {
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
-
-                string xsdMarkup = @"<xsd:schema elementFormDefault=""qualified"" 
-                                        xmlns:clbl=""http://schemas.microsoft.com/office/2020/mipLabelMetadata""
-                                        xmlns:r=""http://schemas.microsoft.com/office/2020/02/relationships""
-                                        xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  
-                                        <xsd:simpleType name=""ST_ClassificationGuid"">
-                                            <xsd:restriction base=""xsd:token"">
-                                                <xsd:pattern value=""\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\}""/>
-                                            </xsd:restriction>
-                                        </xsd:simpleType>
-  
-                                        <xsd:complexType name=""CT_ClassificationExtension"">
-                                            <xsd:sequence>
-                                                <xsd:any/>
-                                            </xsd:sequence>
-                                            <xsd:attribute name=""uri"" type=""xsd:token"" use=""required""/>
-                                        </xsd:complexType>
-  
-                                        <xsd:complexType name=""CT_ClassificationExtensionList"">
-                                            <xsd:sequence>
-                                                <xsd:element name=""ext"" type=""CT_ClassificationExtension"" minOccurs=""0"" maxOccurs=""unbounded""/>
-                                            </xsd:sequence>
-                                        </xsd:complexType>
-  
-                                        <xsd:complexType name=""CT_ClassificationLabel"">
-                                            <xsd:attribute name=""id"" type=""xsd:string"" use=""required""/>
-                                            <xsd:attribute name=""enabled"" type=""xsd:boolean"" use=""required""/>
-                                            <xsd:attribute name=""method"" type=""xsd:string"" use=""required""/>
-                                            <xsd:attribute name=""siteId"" type=""ST_ClassificationGuid"" use=""required""/>
-                                            <xsd:attribute name=""contentBits"" type=""xsd:unsignedInt"" use=""optional""/>
-                                            <xsd:attribute name=""removed"" type=""xsd:boolean"" use=""required""/>
-                                        </xsd:complexType>
-  
-                                        <xsd:complexType name=""CT_ClassificationLabelList"">
-                                            <xsd:sequence>
-                                                <xsd:element name=""label"" type=""CT_ClassificationLabel"" minOccurs=""0"" maxOccurs=""unbounded"" />
-                                                <xsd:element name=""extLst"" type=""CT_ClassificationExtensionList"" minOccurs=""0"" maxOccurs=""1""/>
-                                            </xsd:sequence>
-                                        </xsd:complexType>
-  
-                                        <xsd:element name=""labelList"" type=""CT_ClassificationLabelList"" />
-                                    </xsd:schema>";
-
                 XmlSchemaSet schema = new XmlSchemaSet();
-                schema.Add(string.Empty, XmlReader.Create(new StringReader(xsdMarkup)));
+                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdMarkup)));
 
                 var settings = new XmlReaderSettings();
-                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(xsdMarkup)));
+                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdMarkup)));
                 settings.ValidationType = ValidationType.Schema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
