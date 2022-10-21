@@ -5,8 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>Office_File_Explorer</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.0.1.44</AssemblyVersion>
-    <FileVersion>2.0.1.44</FileVersion>
+    <AssemblyVersion>2.0.1.41</AssemblyVersion>
+    <FileVersion>2.0.1.41</FileVersion>
     <Version>2.0.1</Version>
     <PackageIcon>Office2013.ico</PackageIcon>
     <PackageIconUrl />
@@ -18,10 +18,6 @@
     <ApplicationIcon>Resources\Office2013.ico</ApplicationIcon>
     <StartupObject>Office_File_Explorer.Program</StartupObject>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="LabelInfo.xsd" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.18.0" />
@@ -49,12 +45,6 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="LabelInfo.xsd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
