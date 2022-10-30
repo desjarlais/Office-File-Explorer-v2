@@ -59,7 +59,8 @@ namespace Office_File_Explorer.Helpers
             PackageParts = 4,
             CustomProperties = 8,
             CustomXml = 16,
-            Images = 32
+            Images = 32,
+            XmlSignatures = 64
         }
 
         public enum WordModifyCmds

@@ -104,6 +104,7 @@ namespace Office_File_Explorer.Helpers
         public const string wSlideTransitions = "Slide Transitions";
         public const string wEmbeddedObjects = "Embedded Objects";
         public const string wPackageParts = "Package Parts";
+        public const string wXmlSignatures = "Document Signatures";
         public const string wCustomDocProps = "Custom Document Properties";
         public const string wDocProps = "Document Properties";
         public const string wNotesMaster = "Notes Master";

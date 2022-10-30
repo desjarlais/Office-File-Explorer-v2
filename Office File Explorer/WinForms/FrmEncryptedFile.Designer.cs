@@ -44,6 +44,7 @@
             this.tvEncryptedContents.TabIndex = 0;
             this.tvEncryptedContents.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvEncryptedContents_NodeMouseClick);
             this.tvEncryptedContents.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvEncryptedContents_KeyDown);
+            this.tvEncryptedContents.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tvEncryptedContents_KeyUp);
             // 
             // TxbOutput
             // 

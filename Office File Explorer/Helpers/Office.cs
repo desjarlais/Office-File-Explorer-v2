@@ -24,6 +24,8 @@ using A = DocumentFormat.OpenXml.Drawing;
 using Path = System.IO.Path;
 using System.Reflection;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -933,6 +935,58 @@ namespace Office_File_Explorer.Helpers
                             tList.Add(count + Strings.shp3D);
                         }
                     }
+                }
+            }
+
+            return tList;
+        }
+
+        public static List<string> GetSignatureDetails(DigitalSignatureOriginPart dsop)
+        {
+            List<string> signatureDetails = new List<string>();
+            foreach (XmlSignaturePart xsp in dsop.XmlSignatureParts)
+            {
+                XDocument xDoc = xsp.GetXDocument();
+                List<XElement> xeList = xDoc.Descendants().ToList();
+                foreach (XElement e in xeList)
+                {
+                    if (e.Parent is not null)
+                    {
+                        if (e.Parent.ToString().Contains("idSignatureTime") || e.Parent.ToString().Contains("SignatureInfoV1"))
+                        {
+                            signatureDetails.Add(e.Name.LocalName + Strings.wColon + e.Value);
+                        }
+                    }
+                }
+            }
+            return signatureDetails;
+        }
+
+        public static List<string> GetSignatures(string path, string fileType)
+        {
+            List<string> tList = new List<string>();
+            if (fileType == Strings.oAppWord)
+            {
+                // with Word, we can just run through the entire body and get the shapes
+                using (WordprocessingDocument document = WordprocessingDocument.Open(path, false))
+                {
+                    tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
+                }
+            }
+            else if (fileType == Strings.oAppExcel)
+            {
+                // with XL, we would need to check all sheets
+                using (SpreadsheetDocument document = SpreadsheetDocument.Open(path, false))
+                {
+                    tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
+                }
+            }
+            else if (fileType == Strings.oAppPowerPoint)
+            {
+                // with PPT, we need to run through all slides
+                using (PresentationDocument document = PresentationDocument.Open(path, false))
+                {
+                    tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
                 }
             }
 

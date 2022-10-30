@@ -97,17 +97,21 @@ namespace Office_File_Explorer.WinForms
 
         private void tvEncryptedContents_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            TreeNode tNode = tvEncryptedContents.GetNodeAt(e.X, e.Y);
+            UpdateStreamDisplay(tNode);
+        }
+
+        public void UpdateStreamDisplay(TreeNode tn)
+        {
             try
             {
                 Cursor = Cursors.WaitCursor;
-                TreeNode n = tvEncryptedContents.GetNodeAt(e.X, e.Y);
-                if (n != null)
+                if (tn != null)
                 {
-                    tvEncryptedContents.SelectedNode = n;
-
+                    tvEncryptedContents.SelectedNode = tn;
                     // The tag property contains the underlying CFItem.
                     // CFItem target = (CFItem)n.Tag;
-                    cfStream = n.Tag as CFStream;
+                    cfStream = tn.Tag as CFStream;
                     if (cfStream != null)
                     {
                         byte[] buffer = new byte[cfStream.Size];
@@ -310,6 +314,15 @@ namespace Office_File_Explorer.WinForms
                         }
                     }
                 }
+            }
+        }
+
+        private void tvEncryptedContents_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Up)
+            {
+                TreeNode tNode = tvEncryptedContents.SelectedNode;
+                UpdateStreamDisplay(tNode);
             }
         }
     }

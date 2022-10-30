@@ -160,6 +160,15 @@ namespace Office_File_Explorer.WinForms
                 offCmds &= ~AppUtilities.OfficeViewCmds.PackageParts;
             }
 
+            if (ckbSignatures.Checked)
+            {
+                offCmds |= AppUtilities.OfficeViewCmds.XmlSignatures;
+            }
+            else
+            {
+                offCmds &= ~AppUtilities.OfficeViewCmds.XmlSignatures;
+            }
+
             Close();
         }
 

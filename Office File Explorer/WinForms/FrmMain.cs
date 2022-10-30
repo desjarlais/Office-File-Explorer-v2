@@ -53,7 +53,7 @@ namespace Office_File_Explorer
         static StringBuilder sbNodeBuffer = new StringBuilder();
 
         // enums
-        public enum LogInfoType { ClearAndAdd, Append, TextOnly, InvalidFile, LogException, EmptyCount };
+        public enum LogInfoType { ClearAndAdd, TextOnly, InvalidFile, LogException, EmptyCount };
 
         public FrmMain()
         {
@@ -268,10 +268,6 @@ namespace Office_File_Explorer
             {
                 case LogInfoType.ClearAndAdd:
                     LstDisplay.Items.Clear();
-                    LstDisplay.Items.Add(output);
-                    break;
-                case LogInfoType.Append:
-                    LstDisplay.Items.Add(string.Empty);
                     LstDisplay.Items.Add(output);
                     break;
                 case LogInfoType.InvalidFile:
@@ -715,6 +711,12 @@ namespace Office_File_Explorer
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wPackageParts + Strings.wHeadingEnd);
                             pParts.Sort();
                             DisplayListContents(pParts, Strings.wPackageParts);
+                        }
+
+                        if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.XmlSignatures))
+                        {
+                            LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wXmlSignatures + Strings.wHeadingEnd);
+                            DisplayListContents(Office.GetSignatures(lblFilePath.Text, Strings.oAppWord), Strings.wXmlSignatures);
                         }
                     }
                 }

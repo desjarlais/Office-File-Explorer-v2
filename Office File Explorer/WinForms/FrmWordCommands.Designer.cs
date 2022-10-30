@@ -46,6 +46,7 @@ namespace Office_File_Explorer.WinForms
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.BtnAcceptChanges = new System.Windows.Forms.Button();
             this.lbRevisions = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbAuthors = new System.Windows.Forms.ComboBox();
@@ -55,7 +56,7 @@ namespace Office_File_Explorer.WinForms
             this.ckbShapes = new System.Windows.Forms.CheckBox();
             this.ckbOleObjects = new System.Windows.Forms.CheckBox();
             this.ckbSelectAll = new System.Windows.Forms.CheckBox();
-            this.BtnAcceptChanges = new System.Windows.Forms.Button();
+            this.ckbSignatures = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -77,7 +78,7 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.Controls.Add(this.ckbStyles);
             this.groupBox1.Location = new System.Drawing.Point(9, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(212, 379);
+            this.groupBox1.Size = new System.Drawing.Size(212, 344);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Word Content To Display";
@@ -236,6 +237,17 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Revisions";
             // 
+            // BtnAcceptChanges
+            // 
+            this.BtnAcceptChanges.Enabled = false;
+            this.BtnAcceptChanges.Location = new System.Drawing.Point(6, 459);
+            this.BtnAcceptChanges.Name = "BtnAcceptChanges";
+            this.BtnAcceptChanges.Size = new System.Drawing.Size(115, 23);
+            this.BtnAcceptChanges.TabIndex = 15;
+            this.BtnAcceptChanges.Text = "Accept Changes";
+            this.BtnAcceptChanges.UseVisualStyleBackColor = true;
+            this.BtnAcceptChanges.Click += new System.EventHandler(this.BtnAcceptChanges_Click);
+            // 
             // lbRevisions
             // 
             this.lbRevisions.Enabled = false;
@@ -279,12 +291,13 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.ckbSignatures);
             this.groupBox3.Controls.Add(this.ckbPackageParts);
             this.groupBox3.Controls.Add(this.ckbShapes);
             this.groupBox3.Controls.Add(this.ckbOleObjects);
-            this.groupBox3.Location = new System.Drawing.Point(9, 397);
+            this.groupBox3.Location = new System.Drawing.Point(9, 362);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(212, 103);
+            this.groupBox3.Size = new System.Drawing.Size(212, 138);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Select Office Content To Display";
@@ -330,16 +343,15 @@ namespace Office_File_Explorer.WinForms
             this.ckbSelectAll.UseVisualStyleBackColor = true;
             this.ckbSelectAll.CheckedChanged += new System.EventHandler(this.CkbSelectAll_CheckedChanged);
             // 
-            // BtnAcceptChanges
+            // ckbSignatures
             // 
-            this.BtnAcceptChanges.Enabled = false;
-            this.BtnAcceptChanges.Location = new System.Drawing.Point(6, 459);
-            this.BtnAcceptChanges.Name = "BtnAcceptChanges";
-            this.BtnAcceptChanges.Size = new System.Drawing.Size(115, 23);
-            this.BtnAcceptChanges.TabIndex = 15;
-            this.BtnAcceptChanges.Text = "Accept Changes";
-            this.BtnAcceptChanges.UseVisualStyleBackColor = true;
-            this.BtnAcceptChanges.Click += new System.EventHandler(this.BtnAcceptChanges_Click);
+            this.ckbSignatures.AutoSize = true;
+            this.ckbSignatures.Location = new System.Drawing.Point(11, 97);
+            this.ckbSignatures.Name = "ckbSignatures";
+            this.ckbSignatures.Size = new System.Drawing.Size(81, 19);
+            this.ckbSignatures.TabIndex = 3;
+            this.ckbSignatures.Text = "Signatures";
+            this.ckbSignatures.UseVisualStyleBackColor = true;
             // 
             // FrmWordCommands
             // 
@@ -400,5 +412,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.CheckBox ckbSelectAll;
         private System.Windows.Forms.CheckBox ckbTables;
         private System.Windows.Forms.Button BtnAcceptChanges;
+        private System.Windows.Forms.CheckBox ckbSignatures;
     }
 }
