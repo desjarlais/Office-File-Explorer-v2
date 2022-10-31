@@ -944,8 +944,12 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetSignatureDetails(DigitalSignatureOriginPart dsop)
         {
             List<string> signatureDetails = new List<string>();
+            int count = 0;
             foreach (XmlSignaturePart xsp in dsop.XmlSignatureParts)
             {
+                count++;
+                signatureDetails.Add(string.Empty);
+                signatureDetails.Add("Signature " + count);
                 XDocument xDoc = xsp.GetXDocument();
                 List<XElement> xeList = xDoc.Descendants().ToList();
                 foreach (XElement e in xeList)
