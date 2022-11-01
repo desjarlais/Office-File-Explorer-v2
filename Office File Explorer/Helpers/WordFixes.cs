@@ -332,136 +332,139 @@ namespace Office_File_Explorer.Helpers
             corruptionFound = false;
             bool mismatchNamespaceFound;
 
-            // hiding additional guid checks behind settings, if enabled, makes sure guids are correct in SP custom xml first
-            // correct is a subjective term here, essentially the setting lets the user choose the context
-            // whether the content control is "correct" or the value from SP is "correct" is up to the user
-            // they can also use a user selected value and choose manually from existing namespaces
-            // once the custom xml is updated, those later functions will just pull in the corrected guids established here
-            if (Properties.Settings.Default.UseSharePointGuid == false)
+            try
             {
-                if (Properties.Settings.Default.UseContentControlGuid)
+                // hiding additional guid checks behind settings, if enabled, makes sure guids are correct in SP custom xml first
+                // correct is a subjective term here, essentially the setting lets the user choose the context
+                // whether the content control is "correct" or the value from SP is "correct" is up to the user
+                // they can also use a user selected value and choose manually from existing namespaces
+                // once the custom xml is updated, those later functions will just pull in the corrected guids established here
+                if (Properties.Settings.Default.UseSharePointGuid == false)
                 {
-                    corruptionFound = FixSharePointGuidUsingContentControlGuid(filePath);
-                }
-                else if (Properties.Settings.Default.UseUserSelectedCCGuid)
-                {
-                    corruptionFound = FixSharePointGuidWithUserSelectedGuid(filePath);
-                }
-            }
-            
-            // now that we have the custom xml updated, check the content controls
-            using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
-            {
-                string newGuid = string.Empty;
-                string oldGuid = string.Empty;
-                string oldNs = string.Empty;
-                string oldXpath = string.Empty;
-                string oldStoreItemID = string.Empty;
-
-                // this is a 4 part fix
-                // 1. loop each content control and get the databinding xpaths and prefixmappings
-                // 2. get the custom xml file and loop its nodes looking for the node that matches up with the content control
-                // 3. compare the namespaces in the custom xml with the prefix mappings used in the content control
-                // 4. if the namespace is different, create a new databinding updated with the new namespace and push it back into the content control
-                foreach (var cc in document.ContentControls())
-                {
-                    string ccTag = string.Empty;
-                    string nsUri = string.Empty;
-                    newGuid = string.Empty;
-                    oldGuid = string.Empty;
-                    oldNs = string.Empty;
-                    oldXpath = string.Empty;
-                    oldStoreItemID = string.Empty;
-
-                    List<string> prefixMappingList = new List<string>();
-                    List<string> xPathList = new List<string>();
-
-                    mismatchNamespaceFound = false;
-
-                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
-
-                    foreach (OpenXmlElement oxe in props.ChildElements)
+                    if (Properties.Settings.Default.UseContentControlGuid)
                     {
-                        // get details from the databinding tag
-                        if (oxe.GetType().ToString() == Strings.dfowDataBinding)
+                        corruptionFound = FixSharePointGuidUsingContentControlGuid(filePath);
+                    }
+                    else if (Properties.Settings.Default.UseUserSelectedCCGuid)
+                    {
+                        corruptionFound = FixSharePointGuidWithUserSelectedGuid(filePath);
+                    }
+                }
+
+                // now that we have the custom xml updated, check the content controls
+                using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+                {
+                    string newGuid = string.Empty;
+                    string oldGuid = string.Empty;
+                    string oldNs = string.Empty;
+                    string oldXpath = string.Empty;
+                    string oldStoreItemID = string.Empty;
+
+                    // this is a 4 part fix
+                    // 1. loop each content control and get the databinding xpaths and prefixmappings
+                    // 2. get the custom xml file and loop its nodes looking for the node that matches up with the content control
+                    // 3. compare the namespaces in the custom xml with the prefix mappings used in the content control
+                    // 4. if the namespace is different, create a new databinding updated with the new namespace and push it back into the content control
+                    foreach (var cc in document.ContentControls())
+                    {
+                        string ccTag = string.Empty;
+                        string nsUri = string.Empty;
+                        newGuid = string.Empty;
+                        oldGuid = string.Empty;
+                        oldNs = string.Empty;
+                        oldXpath = string.Empty;
+                        oldStoreItemID = string.Empty;
+
+                        List<string> prefixMappingList = new List<string>();
+                        List<string> xPathList = new List<string>();
+
+                        mismatchNamespaceFound = false;
+
+                        SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
+
+                        foreach (OpenXmlElement oxe in props.ChildElements)
                         {
-                            foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
+                            // get details from the databinding tag
+                            if (oxe.GetType().ToString() == Strings.dfowDataBinding)
                             {
-                                if (oxa.LocalName == "prefixMappings")
+                                foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
                                 {
-                                    string[] prefixMappings = oxa.Value.Split(' ');
-                                    foreach (string s in prefixMappings)
+                                    if (oxa.LocalName == "prefixMappings")
                                     {
-                                        prefixMappingList.Add(s);
+                                        string[] prefixMappings = oxa.Value.Split(' ');
+                                        foreach (string s in prefixMappings)
+                                        {
+                                            prefixMappingList.Add(s);
+                                        }
                                     }
-                                }
 
-                                if (oxa.LocalName == "xpath")
-                                {
-                                    oldXpath = oxa.Value;
-                                    string[] xpathVal = oxa.Value.Split('/');
-                                    foreach (string s in xpathVal)
+                                    if (oxa.LocalName == "xpath")
                                     {
-                                        xPathList.Add(s);
+                                        oldXpath = oxa.Value;
+                                        string[] xpathVal = oxa.Value.Split('/');
+                                        foreach (string s in xpathVal)
+                                        {
+                                            xPathList.Add(s);
+                                        }
                                     }
-                                }
 
-                                if (oxa.LocalName == "storeItemID")
-                                {
-                                    oldStoreItemID = oxa.Value;
+                                    if (oxa.LocalName == "storeItemID")
+                                    {
+                                        oldStoreItemID = oxa.Value;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    // loop the custom xml and check for the mapped values
-                    foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
-                    {
-                        XmlDocument xDoc = new XmlDocument();
-                        // need to load as a stream to get around a .net bug where using GetStream wasn't closing out properly
-                        // this allows me to close the stream manually to avoid the exception
-                        Stream stream = cxp.GetStream();
-                        xDoc.Load(stream);
-
-                        if (xDoc.DocumentElement.NamespaceURI == Strings.schemaMetadataProperties)
+                        // loop the custom xml and check for the mapped values
+                        foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
                         {
-                            // loop through the metadata and get the uri's
-                            foreach (XmlNode xNode in xDoc.ChildNodes)
+                            XmlDocument xDoc = new XmlDocument();
+                            // need to load as a stream to get around a .net bug where using GetStream wasn't closing out properly
+                            // this allows me to close the stream manually to avoid the exception
+                            Stream stream = cxp.GetStream();
+                            xDoc.Load(stream);
+
+                            if (xDoc.DocumentElement.NamespaceURI == Strings.schemaMetadataProperties)
                             {
-                                if (xNode.Name == Strings.wSPCustomXmlProperties)
+                                // loop through the metadata and get the uri's
+                                foreach (XmlNode xNode in xDoc.ChildNodes)
                                 {
-                                    foreach (XmlNode xNode2 in xNode.ChildNodes)
+                                    if (xNode.Name == Strings.wSPCustomXmlProperties)
                                     {
-                                        if (xNode2.Name == Strings.wSPDocManagement)
+                                        foreach (XmlNode xNode2 in xNode.ChildNodes)
                                         {
-                                            // loop each custom xml and find the name that matches the xpath from the content control
-                                            // check the val of the custom xml ns with the prefixmapping ns value
-                                            // if they don't match, replace the content control guid with the one form the custom xml guid
-                                            foreach (XmlNode xNode3 in xNode2.ChildNodes)
+                                            if (xNode2.Name == Strings.wSPDocManagement)
                                             {
-                                                foreach (string s in xPathList)
+                                                // loop each custom xml and find the name that matches the xpath from the content control
+                                                // check the val of the custom xml ns with the prefixmapping ns value
+                                                // if they don't match, replace the content control guid with the one form the custom xml guid
+                                                foreach (XmlNode xNode3 in xNode2.ChildNodes)
                                                 {
-                                                    if (s != string.Empty)
+                                                    foreach (string s in xPathList)
                                                     {
-                                                        // pull the ns val out of xpath
-                                                        if (s.Substring(0, 2) == "ns")
+                                                        if (s != string.Empty)
                                                         {
-                                                            string[] clientNs = s.Split(':');
-                                                            if (clientNs[1].StartsWith(xNode3.Name))
+                                                            // pull the ns val out of xpath
+                                                            if (s.Substring(0, 2) == "ns")
                                                             {
-                                                                foreach (string pm in prefixMappingList)
+                                                                string[] clientNs = s.Split(':');
+                                                                if (clientNs[1].StartsWith(xNode3.Name))
                                                                 {
-                                                                    if (pm.StartsWith(Strings.wXmlNsStart + clientNs[0]))
+                                                                    foreach (string pm in prefixMappingList)
                                                                     {
-                                                                        string[] serverNs = pm.Split('=');
-                                                                        string newServerNs = serverNs[1].Replace("'", string.Empty);
-                                                                        if (newServerNs != xNode3.NamespaceURI)
+                                                                        if (pm.StartsWith(Strings.wXmlNsStart + clientNs[0]))
                                                                         {
-                                                                            // this is the correct guid and needs to be replaced
-                                                                            newGuid = xNode3.NamespaceURI;
-                                                                            oldNs = clientNs[0];
-                                                                            oldGuid = serverNs[1];
-                                                                            mismatchNamespaceFound = true;
+                                                                            string[] serverNs = pm.Split('=');
+                                                                            string newServerNs = serverNs[1].Replace("'", string.Empty);
+                                                                            if (newServerNs != xNode3.NamespaceURI)
+                                                                            {
+                                                                                // this is the correct guid and needs to be replaced
+                                                                                newGuid = xNode3.NamespaceURI;
+                                                                                oldNs = clientNs[0];
+                                                                                oldGuid = serverNs[1];
+                                                                                mismatchNamespaceFound = true;
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -474,45 +477,45 @@ namespace Office_File_Explorer.Helpers
                                     }
                                 }
                             }
+
+                            stream.Close();
                         }
 
-                        stream.Close();
-                    }
-
-                    // now replace the value in the content control if there was a new guid found
-                    if (mismatchNamespaceFound)
-                    {
-                        foreach (OpenXmlElement oxe in props.ChildElements)
+                        // now replace the value in the content control if there was a new guid found
+                        if (mismatchNamespaceFound)
                         {
-                            if (oxe.GetType().ToString() == Strings.dfowDataBinding)
+                            foreach (OpenXmlElement oxe in props.ChildElements)
                             {
-                                foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
+                                if (oxe.GetType().ToString() == Strings.dfowDataBinding)
                                 {
-                                    if (oxa.LocalName == "prefixMappings")
+                                    foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
                                     {
-                                        string[] prefixMappings = oxa.Value.Split(' ');
-                                        foreach (string s in prefixMappings)
+                                        if (oxa.LocalName == "prefixMappings")
                                         {
-                                            if (s.StartsWith(Strings.wXmlNsStart + oldNs))
+                                            string[] prefixMappings = oxa.Value.Split(' ');
+                                            foreach (string s in prefixMappings)
                                             {
-                                                // prep the namespaces 
-                                                string oldNamespace = Strings.wXmlNsStart + oldNs + Strings.wEqualNoSpace + oldGuid;
-                                                string newNamespace = Strings.wXmlNsStart + oldNs + "='" + newGuid + "'";
-
-                                                // create the databinding object that will replace the old value
-                                                DataBinding db = new DataBinding();
-                                                db.XPath = oldXpath;
-                                                db.PrefixMappings = oxa.Value.Replace(oldNamespace, newNamespace);
-
-                                                if (oldStoreItemID != string.Empty)
+                                                if (s.StartsWith(Strings.wXmlNsStart + oldNs))
                                                 {
-                                                    db.StoreItemId = oldStoreItemID;
-                                                }
+                                                    // prep the namespaces 
+                                                    string oldNamespace = Strings.wXmlNsStart + oldNs + Strings.wEqualNoSpace + oldGuid;
+                                                    string newNamespace = Strings.wXmlNsStart + oldNs + "='" + newGuid + "'";
 
-                                                // remove the current databinding tag and add the new one back into the file
-                                                oxe.Remove();
-                                                props.Append(db);
-                                                corruptionFound = true;
+                                                    // create the databinding object that will replace the old value
+                                                    DataBinding db = new DataBinding();
+                                                    db.XPath = oldXpath;
+                                                    db.PrefixMappings = oxa.Value.Replace(oldNamespace, newNamespace);
+
+                                                    if (oldStoreItemID != string.Empty)
+                                                    {
+                                                        db.StoreItemId = oldStoreItemID;
+                                                    }
+
+                                                    // remove the current databinding tag and add the new one back into the file
+                                                    oxe.Remove();
+                                                    props.Append(db);
+                                                    corruptionFound = true;
+                                                }
                                             }
                                         }
                                     }
@@ -520,12 +523,17 @@ namespace Office_File_Explorer.Helpers
                             }
                         }
                     }
-                }
 
-                if (corruptionFound)
-                {
-                    document.Save();
+                    if (corruptionFound)
+                    {
+                        document.Save();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+                return corruptionFound;
             }
 
             return corruptionFound;

@@ -43,6 +43,7 @@ namespace Office_File_Explorer.WinForms
             this.ckbSubfolders = new System.Windows.Forms.CheckBox();
             this.lstOutput = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.BtnCheckForDigSig = new System.Windows.Forms.Button();
             this.BtnResetBulletMargins = new System.Windows.Forms.Button();
             this.BtnRemoveCustomTitle = new System.Windows.Forms.Button();
             this.BtnFixComments = new System.Windows.Forms.Button();
@@ -189,6 +190,7 @@ namespace Office_File_Explorer.WinForms
             // lstOutput
             // 
             this.lstOutput.FormattingEnabled = true;
+            this.lstOutput.HorizontalScrollbar = true;
             this.lstOutput.ItemHeight = 15;
             this.lstOutput.Location = new System.Drawing.Point(3, 19);
             this.lstOutput.Name = "lstOutput";
@@ -197,6 +199,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.BtnCheckForDigSig);
             this.groupBox4.Controls.Add(this.BtnResetBulletMargins);
             this.groupBox4.Controls.Add(this.BtnRemoveCustomTitle);
             this.groupBox4.Controls.Add(this.BtnFixComments);
@@ -217,10 +220,20 @@ namespace Office_File_Explorer.WinForms
             this.groupBox4.Controls.Add(this.BtnAddCustomProps);
             this.groupBox4.Location = new System.Drawing.Point(12, 367);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(995, 118);
+            this.groupBox4.Size = new System.Drawing.Size(995, 152);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Batch Commands";
+            // 
+            // BtnCheckForDigSig
+            // 
+            this.BtnCheckForDigSig.Location = new System.Drawing.Point(6, 109);
+            this.BtnCheckForDigSig.Name = "BtnCheckForDigSig";
+            this.BtnCheckForDigSig.Size = new System.Drawing.Size(185, 23);
+            this.BtnCheckForDigSig.TabIndex = 16;
+            this.BtnCheckForDigSig.Text = "Check For Digital Signature";
+            this.BtnCheckForDigSig.UseVisualStyleBackColor = true;
+            this.BtnCheckForDigSig.Click += new System.EventHandler(this.BtnCheckForDigSig_Click);
             // 
             // BtnResetBulletMargins
             // 
@@ -344,7 +357,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnUpdateNamespaces
             // 
-            this.BtnUpdateNamespaces.Location = new System.Drawing.Point(153, 80);
+            this.BtnUpdateNamespaces.Location = new System.Drawing.Point(6, 80);
             this.BtnUpdateNamespaces.Name = "BtnUpdateNamespaces";
             this.BtnUpdateNamespaces.Size = new System.Drawing.Size(185, 23);
             this.BtnUpdateNamespaces.TabIndex = 5;
@@ -354,7 +367,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnSetOpenByDefault
             // 
-            this.BtnSetOpenByDefault.Location = new System.Drawing.Point(153, 51);
+            this.BtnSetOpenByDefault.Location = new System.Drawing.Point(6, 51);
             this.BtnSetOpenByDefault.Name = "BtnSetOpenByDefault";
             this.BtnSetOpenByDefault.Size = new System.Drawing.Size(185, 23);
             this.BtnSetOpenByDefault.TabIndex = 4;
@@ -364,7 +377,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnChangeTemplate
             // 
-            this.BtnChangeTemplate.Location = new System.Drawing.Point(153, 22);
+            this.BtnChangeTemplate.Location = new System.Drawing.Point(6, 22);
             this.BtnChangeTemplate.Name = "BtnChangeTemplate";
             this.BtnChangeTemplate.Size = new System.Drawing.Size(185, 23);
             this.BtnChangeTemplate.TabIndex = 3;
@@ -374,7 +387,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnFixHyperlinks
             // 
-            this.BtnFixHyperlinks.Location = new System.Drawing.Point(6, 80);
+            this.BtnFixHyperlinks.Location = new System.Drawing.Point(197, 80);
             this.BtnFixHyperlinks.Name = "BtnFixHyperlinks";
             this.BtnFixHyperlinks.Size = new System.Drawing.Size(141, 23);
             this.BtnFixHyperlinks.TabIndex = 2;
@@ -384,7 +397,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnDeleteCustomProps
             // 
-            this.BtnDeleteCustomProps.Location = new System.Drawing.Point(6, 51);
+            this.BtnDeleteCustomProps.Location = new System.Drawing.Point(197, 51);
             this.BtnDeleteCustomProps.Name = "BtnDeleteCustomProps";
             this.BtnDeleteCustomProps.Size = new System.Drawing.Size(141, 23);
             this.BtnDeleteCustomProps.TabIndex = 1;
@@ -394,7 +407,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnAddCustomProps
             // 
-            this.BtnAddCustomProps.Location = new System.Drawing.Point(6, 22);
+            this.BtnAddCustomProps.Location = new System.Drawing.Point(197, 22);
             this.BtnAddCustomProps.Name = "BtnAddCustomProps";
             this.BtnAddCustomProps.Size = new System.Drawing.Size(141, 23);
             this.BtnAddCustomProps.TabIndex = 0;
@@ -406,7 +419,7 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1017, 495);
+            this.ClientSize = new System.Drawing.Size(1017, 531);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
@@ -465,5 +478,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button BtnRemoveCustomTitle;
         private System.Windows.Forms.Button BtnResetBulletMargins;
+        private System.Windows.Forms.Button BtnCheckForDigSig;
     }
 }

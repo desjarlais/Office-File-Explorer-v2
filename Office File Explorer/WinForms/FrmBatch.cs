@@ -107,6 +107,7 @@ namespace Office_File_Explorer.WinForms
             BtnFixComments.Enabled = false;
             BtnRemoveCustomTitle.Enabled = false;
             BtnResetBulletMargins.Enabled = false;
+            BtnCheckForDigSig.Enabled = false;
         }
 
         public void EnableUI()
@@ -120,6 +121,7 @@ namespace Office_File_Explorer.WinForms
             BtnRemovePII.Enabled = true;
             BtnDeleteCustomProps.Enabled = true;
             BtnDeleteRequestStatus.Enabled = true;
+            BtnCheckForDigSig.Enabled = true;
 
             // enable the radio buttons
             rdoExcel.Enabled = true;
@@ -829,32 +831,22 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnUpdateNamespaces_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-                lstOutput.Items.Clear();
+            Cursor = Cursors.WaitCursor;
+            lstOutput.Items.Clear();
 
-                foreach (string f in files)
+            foreach (string f in files)
+            {
+                if (WordFixes.FixContentControlNamespaces(f))
                 {
-                    if (WordFixes.FixContentControlNamespaces(f))
-                    {
-                        lstOutput.Items.Add(f + " : Quick Part Updated");
-                    }
-                    else
-                    {
-                        lstOutput.Items.Add(f + " : No Update Needed");
-                    }
+                    lstOutput.Items.Add(f + " : Quick Part Updated");
+                }
+                else
+                {
+                    lstOutput.Items.Add(f + " : No Update Needed");
                 }
             }
-            catch (Exception ex)
-            {
-                FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnUpdateQuickPartNamespaces Error: " + ex.Message);
-                lstOutput.Items.Add(Strings.wErrorText + ex.Message);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
+
+            Cursor = Cursors.Default;
         }
 
         private void BtnConvertStrict_Click(object sender, EventArgs e)
@@ -1792,6 +1784,43 @@ namespace Office_File_Explorer.WinForms
                 catch (Exception ex)
                 {
                     lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void BtnCheckForDigSig_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+            Cursor = Cursors.WaitCursor;
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    bool hasSignature = false;
+                    using (Package package = Package.Open(f, FileMode.Open, FileAccess.Read))
+                    {
+                        foreach (PackagePart part in package.GetParts())
+                        {
+                            if (part.Uri.ToString().Contains("/_xmlsignatures"))
+                            {
+                                hasSignature = true;
+                            }
+                        }
+                    }
+
+                    if (hasSignature)
+                    {
+                        lstOutput.Items.Add(f + " : contains signature");
+                    }
+                }
+                catch (Exception ex)
+                {
                     FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 }
                 finally
