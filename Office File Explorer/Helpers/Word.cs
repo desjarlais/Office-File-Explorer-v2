@@ -1382,6 +1382,7 @@ namespace Office_File_Explorer.Helpers
             List<string> settingList = new List<string>();
             List<string> mathPrList = new List<string>();
             List<string> rsidList = new List<string>();
+            List<string> attachedSchemas = new List<string>();
             StringBuilder sb = new StringBuilder();
 
             compatList.Add(string.Empty);
@@ -1567,7 +1568,7 @@ namespace Office_File_Explorer.Helpers
                                     {
                                         if (!(xa.LocalName == "w" || xa.LocalName == "m" || xa.LocalName == "w14" || xa.LocalName == "w15" || xa.LocalName == "w16"))
                                         {
-                                            if (!xa.Value.StartsWith("http"))
+                                            if (!xa.Value.StartsWith("http") || (xe.Name == "w:attachedSchema"))
                                             {
                                                 if (xa.LocalName == "val")
                                                 {
@@ -1608,6 +1609,16 @@ namespace Office_File_Explorer.Helpers
                                         foreach (XmlAttribute xa in rNode.Attributes)
                                         {
                                             mathPrList.Add(rNode.Name + Strings.wColon + xa.Value);
+                                        }
+                                    }
+                                }
+                                else if (xe.Name == "w:attachedSchema")
+                                {
+                                    foreach (XmlNode rNode in xe.ChildNodes)
+                                    {
+                                        foreach (XmlAttribute xa in rNode.Attributes)
+                                        {
+                                            attachedSchemas.Add(rNode.Name + Strings.wColon + xa.Value);
                                         }
                                     }
                                 }
