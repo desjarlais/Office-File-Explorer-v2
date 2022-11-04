@@ -16,6 +16,7 @@ using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
@@ -108,6 +109,7 @@ namespace Office_File_Explorer.WinForms
             BtnRemoveCustomTitle.Enabled = false;
             BtnResetBulletMargins.Enabled = false;
             BtnCheckForDigSig.Enabled = false;
+            BtnFixFooterSpacing.Enabled = false;
         }
 
         public void EnableUI()
@@ -143,6 +145,7 @@ namespace Office_File_Explorer.WinForms
                 BtnUpdateNamespaces.Enabled = true;
                 BtnFixComments.Enabled = true;
                 BtnRemoveCustomTitle.Enabled = true;
+                BtnFixFooterSpacing.Enabled = true;
             }
 
             if (rdoPowerPoint.Checked == true)
@@ -1817,6 +1820,79 @@ namespace Office_File_Explorer.WinForms
                     if (hasSignature)
                     {
                         lstOutput.Items.Add(f + " : contains signature");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        /// <summary>
+        /// known issue where too many spaces in a footer can cause display issues
+        /// in the only scenario where this was used I've seen, the spaces are there to layout the page x of y 
+        /// this will check for a large amount of consecutive spaces and remove them which should prevent layout issues in Word
+        /// then since the spacing I've seen is to push the page x of y to the right side of the page, set the justification to Right instead of Center
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnFixFooterSpacing_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+            Cursor = Cursors.WaitCursor;
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    bool isFixed = false;
+                    using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
+                    {
+                        foreach (FooterPart fp in document.MainDocumentPart.FooterParts)
+                        {
+                            // check the footer for text elements with many spaces and trim it to a single space
+                            IEnumerable<Paragraph> pElements = fp.Footer.Descendants<Paragraph>().ToList();
+                            foreach (Paragraph p in pElements)
+                            {
+                                IEnumerable<O.Wordprocessing.Text> txtElements = p.Descendants<O.Wordprocessing.Text>().ToList();
+                                foreach (O.Wordprocessing.Text txtElement in txtElements)
+                                {
+                                    // if there are text elements with a lot of spaces, remove the text element and adjust the justification as needed
+                                    int count = txtElement.Text.TakeWhile(char.IsWhiteSpace).Count();
+                                    if (count > 10)
+                                    {
+                                        txtElement.Remove();
+                                        isFixed = true;
+
+                                        // if the justification is center, move it to the right
+                                        if (p.ParagraphProperties.Justification.Val == JustificationValues.Center)
+                                        {
+                                            p.ParagraphProperties.Justification.Val = JustificationValues.Right;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (isFixed)
+                            {
+                                // save changes
+                                document.Save();
+                            }
+                        }
+                    }
+
+                    if (isFixed)
+                    {
+                        lstOutput.Items.Add(f + " : Footer Spacing Fixed.");
+                    }
+                    else
+                    {
+                        lstOutput.Items.Add(f + " : No Footer Spacing Problem Found.");
                     }
                 }
                 catch (Exception ex)

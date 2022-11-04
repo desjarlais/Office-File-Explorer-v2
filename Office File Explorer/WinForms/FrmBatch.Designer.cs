@@ -63,6 +63,7 @@ namespace Office_File_Explorer.WinForms
             this.BtnDeleteCustomProps = new System.Windows.Forms.Button();
             this.BtnAddCustomProps = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.BtnFixFooterSpacing = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -199,6 +200,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.BtnFixFooterSpacing);
             this.groupBox4.Controls.Add(this.BtnCheckForDigSig);
             this.groupBox4.Controls.Add(this.BtnResetBulletMargins);
             this.groupBox4.Controls.Add(this.BtnRemoveCustomTitle);
@@ -415,6 +417,16 @@ namespace Office_File_Explorer.WinForms
             this.BtnAddCustomProps.UseVisualStyleBackColor = true;
             this.BtnAddCustomProps.Click += new System.EventHandler(this.BtnAddCustomProps_Click);
             // 
+            // BtnFixFooterSpacing
+            // 
+            this.BtnFixFooterSpacing.Location = new System.Drawing.Point(197, 109);
+            this.BtnFixFooterSpacing.Name = "BtnFixFooterSpacing";
+            this.BtnFixFooterSpacing.Size = new System.Drawing.Size(141, 23);
+            this.BtnFixFooterSpacing.TabIndex = 1;
+            this.BtnFixFooterSpacing.Text = "Fix Footer Spacing";
+            this.BtnFixFooterSpacing.UseVisualStyleBackColor = true;
+            this.BtnFixFooterSpacing.Click += new System.EventHandler(this.BtnFixFooterSpacing_Click);
+            // 
             // FrmBatch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -479,5 +491,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnRemoveCustomTitle;
         private System.Windows.Forms.Button BtnResetBulletMargins;
         private System.Windows.Forms.Button BtnCheckForDigSig;
+        private System.Windows.Forms.Button BtnFixFooterSpacing;
     }
 }

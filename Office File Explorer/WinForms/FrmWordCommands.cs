@@ -700,6 +700,7 @@ namespace Office_File_Explorer.WinForms
                 ckbComments.Checked = true;
                 ckbBookmarks.Checked = true;
                 ckbTables.Checked = true;
+                ckbSignatures.Checked = true;
             }
             else
             {
@@ -718,6 +719,7 @@ namespace Office_File_Explorer.WinForms
                 ckbComments.Checked = false;
                 ckbBookmarks.Checked = false;
                 ckbTables.Checked = false;
+                ckbSignatures.Checked = false;
             }
         }
 
