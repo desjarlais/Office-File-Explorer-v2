@@ -16,7 +16,6 @@ using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
@@ -171,7 +170,6 @@ namespace Office_File_Explorer.WinForms
                 files.Clear();
                 int fCount = 0;
 
-                // get all the file paths for .docx files in the folder
                 DirectoryInfo dir = new DirectoryInfo(tbFolderPath.Text);
                 if (ckbSubfolders.Checked == true)
                 {
@@ -179,7 +177,7 @@ namespace Office_File_Explorer.WinForms
                     {
                         if (f.Name.StartsWith("~"))
                         {
-                            // we don't want to change temp files
+                            // we don't want to process temp files
                             continue;
                         }
                         else
@@ -674,7 +672,7 @@ namespace Office_File_Explorer.WinForms
                                 if (!File.Exists(filePath))
                                 {
                                     // Normal.dotm path is not correct?
-                                    FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnChangeDefaultTemplate Error: " + "Invalid Attached Template Path - " + filePath);
+                                    FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnChangeDefaultTemplate Error: Invalid Attached Template Path - " + filePath);
                                     throw new Exception();
                                 }
                             }
@@ -1880,7 +1878,6 @@ namespace Office_File_Explorer.WinForms
 
                             if (isFixed)
                             {
-                                // save changes
                                 document.Save();
                             }
                         }

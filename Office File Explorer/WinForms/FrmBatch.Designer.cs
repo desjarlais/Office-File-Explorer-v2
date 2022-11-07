@@ -43,6 +43,7 @@ namespace Office_File_Explorer.WinForms
             this.ckbSubfolders = new System.Windows.Forms.CheckBox();
             this.lstOutput = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.BtnFixFooterSpacing = new System.Windows.Forms.Button();
             this.BtnCheckForDigSig = new System.Windows.Forms.Button();
             this.BtnResetBulletMargins = new System.Windows.Forms.Button();
             this.BtnRemoveCustomTitle = new System.Windows.Forms.Button();
@@ -63,7 +64,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnDeleteCustomProps = new System.Windows.Forms.Button();
             this.BtnAddCustomProps = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.BtnFixFooterSpacing = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -226,6 +226,16 @@ namespace Office_File_Explorer.WinForms
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Batch Commands";
+            // 
+            // BtnFixFooterSpacing
+            // 
+            this.BtnFixFooterSpacing.Location = new System.Drawing.Point(197, 109);
+            this.BtnFixFooterSpacing.Name = "BtnFixFooterSpacing";
+            this.BtnFixFooterSpacing.Size = new System.Drawing.Size(141, 23);
+            this.BtnFixFooterSpacing.TabIndex = 1;
+            this.BtnFixFooterSpacing.Text = "Fix Footer Spacing";
+            this.BtnFixFooterSpacing.UseVisualStyleBackColor = true;
+            this.BtnFixFooterSpacing.Click += new System.EventHandler(this.BtnFixFooterSpacing_Click);
             // 
             // BtnCheckForDigSig
             // 
@@ -416,16 +426,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnAddCustomProps.Text = "Add Custom Props";
             this.BtnAddCustomProps.UseVisualStyleBackColor = true;
             this.BtnAddCustomProps.Click += new System.EventHandler(this.BtnAddCustomProps_Click);
-            // 
-            // BtnFixFooterSpacing
-            // 
-            this.BtnFixFooterSpacing.Location = new System.Drawing.Point(197, 109);
-            this.BtnFixFooterSpacing.Name = "BtnFixFooterSpacing";
-            this.BtnFixFooterSpacing.Size = new System.Drawing.Size(141, 23);
-            this.BtnFixFooterSpacing.TabIndex = 1;
-            this.BtnFixFooterSpacing.Text = "Fix Footer Spacing";
-            this.BtnFixFooterSpacing.UseVisualStyleBackColor = true;
-            this.BtnFixFooterSpacing.Click += new System.EventHandler(this.BtnFixFooterSpacing_Click);
             // 
             // FrmBatch
             // 

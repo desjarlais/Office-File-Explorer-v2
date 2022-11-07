@@ -169,7 +169,7 @@ namespace Office_File_Explorer
             LstDisplay.Items.Add("  - file corruption");
             LstDisplay.Items.Add("  - file encrypted");
             LstDisplay.Items.Add("  - file password protected");
-            LstDisplay.Items.Add("  - not a valid Open Xml file");
+            LstDisplay.Items.Add("  - binary Office Document (Use Tools | Structured Storage Viewer)");
         }
 
         /// <summary>
@@ -183,7 +183,8 @@ namespace Office_File_Explorer
                 OpenFileDialog fDialog = new OpenFileDialog
                 {
                     Title = "Select Office Open Xml File.",
-                    Filter = "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm",
+                    Filter = "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm | " +
+                             "Binary Office Documents | *.doc; *.dot; *.xls; *.xlt; *.ppt; *.pot",
                     RestoreDirectory = true,
                     InitialDirectory = @"%userprofile%"
                 };
