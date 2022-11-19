@@ -7,6 +7,7 @@ namespace Office_File_Explorer.WinForms
     {
         public AppUtilities.PowerPointViewCmds pptCmds = new AppUtilities.PowerPointViewCmds();
         public AppUtilities.OfficeViewCmds offCmds = new AppUtilities.OfficeViewCmds();
+        public DialogResult dr;
 
         public FrmPPTCommands()
         {
@@ -98,11 +99,13 @@ namespace Office_File_Explorer.WinForms
                 offCmds &= ~AppUtilities.OfficeViewCmds.PackageParts;
             }
 
+            dr = DialogResult.OK;
             Close();
         }
 
         private void BtnCancel_Click(object sender, System.EventArgs e)
         {
+            dr = DialogResult.Cancel;
             Close();
         }
 

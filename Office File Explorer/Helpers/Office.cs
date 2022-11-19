@@ -92,6 +92,11 @@ namespace Office_File_Explorer.Helpers
                 output.Add(Strings.wHeaderLine);
             }
 
+            if (count == 0)
+            {
+                output.Add("No Validation Errors Found.");
+            }
+
             return output;
         }
 

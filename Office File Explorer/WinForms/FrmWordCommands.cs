@@ -14,6 +14,7 @@ namespace Office_File_Explorer.WinForms
         public AppUtilities.WordViewCmds wdCmds = new AppUtilities.WordViewCmds();
         public AppUtilities.OfficeViewCmds offCmds = new AppUtilities.OfficeViewCmds();
         string filePath;
+        public DialogResult dr;
 
         public FrmWordCommands(string fPath)
         {
@@ -169,11 +170,13 @@ namespace Office_File_Explorer.WinForms
                 offCmds &= ~AppUtilities.OfficeViewCmds.XmlSignatures;
             }
 
+            dr = DialogResult.OK;
             Close();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
+            dr = DialogResult.Cancel;
             Close();
         }
 

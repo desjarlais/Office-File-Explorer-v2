@@ -14,11 +14,11 @@ namespace Office_File_Explorer.WinForms
     {
         // global var
         private IDataObject data;
+        private IntPtr _chainedWnd = (IntPtr)0;
         private bool DisplayMemoryInHex;
         private bool DisplayRichText;
         private bool DisplayPictures;
         private bool AutoRefresh;
-        private IntPtr _chainedWnd = (IntPtr)0;
 
         protected override void WndProc(ref Message m)
         {
@@ -298,13 +298,10 @@ namespace Office_File_Explorer.WinForms
             {
                 string DlgFilterText;
 
-                // get the clipboard contents
-                bool isImage = Clipboard.ContainsImage();
-
                 // set dialog filter text
-                if (isImage)
+                if (Clipboard.ContainsImage())
                 {
-                    DlgFilterText = "Bitmap (*.bmp)|*.bmp|PNG (*.png)|*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|All files (*.*)|*.*";
+                    DlgFilterText = "Bitmap (*.bmp)|*.bmp|PNG (*.png)|*.png|JPEG (*.jpg;*.jpeg;*.jfif)|*.jpg;*.jpeg;*.jfif|WMF (*.wmf)|*.wmf|EMF(*.emf)|*.emf|TIFF (*.tiff;*.tif)|*.tiff;*.tif|ICO (*.ico)|*.ico|EXIF (*.exif)|*.exif|All files (*.*)|*.*";
                 }
                 else
                 {
@@ -355,6 +352,14 @@ namespace Office_File_Explorer.WinForms
                     else if (name.EndsWith(".ico"))
                     {
                         Clipboard.GetImage().Save(name, ImageFormat.Icon);
+                    }
+                    else if (name.EndsWith(".tiff") || name.EndsWith(".tif"))
+                    {
+                        Clipboard.GetImage().Save(name, ImageFormat.Tiff);
+                    }
+                    else if (name.EndsWith(".exif"))
+                    {
+                        Clipboard.GetImage().Save(name, ImageFormat.Exif);
                     }
                     else
                     {

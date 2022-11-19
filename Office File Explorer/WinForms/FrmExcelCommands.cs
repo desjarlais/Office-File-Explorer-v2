@@ -1,5 +1,6 @@
 ﻿using Office_File_Explorer.Helpers;
 using System;
+using System.Security.Policy;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms
@@ -8,6 +9,7 @@ namespace Office_File_Explorer.WinForms
     {
         public AppUtilities.ExcelViewCmds xlCmds = new AppUtilities.ExcelViewCmds();
         public AppUtilities.OfficeViewCmds offCmds = new AppUtilities.OfficeViewCmds();
+        public DialogResult dr;
 
         public FrmExcelCommands()
         {
@@ -117,11 +119,13 @@ namespace Office_File_Explorer.WinForms
                 offCmds &= ~AppUtilities.OfficeViewCmds.PackageParts;
             }
 
+            dr = DialogResult.OK;
             Close();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
+            dr = DialogResult.Cancel;
             Close();
         }
 

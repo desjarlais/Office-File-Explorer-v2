@@ -11,6 +11,7 @@ using Office_File_Explorer.WinForms;
 // .NET refs
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -129,14 +130,13 @@ namespace Office_File_Explorer
             try
             {
                 if (LstDisplay.Items.Count <= 0) { return; }
-
                 StringBuilder buffer = new StringBuilder();
                 foreach (string s in LstDisplay.Items)
                 {
                     buffer.Append(s);
                     buffer.Append('\n');
                 }
-
+                
                 Clipboard.SetText(buffer.ToString());
             }
             catch (Exception ex)
@@ -250,6 +250,7 @@ namespace Office_File_Explorer
                     DisableUI();
                     lblFilePath.Text = string.Empty;
                     lblFileType.Text = string.Empty;
+                    LstDisplay.Items.Clear();
                     return;
                 }
             }
@@ -456,7 +457,6 @@ namespace Office_File_Explorer
             if (output.Count == 0)
             {
                 LogInformation(LogInfoType.EmptyCount, type, string.Empty);
-                LstDisplay.Items.Add(string.Empty);
                 return;
             }
 
@@ -604,43 +604,50 @@ namespace Office_File_Explorer
         {
             try
             {
-                LstDisplay.Items.Clear();
-
                 if (StrOfficeApp == Strings.oAppWord)
                 {
                     using (var f = new FrmWordCommands(lblFilePath.Text))
                     {
                         var result = f.ShowDialog();
 
+                        if (f.dr == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            LstDisplay.Items.Clear();
+                        }
+
                         Cursor = Cursors.WaitCursor;
-                        AppUtilities.WordViewCmds cmds = f.wdCmds;
+                        AppUtilities.WordViewCmds wdCmds = f.wdCmds;
                         AppUtilities.OfficeViewCmds oCmds = f.offCmds;
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.ContentControls))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.ContentControls))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wContentControls + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstContentControls(lblFilePath.Text), Strings.wContentControls);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Styles))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Styles))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wStyles + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstStyles(lblFilePath.Text), Strings.wStyles);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Hyperlinks))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Hyperlinks))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wHyperlinks + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstHyperlinks(lblFilePath.Text), Strings.wHyperlinks);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.ListTemplates))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.ListTemplates))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wListTemplates + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstListTemplates(lblFilePath.Text, false), Strings.wListTemplates);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Fonts))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Fonts))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wFonts + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstFonts(lblFilePath.Text), Strings.wFonts);
@@ -648,37 +655,37 @@ namespace Office_File_Explorer
                             DisplayListContents(Word.LstRunFonts(lblFilePath.Text), Strings.wRunFonts);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Footnotes))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Footnotes))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wFootnotes + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstFootnotes(lblFilePath.Text), Strings.wFootnotes);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Endnotes))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Endnotes))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wEndnotes + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstEndnotes(lblFilePath.Text), Strings.wEndnotes);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.DocumentProperties))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.DocumentProperties))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wDocProps + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstDocProps(lblFilePath.Text), Strings.wDocProps);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Bookmarks))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Bookmarks))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wBookmarks + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstBookmarks(lblFilePath.Text), Strings.wBookmarks);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Comments))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Comments))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wComments + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstComments(lblFilePath.Text), Strings.wComments);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.FieldCodes))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.FieldCodes))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wFldCodes + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstFieldCodes(lblFilePath.Text), Strings.wFldCodes);
@@ -688,7 +695,7 @@ namespace Office_File_Explorer
                             DisplayListContents(Word.LstFieldCodesInFooter(lblFilePath.Text), Strings.wFldCodes);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.WordViewCmds.Tables))
+                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Tables))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wTables + Strings.wHeadingEnd);
                             DisplayListContents(Word.LstTables(lblFilePath.Text), Strings.wTables);
@@ -727,72 +734,81 @@ namespace Office_File_Explorer
                     {
                         var result = f.ShowDialog();
 
-                        Cursor = Cursors.WaitCursor;
-                        AppUtilities.ExcelViewCmds cmds = f.xlCmds;
-                        AppUtilities.OfficeViewCmds oCmds = f.offCmds;
+                        if (f.dr == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            LstDisplay.Items.Clear();
+                        }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.Links))
+                        Cursor = Cursors.WaitCursor;
+                        AppUtilities.ExcelViewCmds xlCmds = f.xlCmds;
+                        AppUtilities.OfficeViewCmds offCmds = f.offCmds;
+
+                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Links))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wLinks + Strings.wHeadingEnd);
                             DisplayListContents(Excel.GetLinks(lblFilePath.Text, true), Strings.wLinks);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.Comments))
+                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Comments))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wComments + Strings.wHeadingEnd);
                             DisplayListContents(Excel.GetComments(lblFilePath.Text), Strings.wComments);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.Hyperlinks))
+                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Hyperlinks))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wHyperlinks + Strings.wHeadingEnd);
                             DisplayListContents(Excel.GetHyperlinks(lblFilePath.Text), Strings.wHyperlinks);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.WorksheetInfo))
+                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.WorksheetInfo))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wWorksheetInfo + Strings.wHeadingEnd);
                             DisplayListContents(Excel.GetSheetInfo(lblFilePath.Text), Strings.wWorksheetInfo);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.SharedStrings))
+                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.SharedStrings))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wSharedStrings + Strings.wHeadingEnd);
                             DisplayListContents(Excel.GetSharedStrings(lblFilePath.Text), Strings.wSharedStrings);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.DefinedNames))
+                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.DefinedNames))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wDefinedNames + Strings.wHeadingEnd);
                             DisplayListContents(Excel.GetDefinedNames(lblFilePath.Text), Strings.wDefinedNames);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.Connections))
+                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Connections))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wConnections + Strings.wHeadingEnd);
                             DisplayListContents(Excel.GetConnections(lblFilePath.Text), Strings.wConnections);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.ExcelViewCmds.HiddenRowsCols))
+                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.HiddenRowsCols))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wHiddenRowCol + Strings.wHeadingEnd);
                             DisplayListContents(Excel.GetHiddenRowCols(lblFilePath.Text), Strings.wHiddenRowCol);
                         }
 
                         // display Office features
-                        if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
+                        if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wEmbeddedObjects + Strings.wHeadingEnd);
                             DisplayListContents(Office.GetEmbeddedObjectProperties(lblFilePath.Text, Strings.oAppExcel), Strings.wEmbeddedObjects);
                         }
 
-                        if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.Shapes))
+                        if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.Shapes))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wShapes + Strings.wHeadingEnd);
                             DisplayListContents(Office.GetShapes(lblFilePath.Text, Strings.oAppExcel), Strings.wShapes);
                         }
 
-                        if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.PackageParts))
+                        if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.PackageParts))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wPackageParts + Strings.wHeadingEnd);
                             pParts.Sort();
@@ -806,60 +822,69 @@ namespace Office_File_Explorer
                     {
                         var result = f.ShowDialog();
 
-                        Cursor = Cursors.WaitCursor;
-                        AppUtilities.PowerPointViewCmds cmds = f.pptCmds;
-                        AppUtilities.OfficeViewCmds oCmds = f.offCmds;
+                        if (f.dr == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            LstDisplay.Items.Clear();
+                        }
 
-                        if (cmds.HasFlag(AppUtilities.PowerPointViewCmds.Hyperlinks))
+                        Cursor = Cursors.WaitCursor;
+                        AppUtilities.PowerPointViewCmds pptCmds = f.pptCmds;
+                        AppUtilities.OfficeViewCmds offCmds = f.offCmds;
+
+                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Hyperlinks))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wHyperlinks + Strings.wHeadingEnd);
                             DisplayListContents(PowerPoint.GetHyperlinks(lblFilePath.Text), Strings.wHyperlinks);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.PowerPointViewCmds.Comments))
+                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Comments))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wComments + Strings.wHeadingEnd);
                             DisplayListContents(PowerPoint.GetComments(lblFilePath.Text), Strings.wComments);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideText))
+                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideText))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wSlideText + Strings.wHeadingEnd);
                             DisplayListContents(PowerPoint.GetSlideText(lblFilePath.Text), Strings.wSlideText);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideTitles))
+                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideTitles))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wSlideText + Strings.wHeadingEnd);
                             DisplayListContents(PowerPoint.GetSlideTitles(lblFilePath.Text), Strings.wSlideText);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideTransitions))
+                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideTransitions))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wSlideTransitions + Strings.wHeadingEnd);
                             DisplayListContents(PowerPoint.GetSlideTransitions(lblFilePath.Text), Strings.wSlideTransitions);
                         }
 
-                        if (cmds.HasFlag(AppUtilities.PowerPointViewCmds.Fonts))
+                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Fonts))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wFonts + Strings.wHeadingEnd);
                             DisplayListContents(PowerPoint.GetFonts(lblFilePath.Text), Strings.wFonts);
                         }
 
                         // display Office features
-                        if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
+                        if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wEmbeddedObjects + Strings.wHeadingEnd);
                             DisplayListContents(Office.GetEmbeddedObjectProperties(lblFilePath.Text, Strings.oAppPowerPoint), Strings.wEmbeddedObjects);
                         }
 
-                        if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.Shapes))
+                        if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.Shapes))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wShapes + Strings.wHeadingEnd);
                             DisplayListContents(Office.GetShapes(lblFilePath.Text, Strings.oAppPowerPoint), Strings.wShapes);
                         }
 
-                        if (oCmds.HasFlag(AppUtilities.OfficeViewCmds.PackageParts))
+                        if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.PackageParts))
                         {
                             LstDisplay.Items.Add(Strings.wHeadingBegin + Strings.wPackageParts + Strings.wHeadingEnd);
                             pParts.Sort();
