@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoFixListStyles = new System.Windows.Forms.RadioButton();
             this.rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
             this.rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
             this.rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
@@ -57,6 +58,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoFixListStyles);
             this.groupBox1.Controls.Add(this.rdoFixDataDescriptorW);
             this.groupBox1.Controls.Add(this.rdoFixMathAccentsW);
             this.groupBox1.Controls.Add(this.rdoTryAllFixesW);
@@ -75,6 +77,17 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Document";
+            // 
+            // rdoFixListStyles
+            // 
+            this.rdoFixListStyles.AutoSize = true;
+            this.rdoFixListStyles.Location = new System.Drawing.Point(6, 147);
+            this.rdoFixListStyles.Name = "rdoFixListStyles";
+            this.rdoFixListStyles.Size = new System.Drawing.Size(94, 19);
+            this.rdoFixListStyles.TabIndex = 3;
+            this.rdoFixListStyles.TabStop = true;
+            this.rdoFixListStyles.Text = "Fix List Styles";
+            this.rdoFixListStyles.UseVisualStyleBackColor = true;
             // 
             // rdoFixDataDescriptorW
             // 
@@ -345,5 +358,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoFixMathAccentsW;
         private System.Windows.Forms.RadioButton rdoTryAllFixesW;
         private System.Windows.Forms.RadioButton rdoFixDataDescriptorW;
+        private System.Windows.Forms.RadioButton rdoFixListStyles;
     }
 }

@@ -26,6 +26,11 @@ using System.Reflection;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using System.IO.Packaging;
+using System.IO.Compression;
+using DocumentFormat.OpenXml.Presentation;
+using DocumentFormat.OpenXml.Wordprocessing;
+using System.Collections;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -396,13 +401,66 @@ namespace Office_File_Explorer.Helpers
             }
             else if (app == Strings.oAppPowerPoint)
             {
+                isFixed = false;
+
+                // remove all customerxml files
                 using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
                 {
-                    foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
+                    int count = 0;
+                    count = presDoc.PresentationPart.Presentation.CustomerDataList.Count();
+
+                    if (count > 0)
                     {
-                        presDoc.PresentationPart.DeletePart(cxp);
-                        presDoc.Save();
-                        isFixed = true;
+                        foreach (CustomerDataList cdl in presDoc.PresentationPart.Presentation.CustomerDataList)
+                        {
+                            cdl.Remove();
+                            isFixed = true;
+                        }
+                    }
+
+                    foreach (SlidePart sp in presDoc.PresentationPart.SlideParts)
+                    {
+                        foreach (CustomXmlPart cxp in sp.CustomXmlParts)
+                        {
+                            presDoc.DeletePart(cxp);
+                            isFixed = true;
+                        }
+                    }
+
+                    // slidemaster
+                    foreach (SlideMasterPart smp in presDoc.PresentationPart.SlideMasterParts)
+                    {
+                        foreach (CustomXmlPart cxp in smp.CustomXmlParts)
+                        {
+                            presDoc.DeletePart(cxp);
+                            isFixed = true;
+                        }
+
+                        foreach (SlideLayoutPart slp in smp.SlideLayoutParts)
+                        {
+                            foreach (CustomXmlPart cxp in slp.CustomXmlParts)
+                            {
+                                presDoc.DeletePart(cxp);
+                                isFixed = true;
+                            }
+                        }
+                    }
+                }
+
+                // remove custom xml files outside of sdk
+                using (FileStream zipToOpen = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                    {
+                        for (int i = archive.Entries.Count - 1 ; i > 0; i--)
+                        {
+                            // customxml
+                            if (archive.Entries[i].FullName.StartsWith("customXml"))
+                            {
+                                archive.Entries[i].Delete();
+                                isFixed = true;
+                            }
+                        }
                     }
                 }
             }

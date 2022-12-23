@@ -13,6 +13,7 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -1478,6 +1479,104 @@ namespace Office_File_Explorer.Helpers
             }
 
             return corruptEndnotesFound;
+        }
+
+        /// <summary>
+        /// this fix is for a known issue where list styles are somehow getting the style name changed to Normal
+        /// the fix is to find those number styles and change them to a default list style
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixListStyles(string filePath) 
+        {
+            bool isFixed = false;
+
+            try
+            {
+                using (WordprocessingDocument package = WordprocessingDocument.Open(filePath, true))
+                {
+                    // loop each number style and check for Normal as a style name
+                    foreach (AbstractNum an in package.MainDocumentPart.NumberingDefinitionsPart.Numbering)
+                    {
+                        // loop the w:lvl elements
+                        foreach (OpenXmlElement oxe in an.ChildElements) 
+                        {
+                            bool levelChanged = false;
+                            OpenXmlElement lvlClone = oxe.CloneNode(true);
+                            if (oxe.LocalName == "lvl")
+                            {
+                                Level l = (Level)lvlClone;
+
+                                // some levels don't have a pstyleid, skip these elements
+                                if (l.ParagraphStyleIdInLevel is null)
+                                {
+                                    continue;
+                                }
+
+                                // when we get to a number style that says Normal, we need to change it
+                                if (l.ParagraphStyleIdInLevel.Val == "Normal")
+                                {
+                                    // loop the w:pPr elements, new name will be based on indent level value
+                                    foreach (OpenXmlElement oxePr in lvlClone.ChildElements)
+                                    {
+                                        if (oxePr.LocalName == "pPr")
+                                        {
+                                            // look for the indent prop
+                                            foreach (OpenXmlElement oxeIndent in oxePr.ChildElements)
+                                            {
+                                                // choose the new bullet style depending on the size of the indentation
+                                                if (oxeIndent.LocalName == "ind")
+                                                {
+                                                    Indentation lIndent = (Indentation)oxeIndent;
+                                                    int leftIndent = Convert.ToInt32(lIndent.Left);
+                                                    if (leftIndent >= 1080)
+                                                    {
+                                                        l.ParagraphStyleIdInLevel.Val = "ListBullet3";
+                                                        isFixed = true;
+                                                        levelChanged = true;
+                                                    }
+                                                    else if (leftIndent >= 720)
+                                                    {
+                                                        l.ParagraphStyleIdInLevel.Val = "ListBullet2";
+                                                        isFixed = true;
+                                                        levelChanged = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        l.ParagraphStyleIdInLevel.Val = "ListBullet";
+                                                        isFixed = true;
+                                                        levelChanged = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // write the level into the clone
+                                if (levelChanged)
+                                {
+                                    oxe.Remove();
+                                    an.AddChild(lvlClone);
+                                }
+                            }
+                        }
+                    }
+
+                    // save out the file
+                    if (isFixed)
+                    {
+                        package.Save();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "FixListStyles Error: " + ex.Message);
+                return isFixed;
+            }
+
+            return isFixed;
         }
 
         /// <summary>

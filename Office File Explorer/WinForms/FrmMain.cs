@@ -11,7 +11,6 @@ using Office_File_Explorer.WinForms;
 // .NET refs
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -239,7 +238,12 @@ namespace Office_File_Explorer
                             {
                                 // if it failed the SDK, turn on Fix Corrupt Doc button only
                                 DisableUI();
-                                BtnFixCorruptDoc.Enabled = true;
+
+                                // if the doc was Word, there is one additional check that can be done
+                                if (lblFilePath.Text.EndsWith(".docx"))
+                                {
+                                    BtnFixCorruptDoc.Enabled = true;
+                                }
                             }
                         }
                     }
@@ -363,9 +367,10 @@ namespace Office_File_Explorer
             }
             catch (OpenXmlPackageException ope)
             {
-                // if the exception is related to invalid hyperlinks, use the FixInvalidUri method to change the file
+                // if the exception is related to invalid hyperlinks or relationship uri's
+                // use the FixInvalidUri method to change the file
                 // once we change the copied file, we can open it in the SDK
-                if (ope.ToString().Contains("Invalid Hyperlink"))
+                if (ope.ToString().Contains("Invalid Hyperlink") || ope.ToString().Contains("malformed URI"))
                 {
                     // known issue in .NET with malformed hyperlinks causing SDK to throw during parse
                     // see UriFixHelper for more details
@@ -390,7 +395,7 @@ namespace Office_File_Explorer
                     }
 
                     // now use the new file in the open logic from above
-                    if (StrOfficeApp == Strings.oAppWord)
+                    if (StrOfficeApp == Strings.oAppWord || (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppWord))
                     {
                         using (WordprocessingDocument document = WordprocessingDocument.Open(StrCopyFileName, false))
                         {
@@ -399,7 +404,7 @@ namespace Office_File_Explorer
                             fSuccess = true;
                         }
                     }
-                    else if (StrOfficeApp == Strings.oAppExcel)
+                    else if (StrOfficeApp == Strings.oAppExcel || (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppExcel))
                     {
                         using (SpreadsheetDocument document = SpreadsheetDocument.Open(StrCopyFileName, false))
                         {
@@ -408,7 +413,7 @@ namespace Office_File_Explorer
                             fSuccess = true;
                         }
                     }
-                    else if (StrOfficeApp == Strings.oAppPowerPoint)
+                    else if (StrOfficeApp == Strings.oAppPowerPoint || (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppPowerPoint))
                     {
                         using (PresentationDocument document = PresentationDocument.Open(StrCopyFileName, false))
                         {

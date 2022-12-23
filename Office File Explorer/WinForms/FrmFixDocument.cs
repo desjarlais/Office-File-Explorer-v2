@@ -80,6 +80,15 @@ namespace Office_File_Explorer.WinForms
                 tryAllFixes = true;
             }
 
+            if (rdoFixListStyles.Checked || tryAllFixes == true)
+            {
+                SetCorruptionChecked(Strings.wListStyles);
+                if (WordFixes.FixListStyles(filePath))
+                {
+                    isFileFixed = true;
+                }
+            }
+
             if (rdoFixBookmarksW.Checked || tryAllFixes == true)
             {
                 SetCorruptionChecked(Strings.wBookmarks);
