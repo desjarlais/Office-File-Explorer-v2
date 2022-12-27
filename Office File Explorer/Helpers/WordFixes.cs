@@ -1485,7 +1485,7 @@ namespace Office_File_Explorer.Helpers
         /// this fix is for a known issue where list styles are somehow getting the style name changed to Normal
         /// the fix is to find those number styles and change them to a default list style
         /// </summary>
-        /// <param name="filePath"></param>
+        /// <param name="filePath">file to check if a fix is needed</param>
         /// <returns></returns>
         public static bool FixListStyles(string filePath) 
         {
@@ -1507,7 +1507,7 @@ namespace Office_File_Explorer.Helpers
                             {
                                 Level l = (Level)lvlClone;
 
-                                // some levels don't have a pstyleid, skip these elements
+                                // some levels don't have a pStyleId, skip these elements
                                 if (l.ParagraphStyleIdInLevel is null)
                                 {
                                     continue;
@@ -1524,7 +1524,7 @@ namespace Office_File_Explorer.Helpers
                                             // look for the indent prop
                                             foreach (OpenXmlElement oxeIndent in oxePr.ChildElements)
                                             {
-                                                // choose the new bullet style depending on the size of the indentation
+                                                // choose the new bullet style name depending on indent location
                                                 if (oxeIndent.LocalName == "ind")
                                                 {
                                                     Indentation lIndent = (Indentation)oxeIndent;
