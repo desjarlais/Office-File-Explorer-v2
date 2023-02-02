@@ -182,7 +182,7 @@ namespace Office_File_Explorer
                 OpenFileDialog fDialog = new OpenFileDialog
                 {
                     Title = "Select Office Open Xml File.",
-                    Filter = "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm | " +
+                    Filter = "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm|" +
                              "Binary Office Documents | *.doc; *.dot; *.xls; *.xlt; *.ppt; *.pot",
                     RestoreDirectory = true,
                     InitialDirectory = @"%userprofile%"
@@ -1106,7 +1106,7 @@ namespace Office_File_Explorer
                             {
                                 DocumentSettingsPart dsp = document.MainDocumentPart.DocumentSettingsPart;
 
-                                // if the external rel exists, we need to pull the rid and old uri
+                                // if the external rel exists, we need to pull the rId and old uri
                                 // we will be deleting this part and re-adding with the new uri
                                 if (dsp.ExternalRelationships.Any())
                                 {

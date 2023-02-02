@@ -401,66 +401,14 @@ namespace Office_File_Explorer.Helpers
             }
             else if (app == Strings.oAppPowerPoint)
             {
-                isFixed = false;
-
-                // remove all customerxml files
+                // remove all of the parts
                 using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
                 {
-                    int count = 0;
-                    count = presDoc.PresentationPart.Presentation.CustomerDataList.Count();
-
-                    if (count > 0)
+                    foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
                     {
-                        foreach (CustomerDataList cdl in presDoc.PresentationPart.Presentation.CustomerDataList)
-                        {
-                            cdl.Remove();
-                            isFixed = true;
-                        }
-                    }
-
-                    foreach (SlidePart sp in presDoc.PresentationPart.SlideParts)
-                    {
-                        foreach (CustomXmlPart cxp in sp.CustomXmlParts)
-                        {
-                            presDoc.DeletePart(cxp);
-                            isFixed = true;
-                        }
-                    }
-
-                    // slidemaster
-                    foreach (SlideMasterPart smp in presDoc.PresentationPart.SlideMasterParts)
-                    {
-                        foreach (CustomXmlPart cxp in smp.CustomXmlParts)
-                        {
-                            presDoc.DeletePart(cxp);
-                            isFixed = true;
-                        }
-
-                        foreach (SlideLayoutPart slp in smp.SlideLayoutParts)
-                        {
-                            foreach (CustomXmlPart cxp in slp.CustomXmlParts)
-                            {
-                                presDoc.DeletePart(cxp);
-                                isFixed = true;
-                            }
-                        }
-                    }
-                }
-
-                // remove custom xml files outside of sdk
-                using (FileStream zipToOpen = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
-                {
-                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
-                    {
-                        for (int i = archive.Entries.Count - 1 ; i > 0; i--)
-                        {
-                            // customxml
-                            if (archive.Entries[i].FullName.StartsWith("customXml"))
-                            {
-                                archive.Entries[i].Delete();
-                                isFixed = true;
-                            }
-                        }
+                        presDoc.PresentationPart.DeletePart(cxp);
+                        presDoc.Save();
+                        isFixed = true;
                     }
                 }
             }
@@ -1087,6 +1035,7 @@ namespace Office_File_Explorer.Helpers
                 StringBuilder tempSB = new StringBuilder();
 
                 // loop each byte and check for lfh signature
+                // there will be multiple zip items, this will check each one for the datadescriptor issue
                 foreach (Byte b in buffer)
                 {
                     switch (byteCount)

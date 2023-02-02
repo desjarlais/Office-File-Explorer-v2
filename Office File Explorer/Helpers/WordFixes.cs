@@ -13,7 +13,6 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -1495,6 +1494,11 @@ namespace Office_File_Explorer.Helpers
             {
                 using (WordprocessingDocument package = WordprocessingDocument.Open(filePath, true))
                 {
+                    if (package.MainDocumentPart.NumberingDefinitionsPart is null)
+                    {
+                        return isFixed;
+                    }
+
                     // loop each number style and check for Normal as a style name
                     foreach (AbstractNum an in package.MainDocumentPart.NumberingDefinitionsPart.Numbering)
                     {

@@ -46,13 +46,6 @@ namespace Office_File_Explorer.WinForms
             this.rdoDOM = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.tbxSiteURL = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbxClientID = new System.Windows.Forms.TextBox();
-            this.tbxTenant = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
             this.rdoUseSPGuid = new System.Windows.Forms.RadioButton();
@@ -61,7 +54,6 @@ namespace Office_File_Explorer.WinForms
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -215,7 +207,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(387, 415);
+            this.BtnOk.Location = new System.Drawing.Point(387, 293);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -225,76 +217,13 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(468, 415);
+            this.BtnCancel.Location = new System.Drawing.Point(468, 293);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 2;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.tbxSiteURL);
-            this.groupBox5.Controls.Add(this.label3);
-            this.groupBox5.Controls.Add(this.tbxClientID);
-            this.groupBox5.Controls.Add(this.tbxTenant);
-            this.groupBox5.Controls.Add(this.label2);
-            this.groupBox5.Controls.Add(this.label1);
-            this.groupBox5.Location = new System.Drawing.Point(12, 293);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(531, 116);
-            this.groupBox5.TabIndex = 3;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "ADAL Settings";
-            // 
-            // tbxSiteURL
-            // 
-            this.tbxSiteURL.Location = new System.Drawing.Point(61, 81);
-            this.tbxSiteURL.Name = "tbxSiteURL";
-            this.tbxSiteURL.Size = new System.Drawing.Size(464, 23);
-            this.tbxSiteURL.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 84);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(50, 15);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Site URL";
-            // 
-            // tbxClientID
-            // 
-            this.tbxClientID.Location = new System.Drawing.Point(61, 25);
-            this.tbxClientID.Name = "tbxClientID";
-            this.tbxClientID.Size = new System.Drawing.Size(464, 23);
-            this.tbxClientID.TabIndex = 3;
-            // 
-            // tbxTenant
-            // 
-            this.tbxTenant.Location = new System.Drawing.Point(61, 52);
-            this.tbxTenant.Name = "tbxTenant";
-            this.tbxTenant.Size = new System.Drawing.Size(464, 23);
-            this.tbxTenant.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 55);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(48, 15);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Tenant: ";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 15);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Client ID: ";
             // 
             // groupBox6
             // 
@@ -345,9 +274,8 @@ namespace Office_File_Explorer.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 446);
+            this.ClientSize = new System.Drawing.Size(546, 326);
             this.Controls.Add(this.groupBox6);
-            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.groupBox2);
@@ -371,8 +299,6 @@ namespace Office_File_Explorer.WinForms
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
@@ -396,13 +322,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoDOM;
         private System.Windows.Forms.CheckBox ckbZipItemCorrupt;
         private System.Windows.Forms.CheckBox ckbBackupOnOpen;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.TextBox tbxClientID;
-        private System.Windows.Forms.TextBox tbxTenant;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbxSiteURL;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox ckbDeleteOnlyCommentBookmarks;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.RadioButton rdoUseCCGuid;
