@@ -25,12 +25,6 @@ using Path = System.IO.Path;
 using System.Reflection;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 using System.Xml.Linq;
-using System.Xml.XPath;
-using System.IO.Packaging;
-using System.IO.Compression;
-using DocumentFormat.OpenXml.Presentation;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System.Collections;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -559,7 +553,6 @@ namespace Office_File_Explorer.Helpers
 
             // Add the ThumbnailPart part in the new word processing document.
             wordDoc.AddNewPart<ThumbnailPart>("image/jpeg", "rId6");
-
             wordDoc.Close();
         }
 
@@ -985,7 +978,10 @@ namespace Office_File_Explorer.Helpers
                 // with Word, we can just run through the entire body and get the shapes
                 using (WordprocessingDocument document = WordprocessingDocument.Open(path, false))
                 {
-                    tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
+                    if (document.DigitalSignatureOriginPart is not null)
+                    {
+                        tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
+                    }
                 }
             }
             else if (fileType == Strings.oAppExcel)
@@ -993,7 +989,10 @@ namespace Office_File_Explorer.Helpers
                 // with XL, we would need to check all sheets
                 using (SpreadsheetDocument document = SpreadsheetDocument.Open(path, false))
                 {
-                    tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
+                    if (document.DigitalSignatureOriginPart is not null)
+                    {
+                        tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
+                    }
                 }
             }
             else if (fileType == Strings.oAppPowerPoint)
@@ -1001,7 +1000,10 @@ namespace Office_File_Explorer.Helpers
                 // with PPT, we need to run through all slides
                 using (PresentationDocument document = PresentationDocument.Open(path, false))
                 {
-                    tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
+                    if (document.DigitalSignatureOriginPart is not null)
+                    {
+                        tList = GetSignatureDetails(document.DigitalSignatureOriginPart);
+                    }
                 }
             }
 
