@@ -13,6 +13,7 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -1185,7 +1186,7 @@ namespace Office_File_Explorer.Helpers
 
             using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
             {
-                Document doc = document.MainDocumentPart.Document;
+                DocumentFormat.OpenXml.Wordprocessing.Document doc = document.MainDocumentPart.Document;
                 var deleted = doc.Descendants<DeletedRun>().ToList();
 
                 // loop each DeletedRun
@@ -1581,6 +1582,81 @@ namespace Office_File_Explorer.Helpers
             }
 
             return isFixed;
+        }
+
+        /// <summary>
+        /// There are scenarios where a file is saved out with no block level content in a table cell tag
+        /// <w:tc><w:tcPr/></tc>
+        /// This is corrupt, at least 1 block level tag like a paragraph <p></p> should be in the tc tag
+        /// This function will look for this condition and remove any table cell tags that have no block level tags
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static bool FixCorruptTableCellTags(string filename)
+        {
+            bool isFixed = false;
+
+            try
+            {
+                using (WordprocessingDocument document = WordprocessingDocument.Open(filename, true))
+                {
+                    if (Word.IsPartNull(document, "Table") == false)
+                    {
+                        bool tableCellCorruptionFound = false;
+
+                        do
+                        {
+                            tableCellCorruptionFound = WordFixes.IsTableCellCorruptionFound(document);
+                            if (tableCellCorruptionFound == true)
+                            {
+                                isFixed = true;
+                            }
+                        } while (tableCellCorruptionFound);
+                    }
+
+                    if (isFixed)
+                    {
+                        document.Save();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "FixCorruptTableCellTags Error: " + ex.Message);
+                return false;
+            }
+
+            return isFixed;
+        }
+
+        /// <summary>
+        /// get the tablecells in the passed in doc and check for two known corruptions
+        /// the first check is for "<w:tc />"
+        /// the second is for "<w:tc ><w:tcPr></w:tc>"
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public static bool IsTableCellCorruptionFound(WordprocessingDocument doc)
+        {
+            IEnumerable<TableCell> tcList = doc.MainDocumentPart.Document.Descendants<TableCell>().ToList();
+            foreach (TableCell tc in tcList)
+            {
+                // no child elements is corruption, add paragraph
+                if (tc.ChildElements.Count == 0)
+                {
+                    tc.Parent.Remove();
+                    return true;
+                }
+
+                // if the tc has 1 element and it is tcPr, we must also be missing a block level ement, which is also corrupt
+                if (tc.ChildElements.Count == 1 && tc.ChildElements.ElementAt(0).LocalName == "tcPr")
+                {
+                    tc.Parent.Remove();
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

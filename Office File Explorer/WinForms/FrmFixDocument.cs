@@ -213,6 +213,16 @@ namespace Office_File_Explorer.WinForms
                 }
             }
 
+            if (rdoFixTableCellTags.Checked || tryAllFixes == true) 
+            {
+                SetCorruptionChecked(Strings.wTableCell);
+                if (WordFixes.FixCorruptTableCellTags(filePath) == true)
+                {
+                    isFileFixed = true;
+                    featureFixed.Add("Table Cell Corruption Fixed");
+                }
+            }
+
             Close();
         }
     }

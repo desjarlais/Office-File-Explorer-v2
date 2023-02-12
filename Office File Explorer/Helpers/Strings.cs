@@ -76,6 +76,7 @@ namespace Office_File_Explorer.Helpers
         public const string wBookmarks = "Bookmarks";
         public const string wMathAccents = "Math Formula Accents";
         public const string wZipItem = "Zip Item";
+        public const string wTableCell = "Table Cells";
         public const string wFldCodes = "Field Codes";
         public const string wListTemplates = "List Templates";
         public const string wFootnotes = "Footnotes";

@@ -51,6 +51,7 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixStrictX = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
+            this.rdoFixTableCellTags = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -58,6 +59,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoFixTableCellTags);
             this.groupBox1.Controls.Add(this.rdoFixListStyles);
             this.groupBox1.Controls.Add(this.rdoFixDataDescriptorW);
             this.groupBox1.Controls.Add(this.rdoFixMathAccentsW);
@@ -310,6 +312,17 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
+            // rdoFixTableCellTags
+            // 
+            this.rdoFixTableCellTags.AutoSize = true;
+            this.rdoFixTableCellTags.Location = new System.Drawing.Point(193, 172);
+            this.rdoFixTableCellTags.Name = "rdoFixTableCellTags";
+            this.rdoFixTableCellTags.Size = new System.Drawing.Size(142, 19);
+            this.rdoFixTableCellTags.TabIndex = 3;
+            this.rdoFixTableCellTags.TabStop = true;
+            this.rdoFixTableCellTags.Text = "Fix Corrupt Table Cells";
+            this.rdoFixTableCellTags.UseVisualStyleBackColor = true;
+            // 
             // FrmFixDocument
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -359,5 +372,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoTryAllFixesW;
         private System.Windows.Forms.RadioButton rdoFixDataDescriptorW;
         private System.Windows.Forms.RadioButton rdoFixListStyles;
+        private System.Windows.Forms.RadioButton rdoFixTableCellTags;
     }
 }

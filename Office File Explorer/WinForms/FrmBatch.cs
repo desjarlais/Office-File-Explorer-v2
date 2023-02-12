@@ -109,6 +109,8 @@ namespace Office_File_Explorer.WinForms
             BtnResetBulletMargins.Enabled = false;
             BtnCheckForDigSig.Enabled = false;
             BtnFixFooterSpacing.Enabled = false;
+            BtnRemoveCustomFileProps.Enabled = false;
+            BtnFixCorruptTcTags.Enabled = false;
         }
 
         public void EnableUI()
@@ -123,6 +125,7 @@ namespace Office_File_Explorer.WinForms
             BtnDeleteCustomProps.Enabled = true;
             BtnDeleteRequestStatus.Enabled = true;
             BtnCheckForDigSig.Enabled = true;
+            BtnRemoveCustomFileProps.Enabled = true;
 
             // enable the radio buttons
             rdoExcel.Enabled = true;
@@ -145,6 +148,7 @@ namespace Office_File_Explorer.WinForms
                 BtnFixComments.Enabled = true;
                 BtnRemoveCustomTitle.Enabled = true;
                 BtnFixFooterSpacing.Enabled = true;
+                BtnFixCorruptTcTags.Enabled = true;
             }
 
             if (rdoPowerPoint.Checked == true)
@@ -1890,6 +1894,103 @@ namespace Office_File_Explorer.WinForms
                     else
                     {
                         lstOutput.Items.Add(f + " : No Footer Spacing Problem Found.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        /// <summary>
+        /// see details in WordFixes.FixCorruptTableCellTags
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnFixCorruptTcTags_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+            Cursor = Cursors.WaitCursor;
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    bool isFixed = false;
+                    using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
+                    {
+                        if (Word.IsPartNull(document, "Table") == false)
+                        {
+                            bool tableCellCorruptionFound = false;
+                            
+                            do 
+                            {
+                                tableCellCorruptionFound = WordFixes.IsTableCellCorruptionFound(document);
+                                if (tableCellCorruptionFound == true)
+                                {
+                                    isFixed = true;
+                                }
+                            } while (tableCellCorruptionFound);
+                        }
+
+                        if (isFixed)
+                        {
+                            document.Save();
+                        }
+                    }
+
+                    if (isFixed)
+                    {
+                        lstOutput.Items.Add(f + " : Table Cells Fixed.");
+                    }
+                    else
+                    {
+                        lstOutput.Items.Add(f + " : No Table Cell Problem Found.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void BtnRemoveCustomFileProps_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+            Cursor = Cursors.WaitCursor;
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    bool isFixed = false;
+                    using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
+                    {
+                        document.DeletePart(document.CustomFilePropertiesPart);
+
+                        if (isFixed)
+                        {
+                            document.Save();
+                        }
+                    }
+
+                    if (isFixed)
+                    {
+                        lstOutput.Items.Add(f + " : Table Cells Fixed.");
+                    }
+                    else
+                    {
+                        lstOutput.Items.Add(f + " : No Table Cell Problem Found.");
                     }
                 }
                 catch (Exception ex)
