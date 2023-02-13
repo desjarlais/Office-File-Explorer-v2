@@ -13,7 +13,6 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
-using System.Reflection.Metadata;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -1606,7 +1605,7 @@ namespace Office_File_Explorer.Helpers
 
                         do
                         {
-                            tableCellCorruptionFound = WordFixes.IsTableCellCorruptionFound(document);
+                            tableCellCorruptionFound = IsTableCellCorruptionFound(document);
                             if (tableCellCorruptionFound == true)
                             {
                                 isFixed = true;
@@ -1633,6 +1632,8 @@ namespace Office_File_Explorer.Helpers
         /// get the tablecells in the passed in doc and check for two known corruptions
         /// the first check is for "<w:tc />"
         /// the second is for "<w:tc ><w:tcPr></w:tc>"
+        /// I'm essentially removing a row if any table cell is corrupt in either way
+        /// TODO: when I can come up with a way to keep the row and fix the cell, I will update the function
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>

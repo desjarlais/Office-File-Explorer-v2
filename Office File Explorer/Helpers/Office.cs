@@ -25,6 +25,7 @@ using Path = System.IO.Path;
 using System.Reflection;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 using System.Xml.Linq;
+using DocumentFormat.OpenXml.Presentation;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -395,14 +396,70 @@ namespace Office_File_Explorer.Helpers
             }
             else if (app == Strings.oAppPowerPoint)
             {
-                // remove all of the parts
                 using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
                 {
-                    foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
+                    // remove the <p:custDataLst> from slides
+                    foreach (SlidePart sp in presDoc.PresentationPart.SlideParts)
                     {
-                        presDoc.PresentationPart.DeletePart(cxp);
-                        presDoc.Save();
+                        // delete the cd for slides
+                        if (sp.Slide.CommonSlideData.CustomerDataList is not null)
+                        {
+                            IEnumerable<CustomerData> cdList = sp.Slide.CommonSlideData.CustomerDataList.Descendants<CustomerData>().ToList();
+                            foreach (CustomerData cd in cdList)
+                            {
+                                cd.Remove();
+                                isFixed = true;
+                            }
+                        }
+
+                        // delete the cd for slidelayouts
+                        IEnumerable<CustomerData> cdListSl = sp.SlideLayoutPart.SlideLayout.Descendants<CustomerData>().ToList();
+                        foreach (CustomerData cd in cdListSl)
+                        {
+                            cd.Remove();
+                            isFixed = true;
+                        }
+
+                        // delete the cd for notes slides
+                        if (sp.NotesSlidePart is not null)
+                        {
+                            IEnumerable<CustomerData> cdListSlm = sp.NotesSlidePart.NotesSlide.Descendants<CustomerData>().ToList();
+                            foreach (CustomerData cd in cdListSlm)
+                            {
+                                cd.Remove();
+                                isFixed = true;
+                            }
+                        }
+                    }
+
+                    // delete the cd for slidemasters
+                    foreach (SlideMasterPart smp in presDoc.PresentationPart.SlideMasterParts)
+                    {
+                        IEnumerable<CustomerData> cdListSmp = smp.SlideMaster.Descendants<CustomerData>().ToList();
+                        foreach (CustomerData cd in cdListSmp)
+                        {
+                            cd.Remove();
+                            isFixed = true;
+                        }
+                    }
+                    
+                    // delete the cd for presentationpart
+                    IEnumerable<CustomerData> cdListPresPart = presDoc.PresentationPart.Presentation.Descendants<CustomerData>().ToList();
+                    foreach (CustomerData cd in cdListPresPart)
+                    {
+                        cd.Remove();
                         isFixed = true;
+                    }
+
+                    // remove the custom xml parts
+                    if (presDoc.PresentationPart.CustomXmlParts is not null)
+                    {
+                        foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
+                        {
+                            presDoc.PresentationPart.DeletePart(cxp);
+                            presDoc.Save();
+                            isFixed = true;
+                        }
                     }
                 }
             }
