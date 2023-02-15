@@ -50,6 +50,7 @@ namespace Office_File_Explorer.WinForms
             this.rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
             this.rdoUseSPGuid = new System.Windows.Forms.RadioButton();
             this.rdoUseCCGuid = new System.Windows.Forms.RadioButton();
+            this.ckbRemoveCustDataTags = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -112,10 +113,11 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.ckbRemoveCustDataTags);
             this.groupBox2.Controls.Add(this.ckbResetNotes);
             this.groupBox2.Location = new System.Drawing.Point(305, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(238, 63);
+            this.groupBox2.Size = new System.Drawing.Size(238, 85);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PowerPoint Options";
@@ -176,9 +178,9 @@ namespace Office_File_Explorer.WinForms
             // 
             this.groupBox4.Controls.Add(this.rdoSAX);
             this.groupBox4.Controls.Add(this.rdoDOM);
-            this.groupBox4.Location = new System.Drawing.Point(305, 81);
+            this.groupBox4.Location = new System.Drawing.Point(305, 103);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(238, 100);
+            this.groupBox4.Size = new System.Drawing.Size(238, 78);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Excel Cell Value Option";
@@ -270,6 +272,16 @@ namespace Office_File_Explorer.WinForms
             this.rdoUseCCGuid.Text = "Use Content Control Guid";
             this.rdoUseCCGuid.UseVisualStyleBackColor = true;
             // 
+            // ckbRemoveCustDataTags
+            // 
+            this.ckbRemoveCustDataTags.AutoSize = true;
+            this.ckbRemoveCustDataTags.Location = new System.Drawing.Point(8, 44);
+            this.ckbRemoveCustDataTags.Name = "ckbRemoveCustDataTags";
+            this.ckbRemoveCustDataTags.Size = new System.Drawing.Size(167, 19);
+            this.ckbRemoveCustDataTags.TabIndex = 6;
+            this.ckbRemoveCustDataTags.Text = "Remove Custom Data Tags";
+            this.ckbRemoveCustDataTags.UseVisualStyleBackColor = true;
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -327,5 +339,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoUseCCGuid;
         private System.Windows.Forms.RadioButton rdoUserSelectedCC;
         private System.Windows.Forms.RadioButton rdoUseSPGuid;
+        private System.Windows.Forms.CheckBox ckbRemoveCustDataTags;
     }
 }

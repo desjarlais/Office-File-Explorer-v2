@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoFixTableCellTags = new System.Windows.Forms.RadioButton();
             this.rdoFixListStyles = new System.Windows.Forms.RadioButton();
             this.rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
             this.rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
@@ -51,7 +52,6 @@ namespace Office_File_Explorer.WinForms
             this.rdoFixStrictX = new System.Windows.Forms.RadioButton();
             this.BtnOk = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
-            this.rdoFixTableCellTags = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -79,6 +79,17 @@ namespace Office_File_Explorer.WinForms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Word Document";
+            // 
+            // rdoFixTableCellTags
+            // 
+            this.rdoFixTableCellTags.AutoSize = true;
+            this.rdoFixTableCellTags.Location = new System.Drawing.Point(193, 172);
+            this.rdoFixTableCellTags.Name = "rdoFixTableCellTags";
+            this.rdoFixTableCellTags.Size = new System.Drawing.Size(142, 19);
+            this.rdoFixTableCellTags.TabIndex = 3;
+            this.rdoFixTableCellTags.TabStop = true;
+            this.rdoFixTableCellTags.Text = "Fix Corrupt Table Cells";
+            this.rdoFixTableCellTags.UseVisualStyleBackColor = true;
             // 
             // rdoFixListStyles
             // 
@@ -311,17 +322,6 @@ namespace Office_File_Explorer.WinForms
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
-            // 
-            // rdoFixTableCellTags
-            // 
-            this.rdoFixTableCellTags.AutoSize = true;
-            this.rdoFixTableCellTags.Location = new System.Drawing.Point(193, 172);
-            this.rdoFixTableCellTags.Name = "rdoFixTableCellTags";
-            this.rdoFixTableCellTags.Size = new System.Drawing.Size(142, 19);
-            this.rdoFixTableCellTags.TabIndex = 3;
-            this.rdoFixTableCellTags.TabStop = true;
-            this.rdoFixTableCellTags.Text = "Fix Corrupt Table Cells";
-            this.rdoFixTableCellTags.UseVisualStyleBackColor = true;
             // 
             // FrmFixDocument
             // 

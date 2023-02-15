@@ -59,6 +59,11 @@ namespace Office_File_Explorer.WinForms
                 ckbDeleteOnlyCommentBookmarks.Checked = true;
             }
 
+            if (Properties.Settings.Default.RemoveCustDataTags == true)
+            {
+                ckbRemoveCustDataTags.Checked = true;
+            }
+
             if (Properties.Settings.Default.UseContentControlGuid == true)
             {
                 rdoUseCCGuid.Checked = true;
@@ -83,6 +88,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.CheckZipItemCorrupt = ckbZipItemCorrupt.Checked;
             Properties.Settings.Default.BackupOnOpen = ckbBackupOnOpen.Checked;
             Properties.Settings.Default.DeleteOnlyCommentBookmarks = ckbDeleteOnlyCommentBookmarks.Checked;
+            Properties.Settings.Default.RemoveCustDataTags = ckbRemoveCustDataTags.Checked;
 
             if (rdoUseCCGuid.Checked)
             {

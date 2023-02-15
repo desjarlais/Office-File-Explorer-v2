@@ -26,6 +26,8 @@ using System.Reflection;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Presentation;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using System.IO.Compression;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -398,7 +400,7 @@ namespace Office_File_Explorer.Helpers
             {
                 using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
                 {
-                    // remove the <p:custDataLst> from slides
+                    // remove the <p:custData> from slides
                     foreach (SlidePart sp in presDoc.PresentationPart.SlideParts)
                     {
                         // delete the cd for slides
@@ -435,14 +437,38 @@ namespace Office_File_Explorer.Helpers
                     // delete the cd for slidemasters
                     foreach (SlideMasterPart smp in presDoc.PresentationPart.SlideMasterParts)
                     {
+                        // check slide master
                         IEnumerable<CustomerData> cdListSmp = smp.SlideMaster.Descendants<CustomerData>().ToList();
                         foreach (CustomerData cd in cdListSmp)
                         {
                             cd.Remove();
                             isFixed = true;
                         }
+
+                        // slide layout
+                        foreach (SlideLayoutPart slp in smp.SlideLayoutParts)
+                        {
+                            if (slp.SlideLayout.CommonSlideData.CustomerDataList is not null)
+                            {
+                                // check the slidelayout for cd tags
+                                IEnumerable<CustomerData> cdSlList = slp.SlideLayout.CommonSlideData.CustomerDataList.Descendants<CustomerData>();
+                                foreach (CustomerData cd in cdSlList)
+                                {
+                                    cd.Remove();
+                                    isFixed = true;
+                                }
+
+                                // check the shapetree for cd tags
+                                IEnumerable<CustomerData> cdSpList = slp.SlideLayout.CommonSlideData.ShapeTree.Descendants<CustomerData>();
+                                foreach (CustomerData cd in cdSpList)
+                                {
+                                    cd.Remove();
+                                    isFixed = true;
+                                }
+                            }
+                        }
                     }
-                    
+
                     // delete the cd for presentationpart
                     IEnumerable<CustomerData> cdListPresPart = presDoc.PresentationPart.Presentation.Descendants<CustomerData>().ToList();
                     foreach (CustomerData cd in cdListPresPart)
@@ -459,6 +485,43 @@ namespace Office_File_Explorer.Helpers
                             presDoc.PresentationPart.DeletePart(cxp);
                             presDoc.Save();
                             isFixed = true;
+                        }
+                    }
+                }
+
+                bool containsCustomXml = false;
+
+                // todo / workaround: still looking into some files that the above customxmlpart deletepart does not work on
+                // this is a manual removal of the physical files...the deletepart seems to remove the rels information but not the item#.xml files
+                using (FileStream zipToOpen = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read))
+                    {
+                        foreach (ZipArchiveEntry zae in archive.Entries)
+                        {
+                            if (zae.FullName.Contains("customXml/item"))
+                            {
+                                containsCustomXml = true;
+                            }
+                        }
+                    }
+                }
+
+                if (containsCustomXml)
+                {
+                    // remove custom xml files outside of sdk
+                    using (FileStream zipToOpen = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+                    {
+                        using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                        {
+                            for (int i = archive.Entries.Count - 1; i > 0; i--)
+                            {
+                                if (archive.Entries[i].FullName.StartsWith("customXml"))
+                                {
+                                    archive.Entries[i].Delete();
+                                    isFixed = true;
+                                }
+                            }
                         }
                     }
                 }
