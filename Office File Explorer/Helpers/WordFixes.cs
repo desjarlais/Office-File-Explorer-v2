@@ -1019,16 +1019,26 @@ namespace Office_File_Explorer.Helpers
 
                 bool cRefIdExists = false;
 
-                if (commentsPart is null && commentRefs.Count() > 0)
+                // if the comments part is gone, we can still fix up the orphan potentially
+                // removing the comment refs if they exist
+                if (commentsPart is null)
                 {
-                    // if there are comment refs but no comments.xml, remove refs
-                    foreach (CommentReference cr in commentRefs)
+                    // if there is no comments part and no commentrefs, the dangling unknownelements will have nothing to check against
+                    // bail out in that case, otherwise loop the commentrefs and remove them so the file will open
+                    if (commentRefs.Count() == 0)
                     {
-                        cr.Remove();
-                        saveFile = true;
+                        return saveFile;
+                    }
+                    else
+                    {
+                        foreach (CommentReference cr in commentRefs)
+                        {
+                            cr.Remove();
+                            saveFile = true;
+                        }
                     }
                 }
-                else if (commentsPart is null && commentRefs.Count() == 0)
+                else if (commentsPart is not null && commentRefs.Count() == 0)
                 {
                     // for some reason these dangling refs are considered unknown types, not commentrefs
                     // convert to an openxmlelement then type it to a commentref to get the id

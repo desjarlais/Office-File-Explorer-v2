@@ -28,6 +28,7 @@ using System.Xml.Linq;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System.IO.Compression;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -398,129 +399,148 @@ namespace Office_File_Explorer.Helpers
             }
             else if (app == Strings.oAppPowerPoint)
             {
-                using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
+                if (Properties.Settings.Default.RemoveCustDataTags)
                 {
-                    // remove the <p:custData> from slides
-                    foreach (SlidePart sp in presDoc.PresentationPart.SlideParts)
+                    using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
                     {
-                        // delete the cd for slides
-                        if (sp.Slide.CommonSlideData.CustomerDataList is not null)
+                        // step 1. check slide, slidelayout and notesslide
+                        foreach (SlidePart sp in presDoc.PresentationPart.SlideParts)
                         {
-                            IEnumerable<CustomerData> cdList = sp.Slide.CommonSlideData.CustomerDataList.Descendants<CustomerData>().ToList();
-                            foreach (CustomerData cd in cdList)
+                            // remove the<p:custData > from slides
+                            if (sp.Slide.CommonSlideData.CustomerDataList is not null)
                             {
-                                cd.Remove();
-                                isFixed = true;
-                            }
-                        }
-
-                        // delete the cd for slidelayouts
-                        IEnumerable<CustomerData> cdListSl = sp.SlideLayoutPart.SlideLayout.Descendants<CustomerData>().ToList();
-                        foreach (CustomerData cd in cdListSl)
-                        {
-                            cd.Remove();
-                            isFixed = true;
-                        }
-
-                        // delete the cd for notes slides
-                        if (sp.NotesSlidePart is not null)
-                        {
-                            IEnumerable<CustomerData> cdListSlm = sp.NotesSlidePart.NotesSlide.Descendants<CustomerData>().ToList();
-                            foreach (CustomerData cd in cdListSlm)
-                            {
-                                cd.Remove();
-                                isFixed = true;
-                            }
-                        }
-                    }
-
-                    // delete the cd for slidemasters
-                    foreach (SlideMasterPart smp in presDoc.PresentationPart.SlideMasterParts)
-                    {
-                        // check slide master
-                        IEnumerable<CustomerData> cdListSmp = smp.SlideMaster.Descendants<CustomerData>().ToList();
-                        foreach (CustomerData cd in cdListSmp)
-                        {
-                            cd.Remove();
-                            isFixed = true;
-                        }
-
-                        // slide layout
-                        foreach (SlideLayoutPart slp in smp.SlideLayoutParts)
-                        {
-                            if (slp.SlideLayout.CommonSlideData.CustomerDataList is not null)
-                            {
-                                // check the slidelayout for cd tags
-                                IEnumerable<CustomerData> cdSlList = slp.SlideLayout.CommonSlideData.CustomerDataList.Descendants<CustomerData>();
-                                foreach (CustomerData cd in cdSlList)
+                                IEnumerable<CustomerData> cdList = sp.Slide.CommonSlideData.CustomerDataList.Descendants<CustomerData>().ToList();
+                                foreach (CustomerData cd in cdList)
                                 {
                                     cd.Remove();
                                     isFixed = true;
                                 }
+                            }
 
-                                // check the shapetree for cd tags
-                                IEnumerable<CustomerData> cdSpList = slp.SlideLayout.CommonSlideData.ShapeTree.Descendants<CustomerData>();
-                                foreach (CustomerData cd in cdSpList)
+                            // delete the cd for slidelayout
+                            IEnumerable<CustomerData> cdListSl = sp.SlideLayoutPart.SlideLayout.Descendants<CustomerData>().ToList();
+                            foreach (CustomerData cd in cdListSl)
+                            {
+                                cd.Remove();
+                                isFixed = true;
+                            }
+
+                            // delete the cd for notes slides
+                            if (sp.NotesSlidePart is not null)
+                            {
+                                IEnumerable<CustomerData> cdListSlm = sp.NotesSlidePart.NotesSlide.Descendants<CustomerData>().ToList();
+                                foreach (CustomerData cd in cdListSlm)
                                 {
                                     cd.Remove();
                                     isFixed = true;
                                 }
                             }
                         }
-                    }
 
-                    // delete the cd for presentationpart
-                    IEnumerable<CustomerData> cdListPresPart = presDoc.PresentationPart.Presentation.Descendants<CustomerData>().ToList();
-                    foreach (CustomerData cd in cdListPresPart)
-                    {
-                        cd.Remove();
-                        isFixed = true;
-                    }
-
-                    // remove the custom xml parts
-                    if (presDoc.PresentationPart.CustomXmlParts is not null)
-                    {
-                        foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
+                        // step 2. delete the cd for slidemasters, which includes all slidelayouts
+                        foreach (SlideMasterPart smp in presDoc.PresentationPart.SlideMasterParts)
                         {
-                            presDoc.PresentationPart.DeletePart(cxp);
-                            presDoc.Save();
+                            // check slide master
+                            IEnumerable<CustomerData> cdListSmp = smp.SlideMaster.Descendants<CustomerData>().ToList();
+                            foreach (CustomerData cd in cdListSmp)
+                            {
+                                cd.Remove();
+                                isFixed = true;
+                            }
+
+                            // slide layout
+                            foreach (SlideLayoutPart slp in smp.SlideLayoutParts)
+                            {
+                                if (slp.SlideLayout.CommonSlideData.CustomerDataList is not null)
+                                {
+                                    // check the slidelayout for cd tags
+                                    IEnumerable<CustomerData> cdSlList = slp.SlideLayout.CommonSlideData.CustomerDataList.Descendants<CustomerData>();
+                                    foreach (CustomerData cd in cdSlList)
+                                    {
+                                        cd.Remove();
+                                        isFixed = true;
+                                    }
+
+                                    // check the shapetree for cd tags
+                                    IEnumerable<CustomerData> cdSpList = slp.SlideLayout.CommonSlideData.ShapeTree.Descendants<CustomerData>();
+                                    foreach (CustomerData cd in cdSpList)
+                                    {
+                                        cd.Remove();
+                                        isFixed = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        // step 3. delete the cd for presentation.xml
+                        IEnumerable<CustomerData> cdListPresPart = presDoc.PresentationPart.Presentation.Descendants<CustomerData>().ToList();
+                        foreach (CustomerData cd in cdListPresPart)
+                        {
+                            cd.Remove();
                             isFixed = true;
                         }
-                    }
-                }
 
-                bool containsCustomXml = false;
-
-                // todo / workaround: still looking into some files that the above customxmlpart deletepart does not work on
-                // this is a manual removal of the physical files...the deletepart seems to remove the rels information but not the item#.xml files
-                using (FileStream zipToOpen = new FileStream(path, FileMode.Open, FileAccess.Read))
-                {
-                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read))
-                    {
-                        foreach (ZipArchiveEntry zae in archive.Entries)
+                        // step 4. remove the custom xml parts
+                        if (presDoc.PresentationPart.CustomXmlParts is not null)
                         {
-                            if (zae.FullName.Contains("customXml/item"))
+                            foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
                             {
-                                containsCustomXml = true;
+                                presDoc.PresentationPart.DeletePart(cxp);
+                                presDoc.Save();
+                                isFixed = true;
+                            }
+                        }
+                    }
+
+                    // step 5. make sure the customxml files were deleted
+                    bool containsCustomXml = false;
+
+                    // todo / workaround: still looking into some files where the above customxmlpart deletepart does not work
+                    // this is a manual removal of the physical files...the deletepart seems to remove the rels information but not the item#.xml files
+                    using (FileStream zipToOpen = new FileStream(path, FileMode.Open, FileAccess.Read))
+                    {
+                        using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read))
+                        {
+                            foreach (ZipArchiveEntry zae in archive.Entries)
+                            {
+                                if (zae.FullName.Contains("customXml/item"))
+                                {
+                                    containsCustomXml = true;
+                                }
+                            }
+                        }
+                    }
+
+                    // if the files are still there after the deletepart, remove them from the archive
+                    if (containsCustomXml)
+                    {
+                        using (FileStream zipToOpen = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+                        {
+                            using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                            {
+                                for (int i = archive.Entries.Count - 1; i > 0; i--)
+                                {
+                                    if (archive.Entries[i].FullName.StartsWith("customXml"))
+                                    {
+                                        archive.Entries[i].Delete();
+                                        isFixed = true;
+                                    }
+                                }
                             }
                         }
                     }
                 }
-
-                if (containsCustomXml)
+                else
                 {
-                    // remove custom xml files outside of sdk
-                    using (FileStream zipToOpen = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+                    using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
                     {
-                        using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                        if (presDoc.PresentationPart.CustomXmlParts is not null)
                         {
-                            for (int i = archive.Entries.Count - 1; i > 0; i--)
+                            foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
                             {
-                                if (archive.Entries[i].FullName.StartsWith("customXml"))
-                                {
-                                    archive.Entries[i].Delete();
-                                    isFixed = true;
-                                }
+                                presDoc.PresentationPart.DeletePart(cxp);
+                                presDoc.Save();
+                                isFixed = true;
                             }
                         }
                     }
