@@ -1556,6 +1556,7 @@ namespace Office_File_Explorer.WinForms
                             bool saveFile = false;
                             bool cRefIdExists = false;
 
+                            // todo: check the logic here
                             if (commentsPart is null && commentRefs.Count() > 0)
                             {
                                 // if there are comment refs but no comments.xml, remove refs
@@ -1991,6 +1992,39 @@ namespace Office_File_Explorer.WinForms
                     else
                     {
                         lstOutput.Items.Add(f + " : No Table Cell Problem Found.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void BtnRemoveCustomXml_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+            Cursor = Cursors.WaitCursor;
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    if (rdoWord.Checked)
+                    {
+                        Office.RemoveCustomXmlParts(f, Strings.oAppWord);
+                    }
+                    else if (rdoExcel.Checked)
+                    {
+                        Office.RemoveCustomXmlParts(f, Strings.oAppExcel);
+                    }
+                    else if (rdoPowerPoint.Checked)
+                    {
+                        Office.RemoveCustomXmlParts(f, Strings.oAppPowerPoint);
                     }
                 }
                 catch (Exception ex)

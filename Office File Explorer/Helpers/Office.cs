@@ -404,9 +404,10 @@ namespace Office_File_Explorer.Helpers
                     using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
                     {
                         // step 1. check slide, slidelayout and notesslide
+                        // todo: add check for non custom xml referenced customerdatatags
                         foreach (SlidePart sp in presDoc.PresentationPart.SlideParts)
                         {
-                            // remove the<p:custData > from slides
+                            // remove the cd / <p:custData ...> from slides
                             if (sp.Slide.CommonSlideData.CustomerDataList is not null)
                             {
                                 IEnumerable<CustomerData> cdList = sp.Slide.CommonSlideData.CustomerDataList.Descendants<CustomerData>().ToList();

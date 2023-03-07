@@ -43,6 +43,7 @@ namespace Office_File_Explorer.WinForms
             this.ckbSubfolders = new System.Windows.Forms.CheckBox();
             this.lstOutput = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
             this.BtnFixCorruptTcTags = new System.Windows.Forms.Button();
             this.BtnFixFooterSpacing = new System.Windows.Forms.Button();
             this.BtnCheckForDigSig = new System.Windows.Forms.Button();
@@ -65,7 +66,7 @@ namespace Office_File_Explorer.WinForms
             this.BtnDeleteCustomProps = new System.Windows.Forms.Button();
             this.BtnAddCustomProps = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
+            this.BtnRemoveCustomXml = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -202,6 +203,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.BtnRemoveCustomXml);
             this.groupBox4.Controls.Add(this.BtnRemoveCustomFileProps);
             this.groupBox4.Controls.Add(this.BtnFixCorruptTcTags);
             this.groupBox4.Controls.Add(this.BtnFixFooterSpacing);
@@ -230,6 +232,16 @@ namespace Office_File_Explorer.WinForms
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Batch Commands";
+            // 
+            // BtnRemoveCustomFileProps
+            // 
+            this.BtnRemoveCustomFileProps.Location = new System.Drawing.Point(344, 109);
+            this.BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
+            this.BtnRemoveCustomFileProps.Size = new System.Drawing.Size(173, 23);
+            this.BtnRemoveCustomFileProps.TabIndex = 17;
+            this.BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
+            this.BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
+            this.BtnRemoveCustomFileProps.Click += new System.EventHandler(this.BtnRemoveCustomFileProps_Click);
             // 
             // BtnFixCorruptTcTags
             // 
@@ -441,15 +453,15 @@ namespace Office_File_Explorer.WinForms
             this.BtnAddCustomProps.UseVisualStyleBackColor = true;
             this.BtnAddCustomProps.Click += new System.EventHandler(this.BtnAddCustomProps_Click);
             // 
-            // BtnRemoveCustomFileProps
+            // BtnRemoveCustomXml
             // 
-            this.BtnRemoveCustomFileProps.Location = new System.Drawing.Point(344, 109);
-            this.BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
-            this.BtnRemoveCustomFileProps.Size = new System.Drawing.Size(173, 23);
-            this.BtnRemoveCustomFileProps.TabIndex = 17;
-            this.BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
-            this.BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
-            this.BtnRemoveCustomFileProps.Click += new System.EventHandler(this.BtnRemoveCustomFileProps_Click);
+            this.BtnRemoveCustomXml.Location = new System.Drawing.Point(681, 109);
+            this.BtnRemoveCustomXml.Name = "BtnRemoveCustomXml";
+            this.BtnRemoveCustomXml.Size = new System.Drawing.Size(151, 23);
+            this.BtnRemoveCustomXml.TabIndex = 1;
+            this.BtnRemoveCustomXml.Text = "Remove Custom Xml";
+            this.BtnRemoveCustomXml.UseVisualStyleBackColor = true;
+            this.BtnRemoveCustomXml.Click += new System.EventHandler(this.BtnRemoveCustomXml_Click);
             // 
             // FrmBatch
             // 
@@ -518,5 +530,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnFixFooterSpacing;
         private System.Windows.Forms.Button BtnFixCorruptTcTags;
         private System.Windows.Forms.Button BtnRemoveCustomFileProps;
+        private System.Windows.Forms.Button BtnRemoveCustomXml;
     }
 }
