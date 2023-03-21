@@ -2054,7 +2054,8 @@ namespace Office_File_Explorer.WinForms
         /// there are times when a duplicate documentManagement custom xml file is added to a document
         /// this causes an error "The server properties in this file cannot be displayed."
         /// usually the duplicate is empty, so check for an empty doc management custom xml file
-        /// then remove it from the rels file
+        /// other times, there are two versions of <documentManagement/>
+        /// if either are found, remove the rel reference
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2070,10 +2071,17 @@ namespace Office_File_Explorer.WinForms
                     bool isCorrupt = false;
                     bool isFixed = false;
                     string badUri = string.Empty;
+                    int docMgmtCount = 0;
+                    string dupeDocMgmtUri = string.Empty;
 
                     using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
                     {
-                        // remove the reference to a blank custom xml file
+                        // first check if there is an empty documentManagement tag in the custom xml file
+                        // the second check is if there is more than one docManagement custom xml file
+                        // more to do here long term, not sure how to determine which is the "current" version
+                        // for now, just removing the last referenced uri in the loop
+                        // also not accounting for potentially more than 2 dupes of documentManagement
+                        // currently assuming at most there are 2
                         foreach (CustomXmlPart part in document.MainDocumentPart.CustomXmlParts)
                         {
                             XDocument xDoc = part.GetXDocument();
@@ -2083,10 +2091,20 @@ namespace Office_File_Explorer.WinForms
                                 isCorrupt = true;
                                 badUri = part.Uri.ToString();
                             }
+                            else if (badElement.Contains("<documentManagement>"))
+                            {
+                                dupeDocMgmtUri = part.Uri.ToString();
+                                docMgmtCount++;
+                            }
+                        }
+
+                        if (docMgmtCount > 1)
+                        {
+                            isCorrupt = true;
                         }
                     }
 
-                    // if there is an empty docManagement tag, remove it as a reference
+                    // if either condition is found, pull the rel file as a zipentry and remove the node for the bad reference
                     if (isCorrupt)
                     {
                         // loop package parts and push the rels into an xdoc to parse and remove the uri 
@@ -2114,7 +2132,7 @@ namespace Office_File_Explorer.WinForms
                                                 {
                                                     foreach (XmlAttribute xa in xnRel.Attributes)
                                                     {
-                                                        if (xa.Value == ".." + badUri)
+                                                        if (xa.Value == ".." + badUri || xa.Value == ".." + dupeDocMgmtUri)
                                                         {
                                                             // remove the node and save the changes back to the file
                                                             xn.RemoveChild(xnRel);

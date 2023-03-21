@@ -101,7 +101,7 @@ namespace Office_File_Explorer.WinForms
                 {
                     isFileFixed = true;
                 }
-                
+
                 if (WordFixes.FixBookmarkTagInSdtContent(filePath))
                 {
                     isFileFixed = true;
@@ -122,7 +122,7 @@ namespace Office_File_Explorer.WinForms
                     featureFixed.Add("Revisions Fixed");
                 }
             }
-            
+
             if (rdoFixEndnotesW.Checked || tryAllFixes == true)
             {
                 SetCorruptionChecked(Strings.wEndnotes);
@@ -213,7 +213,7 @@ namespace Office_File_Explorer.WinForms
                 }
             }
 
-            if (rdoFixTableCellTags.Checked || tryAllFixes == true) 
+            if (rdoFixTableCellTags.Checked || tryAllFixes == true)
             {
                 SetCorruptionChecked(Strings.wTableCell);
                 if (WordFixes.FixCorruptTableCellTags(filePath) == true || WordFixes.FixGridSpan(filePath) == true)
