@@ -30,466 +30,477 @@ namespace Office_File_Explorer.WinForms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmBatch));
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rdoPowerPoint = new System.Windows.Forms.RadioButton();
-            this.rdoExcel = new System.Windows.Forms.RadioButton();
-            this.rdoWord = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.BtnBrowseFolder = new System.Windows.Forms.Button();
-            this.tbFolderPath = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.BtnCopyOutput = new System.Windows.Forms.Button();
-            this.ckbSubfolders = new System.Windows.Forms.CheckBox();
-            this.lstOutput = new System.Windows.Forms.ListBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
-            this.BtnFixCorruptTcTags = new System.Windows.Forms.Button();
-            this.BtnFixFooterSpacing = new System.Windows.Forms.Button();
-            this.BtnCheckForDigSig = new System.Windows.Forms.Button();
-            this.BtnResetBulletMargins = new System.Windows.Forms.Button();
-            this.BtnRemoveCustomTitle = new System.Windows.Forms.Button();
-            this.BtnFixComments = new System.Windows.Forms.Button();
-            this.BtnRemovePII = new System.Windows.Forms.Button();
-            this.BtnFixTableProps = new System.Windows.Forms.Button();
-            this.BtnChangeTheme = new System.Windows.Forms.Button();
-            this.BtnDeleteRequestStatus = new System.Windows.Forms.Button();
-            this.BtnFixRevisions = new System.Windows.Forms.Button();
-            this.BtnFixBookmarks = new System.Windows.Forms.Button();
-            this.BtnFixNotesPage = new System.Windows.Forms.Button();
-            this.BtnRemovePIIOnSave = new System.Windows.Forms.Button();
-            this.BtnConvertStrict = new System.Windows.Forms.Button();
-            this.BtnUpdateNamespaces = new System.Windows.Forms.Button();
-            this.BtnSetOpenByDefault = new System.Windows.Forms.Button();
-            this.BtnChangeTemplate = new System.Windows.Forms.Button();
-            this.BtnFixHyperlinks = new System.Windows.Forms.Button();
-            this.BtnDeleteCustomProps = new System.Windows.Forms.Button();
-            this.BtnAddCustomProps = new System.Windows.Forms.Button();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.BtnRemoveCustomXml = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.SuspendLayout();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            rdoPowerPoint = new System.Windows.Forms.RadioButton();
+            rdoExcel = new System.Windows.Forms.RadioButton();
+            rdoWord = new System.Windows.Forms.RadioButton();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            BtnBrowseFolder = new System.Windows.Forms.Button();
+            tbFolderPath = new System.Windows.Forms.TextBox();
+            label1 = new System.Windows.Forms.Label();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            BtnCopyOutput = new System.Windows.Forms.Button();
+            ckbSubfolders = new System.Windows.Forms.CheckBox();
+            lstOutput = new System.Windows.Forms.ListBox();
+            groupBox4 = new System.Windows.Forms.GroupBox();
+            BtnRemoveCustomXml = new System.Windows.Forms.Button();
+            BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
+            BtnFixCorruptTcTags = new System.Windows.Forms.Button();
+            BtnFixFooterSpacing = new System.Windows.Forms.Button();
+            BtnCheckForDigSig = new System.Windows.Forms.Button();
+            BtnResetBulletMargins = new System.Windows.Forms.Button();
+            BtnRemoveCustomTitle = new System.Windows.Forms.Button();
+            BtnFixComments = new System.Windows.Forms.Button();
+            BtnRemovePII = new System.Windows.Forms.Button();
+            BtnFixTableProps = new System.Windows.Forms.Button();
+            BtnChangeTheme = new System.Windows.Forms.Button();
+            BtnDeleteRequestStatus = new System.Windows.Forms.Button();
+            BtnFixRevisions = new System.Windows.Forms.Button();
+            BtnFixBookmarks = new System.Windows.Forms.Button();
+            BtnFixNotesPage = new System.Windows.Forms.Button();
+            BtnRemovePIIOnSave = new System.Windows.Forms.Button();
+            BtnConvertStrict = new System.Windows.Forms.Button();
+            BtnUpdateNamespaces = new System.Windows.Forms.Button();
+            BtnSetOpenByDefault = new System.Windows.Forms.Button();
+            BtnChangeTemplate = new System.Windows.Forms.Button();
+            BtnFixHyperlinks = new System.Windows.Forms.Button();
+            BtnDeleteCustomProps = new System.Windows.Forms.Button();
+            BtnAddCustomProps = new System.Windows.Forms.Button();
+            folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            BtnFixDupeCustomXml = new System.Windows.Forms.Button();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
+            SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.rdoPowerPoint);
-            this.groupBox1.Controls.Add(this.rdoExcel);
-            this.groupBox1.Controls.Add(this.rdoWord);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(220, 64);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Application";
+            groupBox1.Controls.Add(rdoPowerPoint);
+            groupBox1.Controls.Add(rdoExcel);
+            groupBox1.Controls.Add(rdoWord);
+            groupBox1.Location = new System.Drawing.Point(12, 12);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new System.Drawing.Size(220, 64);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Application";
             // 
             // rdoPowerPoint
             // 
-            this.rdoPowerPoint.AutoSize = true;
-            this.rdoPowerPoint.Location = new System.Drawing.Point(121, 27);
-            this.rdoPowerPoint.Name = "rdoPowerPoint";
-            this.rdoPowerPoint.Size = new System.Drawing.Size(86, 19);
-            this.rdoPowerPoint.TabIndex = 2;
-            this.rdoPowerPoint.Text = "PowerPoint";
-            this.rdoPowerPoint.UseVisualStyleBackColor = true;
-            this.rdoPowerPoint.CheckedChanged += new System.EventHandler(this.RdoPowerPoint_CheckedChanged);
+            rdoPowerPoint.AutoSize = true;
+            rdoPowerPoint.Location = new System.Drawing.Point(121, 27);
+            rdoPowerPoint.Name = "rdoPowerPoint";
+            rdoPowerPoint.Size = new System.Drawing.Size(86, 19);
+            rdoPowerPoint.TabIndex = 2;
+            rdoPowerPoint.Text = "PowerPoint";
+            rdoPowerPoint.UseVisualStyleBackColor = true;
+            rdoPowerPoint.CheckedChanged += RdoPowerPoint_CheckedChanged;
             // 
             // rdoExcel
             // 
-            this.rdoExcel.AutoSize = true;
-            this.rdoExcel.Location = new System.Drawing.Point(63, 27);
-            this.rdoExcel.Name = "rdoExcel";
-            this.rdoExcel.Size = new System.Drawing.Size(52, 19);
-            this.rdoExcel.TabIndex = 1;
-            this.rdoExcel.Text = "Excel";
-            this.rdoExcel.UseVisualStyleBackColor = true;
-            this.rdoExcel.CheckedChanged += new System.EventHandler(this.RdoExcel_CheckedChanged);
+            rdoExcel.AutoSize = true;
+            rdoExcel.Location = new System.Drawing.Point(63, 27);
+            rdoExcel.Name = "rdoExcel";
+            rdoExcel.Size = new System.Drawing.Size(52, 19);
+            rdoExcel.TabIndex = 1;
+            rdoExcel.Text = "Excel";
+            rdoExcel.UseVisualStyleBackColor = true;
+            rdoExcel.CheckedChanged += RdoExcel_CheckedChanged;
             // 
             // rdoWord
             // 
-            this.rdoWord.AutoSize = true;
-            this.rdoWord.Checked = true;
-            this.rdoWord.Location = new System.Drawing.Point(3, 27);
-            this.rdoWord.Name = "rdoWord";
-            this.rdoWord.Size = new System.Drawing.Size(54, 19);
-            this.rdoWord.TabIndex = 0;
-            this.rdoWord.TabStop = true;
-            this.rdoWord.Text = "Word";
-            this.rdoWord.UseVisualStyleBackColor = true;
-            this.rdoWord.CheckedChanged += new System.EventHandler(this.RdoWord_CheckedChanged);
+            rdoWord.AutoSize = true;
+            rdoWord.Checked = true;
+            rdoWord.Location = new System.Drawing.Point(3, 27);
+            rdoWord.Name = "rdoWord";
+            rdoWord.Size = new System.Drawing.Size(54, 19);
+            rdoWord.TabIndex = 0;
+            rdoWord.TabStop = true;
+            rdoWord.Text = "Word";
+            rdoWord.UseVisualStyleBackColor = true;
+            rdoWord.CheckedChanged += RdoWord_CheckedChanged;
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.BtnBrowseFolder);
-            this.groupBox2.Controls.Add(this.tbFolderPath);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(238, 12);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(769, 64);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Folder Location";
+            groupBox2.Controls.Add(BtnBrowseFolder);
+            groupBox2.Controls.Add(tbFolderPath);
+            groupBox2.Controls.Add(label1);
+            groupBox2.Location = new System.Drawing.Point(238, 12);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new System.Drawing.Size(769, 64);
+            groupBox2.TabIndex = 0;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Folder Location";
             // 
             // BtnBrowseFolder
             // 
-            this.BtnBrowseFolder.Location = new System.Drawing.Point(635, 25);
-            this.BtnBrowseFolder.Name = "BtnBrowseFolder";
-            this.BtnBrowseFolder.Size = new System.Drawing.Size(126, 23);
-            this.BtnBrowseFolder.TabIndex = 2;
-            this.BtnBrowseFolder.Text = "...Choose Folder";
-            this.BtnBrowseFolder.UseVisualStyleBackColor = true;
-            this.BtnBrowseFolder.Click += new System.EventHandler(this.BtnBrowseFolder_Click);
+            BtnBrowseFolder.Location = new System.Drawing.Point(635, 25);
+            BtnBrowseFolder.Name = "BtnBrowseFolder";
+            BtnBrowseFolder.Size = new System.Drawing.Size(126, 23);
+            BtnBrowseFolder.TabIndex = 2;
+            BtnBrowseFolder.Text = "...Choose Folder";
+            BtnBrowseFolder.UseVisualStyleBackColor = true;
+            BtnBrowseFolder.Click += BtnBrowseFolder_Click;
             // 
             // tbFolderPath
             // 
-            this.tbFolderPath.Location = new System.Drawing.Point(46, 26);
-            this.tbFolderPath.Name = "tbFolderPath";
-            this.tbFolderPath.Size = new System.Drawing.Size(583, 23);
-            this.tbFolderPath.TabIndex = 1;
+            tbFolderPath.Location = new System.Drawing.Point(46, 26);
+            tbFolderPath.Name = "tbFolderPath";
+            tbFolderPath.Size = new System.Drawing.Size(583, 23);
+            tbFolderPath.TabIndex = 1;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 15);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Path:";
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(6, 29);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(34, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Path:";
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.BtnCopyOutput);
-            this.groupBox3.Controls.Add(this.ckbSubfolders);
-            this.groupBox3.Controls.Add(this.lstOutput);
-            this.groupBox3.Location = new System.Drawing.Point(12, 82);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(995, 285);
-            this.groupBox3.TabIndex = 0;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Files";
+            groupBox3.Controls.Add(BtnCopyOutput);
+            groupBox3.Controls.Add(ckbSubfolders);
+            groupBox3.Controls.Add(lstOutput);
+            groupBox3.Location = new System.Drawing.Point(12, 82);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(1004, 285);
+            groupBox3.TabIndex = 0;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Files";
             // 
             // BtnCopyOutput
             // 
-            this.BtnCopyOutput.Location = new System.Drawing.Point(861, 254);
-            this.BtnCopyOutput.Name = "BtnCopyOutput";
-            this.BtnCopyOutput.Size = new System.Drawing.Size(126, 23);
-            this.BtnCopyOutput.TabIndex = 2;
-            this.BtnCopyOutput.Text = "Copy Output";
-            this.BtnCopyOutput.UseVisualStyleBackColor = true;
-            this.BtnCopyOutput.Click += new System.EventHandler(this.BtnCopyOutput_Click);
+            BtnCopyOutput.Location = new System.Drawing.Point(861, 254);
+            BtnCopyOutput.Name = "BtnCopyOutput";
+            BtnCopyOutput.Size = new System.Drawing.Size(126, 23);
+            BtnCopyOutput.TabIndex = 2;
+            BtnCopyOutput.Text = "Copy Output";
+            BtnCopyOutput.UseVisualStyleBackColor = true;
+            BtnCopyOutput.Click += BtnCopyOutput_Click;
             // 
             // ckbSubfolders
             // 
-            this.ckbSubfolders.AutoSize = true;
-            this.ckbSubfolders.Location = new System.Drawing.Point(6, 254);
-            this.ckbSubfolders.Name = "ckbSubfolders";
-            this.ckbSubfolders.Size = new System.Drawing.Size(124, 19);
-            this.ckbSubfolders.TabIndex = 1;
-            this.ckbSubfolders.Text = "Include Subfolders";
-            this.ckbSubfolders.UseVisualStyleBackColor = true;
-            this.ckbSubfolders.CheckedChanged += new System.EventHandler(this.CkbSubfolders_CheckedChanged);
+            ckbSubfolders.AutoSize = true;
+            ckbSubfolders.Location = new System.Drawing.Point(6, 254);
+            ckbSubfolders.Name = "ckbSubfolders";
+            ckbSubfolders.Size = new System.Drawing.Size(124, 19);
+            ckbSubfolders.TabIndex = 1;
+            ckbSubfolders.Text = "Include Subfolders";
+            ckbSubfolders.UseVisualStyleBackColor = true;
+            ckbSubfolders.CheckedChanged += CkbSubfolders_CheckedChanged;
             // 
             // lstOutput
             // 
-            this.lstOutput.FormattingEnabled = true;
-            this.lstOutput.HorizontalScrollbar = true;
-            this.lstOutput.ItemHeight = 15;
-            this.lstOutput.Location = new System.Drawing.Point(3, 19);
-            this.lstOutput.Name = "lstOutput";
-            this.lstOutput.Size = new System.Drawing.Size(984, 229);
-            this.lstOutput.TabIndex = 0;
+            lstOutput.FormattingEnabled = true;
+            lstOutput.HorizontalScrollbar = true;
+            lstOutput.ItemHeight = 15;
+            lstOutput.Location = new System.Drawing.Point(3, 19);
+            lstOutput.Name = "lstOutput";
+            lstOutput.Size = new System.Drawing.Size(984, 229);
+            lstOutput.TabIndex = 0;
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.BtnRemoveCustomXml);
-            this.groupBox4.Controls.Add(this.BtnRemoveCustomFileProps);
-            this.groupBox4.Controls.Add(this.BtnFixCorruptTcTags);
-            this.groupBox4.Controls.Add(this.BtnFixFooterSpacing);
-            this.groupBox4.Controls.Add(this.BtnCheckForDigSig);
-            this.groupBox4.Controls.Add(this.BtnResetBulletMargins);
-            this.groupBox4.Controls.Add(this.BtnRemoveCustomTitle);
-            this.groupBox4.Controls.Add(this.BtnFixComments);
-            this.groupBox4.Controls.Add(this.BtnRemovePII);
-            this.groupBox4.Controls.Add(this.BtnFixTableProps);
-            this.groupBox4.Controls.Add(this.BtnChangeTheme);
-            this.groupBox4.Controls.Add(this.BtnDeleteRequestStatus);
-            this.groupBox4.Controls.Add(this.BtnFixRevisions);
-            this.groupBox4.Controls.Add(this.BtnFixBookmarks);
-            this.groupBox4.Controls.Add(this.BtnFixNotesPage);
-            this.groupBox4.Controls.Add(this.BtnRemovePIIOnSave);
-            this.groupBox4.Controls.Add(this.BtnConvertStrict);
-            this.groupBox4.Controls.Add(this.BtnUpdateNamespaces);
-            this.groupBox4.Controls.Add(this.BtnSetOpenByDefault);
-            this.groupBox4.Controls.Add(this.BtnChangeTemplate);
-            this.groupBox4.Controls.Add(this.BtnFixHyperlinks);
-            this.groupBox4.Controls.Add(this.BtnDeleteCustomProps);
-            this.groupBox4.Controls.Add(this.BtnAddCustomProps);
-            this.groupBox4.Location = new System.Drawing.Point(12, 367);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(995, 152);
-            this.groupBox4.TabIndex = 0;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Batch Commands";
-            // 
-            // BtnRemoveCustomFileProps
-            // 
-            this.BtnRemoveCustomFileProps.Location = new System.Drawing.Point(344, 109);
-            this.BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
-            this.BtnRemoveCustomFileProps.Size = new System.Drawing.Size(173, 23);
-            this.BtnRemoveCustomFileProps.TabIndex = 17;
-            this.BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
-            this.BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
-            this.BtnRemoveCustomFileProps.Click += new System.EventHandler(this.BtnRemoveCustomFileProps_Click);
-            // 
-            // BtnFixCorruptTcTags
-            // 
-            this.BtnFixCorruptTcTags.Location = new System.Drawing.Point(523, 109);
-            this.BtnFixCorruptTcTags.Name = "BtnFixCorruptTcTags";
-            this.BtnFixCorruptTcTags.Size = new System.Drawing.Size(152, 23);
-            this.BtnFixCorruptTcTags.TabIndex = 1;
-            this.BtnFixCorruptTcTags.Text = "Fix Corrupt Table Cells";
-            this.BtnFixCorruptTcTags.UseVisualStyleBackColor = true;
-            this.BtnFixCorruptTcTags.Click += new System.EventHandler(this.BtnFixCorruptTcTags_Click);
-            // 
-            // BtnFixFooterSpacing
-            // 
-            this.BtnFixFooterSpacing.Location = new System.Drawing.Point(197, 109);
-            this.BtnFixFooterSpacing.Name = "BtnFixFooterSpacing";
-            this.BtnFixFooterSpacing.Size = new System.Drawing.Size(141, 23);
-            this.BtnFixFooterSpacing.TabIndex = 1;
-            this.BtnFixFooterSpacing.Text = "Fix Footer Spacing";
-            this.BtnFixFooterSpacing.UseVisualStyleBackColor = true;
-            this.BtnFixFooterSpacing.Click += new System.EventHandler(this.BtnFixFooterSpacing_Click);
-            // 
-            // BtnCheckForDigSig
-            // 
-            this.BtnCheckForDigSig.Location = new System.Drawing.Point(6, 109);
-            this.BtnCheckForDigSig.Name = "BtnCheckForDigSig";
-            this.BtnCheckForDigSig.Size = new System.Drawing.Size(185, 23);
-            this.BtnCheckForDigSig.TabIndex = 16;
-            this.BtnCheckForDigSig.Text = "Check For Digital Signature";
-            this.BtnCheckForDigSig.UseVisualStyleBackColor = true;
-            this.BtnCheckForDigSig.Click += new System.EventHandler(this.BtnCheckForDigSig_Click);
-            // 
-            // BtnResetBulletMargins
-            // 
-            this.BtnResetBulletMargins.Location = new System.Drawing.Point(838, 80);
-            this.BtnResetBulletMargins.Name = "BtnResetBulletMargins";
-            this.BtnResetBulletMargins.Size = new System.Drawing.Size(149, 23);
-            this.BtnResetBulletMargins.TabIndex = 2;
-            this.BtnResetBulletMargins.Text = "Reset Bullet Tab Margins";
-            this.BtnResetBulletMargins.UseVisualStyleBackColor = true;
-            this.BtnResetBulletMargins.Click += new System.EventHandler(this.BtnResetBulletMargins_Click);
-            // 
-            // BtnRemoveCustomTitle
-            // 
-            this.BtnRemoveCustomTitle.Location = new System.Drawing.Point(344, 51);
-            this.BtnRemoveCustomTitle.Name = "BtnRemoveCustomTitle";
-            this.BtnRemoveCustomTitle.Size = new System.Drawing.Size(173, 23);
-            this.BtnRemoveCustomTitle.TabIndex = 1;
-            this.BtnRemoveCustomTitle.Text = "Remove Custom Title Prop";
-            this.BtnRemoveCustomTitle.UseVisualStyleBackColor = true;
-            this.BtnRemoveCustomTitle.Click += new System.EventHandler(this.BtnRemoveCustomTitle_Click);
-            // 
-            // BtnFixComments
-            // 
-            this.BtnFixComments.Location = new System.Drawing.Point(681, 80);
-            this.BtnFixComments.Name = "BtnFixComments";
-            this.BtnFixComments.Size = new System.Drawing.Size(151, 23);
-            this.BtnFixComments.TabIndex = 15;
-            this.BtnFixComments.Text = "Fix Corrupt Comments";
-            this.BtnFixComments.UseVisualStyleBackColor = true;
-            this.BtnFixComments.Click += new System.EventHandler(this.BtnFixComments_Click);
-            // 
-            // BtnRemovePII
-            // 
-            this.BtnRemovePII.Location = new System.Drawing.Point(838, 22);
-            this.BtnRemovePII.Name = "BtnRemovePII";
-            this.BtnRemovePII.Size = new System.Drawing.Size(149, 23);
-            this.BtnRemovePII.TabIndex = 14;
-            this.BtnRemovePII.Text = "Remove PII";
-            this.BtnRemovePII.UseVisualStyleBackColor = true;
-            this.BtnRemovePII.Click += new System.EventHandler(this.BtnRemovePII_Click);
-            // 
-            // BtnFixTableProps
-            // 
-            this.BtnFixTableProps.Location = new System.Drawing.Point(523, 80);
-            this.BtnFixTableProps.Name = "BtnFixTableProps";
-            this.BtnFixTableProps.Size = new System.Drawing.Size(152, 23);
-            this.BtnFixTableProps.TabIndex = 13;
-            this.BtnFixTableProps.Text = "Fix Table Grid Props";
-            this.BtnFixTableProps.UseVisualStyleBackColor = true;
-            this.BtnFixTableProps.Click += new System.EventHandler(this.BtnFixTableProps_Click);
-            // 
-            // BtnChangeTheme
-            // 
-            this.BtnChangeTheme.Location = new System.Drawing.Point(838, 51);
-            this.BtnChangeTheme.Name = "BtnChangeTheme";
-            this.BtnChangeTheme.Size = new System.Drawing.Size(149, 23);
-            this.BtnChangeTheme.TabIndex = 12;
-            this.BtnChangeTheme.Text = "Change Theme";
-            this.BtnChangeTheme.UseVisualStyleBackColor = true;
-            this.BtnChangeTheme.Click += new System.EventHandler(this.BtnChangeTheme_Click);
-            // 
-            // BtnDeleteRequestStatus
-            // 
-            this.BtnDeleteRequestStatus.Location = new System.Drawing.Point(681, 51);
-            this.BtnDeleteRequestStatus.Name = "BtnDeleteRequestStatus";
-            this.BtnDeleteRequestStatus.Size = new System.Drawing.Size(151, 23);
-            this.BtnDeleteRequestStatus.TabIndex = 11;
-            this.BtnDeleteRequestStatus.Text = "Delete RequestStatus";
-            this.BtnDeleteRequestStatus.UseVisualStyleBackColor = true;
-            this.BtnDeleteRequestStatus.Click += new System.EventHandler(this.BtnDeleteRequestStatus_Click);
-            // 
-            // BtnFixRevisions
-            // 
-            this.BtnFixRevisions.Location = new System.Drawing.Point(523, 51);
-            this.BtnFixRevisions.Name = "BtnFixRevisions";
-            this.BtnFixRevisions.Size = new System.Drawing.Size(152, 23);
-            this.BtnFixRevisions.TabIndex = 10;
-            this.BtnFixRevisions.Text = "Fix Corrupt Revisions";
-            this.BtnFixRevisions.UseVisualStyleBackColor = true;
-            this.BtnFixRevisions.Click += new System.EventHandler(this.BtnFixRevisions_Click);
-            // 
-            // BtnFixBookmarks
-            // 
-            this.BtnFixBookmarks.Location = new System.Drawing.Point(523, 22);
-            this.BtnFixBookmarks.Name = "BtnFixBookmarks";
-            this.BtnFixBookmarks.Size = new System.Drawing.Size(152, 23);
-            this.BtnFixBookmarks.TabIndex = 9;
-            this.BtnFixBookmarks.Text = "Fix Corrupt Bookmarks";
-            this.BtnFixBookmarks.UseVisualStyleBackColor = true;
-            this.BtnFixBookmarks.Click += new System.EventHandler(this.BtnFixBookmarks_Click);
-            // 
-            // BtnFixNotesPage
-            // 
-            this.BtnFixNotesPage.Location = new System.Drawing.Point(344, 80);
-            this.BtnFixNotesPage.Name = "BtnFixNotesPage";
-            this.BtnFixNotesPage.Size = new System.Drawing.Size(173, 23);
-            this.BtnFixNotesPage.TabIndex = 8;
-            this.BtnFixNotesPage.Text = "Fix Notes Page Size";
-            this.BtnFixNotesPage.UseVisualStyleBackColor = true;
-            this.BtnFixNotesPage.Click += new System.EventHandler(this.BtnFixNotesPage_Click);
-            // 
-            // BtnRemovePIIOnSave
-            // 
-            this.BtnRemovePIIOnSave.Location = new System.Drawing.Point(681, 22);
-            this.BtnRemovePIIOnSave.Name = "BtnRemovePIIOnSave";
-            this.BtnRemovePIIOnSave.Size = new System.Drawing.Size(151, 23);
-            this.BtnRemovePIIOnSave.TabIndex = 7;
-            this.BtnRemovePIIOnSave.Text = "Remove PII On Save";
-            this.BtnRemovePIIOnSave.UseVisualStyleBackColor = true;
-            this.BtnRemovePIIOnSave.Click += new System.EventHandler(this.BtnRemovePIIOnSave_Click);
-            // 
-            // BtnConvertStrict
-            // 
-            this.BtnConvertStrict.Location = new System.Drawing.Point(344, 22);
-            this.BtnConvertStrict.Name = "BtnConvertStrict";
-            this.BtnConvertStrict.Size = new System.Drawing.Size(173, 23);
-            this.BtnConvertStrict.TabIndex = 6;
-            this.BtnConvertStrict.Text = "Convert Strict To Non-Strict";
-            this.BtnConvertStrict.UseVisualStyleBackColor = true;
-            this.BtnConvertStrict.Click += new System.EventHandler(this.BtnConvertStrict_Click);
-            // 
-            // BtnUpdateNamespaces
-            // 
-            this.BtnUpdateNamespaces.Location = new System.Drawing.Point(6, 80);
-            this.BtnUpdateNamespaces.Name = "BtnUpdateNamespaces";
-            this.BtnUpdateNamespaces.Size = new System.Drawing.Size(185, 23);
-            this.BtnUpdateNamespaces.TabIndex = 5;
-            this.BtnUpdateNamespaces.Text = "Update Quick Part Namespaces";
-            this.BtnUpdateNamespaces.UseVisualStyleBackColor = true;
-            this.BtnUpdateNamespaces.Click += new System.EventHandler(this.BtnUpdateNamespaces_Click);
-            // 
-            // BtnSetOpenByDefault
-            // 
-            this.BtnSetOpenByDefault.Location = new System.Drawing.Point(6, 51);
-            this.BtnSetOpenByDefault.Name = "BtnSetOpenByDefault";
-            this.BtnSetOpenByDefault.Size = new System.Drawing.Size(185, 23);
-            this.BtnSetOpenByDefault.TabIndex = 4;
-            this.BtnSetOpenByDefault.Text = "Set OpenByDefault = False";
-            this.BtnSetOpenByDefault.UseVisualStyleBackColor = true;
-            this.BtnSetOpenByDefault.Click += new System.EventHandler(this.BtnSetOpenByDefault_Click);
-            // 
-            // BtnChangeTemplate
-            // 
-            this.BtnChangeTemplate.Location = new System.Drawing.Point(6, 22);
-            this.BtnChangeTemplate.Name = "BtnChangeTemplate";
-            this.BtnChangeTemplate.Size = new System.Drawing.Size(185, 23);
-            this.BtnChangeTemplate.TabIndex = 3;
-            this.BtnChangeTemplate.Text = "Change Attached Template";
-            this.BtnChangeTemplate.UseVisualStyleBackColor = true;
-            this.BtnChangeTemplate.Click += new System.EventHandler(this.BtnChangeTemplate_Click);
-            // 
-            // BtnFixHyperlinks
-            // 
-            this.BtnFixHyperlinks.Location = new System.Drawing.Point(197, 80);
-            this.BtnFixHyperlinks.Name = "BtnFixHyperlinks";
-            this.BtnFixHyperlinks.Size = new System.Drawing.Size(141, 23);
-            this.BtnFixHyperlinks.TabIndex = 2;
-            this.BtnFixHyperlinks.Text = "Fix Corrupt Hyperlinks";
-            this.BtnFixHyperlinks.UseVisualStyleBackColor = true;
-            this.BtnFixHyperlinks.Click += new System.EventHandler(this.BtnFixHyperlinks_Click);
-            // 
-            // BtnDeleteCustomProps
-            // 
-            this.BtnDeleteCustomProps.Location = new System.Drawing.Point(197, 51);
-            this.BtnDeleteCustomProps.Name = "BtnDeleteCustomProps";
-            this.BtnDeleteCustomProps.Size = new System.Drawing.Size(141, 23);
-            this.BtnDeleteCustomProps.TabIndex = 1;
-            this.BtnDeleteCustomProps.Text = "Delete Custom Props";
-            this.BtnDeleteCustomProps.UseVisualStyleBackColor = true;
-            this.BtnDeleteCustomProps.Click += new System.EventHandler(this.BtnDeleteCustomProps_Click);
-            // 
-            // BtnAddCustomProps
-            // 
-            this.BtnAddCustomProps.Location = new System.Drawing.Point(197, 22);
-            this.BtnAddCustomProps.Name = "BtnAddCustomProps";
-            this.BtnAddCustomProps.Size = new System.Drawing.Size(141, 23);
-            this.BtnAddCustomProps.TabIndex = 0;
-            this.BtnAddCustomProps.Text = "Add Custom Props";
-            this.BtnAddCustomProps.UseVisualStyleBackColor = true;
-            this.BtnAddCustomProps.Click += new System.EventHandler(this.BtnAddCustomProps_Click);
+            groupBox4.Controls.Add(BtnFixDupeCustomXml);
+            groupBox4.Controls.Add(BtnRemoveCustomXml);
+            groupBox4.Controls.Add(BtnRemoveCustomFileProps);
+            groupBox4.Controls.Add(BtnFixCorruptTcTags);
+            groupBox4.Controls.Add(BtnFixFooterSpacing);
+            groupBox4.Controls.Add(BtnCheckForDigSig);
+            groupBox4.Controls.Add(BtnResetBulletMargins);
+            groupBox4.Controls.Add(BtnRemoveCustomTitle);
+            groupBox4.Controls.Add(BtnFixComments);
+            groupBox4.Controls.Add(BtnRemovePII);
+            groupBox4.Controls.Add(BtnFixTableProps);
+            groupBox4.Controls.Add(BtnChangeTheme);
+            groupBox4.Controls.Add(BtnDeleteRequestStatus);
+            groupBox4.Controls.Add(BtnFixRevisions);
+            groupBox4.Controls.Add(BtnFixBookmarks);
+            groupBox4.Controls.Add(BtnFixNotesPage);
+            groupBox4.Controls.Add(BtnRemovePIIOnSave);
+            groupBox4.Controls.Add(BtnConvertStrict);
+            groupBox4.Controls.Add(BtnUpdateNamespaces);
+            groupBox4.Controls.Add(BtnSetOpenByDefault);
+            groupBox4.Controls.Add(BtnChangeTemplate);
+            groupBox4.Controls.Add(BtnFixHyperlinks);
+            groupBox4.Controls.Add(BtnDeleteCustomProps);
+            groupBox4.Controls.Add(BtnAddCustomProps);
+            groupBox4.Location = new System.Drawing.Point(12, 367);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(1004, 152);
+            groupBox4.TabIndex = 0;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Batch Commands";
             // 
             // BtnRemoveCustomXml
             // 
-            this.BtnRemoveCustomXml.Location = new System.Drawing.Point(681, 109);
-            this.BtnRemoveCustomXml.Name = "BtnRemoveCustomXml";
-            this.BtnRemoveCustomXml.Size = new System.Drawing.Size(151, 23);
-            this.BtnRemoveCustomXml.TabIndex = 1;
-            this.BtnRemoveCustomXml.Text = "Remove Custom Xml";
-            this.BtnRemoveCustomXml.UseVisualStyleBackColor = true;
-            this.BtnRemoveCustomXml.Click += new System.EventHandler(this.BtnRemoveCustomXml_Click);
+            BtnRemoveCustomXml.Location = new System.Drawing.Point(681, 109);
+            BtnRemoveCustomXml.Name = "BtnRemoveCustomXml";
+            BtnRemoveCustomXml.Size = new System.Drawing.Size(151, 23);
+            BtnRemoveCustomXml.TabIndex = 1;
+            BtnRemoveCustomXml.Text = "Remove Custom Xml";
+            BtnRemoveCustomXml.UseVisualStyleBackColor = true;
+            BtnRemoveCustomXml.Click += BtnRemoveCustomXml_Click;
+            // 
+            // BtnRemoveCustomFileProps
+            // 
+            BtnRemoveCustomFileProps.Location = new System.Drawing.Point(344, 109);
+            BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
+            BtnRemoveCustomFileProps.Size = new System.Drawing.Size(173, 23);
+            BtnRemoveCustomFileProps.TabIndex = 17;
+            BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
+            BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
+            BtnRemoveCustomFileProps.Click += BtnRemoveCustomFileProps_Click;
+            // 
+            // BtnFixCorruptTcTags
+            // 
+            BtnFixCorruptTcTags.Location = new System.Drawing.Point(523, 109);
+            BtnFixCorruptTcTags.Name = "BtnFixCorruptTcTags";
+            BtnFixCorruptTcTags.Size = new System.Drawing.Size(152, 23);
+            BtnFixCorruptTcTags.TabIndex = 1;
+            BtnFixCorruptTcTags.Text = "Fix Corrupt Table Cells";
+            BtnFixCorruptTcTags.UseVisualStyleBackColor = true;
+            BtnFixCorruptTcTags.Click += BtnFixCorruptTcTags_Click;
+            // 
+            // BtnFixFooterSpacing
+            // 
+            BtnFixFooterSpacing.Location = new System.Drawing.Point(197, 109);
+            BtnFixFooterSpacing.Name = "BtnFixFooterSpacing";
+            BtnFixFooterSpacing.Size = new System.Drawing.Size(141, 23);
+            BtnFixFooterSpacing.TabIndex = 1;
+            BtnFixFooterSpacing.Text = "Fix Footer Spacing";
+            BtnFixFooterSpacing.UseVisualStyleBackColor = true;
+            BtnFixFooterSpacing.Click += BtnFixFooterSpacing_Click;
+            // 
+            // BtnCheckForDigSig
+            // 
+            BtnCheckForDigSig.Location = new System.Drawing.Point(6, 109);
+            BtnCheckForDigSig.Name = "BtnCheckForDigSig";
+            BtnCheckForDigSig.Size = new System.Drawing.Size(185, 23);
+            BtnCheckForDigSig.TabIndex = 16;
+            BtnCheckForDigSig.Text = "Check For Digital Signature";
+            BtnCheckForDigSig.UseVisualStyleBackColor = true;
+            BtnCheckForDigSig.Click += BtnCheckForDigSig_Click;
+            // 
+            // BtnResetBulletMargins
+            // 
+            BtnResetBulletMargins.Location = new System.Drawing.Point(838, 80);
+            BtnResetBulletMargins.Name = "BtnResetBulletMargins";
+            BtnResetBulletMargins.Size = new System.Drawing.Size(160, 23);
+            BtnResetBulletMargins.TabIndex = 2;
+            BtnResetBulletMargins.Text = "Reset Bullet Tab Margins";
+            BtnResetBulletMargins.UseVisualStyleBackColor = true;
+            BtnResetBulletMargins.Click += BtnResetBulletMargins_Click;
+            // 
+            // BtnRemoveCustomTitle
+            // 
+            BtnRemoveCustomTitle.Location = new System.Drawing.Point(344, 51);
+            BtnRemoveCustomTitle.Name = "BtnRemoveCustomTitle";
+            BtnRemoveCustomTitle.Size = new System.Drawing.Size(173, 23);
+            BtnRemoveCustomTitle.TabIndex = 1;
+            BtnRemoveCustomTitle.Text = "Remove Custom Title Prop";
+            BtnRemoveCustomTitle.UseVisualStyleBackColor = true;
+            BtnRemoveCustomTitle.Click += BtnRemoveCustomTitle_Click;
+            // 
+            // BtnFixComments
+            // 
+            BtnFixComments.Location = new System.Drawing.Point(681, 80);
+            BtnFixComments.Name = "BtnFixComments";
+            BtnFixComments.Size = new System.Drawing.Size(151, 23);
+            BtnFixComments.TabIndex = 15;
+            BtnFixComments.Text = "Fix Corrupt Comments";
+            BtnFixComments.UseVisualStyleBackColor = true;
+            BtnFixComments.Click += BtnFixComments_Click;
+            // 
+            // BtnRemovePII
+            // 
+            BtnRemovePII.Location = new System.Drawing.Point(838, 22);
+            BtnRemovePII.Name = "BtnRemovePII";
+            BtnRemovePII.Size = new System.Drawing.Size(159, 23);
+            BtnRemovePII.TabIndex = 14;
+            BtnRemovePII.Text = "Remove PII";
+            BtnRemovePII.UseVisualStyleBackColor = true;
+            BtnRemovePII.Click += BtnRemovePII_Click;
+            // 
+            // BtnFixTableProps
+            // 
+            BtnFixTableProps.Location = new System.Drawing.Point(523, 80);
+            BtnFixTableProps.Name = "BtnFixTableProps";
+            BtnFixTableProps.Size = new System.Drawing.Size(152, 23);
+            BtnFixTableProps.TabIndex = 13;
+            BtnFixTableProps.Text = "Fix Table Grid Props";
+            BtnFixTableProps.UseVisualStyleBackColor = true;
+            BtnFixTableProps.Click += BtnFixTableProps_Click;
+            // 
+            // BtnChangeTheme
+            // 
+            BtnChangeTheme.Location = new System.Drawing.Point(838, 51);
+            BtnChangeTheme.Name = "BtnChangeTheme";
+            BtnChangeTheme.Size = new System.Drawing.Size(159, 23);
+            BtnChangeTheme.TabIndex = 12;
+            BtnChangeTheme.Text = "Change Theme";
+            BtnChangeTheme.UseVisualStyleBackColor = true;
+            BtnChangeTheme.Click += BtnChangeTheme_Click;
+            // 
+            // BtnDeleteRequestStatus
+            // 
+            BtnDeleteRequestStatus.Location = new System.Drawing.Point(681, 51);
+            BtnDeleteRequestStatus.Name = "BtnDeleteRequestStatus";
+            BtnDeleteRequestStatus.Size = new System.Drawing.Size(151, 23);
+            BtnDeleteRequestStatus.TabIndex = 11;
+            BtnDeleteRequestStatus.Text = "Delete RequestStatus";
+            BtnDeleteRequestStatus.UseVisualStyleBackColor = true;
+            BtnDeleteRequestStatus.Click += BtnDeleteRequestStatus_Click;
+            // 
+            // BtnFixRevisions
+            // 
+            BtnFixRevisions.Location = new System.Drawing.Point(523, 51);
+            BtnFixRevisions.Name = "BtnFixRevisions";
+            BtnFixRevisions.Size = new System.Drawing.Size(152, 23);
+            BtnFixRevisions.TabIndex = 10;
+            BtnFixRevisions.Text = "Fix Corrupt Revisions";
+            BtnFixRevisions.UseVisualStyleBackColor = true;
+            BtnFixRevisions.Click += BtnFixRevisions_Click;
+            // 
+            // BtnFixBookmarks
+            // 
+            BtnFixBookmarks.Location = new System.Drawing.Point(523, 22);
+            BtnFixBookmarks.Name = "BtnFixBookmarks";
+            BtnFixBookmarks.Size = new System.Drawing.Size(152, 23);
+            BtnFixBookmarks.TabIndex = 9;
+            BtnFixBookmarks.Text = "Fix Corrupt Bookmarks";
+            BtnFixBookmarks.UseVisualStyleBackColor = true;
+            BtnFixBookmarks.Click += BtnFixBookmarks_Click;
+            // 
+            // BtnFixNotesPage
+            // 
+            BtnFixNotesPage.Location = new System.Drawing.Point(344, 80);
+            BtnFixNotesPage.Name = "BtnFixNotesPage";
+            BtnFixNotesPage.Size = new System.Drawing.Size(173, 23);
+            BtnFixNotesPage.TabIndex = 8;
+            BtnFixNotesPage.Text = "Fix Notes Page Size";
+            BtnFixNotesPage.UseVisualStyleBackColor = true;
+            BtnFixNotesPage.Click += BtnFixNotesPage_Click;
+            // 
+            // BtnRemovePIIOnSave
+            // 
+            BtnRemovePIIOnSave.Location = new System.Drawing.Point(681, 22);
+            BtnRemovePIIOnSave.Name = "BtnRemovePIIOnSave";
+            BtnRemovePIIOnSave.Size = new System.Drawing.Size(151, 23);
+            BtnRemovePIIOnSave.TabIndex = 7;
+            BtnRemovePIIOnSave.Text = "Remove PII On Save";
+            BtnRemovePIIOnSave.UseVisualStyleBackColor = true;
+            BtnRemovePIIOnSave.Click += BtnRemovePIIOnSave_Click;
+            // 
+            // BtnConvertStrict
+            // 
+            BtnConvertStrict.Location = new System.Drawing.Point(344, 22);
+            BtnConvertStrict.Name = "BtnConvertStrict";
+            BtnConvertStrict.Size = new System.Drawing.Size(173, 23);
+            BtnConvertStrict.TabIndex = 6;
+            BtnConvertStrict.Text = "Convert Strict To Non-Strict";
+            BtnConvertStrict.UseVisualStyleBackColor = true;
+            BtnConvertStrict.Click += BtnConvertStrict_Click;
+            // 
+            // BtnUpdateNamespaces
+            // 
+            BtnUpdateNamespaces.Location = new System.Drawing.Point(6, 80);
+            BtnUpdateNamespaces.Name = "BtnUpdateNamespaces";
+            BtnUpdateNamespaces.Size = new System.Drawing.Size(185, 23);
+            BtnUpdateNamespaces.TabIndex = 5;
+            BtnUpdateNamespaces.Text = "Update Quick Part Namespaces";
+            BtnUpdateNamespaces.UseVisualStyleBackColor = true;
+            BtnUpdateNamespaces.Click += BtnUpdateNamespaces_Click;
+            // 
+            // BtnSetOpenByDefault
+            // 
+            BtnSetOpenByDefault.Location = new System.Drawing.Point(6, 51);
+            BtnSetOpenByDefault.Name = "BtnSetOpenByDefault";
+            BtnSetOpenByDefault.Size = new System.Drawing.Size(185, 23);
+            BtnSetOpenByDefault.TabIndex = 4;
+            BtnSetOpenByDefault.Text = "Set OpenByDefault = False";
+            BtnSetOpenByDefault.UseVisualStyleBackColor = true;
+            BtnSetOpenByDefault.Click += BtnSetOpenByDefault_Click;
+            // 
+            // BtnChangeTemplate
+            // 
+            BtnChangeTemplate.Location = new System.Drawing.Point(6, 22);
+            BtnChangeTemplate.Name = "BtnChangeTemplate";
+            BtnChangeTemplate.Size = new System.Drawing.Size(185, 23);
+            BtnChangeTemplate.TabIndex = 3;
+            BtnChangeTemplate.Text = "Change Attached Template";
+            BtnChangeTemplate.UseVisualStyleBackColor = true;
+            BtnChangeTemplate.Click += BtnChangeTemplate_Click;
+            // 
+            // BtnFixHyperlinks
+            // 
+            BtnFixHyperlinks.Location = new System.Drawing.Point(197, 80);
+            BtnFixHyperlinks.Name = "BtnFixHyperlinks";
+            BtnFixHyperlinks.Size = new System.Drawing.Size(141, 23);
+            BtnFixHyperlinks.TabIndex = 2;
+            BtnFixHyperlinks.Text = "Fix Corrupt Hyperlinks";
+            BtnFixHyperlinks.UseVisualStyleBackColor = true;
+            BtnFixHyperlinks.Click += BtnFixHyperlinks_Click;
+            // 
+            // BtnDeleteCustomProps
+            // 
+            BtnDeleteCustomProps.Location = new System.Drawing.Point(197, 51);
+            BtnDeleteCustomProps.Name = "BtnDeleteCustomProps";
+            BtnDeleteCustomProps.Size = new System.Drawing.Size(141, 23);
+            BtnDeleteCustomProps.TabIndex = 1;
+            BtnDeleteCustomProps.Text = "Delete Custom Props";
+            BtnDeleteCustomProps.UseVisualStyleBackColor = true;
+            BtnDeleteCustomProps.Click += BtnDeleteCustomProps_Click;
+            // 
+            // BtnAddCustomProps
+            // 
+            BtnAddCustomProps.Location = new System.Drawing.Point(197, 22);
+            BtnAddCustomProps.Name = "BtnAddCustomProps";
+            BtnAddCustomProps.Size = new System.Drawing.Size(141, 23);
+            BtnAddCustomProps.TabIndex = 0;
+            BtnAddCustomProps.Text = "Add Custom Props";
+            BtnAddCustomProps.UseVisualStyleBackColor = true;
+            BtnAddCustomProps.Click += BtnAddCustomProps_Click;
+            // 
+            // BtnFixDupeCustomXml
+            // 
+            BtnFixDupeCustomXml.Location = new System.Drawing.Point(838, 109);
+            BtnFixDupeCustomXml.Name = "BtnFixDupeCustomXml";
+            BtnFixDupeCustomXml.Size = new System.Drawing.Size(160, 23);
+            BtnFixDupeCustomXml.TabIndex = 1;
+            BtnFixDupeCustomXml.Text = "Fix Duplicate Custom Xml";
+            BtnFixDupeCustomXml.UseVisualStyleBackColor = true;
+            BtnFixDupeCustomXml.Click += BtnFixDupeCustomXml_Click;
             // 
             // FrmBatch
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1017, 531);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.KeyPreview = true;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FrmBatch";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Batch File Processing";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmBatch_KeyDown);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1021, 531);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox3);
+            Controls.Add(groupBox4);
+            Controls.Add(groupBox1);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "FrmBatch";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "Batch File Processing";
+            KeyDown += FrmBatch_KeyDown;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
@@ -531,5 +542,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnFixCorruptTcTags;
         private System.Windows.Forms.Button BtnRemoveCustomFileProps;
         private System.Windows.Forms.Button BtnRemoveCustomXml;
+        private System.Windows.Forms.Button BtnFixDupeCustomXml;
     }
 }

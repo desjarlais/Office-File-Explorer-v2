@@ -13,6 +13,9 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
+using System.IO.Compression;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -1100,6 +1103,62 @@ namespace Office_File_Explorer.Helpers
             }
 
             return saveFile;
+        }
+
+        /// <summary>
+        /// there are times when the gridspan is a really large number, which makes the table appear invisible
+        /// this function will look for that scenario and reset the gridspan to 1
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixGridSpan(string filePath)
+        {
+            bool tblModified = false;
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+            {
+                // global document variables
+                if (Word.IsPartNull(document, "Table") == false)
+                {
+                    // get the list of tables in the document
+                    // need to account for nested tables
+                    List<Table> tbls = document.MainDocumentPart.Document.Descendants<Table>().ToList();
+
+                    foreach (Table tbl in tbls)
+                    {
+                        // get the column count
+                        int colCount = 0;
+                        foreach (OpenXmlElement oxe in tbl.ChildElements)
+                        {
+                            // get the count of columns
+                            if (oxe.GetType().ToString() == Strings.dfowTableGrid)
+                            {
+                                colCount = oxe.ChildElements.Count;
+                            }
+                        }
+
+                        // loop each table cell and check the gridSpan
+                        List<GridSpan> gsList = tbl.Descendants<GridSpan>().ToList();
+                        foreach (GridSpan gs in gsList) 
+                        {
+                            // if the gridspan is larger than the number of columns, reset to 1
+                            if (gs.Val > colCount)
+                            {
+                                gs.Val = 1;
+                                tblModified = true;
+                            }
+                        }
+                    }
+                }
+
+                // save the file if we modified the table
+                if (tblModified == true)
+                {
+                    document.MainDocumentPart.Document.Save();
+                }
+            }
+
+            return tblModified;
         }
 
         /// <summary>

@@ -13,11 +13,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.IO.Packaging;
 using System.Linq;
+using System.Net.Security;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 
 // namespace refs
@@ -111,6 +114,8 @@ namespace Office_File_Explorer.WinForms
             BtnFixFooterSpacing.Enabled = false;
             BtnRemoveCustomFileProps.Enabled = false;
             BtnFixCorruptTcTags.Enabled = false;
+            BtnRemoveCustomXml.Enabled = false;
+            BtnFixDupeCustomXml.Enabled = false;
         }
 
         public void EnableUI()
@@ -126,6 +131,7 @@ namespace Office_File_Explorer.WinForms
             BtnDeleteRequestStatus.Enabled = true;
             BtnCheckForDigSig.Enabled = true;
             BtnRemoveCustomFileProps.Enabled = true;
+            BtnRemoveCustomXml.Enabled = true;
 
             // enable the radio buttons
             rdoExcel.Enabled = true;
@@ -149,6 +155,7 @@ namespace Office_File_Explorer.WinForms
                 BtnRemoveCustomTitle.Enabled = true;
                 BtnFixFooterSpacing.Enabled = true;
                 BtnFixCorruptTcTags.Enabled = true;
+                BtnFixDupeCustomXml.Enabled = true;
             }
 
             if (rdoPowerPoint.Checked == true)
@@ -1909,7 +1916,7 @@ namespace Office_File_Explorer.WinForms
         }
 
         /// <summary>
-        /// see details in WordFixes.FixCorruptTableCellTags
+        /// see details in WordFixes.FixCorruptTableCellTags and WordFixes.FixGridSpan
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1928,8 +1935,8 @@ namespace Office_File_Explorer.WinForms
                         if (Word.IsPartNull(document, "Table") == false)
                         {
                             bool tableCellCorruptionFound = false;
-                            
-                            do 
+
+                            do
                             {
                                 tableCellCorruptionFound = WordFixes.IsTableCellCorruptionFound(document);
                                 if (tableCellCorruptionFound == true)
@@ -1943,6 +1950,11 @@ namespace Office_File_Explorer.WinForms
                         {
                             document.Save();
                         }
+                    }
+
+                    if (WordFixes.FixGridSpan(f) == true)
+                    {
+                        isFixed = true;
                     }
 
                     if (isFixed)
@@ -2025,6 +2037,111 @@ namespace Office_File_Explorer.WinForms
                     else if (rdoPowerPoint.Checked)
                     {
                         Office.RemoveCustomXmlParts(f, Strings.oAppPowerPoint);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        /// <summary>
+        /// there are times when a duplicate documentManagement custom xml file is added to a document
+        /// this causes an error "The server properties in this file cannot be displayed."
+        /// usually the duplicate is empty, so check for an empty doc management custom xml file
+        /// then remove it from the rels file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnFixDupeCustomXml_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+            Cursor = Cursors.WaitCursor;
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    bool isCorrupt = false;
+                    bool isFixed = false;
+                    string badUri = string.Empty;
+
+                    using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
+                    {
+                        // remove the reference to a blank custom xml file
+                        foreach (CustomXmlPart part in document.MainDocumentPart.CustomXmlParts)
+                        {
+                            XDocument xDoc = part.GetXDocument();
+                            string badElement = xDoc.ToString();
+                            if (badElement.Contains("<documentManagement />"))
+                            {
+                                isCorrupt = true;
+                                badUri = part.Uri.ToString();
+                            }
+                        }
+                    }
+
+                    // if there is an empty docManagement tag, remove it as a reference
+                    if (isCorrupt)
+                    {
+                        // loop package parts and push the rels into an xdoc to parse and remove the uri 
+                        using (FileStream zipToOpen = new FileStream(f, FileMode.Open, FileAccess.ReadWrite))
+                        {
+                            using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                            {
+                                foreach (ZipArchiveEntry zae in archive.Entries)
+                                {
+                                    if (zae.Name == "document.xml.rels")
+                                    {
+                                        XmlDocument xDoc = new XmlDocument();
+                                        MemoryStream ms = new MemoryStream();
+                                        Stream relStream = zae.Open();
+                                        relStream.CopyTo(ms);
+                                        ms.Position = 0;
+                                        xDoc.Load(ms);
+                                        XmlNodeList xnl = xDoc.ChildNodes;
+                                        foreach (XmlNode xn in xnl)
+                                        {
+                                            if (xn.Name == "Relationships")
+                                            {
+                                                XmlNodeList xnlRel = xn.ChildNodes;
+                                                foreach (XmlNode xnRel in xnlRel)
+                                                {
+                                                    foreach (XmlAttribute xa in xnRel.Attributes)
+                                                    {
+                                                        if (xa.Value == ".." + badUri)
+                                                        {
+                                                            // remove the node and save the changes back to the file
+                                                            xn.RemoveChild(xnRel);
+                                                            relStream.SetLength(0);
+                                                            xDoc.Save(relStream);
+                                                            relStream.Flush();
+                                                            isFixed = true;
+                                                            goto corruptionFound;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                corruptionFound:
+                    if (isFixed)
+                    {
+                        lstOutput.Items.Add(f + " : Removed Duplicate Custom Xml");
+                    }
+                    else
+                    {
+                        lstOutput.Items.Add(f + " : No Duplicate Custom Xml Found.");
                     }
                 }
                 catch (Exception ex)

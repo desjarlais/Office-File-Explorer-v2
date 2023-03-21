@@ -339,6 +339,31 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
+        public static List<Table> GetAllTables(string docPath)
+        {
+            List<Table> tables = new List<Table>();
+
+            using (WordprocessingDocument document = WordprocessingDocument.Open(docPath, true))
+            {
+                // get all tables in header
+                foreach (FooterPart fp in document.MainDocumentPart.FooterParts)
+                {
+                    List<Table> ftrTables = fp.Footer.Descendants<Table>().ToList();
+                }
+
+                // get all tables in footer
+                foreach (HeaderPart hp in document.MainDocumentPart.HeaderParts)
+                {
+                    List<Table> hdrTables = hp.Header.Descendants<Table>().ToList();
+                }
+
+                // get all tables in main
+                List<Table> mainTables = document.MainDocumentPart.Document.Descendants<Table>().ToList();
+            }
+
+            return tables;
+        }
+
         /// <summary>
         /// Given a document name and an author name, accept all revisions by the specified author. 
         /// Pass an empty string for the author to accept all revisions.
