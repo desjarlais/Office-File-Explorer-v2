@@ -58,7 +58,7 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 ## Batch File Processing Window 
 ![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2batch.jpg?raw=true)
 
-More info in the wiki here -> [Wiki](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Batch-Processing)
+More info in the wiki here -> [Batch Processing Wiki](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Batch-Processing)
 
 ### Batch File Processing Features
 * Change Attached Template (Word)
