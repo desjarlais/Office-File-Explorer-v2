@@ -55,7 +55,7 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Validate underlying xml file details
 * View Custom Xml - view custom xml files in Office documents
 
-## Batch File Processing Window
+## Batch File Processing Window - more info in the wiki here -> [Wiki](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Batch-Processing)
 ![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2batch.jpg?raw=true)
 
 ### Batch File Processing Features
