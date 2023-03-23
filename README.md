@@ -27,9 +27,9 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Change Default Template
 * Accept All Revisions
 * Fix content control namespaces
-* Fix document corruptions (bookmarks, revisions, endnotes, list templates, table properties, comments, hyperlinks, content controls, math formulas)
+* Fix document corruptions (see [Wiki](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature) for more information)
 * Remove PII
-* View Sensitivity Labeled files (credit to https://github.com/ironfede/openmcdf for the heavy lifting parsing the compound file format)
+* View Sensitivity Labeled files (credit to [OpenMcdf](https://github.com/ironfede/openmcdf) for the heavy lifting parsing the compound file format)
 
 ### Excel
 * List function to display (links, comments, worksheets, hidden rows & columns, shared strings, connections, defined names, hyperlinks)
