@@ -1,4 +1,5 @@
-﻿using Office_File_Explorer.Helpers;
+﻿using DocumentFormat.OpenXml.Packaging;
+using Office_File_Explorer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -38,6 +39,8 @@ namespace Office_File_Explorer.WinForms
                 rdoTryAllFixesW.Enabled = true;
                 rdoFixDataDescriptorW.Enabled = true;
                 rdoFixMathAccentsW.Enabled = true;
+                rdoFixTableCellTags.Enabled = true;
+                rdoFixListStyles.Enabled = true;
             }
             else if (type == Strings.oAppExcel)
             {
@@ -47,6 +50,7 @@ namespace Office_File_Explorer.WinForms
             {
                 rdoFixNotesPageSizeCustomP.Enabled = true;
                 rdoFixNotesPageSizeP.Enabled = true;
+                rdoResetBulletMargins.Enabled = true;
             }
         }
 
@@ -220,6 +224,18 @@ namespace Office_File_Explorer.WinForms
                 {
                     isFileFixed = true;
                     featureFixed.Add("Table Cell Corruption Fixed");
+                }
+            }
+
+            if (rdoResetBulletMargins.Checked || tryAllFixes == true)
+            {
+                SetCorruptionChecked("Bullet Margins");
+                using (PresentationDocument document = PresentationDocument.Open(filePath, true))
+                {
+                    PowerPointFixes.ResetBulletMargins(document);
+                    isFileFixed = true;
+                    featureFixed.Add("Bullet Margins");
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + Strings.pptResetBulletMargins);
                 }
             }
 

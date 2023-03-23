@@ -46,6 +46,7 @@ namespace Office_File_Explorer.WinForms
             rdoFixRevisionsW = new System.Windows.Forms.RadioButton();
             rdoFixBookmarksW = new System.Windows.Forms.RadioButton();
             groupBox2 = new System.Windows.Forms.GroupBox();
+            rdoResetBulletMargins = new System.Windows.Forms.RadioButton();
             rdoFixNotesPageSizeCustomP = new System.Windows.Forms.RadioButton();
             rdoFixNotesPageSizeP = new System.Windows.Forms.RadioButton();
             groupBox3 = new System.Windows.Forms.GroupBox();
@@ -75,7 +76,7 @@ namespace Office_File_Explorer.WinForms
             groupBox1.Controls.Add(rdoFixBookmarksW);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(547, 195);
+            groupBox1.Size = new System.Drawing.Size(547, 178);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Word Document";
@@ -83,6 +84,7 @@ namespace Office_File_Explorer.WinForms
             // rdoFixTableCellTags
             // 
             rdoFixTableCellTags.AutoSize = true;
+            rdoFixTableCellTags.Enabled = false;
             rdoFixTableCellTags.Location = new System.Drawing.Point(193, 147);
             rdoFixTableCellTags.Name = "rdoFixTableCellTags";
             rdoFixTableCellTags.Size = new System.Drawing.Size(142, 19);
@@ -94,6 +96,7 @@ namespace Office_File_Explorer.WinForms
             // rdoFixListStyles
             // 
             rdoFixListStyles.AutoSize = true;
+            rdoFixListStyles.Enabled = false;
             rdoFixListStyles.Location = new System.Drawing.Point(6, 147);
             rdoFixListStyles.Name = "rdoFixListStyles";
             rdoFixListStyles.Size = new System.Drawing.Size(94, 19);
@@ -106,7 +109,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoFixDataDescriptorW.AutoSize = true;
             rdoFixDataDescriptorW.Enabled = false;
-            rdoFixDataDescriptorW.Location = new System.Drawing.Point(6, 170);
+            rdoFixDataDescriptorW.Location = new System.Drawing.Point(403, 22);
             rdoFixDataDescriptorW.Name = "rdoFixDataDescriptorW";
             rdoFixDataDescriptorW.Size = new System.Drawing.Size(131, 19);
             rdoFixDataDescriptorW.TabIndex = 3;
@@ -130,7 +133,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoTryAllFixesW.AutoSize = true;
             rdoTryAllFixesW.Enabled = false;
-            rdoTryAllFixesW.Location = new System.Drawing.Point(396, 22);
+            rdoTryAllFixesW.Location = new System.Drawing.Point(403, 47);
             rdoTryAllFixesW.Name = "rdoTryAllFixesW";
             rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
             rdoTryAllFixesW.TabIndex = 9;
@@ -248,14 +251,27 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(rdoResetBulletMargins);
             groupBox2.Controls.Add(rdoFixNotesPageSizeCustomP);
             groupBox2.Controls.Add(rdoFixNotesPageSizeP);
-            groupBox2.Location = new System.Drawing.Point(565, 97);
+            groupBox2.Location = new System.Drawing.Point(565, 70);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new System.Drawing.Size(201, 81);
+            groupBox2.Size = new System.Drawing.Size(201, 108);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "PowerPoint Document";
+            // 
+            // rdoResetBulletMargins
+            // 
+            rdoResetBulletMargins.AutoSize = true;
+            rdoResetBulletMargins.Enabled = false;
+            rdoResetBulletMargins.Location = new System.Drawing.Point(12, 72);
+            rdoResetBulletMargins.Name = "rdoResetBulletMargins";
+            rdoResetBulletMargins.Size = new System.Drawing.Size(132, 19);
+            rdoResetBulletMargins.TabIndex = 2;
+            rdoResetBulletMargins.TabStop = true;
+            rdoResetBulletMargins.Text = "Reset Bullet Margins";
+            rdoResetBulletMargins.UseVisualStyleBackColor = true;
             // 
             // rdoFixNotesPageSizeCustomP
             // 
@@ -286,7 +302,7 @@ namespace Office_File_Explorer.WinForms
             groupBox3.Controls.Add(rdoFixStrictX);
             groupBox3.Location = new System.Drawing.Point(565, 12);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new System.Drawing.Size(201, 79);
+            groupBox3.Size = new System.Drawing.Size(201, 52);
             groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "Excel Document";
@@ -372,5 +388,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoFixDataDescriptorW;
         private System.Windows.Forms.RadioButton rdoFixListStyles;
         private System.Windows.Forms.RadioButton rdoFixTableCellTags;
+        private System.Windows.Forms.RadioButton rdoResetBulletMargins;
     }
 }

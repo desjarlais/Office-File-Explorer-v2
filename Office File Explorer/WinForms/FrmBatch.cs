@@ -2053,7 +2053,7 @@ namespace Office_File_Explorer.WinForms
         /// <summary>
         /// there are times when a duplicate documentManagement custom xml file is added to a document
         /// this causes an error "The server properties in this file cannot be displayed."
-        /// usually the duplicate is empty, so check for an empty doc management custom xml file
+        /// usually the duplicate file has 0 child elements of docmgmt, so check for that
         /// other times, there are two versions of <documentManagement/>
         /// if either are found, remove the rel reference
         /// </summary>
