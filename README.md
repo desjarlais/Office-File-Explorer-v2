@@ -55,21 +55,33 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Validate underlying xml file details
 * View Custom Xml - view custom xml files in Office documents
 
-## Batch File Processing Window
+## Batch File Processing Window 
 ![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2batch.jpg?raw=true)
 
+More info in the wiki here -> [Batch Processing Wiki](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Batch-Processing)
+
 ### Batch File Processing Features
-* Change Theme (Word, Excel, PowerPoint)
-* Add Custom Properties (Word, Excel, PowerPoint)
-* Delete Custom Properties (Word, Excel, PowerPoint)
-* Reset note page size to default value (PowerPoint)
-* Fix corrupt bookmarks (Word)
-* Fix corrupt revisions (Word)
-* Fix corrupt table properties (Word)
-* Fix corrupt hyperlinks (Word)
-* Update Quick Part Namespaces (Word)
-* Remove Personally Identifiable Information (Word)
-* Remove PII On Save (PowerPoint)
-* Set OpenByDefault = false (Word)
-* Convert Strict xlsx format to non-Strict xlsx format (Excel)
-* Delete RequestStatus xml node - (Word, Excel, PowerPoint)
+* Change Attached Template (Word)
+*	Add Custom Properties (Word, Excel, PowerPoint)
+*	Convert Strict To Non-Strict (Excel)
+*	Fix Corrupt Bookmarks (Word)
+*	Remove PII On Save (PowerPoint)
+*	Remove PII (Word)
+*	Set OpenByDefault = False (Word)
+*	Delete Custom Props (Word, Excel, PowerPoint)
+*	Remove Custom Title Prop (Word)
+*	Fix Corrupt Revisions (Word)
+*	Delete RequestStatus (Word, Excel, PowerPoint)
+*	Change Theme (Word, Excel, PowerPoint)
+*	Update Quick Part Namespaces (Word)
+*	Fix Corrupt Hyperlinks (Word)
+*	Fix Notes Page Size (PowerPoint)
+*	Fix Table Grid Props (Word)
+*	Fix Corrupt Comments (Word)
+*	Reset Bullet Tab Margins (PowerPoint)
+*	Check For Digital Signatures (Word, Excel, PowerPoint)
+*	Fix Footer Spacing (Word)
+*	Remove Custom File Props  (Word)
+*	Fix Corrupt Table Cells (Word)
+*	Remove Custom Xml (Word, Excel, PowerPoint)
+*	Fix Duplicate Custom Xml (Word)
