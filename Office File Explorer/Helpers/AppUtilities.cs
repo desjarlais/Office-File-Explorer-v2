@@ -94,7 +94,8 @@ namespace Office_File_Explorer.Helpers
             DelSheet,
             DelEmbeddedLinks,
             ConvertXlsmToXlsx,
-            ConvertStrictToXlsx
+            ConvertStrictToXlsx,
+            ConvertShareLinkToCanonicalLink
         }
 
         public enum PowerPointModifyCmds

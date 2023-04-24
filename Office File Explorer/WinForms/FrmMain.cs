@@ -21,7 +21,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
+
 using File = System.IO.File;
+using CSOM = Microsoft.SharePoint.Client;
+using System.Net;
 
 namespace Office_File_Explorer
 {
@@ -34,7 +37,7 @@ namespace Office_File_Explorer
 
         // openmcdf globals
         private FileStream fs;
-        
+
         private static string StrCopiedFileName = string.Empty;
         private static string StrOfficeApp = string.Empty;
         private static char PrevChar = '<';
@@ -135,7 +138,7 @@ namespace Office_File_Explorer
                     buffer.Append(s);
                     buffer.Append('\n');
                 }
-                
+
                 Clipboard.SetText(buffer.ToString());
             }
             catch (Exception ex)
@@ -151,7 +154,7 @@ namespace Office_File_Explorer
             {
                 Owner = this
             };
-            
+
             if (cForm.IsDisposed)
             {
                 return;
@@ -359,7 +362,7 @@ namespace Office_File_Explorer
                         fSuccess = true;
                     }
                 }
-                else 
+                else
                 {
                     // file is corrupt or not an Office document
                     StrOfficeApp = Strings.oAppUnknown;
@@ -893,7 +896,7 @@ namespace Office_File_Explorer
                     {
                         LstDisplay.Items.Add("Corrupt " + f.corruptionChecked + " Found - " + "Document Fixed");
                     }
-                    
+
                     return;
                 }
                 else
@@ -1288,6 +1291,18 @@ namespace Office_File_Explorer
                             if (fNewName != string.Empty)
                             {
                                 LstDisplay.Items.Add(lblFilePath.Text + Strings.convertedTo + fNewName);
+                            }
+                        }
+
+                        if (f.xlModCmd == AppUtilities.ExcelModifyCmds.ConvertShareLinkToCanonicalLink)
+                        {
+                            if (Excel.ConvertShareLinkToCanonicalLink(lblFilePath.Text) == true)
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "Comments Deleted", string.Empty);
+                            }
+                            else
+                            {
+                                LogInformation(LogInfoType.ClearAndAdd, "Unable to delete comments", string.Empty);
                             }
                         }
 
@@ -2071,6 +2086,12 @@ namespace Office_File_Explorer
         private void structuredStorageViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenEncryptedOfficeDocument(lblFilePath.Text, true);
+        }
+
+        private void loginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // prompt for creds and store user info
+
         }
     }
 }

@@ -11,7 +11,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using RedBlackTree;
 
@@ -654,6 +653,11 @@ namespace Office_File_Explorer.OpenMcdf
                 sourceStream = stream;
                 header.Read(stream);
                 
+                if (!configuration.HasFlag(CFSConfiguration.NoValidationException))
+                {
+                    ValidateHeader(header);
+                }
+
                 int n_sector = Ceiling((stream.Length - GetSectorSize()) / (double)GetSectorSize());
 
                 if (stream.Length > 0x7FFFFF0) _transactionLockAllocated = true;
@@ -671,6 +675,33 @@ namespace Office_File_Explorer.OpenMcdf
             {
                 if (stream != null && closeStream) stream.Close();
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Validate header values specified in [MS-CFB] document
+        /// </summary>
+        /// <param name="header">The Header sector of file to validate</param>
+        private void ValidateHeader(Header header)
+        {
+            if (header.MiniSectorShift != 6)
+            {
+                throw new CFCorruptedFileException("Mini sector Shift MUST be 0x06");
+            }
+
+            if ((header.MajorVersion == 0x0003 && header.SectorShift != 9) || (header.MajorVersion == 0x0004 && header.SectorShift != 0x000c))
+            {
+                throw new CFCorruptedFileException("Sector Shift MUST be 0x0009 for Major Version 3 and 0x000c for Major Version 4");
+            }
+
+            if (header.MinSizeStandardStream != 4096)
+            {
+                throw new CFCorruptedFileException("Mini Stream Cut off size MUST be 4096 byte");
+            }
+
+            if (header.ByteOrder != 0xFFFE)
+            {
+                throw new CFCorruptedFileException("Byte order MUST be little endian (0xFFFE");
             }
         }
 

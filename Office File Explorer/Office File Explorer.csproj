@@ -5,8 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>Office_File_Explorer</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.0.1.47</AssemblyVersion>
-    <FileVersion>2.0.1.47</FileVersion>
+    <AssemblyVersion>2.0.1.48</AssemblyVersion>
+    <FileVersion>2.0.1.48</FileVersion>
     <Version>2.0.1</Version>
     <PackageIcon>Office2013.ico</PackageIcon>
     <PackageIconUrl />
@@ -20,7 +20,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.19.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
+    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.23508.12000" />
   </ItemGroup>
 
   <ItemGroup>

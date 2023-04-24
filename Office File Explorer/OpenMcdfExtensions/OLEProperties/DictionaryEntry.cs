@@ -34,7 +34,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             {
                 nameBytes = br.ReadBytes(Length << 2);
 
-                int m = Length % 4;
+                int m = (Length * 2) % 4;
                 if (m > 0) br.ReadBytes(m);
             }
         }

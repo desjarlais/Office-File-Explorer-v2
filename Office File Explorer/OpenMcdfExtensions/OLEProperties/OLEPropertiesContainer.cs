@@ -100,7 +100,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             }
 
             PropertyNames = (Dictionary<uint, string>)pStream.PropertySet0.Properties
-                .Where(p => p.PropertyType == PropertyType.DictionaryProperty).FirstOrDefault();
+                .Where(p => p.PropertyType == PropertyType.DictionaryProperty).FirstOrDefault()?.Value;
 
             Context = new PropertyContext()
             {
@@ -179,7 +179,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
         public void RemoveProperty(uint propertyIdentifier)
         {
             var toRemove = properties.Where(o => o.PropertyIdentifier == propertyIdentifier).FirstOrDefault();
-
             if (toRemove != null) properties.Remove(toRemove);
         }
 

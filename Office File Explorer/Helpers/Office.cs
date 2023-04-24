@@ -694,7 +694,7 @@ namespace Office_File_Explorer.Helpers
 
             // Add the ThumbnailPart part in the new word processing document.
             wordDoc.AddNewPart<ThumbnailPart>("image/jpeg", "rId6");
-            wordDoc.Close();
+            wordDoc.Dispose();
         }
 
         // To add a new document part to a package.

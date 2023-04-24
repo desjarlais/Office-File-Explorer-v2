@@ -50,6 +50,11 @@ namespace Office_File_Explorer.WinForms
                 xlModCmd = AppUtilities.ExcelModifyCmds.DelLink;
             }
 
+            if (rdoConvertShareLinkToCanonicalLink.Checked)
+            {
+                xlModCmd = AppUtilities.ExcelModifyCmds.ConvertShareLinkToCanonicalLink;
+            }
+
             Close();
         }
 
