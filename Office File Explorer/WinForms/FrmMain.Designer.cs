@@ -154,7 +154,7 @@ namespace Office_File_Explorer
             // 
             loginToolStripMenuItem.Image = Properties.Resources.Login_16x;
             loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            loginToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             loginToolStripMenuItem.Text = "Login";
             loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
             // 
@@ -246,6 +246,7 @@ namespace Office_File_Explorer
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Document Information";
+            groupBox1.Enter += groupBox1_Enter;
             // 
             // BtnRemoveCustomXmlParts
             // 

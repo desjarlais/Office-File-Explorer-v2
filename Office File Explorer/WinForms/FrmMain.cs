@@ -23,8 +23,6 @@ using System.Windows.Forms;
 using System.Xml;
 
 using File = System.IO.File;
-using CSOM = Microsoft.SharePoint.Client;
-using System.Net;
 
 namespace Office_File_Explorer
 {
@@ -149,19 +147,26 @@ namespace Office_File_Explorer
 
         public void OpenEncryptedOfficeDocument(string fileName, bool enableCommit)
         {
-            fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);
-            FrmEncryptedFile cForm = new FrmEncryptedFile(fs, true)
+            try
             {
-                Owner = this
-            };
+                fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);
+                FrmEncryptedFile cForm = new FrmEncryptedFile(fs, true)
+                {
+                    Owner = this
+                };
 
-            if (cForm.IsDisposed)
-            {
-                return;
+                if (cForm.IsDisposed)
+                {
+                    return;
+                }
+                else
+                {
+                    cForm.ShowDialog();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                cForm.ShowDialog();
+                LogInformation(LogInfoType.LogException, "OpenEncryptedOfficeDocument Error", ex.Message);
             }
         }
 
@@ -2091,6 +2096,11 @@ namespace Office_File_Explorer
         private void loginToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // prompt for creds and store user info
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
 
         }
     }

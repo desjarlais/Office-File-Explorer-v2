@@ -297,6 +297,7 @@ namespace Office_File_Explorer.WinForms
             try
             {
                 string DlgFilterText;
+                bool isNonImageEmfWmf = false;
 
                 // set dialog filter text
                 if (Clipboard.ContainsImage())
@@ -305,7 +306,20 @@ namespace Office_File_Explorer.WinForms
                 }
                 else
                 {
-                    DlgFilterText = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                    if (lbClipFormats.Text == "MetaFilePict")
+                    {
+                        DlgFilterText = "MetaFilePict (*.wmf)|*.wmf";
+                        isNonImageEmfWmf = true;
+                    }
+                    else if (lbClipFormats.Text == "EnhancedMetafile")
+                    {
+                        DlgFilterText = "Enhanced Metafile Format (*.emf)|*.emf";
+                        isNonImageEmfWmf = true;
+                    }
+                    else
+                    {
+                        DlgFilterText = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                    }
                 }
 
                 // launch the dialog
@@ -323,6 +337,28 @@ namespace Office_File_Explorer.WinForms
                 {
                     // Get file name.
                     string name = fDialog.FileName;
+
+                    // for clipboard objects that are not an image, but an image format is selected
+                    if (isNonImageEmfWmf)
+                    {
+                        Metafile emf = null;
+                        if (Win32.OpenClipboard(IntPtr.Zero))
+                        {
+                            if (Win32.IsClipboardFormatAvailable(Win32.CF_ENHMETAFILE))
+                            {
+                                var ptr = Win32.GetClipboardData(Win32.CF_ENHMETAFILE);
+                                if (!ptr.Equals(IntPtr.Zero))
+                                {
+                                    emf = new Metafile(ptr, true);
+                                }
+                            }
+
+                            Win32.CloseClipboard();
+                        }
+                        emf.Save(name);
+                        emf.Dispose();
+                        return;
+                    }
 
                     // save out image based on file extension
                     if (name.EndsWith(".jpg") || name.EndsWith(".jpeg"))

@@ -18,6 +18,9 @@ namespace Office_File_Explorer.Helpers
         internal const int WM_SIZECLIPBOARD = 0x030B;
         internal const int WM_VSCROLLCLIPBOARD = 0x030A;
 
+        internal const int CF_METAFILEPICT = 3;
+        internal const int CF_ENHMETAFILE = 14;
+
         // PInvoke declarations
         [DllImport(Strings.user32)]
         internal static extern IntPtr SetClipboardViewer(IntPtr hWndNewViewer);
@@ -38,7 +41,7 @@ namespace Office_File_Explorer.Helpers
         internal static extern bool CloseClipboard();
 
         [DllImport(Strings.user32)]
-        internal static extern int IsClipboardFormatAvailable(int wFormat);
+        internal static extern bool IsClipboardFormatAvailable(int wFormat);
 
         [DllImport(Strings.user32, SetLastError = true)]
         internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
