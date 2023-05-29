@@ -31,7 +31,6 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmExcelModify));
             groupBox1 = new System.Windows.Forms.GroupBox();
-            rdoConvertShareLinkToCanonicalLink = new System.Windows.Forms.RadioButton();
             rdoDelLink = new System.Windows.Forms.RadioButton();
             rdoDeleteSheet = new System.Windows.Forms.RadioButton();
             rdoConvertStrict = new System.Windows.Forms.RadioButton();
@@ -46,7 +45,6 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(rdoConvertShareLinkToCanonicalLink);
             groupBox1.Controls.Add(rdoDelLink);
             groupBox1.Controls.Add(rdoDeleteSheet);
             groupBox1.Controls.Add(rdoConvertStrict);
@@ -60,17 +58,6 @@ namespace Office_File_Explorer.WinForms
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Select Content To Modify";
-            // 
-            // rdoConvertShareLinkToCanonicalLink
-            // 
-            rdoConvertShareLinkToCanonicalLink.AutoSize = true;
-            rdoConvertShareLinkToCanonicalLink.Location = new System.Drawing.Point(6, 197);
-            rdoConvertShareLinkToCanonicalLink.Name = "rdoConvertShareLinkToCanonicalLink";
-            rdoConvertShareLinkToCanonicalLink.Size = new System.Drawing.Size(255, 19);
-            rdoConvertShareLinkToCanonicalLink.TabIndex = 7;
-            rdoConvertShareLinkToCanonicalLink.TabStop = true;
-            rdoConvertShareLinkToCanonicalLink.Text = "Convert SharePoint Share Link To Canonical";
-            rdoConvertShareLinkToCanonicalLink.UseVisualStyleBackColor = true;
             // 
             // rdoDelLink
             // 
@@ -203,6 +190,5 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.RadioButton rdoDeleteSheet;
         private System.Windows.Forms.RadioButton rdoDelLink;
-        private System.Windows.Forms.RadioButton rdoConvertShareLinkToCanonicalLink;
     }
 }

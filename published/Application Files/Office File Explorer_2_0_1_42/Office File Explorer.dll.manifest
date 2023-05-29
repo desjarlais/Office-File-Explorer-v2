@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="Office File Explorer.exe" version="2.0.1.42" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
+  <description asmv2:iconFile="Resources\Office2013.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="Launcher" version="8.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="Launcher.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Launcher.exe" size="16384">
+      <assemblyIdentity name="Launcher" version="8.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>6PLcBFdDu21mwASZMDaJ5IrZP1HtHyt1ymTyl4pWRXw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="DocumentFormat.OpenXml.dll" size="6108592">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>JjiBI17BpHztipV39dQdXAjhHo6Ic0xRjijJJuBQLLo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.Office.Client.Policy.dll" size="101824">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>CK+cdOmbl+24BsdK61YLTPT9ivBeB5BBxhflDVf2Yxk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.Office.Client.TranslationServices.dll" size="41976">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>vGApwEOqfbF1HDW75h6BNfGFIteNUCnYu6/n/tAzwEo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.Office.SharePoint.Tools.dll" size="108024">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>/5iT22vYMKvZzCz2JtnEkW4QWLsxZZje6jID/AClPT0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.Online.SharePoint.Client.Tenant.dll" size="408096">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>JGzKm6PcQnDuZpc2yStaTe+gurpBBLp6OXBdjfN9fm8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.ProjectServer.Client.dll" size="420416">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>i1mVtUEqDsw5Ssd3TUxOAfuzmh9BFVyjOvVelQueMSY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.dll" size="1237432">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>zVrHWDhwpuaFiwE0dlMkfLnyKoKxDWbaC9oehixGlTc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.DocumentManagement.dll" size="51160">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>j3et0lRyE2QcR43Cfu4d+Oi5NX/hAL32rvUKCT8ZRXk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.Publishing.dll" size="150032">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>UNb9d368X3oWwO0+4CEbezNDthgyu2jBRzt+iuRWtpk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.Runtime.dll" size="201216">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>A/Fd4ZzwEAEAZIJ8UKjYBaUGZOoFIvYfKpGoaa3wzUU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.Search.Applications.dll" size="30128">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>WyvHUQ1T9gYietRpw3SOGbY8ZKz8OSYQ6c2GxF5EUiA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.Search.dll" size="140272">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>COtiCI1vOqpDUW5yyA5WjAIZS8z93dzv9aNhXcPyNRI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.Taxonomy.dll" size="92160">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>pJnkT+qBjIN8V2Fy0Yz0I0qhW8YzjLK8M3VKta6NTec=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.UserProfiles.dll" size="182200">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>APqTKtlmugKIgLPfOxE3Kn6OscFztyNCQcvqJI0AP2M=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.SharePoint.Client.WorkflowServices.dll" size="54264">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>zpuLjGNv5yc0c4PMm7NKY9utnzmIr34crBCecr9F98M=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Office File Explorer.deps.json" size="4651">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>whZf81vEPabK/028dbweoPWu4WmYkv900nGzKxp9UpI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Office File Explorer.dll" size="3245056">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>69f3ZtK54yID1t3q9fyVYKsOY6dF1wdtNFKLXvSj4bo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Office File Explorer.dll.config" size="2665">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Ee177MCQxTAac89XdeqJ4esVhHdkhG33LjtxxSnuzW8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Office File Explorer.exe" size="313344">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>nq2VFBgsaV35uhJn8zv+uyPekbaf4CKJU89TdsMsEIE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Office File Explorer.runtimeconfig.json" size="372">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>HsoPDHAHCqg7tgnkt0mybctECXhDJgMnJjlHIiJKCYo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Resources\Office2013.ico" size="164052">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>EX9oD8W9d/3DJ0WC+JACOJlpoEpl/p9H/lXsc2rtKtY=</dsig:DigestValue>
+    </hash>
+  </file>
+</asmv1:assembly>

@@ -1299,18 +1299,6 @@ namespace Office_File_Explorer
                             }
                         }
 
-                        if (f.xlModCmd == AppUtilities.ExcelModifyCmds.ConvertShareLinkToCanonicalLink)
-                        {
-                            if (Excel.ConvertShareLinkToCanonicalLink(lblFilePath.Text) == true)
-                            {
-                                LogInformation(LogInfoType.ClearAndAdd, "Comments Deleted", string.Empty);
-                            }
-                            else
-                            {
-                                LogInformation(LogInfoType.ClearAndAdd, "Unable to delete comments", string.Empty);
-                            }
-                        }
-
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.ConvertStrictToXlsx)
                         {
                             try

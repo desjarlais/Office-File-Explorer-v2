@@ -12,18 +12,6 @@ namespace Office_File_Explorer.Helpers
     {
         public static bool fSuccess;
 
-        public static bool ConvertShareLinkToCanonicalLink(string path)
-        {
-            fSuccess = false;
-
-            foreach (string hlink in GetHyperlinks(path))
-            {
-
-            }
-
-            return fSuccess;
-        }
-
         public static bool RemoveComments(string path)
         {
             fSuccess = false;

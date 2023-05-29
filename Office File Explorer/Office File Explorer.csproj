@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
-    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.23508.12000" />
+    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.23710.12000" />
   </ItemGroup>
 
   <ItemGroup>

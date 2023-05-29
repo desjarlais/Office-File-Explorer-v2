@@ -39,8 +39,6 @@ namespace Office_File_Explorer
             settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            accountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             batchFileProcessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             clipboardViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,19 +71,15 @@ namespace Office_File_Explorer
             copySelectedLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             copyAllLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             imageList1 = new System.Windows.Forms.ImageList(components);
-            mainAppStatusStrip = new System.Windows.Forms.StatusStrip();
-            toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            loggedInUserToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             mnuMainMenu.SuspendLayout();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
-            mainAppStatusStrip.SuspendLayout();
             SuspendLayout();
             // 
             // mnuMainMenu
             // 
-            mnuMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItem, accountToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
+            mnuMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
             mnuMainMenu.Location = new System.Drawing.Point(0, 0);
             mnuMainMenu.Name = "mnuMainMenu";
             mnuMainMenu.Size = new System.Drawing.Size(924, 24);
@@ -142,21 +136,6 @@ namespace Office_File_Explorer
             exitToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             exitToolStripMenuItem.Text = "E&xit";
             exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
-            // 
-            // accountToolStripMenuItem
-            // 
-            accountToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { loginToolStripMenuItem });
-            accountToolStripMenuItem.Name = "accountToolStripMenuItem";
-            accountToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
-            accountToolStripMenuItem.Text = "Account";
-            // 
-            // loginToolStripMenuItem
-            // 
-            loginToolStripMenuItem.Image = Properties.Resources.Login_16x;
-            loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
-            loginToolStripMenuItem.Text = "Login";
-            loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
             // 
             // toolsToolStripMenuItem
             // 
@@ -466,33 +445,11 @@ namespace Office_File_Explorer
             imageList1.Images.SetKeyName(2, "word.png");
             imageList1.Images.SetKeyName(3, "XMLFile_789_32.ico");
             // 
-            // mainAppStatusStrip
-            // 
-            mainAppStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusLabel1, loggedInUserToolStripStatusLabel });
-            mainAppStatusStrip.Location = new System.Drawing.Point(0, 563);
-            mainAppStatusStrip.Name = "mainAppStatusStrip";
-            mainAppStatusStrip.Size = new System.Drawing.Size(924, 22);
-            mainAppStatusStrip.TabIndex = 4;
-            mainAppStatusStrip.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new System.Drawing.Size(202, 17);
-            toolStripStatusLabel1.Text = "User Login Information: Username = ";
-            // 
-            // loggedInUserToolStripStatusLabel
-            // 
-            loggedInUserToolStripStatusLabel.Name = "loggedInUserToolStripStatusLabel";
-            loggedInUserToolStripStatusLabel.Size = new System.Drawing.Size(34, 17);
-            loggedInUserToolStripStatusLabel.Text = "none";
-            // 
             // FrmMain
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(924, 585);
-            Controls.Add(mainAppStatusStrip);
+            ClientSize = new System.Drawing.Size(924, 563);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(mnuMainMenu);
@@ -509,8 +466,6 @@ namespace Office_File_Explorer
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             contextMenuStrip1.ResumeLayout(false);
-            mainAppStatusStrip.ResumeLayout(false);
-            mainAppStatusStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -557,11 +512,6 @@ namespace Office_File_Explorer
         private System.Windows.Forms.Button BtnRemoveCustomFileProps;
         private System.Windows.Forms.Button BtnRemoveCustomXmlParts;
         private System.Windows.Forms.ToolStripMenuItem structuredStorageViewerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem accountToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loginToolStripMenuItem;
-        private System.Windows.Forms.StatusStrip mainAppStatusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel loggedInUserToolStripStatusLabel;
     }
 }
 

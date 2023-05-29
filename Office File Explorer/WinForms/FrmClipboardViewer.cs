@@ -73,8 +73,8 @@ namespace Office_File_Explorer.WinForms
                 {
                     Cursor = Cursors.WaitCursor;
 
-                    // check for image formats
-                    if (Format == "EnhancedMetafile")
+                    // check for metafile image formats
+                    if (Format == "EnhancedMetafile" || Format == "MetaFilePict")
                     {
                         Image imgFormat = GetEnhMetaImageFromClipboard();
                         pbClipData.Image = imgFormat;
@@ -412,7 +412,7 @@ namespace Office_File_Explorer.WinForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Clipboard Save As File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
