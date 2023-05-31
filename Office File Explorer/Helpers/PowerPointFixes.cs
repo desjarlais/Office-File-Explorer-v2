@@ -8,6 +8,7 @@ using NonVisualDrawingProperties = DocumentFormat.OpenXml.Presentation.NonVisual
 using TextBody = DocumentFormat.OpenXml.Presentation.TextBody;
 using System.Linq;
 using System.Windows.Forms;
+using System;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -315,6 +316,56 @@ namespace Office_File_Explorer.Helpers
             }
 
             return nsh;
+        }
+
+        /// <summary>
+        /// some files will have missing / orphaned custData tag rels
+        /// this is a corrupt file scenario and this fix will remove those custData tags
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixMissingRelIds(string filePath)
+        {
+            bool isFixed = false;
+
+            using (PresentationDocument document = PresentationDocument.Open(filePath, true))
+            {
+                // first get the list of presentation parts
+                IEnumerable<IdPartPair> ipp = document.PresentationPart.Parts.OfType<IdPartPair>().ToList();
+                bool idFound = false;
+
+                try
+                {
+                CdlStart:
+                    foreach (CustomerData cd in document.PresentationPart.Presentation.CustomerDataList)
+                    {
+                        // check each custData tag id against the presentation rels
+                        // if we don't find a rel id, then the custData id is missing and we need to delete it
+                        idFound = false;
+                        foreach (IdPartPair ippTemp in ipp)
+                        {
+                            if (ippTemp.RelationshipId == cd.Id)
+                            {
+                                idFound = true;
+                            }
+                        }
+
+                        if (!idFound)
+                        {
+                            cd.Remove();
+                            isFixed = true;
+                            document.Save();
+                            goto CdlStart;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    return isFixed;
+                }
+            }
+
+            return isFixed;
         }
 
         public static bool ResetNotesPageSize(string filePath)

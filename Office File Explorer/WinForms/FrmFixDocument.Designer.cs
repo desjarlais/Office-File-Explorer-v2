@@ -53,6 +53,7 @@ namespace Office_File_Explorer.WinForms
             rdoFixStrictX = new System.Windows.Forms.RadioButton();
             BtnOk = new System.Windows.Forms.Button();
             BtnCancel = new System.Windows.Forms.Button();
+            rdoFixDataTags = new System.Windows.Forms.RadioButton();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -251,12 +252,13 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(rdoFixDataTags);
             groupBox2.Controls.Add(rdoResetBulletMargins);
             groupBox2.Controls.Add(rdoFixNotesPageSizeCustomP);
             groupBox2.Controls.Add(rdoFixNotesPageSizeP);
             groupBox2.Location = new System.Drawing.Point(565, 70);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new System.Drawing.Size(201, 108);
+            groupBox2.Size = new System.Drawing.Size(201, 120);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "PowerPoint Document";
@@ -321,7 +323,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            BtnOk.Location = new System.Drawing.Point(593, 184);
+            BtnOk.Location = new System.Drawing.Point(594, 206);
             BtnOk.Name = "BtnOk";
             BtnOk.Size = new System.Drawing.Size(75, 23);
             BtnOk.TabIndex = 1;
@@ -331,7 +333,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            BtnCancel.Location = new System.Drawing.Point(674, 184);
+            BtnCancel.Location = new System.Drawing.Point(675, 206);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new System.Drawing.Size(90, 23);
             BtnCancel.TabIndex = 2;
@@ -339,11 +341,22 @@ namespace Office_File_Explorer.WinForms
             BtnCancel.UseVisualStyleBackColor = true;
             BtnCancel.Click += BtnCancel_Click;
             // 
+            // rdoFixDataTags
+            // 
+            rdoFixDataTags.AutoSize = true;
+            rdoFixDataTags.Location = new System.Drawing.Point(12, 95);
+            rdoFixDataTags.Name = "rdoFixDataTags";
+            rdoFixDataTags.Size = new System.Drawing.Size(115, 19);
+            rdoFixDataTags.TabIndex = 3;
+            rdoFixDataTags.TabStop = true;
+            rdoFixDataTags.Text = "Fix custData Tags";
+            rdoFixDataTags.UseVisualStyleBackColor = true;
+            // 
             // FrmFixDocument
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(777, 214);
+            ClientSize = new System.Drawing.Size(777, 258);
             Controls.Add(BtnCancel);
             Controls.Add(BtnOk);
             Controls.Add(groupBox3);
@@ -389,5 +402,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoFixListStyles;
         private System.Windows.Forms.RadioButton rdoFixTableCellTags;
         private System.Windows.Forms.RadioButton rdoResetBulletMargins;
+        private System.Windows.Forms.RadioButton rdoFixDataTags;
     }
 }

@@ -51,6 +51,7 @@ namespace Office_File_Explorer.WinForms
                 rdoFixNotesPageSizeCustomP.Enabled = true;
                 rdoFixNotesPageSizeP.Enabled = true;
                 rdoResetBulletMargins.Enabled = true;
+                rdoFixDataTags.Enabled = true;
             }
         }
 
@@ -227,7 +228,7 @@ namespace Office_File_Explorer.WinForms
                 }
             }
 
-            if (rdoResetBulletMargins.Checked || tryAllFixes == true)
+            if (rdoResetBulletMargins.Checked)
             {
                 SetCorruptionChecked("Bullet Margins");
                 using (PresentationDocument document = PresentationDocument.Open(filePath, true))
@@ -236,6 +237,39 @@ namespace Office_File_Explorer.WinForms
                     isFileFixed = true;
                     featureFixed.Add("Bullet Margins");
                     FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + Strings.pptResetBulletMargins);
+                }
+            }
+
+            if (rdoFixDataTags.Checked)
+            {
+                SetCorruptionChecked("custData Tags");
+                if (PowerPointFixes.FixMissingRelIds(filePath))
+                {
+                    isFileFixed = true;
+                    featureFixed.Add("custData Tags");
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + "custData Tags");
+                }
+            }
+
+            if (rdoFixNotesPageSizeP.Checked)
+            {
+                SetCorruptionChecked("Reset Notes Page Size");
+                if (PowerPointFixes.ResetNotesPageSize(filePath))
+                {
+                    isFileFixed = true;
+                    featureFixed.Add("Reset Notes Page Size");
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + "Reset Notes Page Size");
+                }
+            }
+
+            if (rdoFixNotesPageSizeCustomP.Checked)
+            {
+                SetCorruptionChecked("Reset Notes Page Size");
+                if (PowerPointFixes.CustomResetNotesPageSize(filePath))
+                {
+                    isFileFixed = true;
+                    featureFixed.Add("Reset Notes Page Size");
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + "Reset Notes Page Size");
                 }
             }
 
