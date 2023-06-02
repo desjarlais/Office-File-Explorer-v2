@@ -57,7 +57,7 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            corruptionChecked = "Cancel";
+            corruptionChecked = Strings.wCancel;
             Close();
         }
 
@@ -114,7 +114,7 @@ namespace Office_File_Explorer.WinForms
 
                 if (isFileFixed)
                 {
-                    featureFixed.Add("Bookmarks Fixed");
+                    featureFixed.Add(Strings.wBookmarks + Strings.wFixedWithSpace);
                 }
             }
 
@@ -124,7 +124,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixRevisions(filePath) == true || WordFixes.FixDeleteRevision(filePath) == true)
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Revisions Fixed");
+                    featureFixed.Add(Strings.wRevisions + Strings.wFixedWithSpace);
                 }
             }
 
@@ -134,7 +134,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixEndnotes(filePath) == true)
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Endnotes Fixed");
+                    featureFixed.Add(Strings.wEndnotes + Strings.wFixedWithSpace);
                 }
             }
 
@@ -144,7 +144,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixListTemplates(filePath) == true)
                 {
                     isFileFixed = true;
-                    featureFixed.Add("List Templates Fixed");
+                    featureFixed.Add(Strings.wListTemplates + Strings.wFixedWithSpace);
                 }
             }
 
@@ -154,7 +154,7 @@ namespace Office_File_Explorer.WinForms
                 {
                     SetCorruptionChecked(Strings.wTableProps);
                     isFileFixed = true;
-                    featureFixed.Add("Table Corruption Fixed");
+                    featureFixed.Add(Strings.wTableProps + Strings.wFixedWithSpace);
                 }
             }
 
@@ -164,7 +164,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixMissingCommentRefs(filePath) == true || WordFixes.FixShapeInComment(filePath) == true)
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Comments Fixed");
+                    featureFixed.Add(Strings.wComments + Strings.wFixedWithSpace);
                 }
             }
 
@@ -184,7 +184,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixHyperlinks(filePath) == true)
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Hyperlinks Fixed");
+                    featureFixed.Add(Strings.wHyperlinks + Strings.wFixedWithSpace);
                 }
             }
 
@@ -194,7 +194,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixContentControls(filePath) == true)
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Content Controls Fixed");
+                    featureFixed.Add(Strings.wContentControls + Strings.wFixedWithSpace);
                 }
             }
 
@@ -204,7 +204,7 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixMathAccents(filePath) == true)
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Math Accents Fixed");
+                    featureFixed.Add(Strings.wMathAccents + Strings.wFixedWithSpace);
                 }
             }
 
@@ -224,52 +224,52 @@ namespace Office_File_Explorer.WinForms
                 if (WordFixes.FixCorruptTableCellTags(filePath) == true || WordFixes.FixGridSpan(filePath) == true)
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Table Cell Corruption Fixed");
+                    featureFixed.Add(Strings.wTableCell + Strings.wFixedWithSpace);
                 }
             }
 
             if (rdoResetBulletMargins.Checked)
             {
-                SetCorruptionChecked("Bullet Margins");
+                SetCorruptionChecked(Strings.pptResetBulletMargins);
                 using (PresentationDocument document = PresentationDocument.Open(filePath, true))
                 {
                     PowerPointFixes.ResetBulletMargins(document);
                     isFileFixed = true;
-                    featureFixed.Add("Bullet Margins");
+                    featureFixed.Add(Strings.pptResetBulletMargins);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + Strings.pptResetBulletMargins);
                 }
             }
 
             if (rdoFixDataTags.Checked)
             {
-                SetCorruptionChecked("custData Tags");
+                SetCorruptionChecked(Strings.pptCustDataTags);
                 if (PowerPointFixes.FixMissingRelIds(filePath))
                 {
                     isFileFixed = true;
-                    featureFixed.Add("custData Tags");
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + "custData Tags");
+                    featureFixed.Add(Strings.pptCustDataTags);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + Strings.pptCustDataTags);
                 }
             }
 
             if (rdoFixNotesPageSizeP.Checked)
             {
-                SetCorruptionChecked("Reset Notes Page Size");
+                SetCorruptionChecked(Strings.pptNotesSizeReset);
                 if (PowerPointFixes.ResetNotesPageSize(filePath))
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Reset Notes Page Size");
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + "Reset Notes Page Size");
+                    featureFixed.Add(Strings.pptNotesSizeReset);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + Strings.pptNotesSizeReset);
                 }
             }
 
             if (rdoFixNotesPageSizeCustomP.Checked)
             {
-                SetCorruptionChecked("Reset Notes Page Size");
+                SetCorruptionChecked(Strings.pptNotesSizeReset);
                 if (PowerPointFixes.CustomResetNotesPageSize(filePath))
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Reset Notes Page Size");
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + "Reset Notes Page Size");
+                    featureFixed.Add(Strings.pptNotesSizeReset);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + Strings.pptNotesSizeReset);
                 }
             }
 

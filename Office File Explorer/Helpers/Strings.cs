@@ -32,6 +32,7 @@ namespace Office_File_Explorer.Helpers
         public const string wColonBuffer = " : ";
         public const string wErrorText = "Error: ";
         public const string wFixedFileParentheses = "(Fixed)";
+        public const string wFixedWithSpace = " Fixed";
         public const string wEnd = "end";
         public const string wBegin = "begin";
         public const string wColon = ": ";
@@ -132,6 +133,7 @@ namespace Office_File_Explorer.Helpers
         public const string duplicateId = "OOXML part Id <1> already exists.";
         public const string pptNotesSizeReset = "Notes Page Size Reset.";
         public const string pptResetBulletMargins = "Bullet Margins Reset";
+        public const string pptCustDataTags = "Removed Missing custData Tags";
         public const string fileDoesNotExist = "** File does not exist **";
         public const string themeFileAdded = "Theme File Added.";
         public const string unableToDownloadUpdate = "Unable to download update.";

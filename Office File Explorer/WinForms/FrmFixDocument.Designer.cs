@@ -46,6 +46,7 @@ namespace Office_File_Explorer.WinForms
             rdoFixRevisionsW = new System.Windows.Forms.RadioButton();
             rdoFixBookmarksW = new System.Windows.Forms.RadioButton();
             groupBox2 = new System.Windows.Forms.GroupBox();
+            rdoFixDataTags = new System.Windows.Forms.RadioButton();
             rdoResetBulletMargins = new System.Windows.Forms.RadioButton();
             rdoFixNotesPageSizeCustomP = new System.Windows.Forms.RadioButton();
             rdoFixNotesPageSizeP = new System.Windows.Forms.RadioButton();
@@ -53,7 +54,6 @@ namespace Office_File_Explorer.WinForms
             rdoFixStrictX = new System.Windows.Forms.RadioButton();
             BtnOk = new System.Windows.Forms.Button();
             BtnCancel = new System.Windows.Forms.Button();
-            rdoFixDataTags = new System.Windows.Forms.RadioButton();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -263,6 +263,17 @@ namespace Office_File_Explorer.WinForms
             groupBox2.TabStop = false;
             groupBox2.Text = "PowerPoint Document";
             // 
+            // rdoFixDataTags
+            // 
+            rdoFixDataTags.AutoSize = true;
+            rdoFixDataTags.Location = new System.Drawing.Point(12, 95);
+            rdoFixDataTags.Name = "rdoFixDataTags";
+            rdoFixDataTags.Size = new System.Drawing.Size(159, 19);
+            rdoFixDataTags.TabIndex = 3;
+            rdoFixDataTags.TabStop = true;
+            rdoFixDataTags.Text = "Fix Missing custData Tags";
+            rdoFixDataTags.UseVisualStyleBackColor = true;
+            // 
             // rdoResetBulletMargins
             // 
             rdoResetBulletMargins.AutoSize = true;
@@ -341,22 +352,11 @@ namespace Office_File_Explorer.WinForms
             BtnCancel.UseVisualStyleBackColor = true;
             BtnCancel.Click += BtnCancel_Click;
             // 
-            // rdoFixDataTags
-            // 
-            rdoFixDataTags.AutoSize = true;
-            rdoFixDataTags.Location = new System.Drawing.Point(12, 95);
-            rdoFixDataTags.Name = "rdoFixDataTags";
-            rdoFixDataTags.Size = new System.Drawing.Size(115, 19);
-            rdoFixDataTags.TabIndex = 3;
-            rdoFixDataTags.TabStop = true;
-            rdoFixDataTags.Text = "Fix custData Tags";
-            rdoFixDataTags.UseVisualStyleBackColor = true;
-            // 
             // FrmFixDocument
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(777, 258);
+            ClientSize = new System.Drawing.Size(777, 238);
             Controls.Add(BtnCancel);
             Controls.Add(BtnOk);
             Controls.Add(groupBox3);
