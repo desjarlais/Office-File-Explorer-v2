@@ -31,16 +31,14 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             groupBox1 = new System.Windows.Forms.GroupBox();
-            rdoFixTableCellTags = new System.Windows.Forms.RadioButton();
             rdoFixListStyles = new System.Windows.Forms.RadioButton();
             rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
             rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
             rdoTryAllFixesW = new System.Windows.Forms.RadioButton();
             rdoFixContentControlsW = new System.Windows.Forms.RadioButton();
-            rdoFixCommentHyperlinksW = new System.Windows.Forms.RadioButton();
             rdoFixHyperlinksW = new System.Windows.Forms.RadioButton();
             rdoFixCommentsW = new System.Windows.Forms.RadioButton();
-            rdoFixTablePropsW = new System.Windows.Forms.RadioButton();
+            rdoFixCorruptTables = new System.Windows.Forms.RadioButton();
             rdoFixListTemplatesW = new System.Windows.Forms.RadioButton();
             rdoFixEndnotesW = new System.Windows.Forms.RadioButton();
             rdoFixRevisionsW = new System.Windows.Forms.RadioButton();
@@ -61,38 +59,24 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(rdoFixTableCellTags);
             groupBox1.Controls.Add(rdoFixListStyles);
             groupBox1.Controls.Add(rdoFixDataDescriptorW);
             groupBox1.Controls.Add(rdoFixMathAccentsW);
             groupBox1.Controls.Add(rdoTryAllFixesW);
             groupBox1.Controls.Add(rdoFixContentControlsW);
-            groupBox1.Controls.Add(rdoFixCommentHyperlinksW);
             groupBox1.Controls.Add(rdoFixHyperlinksW);
             groupBox1.Controls.Add(rdoFixCommentsW);
-            groupBox1.Controls.Add(rdoFixTablePropsW);
+            groupBox1.Controls.Add(rdoFixCorruptTables);
             groupBox1.Controls.Add(rdoFixListTemplatesW);
             groupBox1.Controls.Add(rdoFixEndnotesW);
             groupBox1.Controls.Add(rdoFixRevisionsW);
             groupBox1.Controls.Add(rdoFixBookmarksW);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(547, 178);
+            groupBox1.Size = new System.Drawing.Size(330, 178);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Word Document";
-            // 
-            // rdoFixTableCellTags
-            // 
-            rdoFixTableCellTags.AutoSize = true;
-            rdoFixTableCellTags.Enabled = false;
-            rdoFixTableCellTags.Location = new System.Drawing.Point(193, 147);
-            rdoFixTableCellTags.Name = "rdoFixTableCellTags";
-            rdoFixTableCellTags.Size = new System.Drawing.Size(142, 19);
-            rdoFixTableCellTags.TabIndex = 3;
-            rdoFixTableCellTags.TabStop = true;
-            rdoFixTableCellTags.Text = "Fix Corrupt Table Cells";
-            rdoFixTableCellTags.UseVisualStyleBackColor = true;
             // 
             // rdoFixListStyles
             // 
@@ -110,7 +94,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoFixDataDescriptorW.AutoSize = true;
             rdoFixDataDescriptorW.Enabled = false;
-            rdoFixDataDescriptorW.Location = new System.Drawing.Point(403, 22);
+            rdoFixDataDescriptorW.Location = new System.Drawing.Point(143, 122);
             rdoFixDataDescriptorW.Name = "rdoFixDataDescriptorW";
             rdoFixDataDescriptorW.Size = new System.Drawing.Size(131, 19);
             rdoFixDataDescriptorW.TabIndex = 3;
@@ -122,7 +106,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoFixMathAccentsW.AutoSize = true;
             rdoFixMathAccentsW.Enabled = false;
-            rdoFixMathAccentsW.Location = new System.Drawing.Point(193, 72);
+            rdoFixMathAccentsW.Location = new System.Drawing.Point(143, 47);
             rdoFixMathAccentsW.Name = "rdoFixMathAccentsW";
             rdoFixMathAccentsW.Size = new System.Drawing.Size(170, 19);
             rdoFixMathAccentsW.TabIndex = 3;
@@ -134,7 +118,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoTryAllFixesW.AutoSize = true;
             rdoTryAllFixesW.Enabled = false;
-            rdoTryAllFixesW.Location = new System.Drawing.Point(403, 47);
+            rdoTryAllFixesW.Location = new System.Drawing.Point(143, 147);
             rdoTryAllFixesW.Name = "rdoTryAllFixesW";
             rdoTryAllFixesW.Size = new System.Drawing.Size(86, 19);
             rdoTryAllFixesW.TabIndex = 9;
@@ -146,7 +130,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoFixContentControlsW.AutoSize = true;
             rdoFixContentControlsW.Enabled = false;
-            rdoFixContentControlsW.Location = new System.Drawing.Point(193, 47);
+            rdoFixContentControlsW.Location = new System.Drawing.Point(143, 22);
             rdoFixContentControlsW.Name = "rdoFixContentControlsW";
             rdoFixContentControlsW.Size = new System.Drawing.Size(134, 19);
             rdoFixContentControlsW.TabIndex = 8;
@@ -154,23 +138,11 @@ namespace Office_File_Explorer.WinForms
             rdoFixContentControlsW.Text = "Fix Content Controls";
             rdoFixContentControlsW.UseVisualStyleBackColor = true;
             // 
-            // rdoFixCommentHyperlinksW
-            // 
-            rdoFixCommentHyperlinksW.AutoSize = true;
-            rdoFixCommentHyperlinksW.Enabled = false;
-            rdoFixCommentHyperlinksW.Location = new System.Drawing.Point(193, 22);
-            rdoFixCommentHyperlinksW.Name = "rdoFixCommentHyperlinksW";
-            rdoFixCommentHyperlinksW.Size = new System.Drawing.Size(156, 19);
-            rdoFixCommentHyperlinksW.TabIndex = 7;
-            rdoFixCommentHyperlinksW.TabStop = true;
-            rdoFixCommentHyperlinksW.Text = "Fix Comment Hyperlinks";
-            rdoFixCommentHyperlinksW.UseVisualStyleBackColor = true;
-            // 
             // rdoFixHyperlinksW
             // 
             rdoFixHyperlinksW.AutoSize = true;
             rdoFixHyperlinksW.Enabled = false;
-            rdoFixHyperlinksW.Location = new System.Drawing.Point(193, 122);
+            rdoFixHyperlinksW.Location = new System.Drawing.Point(143, 97);
             rdoFixHyperlinksW.Name = "rdoFixHyperlinksW";
             rdoFixHyperlinksW.Size = new System.Drawing.Size(99, 19);
             rdoFixHyperlinksW.TabIndex = 6;
@@ -190,17 +162,17 @@ namespace Office_File_Explorer.WinForms
             rdoFixCommentsW.Text = "Fix Comments";
             rdoFixCommentsW.UseVisualStyleBackColor = true;
             // 
-            // rdoFixTablePropsW
+            // rdoFixCorruptTables
             // 
-            rdoFixTablePropsW.AutoSize = true;
-            rdoFixTablePropsW.Enabled = false;
-            rdoFixTablePropsW.Location = new System.Drawing.Point(193, 97);
-            rdoFixTablePropsW.Name = "rdoFixTablePropsW";
-            rdoFixTablePropsW.Size = new System.Drawing.Size(119, 19);
-            rdoFixTablePropsW.TabIndex = 4;
-            rdoFixTablePropsW.TabStop = true;
-            rdoFixTablePropsW.Text = "Fix Corrupt Tables";
-            rdoFixTablePropsW.UseVisualStyleBackColor = true;
+            rdoFixCorruptTables.AutoSize = true;
+            rdoFixCorruptTables.Enabled = false;
+            rdoFixCorruptTables.Location = new System.Drawing.Point(143, 72);
+            rdoFixCorruptTables.Name = "rdoFixCorruptTables";
+            rdoFixCorruptTables.Size = new System.Drawing.Size(119, 19);
+            rdoFixCorruptTables.TabIndex = 4;
+            rdoFixCorruptTables.TabStop = true;
+            rdoFixCorruptTables.Text = "Fix Corrupt Tables";
+            rdoFixCorruptTables.UseVisualStyleBackColor = true;
             // 
             // rdoFixListTemplatesW
             // 
@@ -256,7 +228,7 @@ namespace Office_File_Explorer.WinForms
             groupBox2.Controls.Add(rdoResetBulletMargins);
             groupBox2.Controls.Add(rdoFixNotesPageSizeCustomP);
             groupBox2.Controls.Add(rdoFixNotesPageSizeP);
-            groupBox2.Location = new System.Drawing.Point(565, 70);
+            groupBox2.Location = new System.Drawing.Point(348, 70);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new System.Drawing.Size(201, 120);
             groupBox2.TabIndex = 0;
@@ -266,6 +238,7 @@ namespace Office_File_Explorer.WinForms
             // rdoFixDataTags
             // 
             rdoFixDataTags.AutoSize = true;
+            rdoFixDataTags.Enabled = false;
             rdoFixDataTags.Location = new System.Drawing.Point(12, 95);
             rdoFixDataTags.Name = "rdoFixDataTags";
             rdoFixDataTags.Size = new System.Drawing.Size(159, 19);
@@ -313,7 +286,7 @@ namespace Office_File_Explorer.WinForms
             // groupBox3
             // 
             groupBox3.Controls.Add(rdoFixStrictX);
-            groupBox3.Location = new System.Drawing.Point(565, 12);
+            groupBox3.Location = new System.Drawing.Point(348, 12);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new System.Drawing.Size(201, 52);
             groupBox3.TabIndex = 0;
@@ -334,7 +307,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            BtnOk.Location = new System.Drawing.Point(594, 206);
+            BtnOk.Location = new System.Drawing.Point(379, 196);
             BtnOk.Name = "BtnOk";
             BtnOk.Size = new System.Drawing.Size(75, 23);
             BtnOk.TabIndex = 1;
@@ -344,7 +317,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            BtnCancel.Location = new System.Drawing.Point(675, 206);
+            BtnCancel.Location = new System.Drawing.Point(460, 196);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new System.Drawing.Size(90, 23);
             BtnCancel.TabIndex = 2;
@@ -356,7 +329,7 @@ namespace Office_File_Explorer.WinForms
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(777, 238);
+            ClientSize = new System.Drawing.Size(561, 224);
             Controls.Add(BtnCancel);
             Controls.Add(BtnOk);
             Controls.Add(groupBox3);
@@ -380,10 +353,9 @@ namespace Office_File_Explorer.WinForms
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton rdoFixCommentHyperlinksW;
         private System.Windows.Forms.RadioButton rdoFixHyperlinksW;
         private System.Windows.Forms.RadioButton rdoFixCommentsW;
-        private System.Windows.Forms.RadioButton rdoFixTablePropsW;
+        private System.Windows.Forms.RadioButton rdoFixCorruptTables;
         private System.Windows.Forms.RadioButton rdoFixListTemplatesW;
         private System.Windows.Forms.RadioButton rdoFixEndnotesW;
         private System.Windows.Forms.RadioButton rdoFixRevisionsW;
@@ -400,7 +372,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoTryAllFixesW;
         private System.Windows.Forms.RadioButton rdoFixDataDescriptorW;
         private System.Windows.Forms.RadioButton rdoFixListStyles;
-        private System.Windows.Forms.RadioButton rdoFixTableCellTags;
         private System.Windows.Forms.RadioButton rdoResetBulletMargins;
         private System.Windows.Forms.RadioButton rdoFixDataTags;
     }

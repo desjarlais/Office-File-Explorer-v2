@@ -28,18 +28,16 @@ namespace Office_File_Explorer.WinForms
             if (type == Strings.oAppWord)
             {
                 rdoFixBookmarksW.Enabled = true;
-                rdoFixCommentHyperlinksW.Enabled = true;
                 rdoFixEndnotesW.Enabled = true;
                 rdoFixListTemplatesW.Enabled = true;
                 rdoFixCommentsW.Enabled = true;
                 rdoFixRevisionsW.Enabled = true;
                 rdoFixHyperlinksW.Enabled = true;
-                rdoFixTablePropsW.Enabled = true;
+                rdoFixCorruptTables.Enabled = true;
                 rdoFixContentControlsW.Enabled = true;
                 rdoTryAllFixesW.Enabled = true;
                 rdoFixDataDescriptorW.Enabled = true;
                 rdoFixMathAccentsW.Enabled = true;
-                rdoFixTableCellTags.Enabled = true;
                 rdoFixListStyles.Enabled = true;
             }
             else if (type == Strings.oAppExcel)
@@ -148,11 +146,29 @@ namespace Office_File_Explorer.WinForms
                 }
             }
 
-            if (rdoFixTablePropsW.Checked || tryAllFixes == true)
+            if (rdoFixCorruptTables.Checked || tryAllFixes == true)
             {
-                if (WordFixes.FixTableGridProps(filePath) == true || WordFixes.FixTableRowCorruption(filePath) == true)
+                SetCorruptionChecked(Strings.wTableProps);
+                if (WordFixes.FixTableGridProps(filePath) == true)
                 {
-                    SetCorruptionChecked(Strings.wTableProps);
+                    isFileFixed = true;
+                    featureFixed.Add(Strings.wTableProps + Strings.wFixedWithSpace);
+                }
+
+                if (WordFixes.FixTableRowCorruption(filePath) == true)
+                {
+                    isFileFixed = true;
+                    featureFixed.Add(Strings.wTableProps + Strings.wFixedWithSpace);
+                }
+
+                if (WordFixes.FixCorruptTableCellTags(filePath) == true)
+                {
+                    isFileFixed = true;
+                    featureFixed.Add(Strings.wTableCell + Strings.wFixedWithSpace);
+                }
+
+                if (WordFixes.FixGridSpan(filePath) == true)
+                {
                     isFileFixed = true;
                     featureFixed.Add(Strings.wTableProps + Strings.wFixedWithSpace);
                 }
@@ -166,11 +182,7 @@ namespace Office_File_Explorer.WinForms
                     isFileFixed = true;
                     featureFixed.Add(Strings.wComments + Strings.wFixedWithSpace);
                 }
-            }
 
-            if (rdoFixCommentHyperlinksW.Checked || tryAllFixes == true)
-            {
-                SetCorruptionChecked(Strings.wFieldCodes);
                 if (WordFixes.FixCommentFieldCodes(filePath) == true)
                 {
                     isFileFixed = true;
@@ -215,16 +227,6 @@ namespace Office_File_Explorer.WinForms
                 {
                     isFileFixed = true;
                     featureFixed.Add("Corrupt Zip Item Fixed");
-                }
-            }
-
-            if (rdoFixTableCellTags.Checked || tryAllFixes == true)
-            {
-                SetCorruptionChecked(Strings.wTableCell);
-                if (WordFixes.FixCorruptTableCellTags(filePath) == true || WordFixes.FixGridSpan(filePath) == true)
-                {
-                    isFileFixed = true;
-                    featureFixed.Add(Strings.wTableCell + Strings.wFixedWithSpace);
                 }
             }
 

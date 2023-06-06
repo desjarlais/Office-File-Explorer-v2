@@ -13,9 +13,6 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
-using System.IO.Compression;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -25,7 +22,8 @@ namespace Office_File_Explorer.Helpers
 
         /// <summary>
         /// table rows need at least one child element, besides table row props
-        /// if a table does not have any child elements, that row is corrupt and the doc is malformed
+        /// if a table row does not have any child elements, that row is corrupt and the doc is malformed
+        /// if a table row also does not have a table cell, that row is corrupt
         /// this function will remove those bad rows
         /// </summary>
         /// <param name="filePath"></param>
@@ -40,7 +38,17 @@ namespace Office_File_Explorer.Helpers
 
                 foreach (TableRow tRow in tRows)
                 {
+                    // table rows need at least one child, make sure each row has one
                     if (tRow.ChildElements.Count == 0)
+                    {
+                        tRow.Remove();
+                        corruptionFound = true;
+                    }
+
+                    // if it has a row, but no column, that is corrupt and the row can also be removed
+                    IEnumerable<TableCell> tCells = tRow.Descendants<TableCell>();
+
+                    if (!tCells.Any())
                     {
                         tRow.Remove();
                         corruptionFound = true;
@@ -50,6 +58,8 @@ namespace Office_File_Explorer.Helpers
 
             return corruptionFound;
         }
+
+
 
         /// <summary>
         /// special circumstance where the content control value has the correct SharePoint guid
