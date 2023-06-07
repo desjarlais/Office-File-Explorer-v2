@@ -196,6 +196,10 @@ namespace Office_File_Explorer.WinForms
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Image GetEnhMetaImageFromClipboard()
         {
             string fileName = Environment.GetEnvironmentVariable("TEMP") + "\\" + Guid.NewGuid().ToString() + ".emf";
@@ -217,6 +221,7 @@ namespace Office_File_Explorer.WinForms
             File.Delete(fileName);
             return image;
         }
+
         public FrmClipboardViewer()
         {
             InitializeComponent();

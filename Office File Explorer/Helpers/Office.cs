@@ -26,9 +26,7 @@ using System.Reflection;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Presentation;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using System.IO.Compression;
-using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -282,6 +280,15 @@ namespace Office_File_Explorer.Helpers
             return returnValue;
         }
 
+        public static void AddThemePartContent(ThemePart tp, string themeFile)
+        {
+            using (StreamReader streamReader = new StreamReader(themeFile))
+            using (StreamWriter streamWriter = new StreamWriter(tp.GetStream(FileMode.Create)))
+            {
+                streamWriter.Write(streamReader.ReadToEnd());
+            }
+        }
+
         /// <summary>
         /// replace the current theme with a user specified theme
         /// </summary>
@@ -295,18 +302,9 @@ namespace Office_File_Explorer.Helpers
                 using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(document, true))
                 {
                     MainDocumentPart mainPart = wordDoc.MainDocumentPart;
-
-                    // Delete the old document part.
                     mainPart.DeletePart(mainPart.ThemePart);
-
-                    // Add a new document part and then add content.
                     ThemePart themePart = mainPart.AddNewPart<ThemePart>();
-
-                    using (StreamReader streamReader = new StreamReader(themeFile))
-                    using (StreamWriter streamWriter = new StreamWriter(themePart.GetStream(FileMode.Create)))
-                    {
-                        streamWriter.Write(streamReader.ReadToEnd());
-                    }
+                    AddThemePartContent(themePart, themeFile);
                 }
             }
             else if (app == Strings.oAppPowerPoint)
@@ -316,12 +314,7 @@ namespace Office_File_Explorer.Helpers
                     PresentationPart mainPart = presDoc.PresentationPart;
                     mainPart.DeletePart(mainPart.ThemePart);
                     ThemePart themePart = mainPart.AddNewPart<ThemePart>();
-
-                    using (StreamReader streamReader = new StreamReader(themeFile))
-                    using (StreamWriter streamWriter = new StreamWriter(themePart.GetStream(FileMode.Create)))
-                    {
-                        streamWriter.Write(streamReader.ReadToEnd());
-                    }
+                    AddThemePartContent(themePart, themeFile);
                 }
             }
             else
@@ -331,12 +324,7 @@ namespace Office_File_Explorer.Helpers
                     WorkbookPart mainPart = excelDoc.WorkbookPart;
                     mainPart.DeletePart(mainPart.ThemePart);
                     ThemePart themePart = mainPart.AddNewPart<ThemePart>();
-
-                    using (StreamReader streamReader = new StreamReader(themeFile))
-                    using (StreamWriter streamWriter = new StreamWriter(themePart.GetStream(FileMode.Create)))
-                    {
-                        streamWriter.Write(streamReader.ReadToEnd());
-                    }
+                    AddThemePartContent(themePart, themeFile);
                 }
             }
         }
@@ -697,8 +685,12 @@ namespace Office_File_Explorer.Helpers
             wordDoc.Dispose();
         }
 
-        // To add a new document part to a package.
-        public static void AddNewPart(string document, string fileName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="fileName"></param>
+        public static void AddNewCustomXmlPart(string document, string fileName)
         {
             using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(document, true))
             {

@@ -244,10 +244,8 @@ namespace Office_File_Explorer
                             }
                             else
                             {
-                                // if it failed the SDK, turn on Fix Corrupt Doc button only
+                                // if it failed the SDK, disable all buttons except the fix corrupt doc button
                                 DisableUI();
-
-                                // if the doc was Word, there is one additional check that can be done
                                 if (lblFilePath.Text.EndsWith(".docx"))
                                 {
                                     BtnFixCorruptDoc.Enabled = true;
@@ -1617,7 +1615,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-                StrDestFileName = AddTextToFileName(lblFilePath.Text, "(Fixed)");
+                StrDestFileName = AddTextToFileName(lblFilePath.Text, Strings.wFixedFileParentheses);
                 bool isXmlException = false;
                 string strDocText = string.Empty;
                 IsFixed = false;
@@ -2079,17 +2077,6 @@ namespace Office_File_Explorer
         private void structuredStorageViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenEncryptedOfficeDocument(lblFilePath.Text, true);
-        }
-
-        private void loginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // prompt for creds and store user info
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
         }
     }
 }

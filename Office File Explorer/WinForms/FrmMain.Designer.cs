@@ -225,7 +225,6 @@ namespace Office_File_Explorer
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Document Information";
-            groupBox1.Enter += groupBox1_Enter;
             // 
             // BtnRemoveCustomXmlParts
             // 
