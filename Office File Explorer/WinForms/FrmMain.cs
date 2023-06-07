@@ -822,12 +822,12 @@ namespace Office_File_Explorer
                 // display selected Office features
                 if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
                 {
-                    DisplayListContents(Office.GetEmbeddedObjectProperties(lblFilePath.Text, Strings.oAppWord), Strings.wEmbeddedObjects);
+                    DisplayListContents(Office.GetEmbeddedObjectProperties(lblFilePath.Text, lblFileType.Text), Strings.wEmbeddedObjects);
                 }
 
                 if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.Shapes))
                 {
-                    DisplayListContents(Office.GetShapes(lblFilePath.Text, Strings.oAppWord), Strings.wShapes);
+                    DisplayListContents(Office.GetShapes(lblFilePath.Text, lblFileType.Text), Strings.wShapes);
                 }
 
                 if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.PackageParts))
@@ -837,7 +837,7 @@ namespace Office_File_Explorer
 
                 if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.XmlSignatures))
                 {
-                    DisplayListContents(Office.GetSignatures(lblFilePath.Text, Strings.oAppWord), Strings.wXmlSignatures);
+                    DisplayListContents(Office.GetSignatures(lblFilePath.Text, lblFileType.Text), Strings.wXmlSignatures);
                 }
             }
             catch (Exception ex)

@@ -12,8 +12,6 @@ using Drawing = DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml;
 using ShapeStyle = DocumentFormat.OpenXml.Presentation.ShapeStyle;
 using ModernComment = DocumentFormat.OpenXml.Office2021.PowerPoint.Comment;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Office2021.PowerPoint.Comment;
 using Comment = DocumentFormat.OpenXml.Presentation.Comment;
 
 namespace Office_File_Explorer.Helpers
@@ -30,6 +28,11 @@ namespace Office_File_Explorer.Helpers
             using (PresentationDocument pptDoc = PresentationDocument.Open(path, true))
             {
                 // list the embedded fonts
+                if (pptDoc.PresentationPart.Presentation.EmbeddedFontList is null)
+                {
+                    return fonts;
+                }
+
                 foreach (EmbeddedFont ef in pptDoc.PresentationPart.Presentation.EmbeddedFontList)
                 {
                     fCount++;
@@ -717,11 +720,6 @@ namespace Office_File_Explorer.Helpers
         }
 
         // Return the number of slides, including hidden slides.
-        public static int GetSlideCount(string fileName)
-        {
-            return GetSlideCount(fileName, true);
-        }
-
         public static int GetSlideCount(string fileName, bool includeHidden)
         {
             int slidesCount = 0;
