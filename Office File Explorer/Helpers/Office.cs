@@ -565,7 +565,7 @@ namespace Office_File_Explorer.Helpers
 
             if (app == Strings.oAppWord)
             {
-                fileExtension = ".docx";
+                fileExtension = Strings.docxFileExt;
                 using (WordprocessingDocument document = WordprocessingDocument.Open(fileName, true))
                 {
                     // Access the main document part.
@@ -589,7 +589,7 @@ namespace Office_File_Explorer.Helpers
             }
             else if (app == Strings.oAppPowerPoint)
             {
-                fileExtension = ".pptx";
+                fileExtension = Strings.pptxFileExt;
                 using (PresentationDocument document = PresentationDocument.Open(fileName, true))
                 {
                     var docPart = document.PresentationPart;
@@ -605,7 +605,7 @@ namespace Office_File_Explorer.Helpers
             }
             else
             {
-                fileExtension = ".xlsx";
+                fileExtension = Strings.xlsxFileExt;
                 using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, true))
                 {
                     var docPart = document.WorkbookPart;

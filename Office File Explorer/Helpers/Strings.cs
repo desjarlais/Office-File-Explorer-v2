@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -20,6 +19,22 @@ namespace Office_File_Explorer.Helpers
         public const string b3 = "3";
         public const string b4 = "4";
         public const string bDataDescriptor = "8";
+
+        // file extensions
+        public const string docxFileExt = ".docx";
+        public const string docmFileExt = ".docm";
+        public const string dotxFileExt = ".dotx";
+        public const string dotmFileExt = ".dotm";
+        
+        public const string xlsxFileExt = ".xlsx";
+        public const string xlsmFileExt = ".xlsm";
+        public const string xltxFileExt = ".xltx";
+        public const string xltmFileExt = ".xltm";
+
+        public const string pptxFileExt = ".pptx";
+        public const string pptmFileExt = ".pptm";
+        public const string potxFileExt = ".potx";
+        public const string potmFileExt = ".potm";
 
         // global app words
         public const string oAppWord = "Word";

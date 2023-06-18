@@ -1,8 +1,6 @@
-﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -126,15 +124,15 @@ namespace Office_File_Explorer.Helpers
 
         public static string GetAppFromFileExtension(string fPath)
         {
-            if (fPath.EndsWith(".docx") || fPath.EndsWith(".dotx") || fPath.EndsWith(".docm") || fPath.EndsWith(".dotm"))
+            if (fPath.EndsWith(Strings.docxFileExt) || fPath.EndsWith(Strings.dotxFileExt) || fPath.EndsWith(Strings.docmFileExt) || fPath.EndsWith(Strings.dotmFileExt))
             {
                 return Strings.oAppWord;
             }
-            else if (fPath.EndsWith(".xlsx") || fPath.EndsWith(".xlst") || fPath.EndsWith(".xlsm") || fPath.EndsWith(".xltm"))
+            else if (fPath.EndsWith(Strings.xlsxFileExt) || fPath.EndsWith(Strings.xltxFileExt) || fPath.EndsWith(Strings.xlsmFileExt) || fPath.EndsWith(Strings.xltmFileExt))
             {
                 return Strings.oAppExcel;
             }
-            else if (fPath.EndsWith(".pptx") || fPath.EndsWith(".potx") || fPath.EndsWith(".pptm") || fPath.EndsWith(".potm"))
+            else if (fPath.EndsWith(Strings.pptxFileExt) || fPath.EndsWith(Strings.potxFileExt) || fPath.EndsWith(Strings.pptmFileExt) || fPath.EndsWith(Strings.potmFileExt))
             {
                 return Strings.oAppPowerPoint;
             }

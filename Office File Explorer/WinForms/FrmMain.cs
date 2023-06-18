@@ -246,7 +246,7 @@ namespace Office_File_Explorer
                             {
                                 // if it failed the SDK, disable all buttons except the fix corrupt doc button
                                 DisableUI();
-                                if (lblFilePath.Text.EndsWith(".docx"))
+                                if (lblFilePath.Text.EndsWith(Strings.docxFileExt))
                                 {
                                     BtnFixCorruptDoc.Enabled = true;
                                 }
@@ -897,7 +897,7 @@ namespace Office_File_Explorer
                     }
                     else
                     {
-                        LstDisplay.Items.Add("Corrupt " + f.corruptionChecked + " Found - " + "Document Fixed");
+                        LstDisplay.Items.Add("Corrupt " + f.corruptionChecked + " Found - Document Fixed");
                     }
 
                     return;
@@ -1628,7 +1628,7 @@ namespace Office_File_Explorer
 
                 LstDisplay.Items.Clear();
 
-                if (StrExtension == ".docx")
+                if (StrExtension == Strings.docxFileExt)
                 {
                     if ((File.GetAttributes(lblFilePath.Text) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                     {

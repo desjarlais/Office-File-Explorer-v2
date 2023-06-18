@@ -195,7 +195,7 @@ namespace Office_File_Explorer.WinForms
                         {
                             if (GetFileExtension() == "*.docx")
                             {
-                                if (f.Name.EndsWith(".docx") || f.Name.EndsWith(".docm") || f.Name.EndsWith(".dotx") || f.Name.EndsWith(".dotm"))
+                                if (f.Name.EndsWith(Strings.docxFileExt) || f.Name.EndsWith(Strings.docmFileExt) || f.Name.EndsWith(Strings.dotxFileExt) || f.Name.EndsWith(Strings.dotmFileExt))
                                 {
                                     files.Add(f.FullName);
                                     lstOutput.Items.Add(f.FullName);
@@ -204,7 +204,7 @@ namespace Office_File_Explorer.WinForms
                             }
                             else if (GetFileExtension() == "*.xlsx")
                             {
-                                if (f.Name.EndsWith(".xlsx") || f.Name.EndsWith(".xlsm") || f.Name.EndsWith(".xltx") || f.Name.EndsWith(".xltm"))
+                                if (f.Name.EndsWith(Strings.xlsxFileExt) || f.Name.EndsWith(Strings.xlsmFileExt) || f.Name.EndsWith(Strings.xltxFileExt) || f.Name.EndsWith(Strings.xltmFileExt))
                                 {
                                     files.Add(f.FullName);
                                     lstOutput.Items.Add(f.FullName);
@@ -213,7 +213,7 @@ namespace Office_File_Explorer.WinForms
                             }
                             else if (GetFileExtension() == "*.pptx")
                             {
-                                if (f.Name.EndsWith(".pptx") || f.Name.EndsWith(".pptm") || f.Name.EndsWith(".potx") || f.Name.EndsWith(".potm"))
+                                if (f.Name.EndsWith(Strings.pptxFileExt) || f.Name.EndsWith(Strings.pptmFileExt) || f.Name.EndsWith(Strings.potxFileExt) || f.Name.EndsWith(Strings.potmFileExt))
                                 {
                                     files.Add(f.FullName);
                                     lstOutput.Items.Add(f.FullName);
@@ -237,7 +237,7 @@ namespace Office_File_Explorer.WinForms
                             // populate the list of file paths
                             if (GetFileExtension() == "*.docx")
                             {
-                                if (f.Name.EndsWith(".docx") || f.Name.EndsWith(".docm") || f.Name.EndsWith(".dotx") || f.Name.EndsWith(".dotm"))
+                                if (f.Name.EndsWith(Strings.docxFileExt) || f.Name.EndsWith(Strings.docmFileExt) || f.Name.EndsWith(Strings.dotxFileExt) || f.Name.EndsWith(Strings.dotmFileExt))
                                 {
                                     files.Add(f.FullName);
                                     lstOutput.Items.Add(f.FullName);
@@ -246,7 +246,7 @@ namespace Office_File_Explorer.WinForms
                             }
                             else if (GetFileExtension() == "*.xlsx")
                             {
-                                if (f.Name.EndsWith(".xlsx") || f.Name.EndsWith(".xlsm") || f.Name.EndsWith(".xltx") || f.Name.EndsWith(".xltm"))
+                                if (f.Name.EndsWith(Strings.xlsxFileExt) || f.Name.EndsWith(Strings.xlsmFileExt) || f.Name.EndsWith(Strings.xltxFileExt) || f.Name.EndsWith(Strings.xltmFileExt))
                                 {
                                     files.Add(f.FullName);
                                     lstOutput.Items.Add(f.FullName);
@@ -255,7 +255,7 @@ namespace Office_File_Explorer.WinForms
                             }
                             else if (GetFileExtension() == "*.pptx")
                             {
-                                if (f.Name.EndsWith(".pptx") || f.Name.EndsWith(".pptm") || f.Name.EndsWith(".potx") || f.Name.EndsWith(".potm"))
+                                if (f.Name.EndsWith(Strings.pptxFileExt) || f.Name.EndsWith(Strings.pptmFileExt) || f.Name.EndsWith(Strings.potxFileExt) || f.Name.EndsWith(Strings.potmFileExt))
                                 {
                                     files.Add(f.FullName);
                                     lstOutput.Items.Add(f.FullName);
