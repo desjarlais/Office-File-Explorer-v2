@@ -275,6 +275,17 @@ namespace Office_File_Explorer.WinForms
                 }
             }
 
+            if (rdoFixCorruptDrawingsXL.Checked)
+            {
+                SetCorruptionChecked("Corrupt VmlDrawing");
+                if (Excel.RemoveCorruptClientDataObjects(filePath))
+                {
+                    isFileFixed = true;
+                    featureFixed.Add("Corrupt VmlDrawing");
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + "Corrupt VmlDrawing");
+                }
+            }
+
             Close();
         }
     }

@@ -1436,6 +1436,7 @@ namespace Office_File_Explorer
                             {
                                 document.PresentationPart.Presentation.RemovePersonalInfoOnSave = false;
                                 document.PresentationPart.Presentation.Save();
+                                LstDisplay.Items.Add("Remove PII On Save Disabled");
                             }
                         }
 

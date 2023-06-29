@@ -3,14 +3,86 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Office_File_Explorer.Helpers
 {
     class Excel
     {
         public static bool fSuccess;
+
+        /// <summary>
+        ///  known corrupt scenario with Excel legacy vml drawings having an empty ClientData object
+        ///  this will cause a crash in Excel and this will check for that empty object and remove the shape from the vml drawing part
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool RemoveCorruptClientDataObjects(string path)
+        {
+            bool isFixed = false;
+
+            corruptionFound:
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
+            {
+                WorkbookPart wbPart = excelDoc.WorkbookPart;
+
+                foreach (WorksheetPart wsp in wbPart.WorksheetParts)
+                {
+                    if (wsp.VmlDrawingParts != null)
+                    {
+                        foreach (VmlDrawingPart vdp in wsp.VmlDrawingParts)
+                        {
+                            XmlDocument xDoc = new XmlDocument();
+                            MemoryStream ms = new MemoryStream();
+                            Stream vmlStream = vdp.GetStream();
+                            vmlStream.CopyTo(ms);
+                            ms.Position = 0;
+                            xDoc.Load(ms);
+                            XmlNodeList xnl = xDoc.ChildNodes;
+                            foreach (XmlNode xn in xnl)
+                            {
+                                if (xn.Name == "xml")
+                                {
+                                    XmlNodeList xnl2 = xn.ChildNodes;
+                                    foreach (XmlNode xn2 in xnl2)
+                                    {
+                                        if (xn2.Name == "v:shape")
+                                        {
+                                            XmlNodeList xnl3 = xn2.ChildNodes;
+                                            foreach (XmlNode xn3 in xnl3)
+                                            {
+                                                if (xn3.Name == "x:ClientData")
+                                                {
+                                                    if (xn3.ChildNodes.Count == 0)
+                                                    {
+                                                        xn.RemoveChild(xn2);
+                                                        vmlStream.SetLength(0);
+                                                        xDoc.Save(vmlStream);
+                                                        vmlStream.Flush();
+                                                        isFixed = true;
+                                                        goto corruptionFound;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (isFixed)
+                {
+                    excelDoc.Save();
+                }
+            }
+
+            return isFixed;
+        }
 
         public static bool RemoveComments(string path)
         {

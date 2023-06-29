@@ -52,6 +52,7 @@ namespace Office_File_Explorer.WinForms
             rdoFixStrictX = new System.Windows.Forms.RadioButton();
             BtnOk = new System.Windows.Forms.Button();
             BtnCancel = new System.Windows.Forms.Button();
+            rdoFixCorruptDrawingsXL = new System.Windows.Forms.RadioButton();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -73,7 +74,7 @@ namespace Office_File_Explorer.WinForms
             groupBox1.Controls.Add(rdoFixBookmarksW);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(330, 178);
+            groupBox1.Size = new System.Drawing.Size(330, 194);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Word Document";
@@ -228,7 +229,7 @@ namespace Office_File_Explorer.WinForms
             groupBox2.Controls.Add(rdoResetBulletMargins);
             groupBox2.Controls.Add(rdoFixNotesPageSizeCustomP);
             groupBox2.Controls.Add(rdoFixNotesPageSizeP);
-            groupBox2.Location = new System.Drawing.Point(348, 70);
+            groupBox2.Location = new System.Drawing.Point(348, 86);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new System.Drawing.Size(201, 120);
             groupBox2.TabIndex = 0;
@@ -285,10 +286,11 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(rdoFixCorruptDrawingsXL);
             groupBox3.Controls.Add(rdoFixStrictX);
             groupBox3.Location = new System.Drawing.Point(348, 12);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new System.Drawing.Size(201, 52);
+            groupBox3.Size = new System.Drawing.Size(201, 68);
             groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "Excel Document";
@@ -307,7 +309,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            BtnOk.Location = new System.Drawing.Point(379, 196);
+            BtnOk.Location = new System.Drawing.Point(378, 212);
             BtnOk.Name = "BtnOk";
             BtnOk.Size = new System.Drawing.Size(75, 23);
             BtnOk.TabIndex = 1;
@@ -317,7 +319,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            BtnCancel.Location = new System.Drawing.Point(460, 196);
+            BtnCancel.Location = new System.Drawing.Point(459, 212);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new System.Drawing.Size(90, 23);
             BtnCancel.TabIndex = 2;
@@ -325,11 +327,22 @@ namespace Office_File_Explorer.WinForms
             BtnCancel.UseVisualStyleBackColor = true;
             BtnCancel.Click += BtnCancel_Click;
             // 
+            // rdoFixCorruptDrawingsXL
+            // 
+            rdoFixCorruptDrawingsXL.AutoSize = true;
+            rdoFixCorruptDrawingsXL.Location = new System.Drawing.Point(6, 43);
+            rdoFixCorruptDrawingsXL.Name = "rdoFixCorruptDrawingsXL";
+            rdoFixCorruptDrawingsXL.Size = new System.Drawing.Size(136, 19);
+            rdoFixCorruptDrawingsXL.TabIndex = 1;
+            rdoFixCorruptDrawingsXL.TabStop = true;
+            rdoFixCorruptDrawingsXL.Text = "Fix Corrupt Drawings";
+            rdoFixCorruptDrawingsXL.UseVisualStyleBackColor = true;
+            // 
             // FrmFixDocument
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(561, 224);
+            ClientSize = new System.Drawing.Size(561, 247);
             Controls.Add(BtnCancel);
             Controls.Add(BtnOk);
             Controls.Add(groupBox3);
@@ -374,5 +387,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoFixListStyles;
         private System.Windows.Forms.RadioButton rdoResetBulletMargins;
         private System.Windows.Forms.RadioButton rdoFixDataTags;
+        private System.Windows.Forms.RadioButton rdoFixCorruptDrawingsXL;
     }
 }
