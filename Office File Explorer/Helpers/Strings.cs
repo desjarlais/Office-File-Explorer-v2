@@ -158,6 +158,7 @@ namespace Office_File_Explorer.Helpers
         public const string invalidFile = "Invalid File. Please select a valid document.";
         public const string replacedWith = "Replaced With: ";
         public const string shpOfficeDrawing = ". Office Drawing";
+        public const string corruptVmlDrawing = "Corrupt Vml Drawing";
         public const string shpVml = "Vml Shape";
         public const string shpVmlRectangle = "Vml Rectangle";
         public const string shpGroupSpaces = "    ";

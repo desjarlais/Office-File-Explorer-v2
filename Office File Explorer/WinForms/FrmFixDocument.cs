@@ -23,6 +23,10 @@ namespace Office_File_Explorer.WinForms
             EnableUI(fileType);
         }
 
+        /// <summary>
+        /// light up the buttons for the file type
+        /// </summary>
+        /// <param name="type"></param>
         public void EnableUI(string type)
         {
             if (type == Strings.oAppWord)
@@ -43,6 +47,7 @@ namespace Office_File_Explorer.WinForms
             else if (type == Strings.oAppExcel)
             {
                 rdoFixStrictX.Enabled = true;
+                rdoFixCorruptDrawingsXL.Enabled = true;
             }
             else
             {
@@ -277,12 +282,12 @@ namespace Office_File_Explorer.WinForms
 
             if (rdoFixCorruptDrawingsXL.Checked)
             {
-                SetCorruptionChecked("Corrupt VmlDrawing");
+                SetCorruptionChecked(Strings.corruptVmlDrawing);
                 if (Excel.RemoveCorruptClientDataObjects(filePath))
                 {
                     isFileFixed = true;
-                    featureFixed.Add("Corrupt VmlDrawing");
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + "Corrupt VmlDrawing");
+                    featureFixed.Add(Strings.corruptVmlDrawing);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, filePath + Strings.wArrow + Strings.corruptVmlDrawing);
                 }
             }
 

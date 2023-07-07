@@ -1171,7 +1171,7 @@ namespace Office_File_Explorer.Helpers
 
                 // loop each byte and check for lfh signature
                 // there will be multiple zip items, this will check each one for the datadescriptor issue
-                foreach (Byte b in buffer)
+                foreach (byte b in buffer)
                 {
                     switch (byteCount)
                     {

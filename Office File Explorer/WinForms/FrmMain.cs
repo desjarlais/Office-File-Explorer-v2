@@ -33,9 +33,10 @@ namespace Office_File_Explorer
         private string replaceText;
         private string fromChangeTemplate;
 
-        // openmcdf globals
+        // openmcdf
         private FileStream fs;
 
+        // corrupt doc legacy
         private static string StrCopiedFileName = string.Empty;
         private static string StrOfficeApp = string.Empty;
         private static char PrevChar = '<';
@@ -44,14 +45,12 @@ namespace Office_File_Explorer
         private static string FixedFallback = string.Empty;
         private static string StrExtension = string.Empty;
         private static string StrDestFileName = string.Empty;
+        static StringBuilder sbNodeBuffer = new StringBuilder();
 
-        // global lists
+        // lists
         private static List<string> corruptNodes = new List<string>();
         private static List<string> pParts = new List<string>();
         private List<string> oNumIdList = new List<string>();
-
-        // corrupt doc xml node buffer
-        static StringBuilder sbNodeBuffer = new StringBuilder();
 
         // enums
         public enum LogInfoType { ClearAndAdd, TextOnly, InvalidFile, LogException, EmptyCount };
@@ -172,11 +171,13 @@ namespace Office_File_Explorer
 
         public void DisplayInvalidFileFormatError()
         {
-            LstDisplay.Items.Add("Unable to open file, possible causes are:");
-            LstDisplay.Items.Add("  - file corruption");
-            LstDisplay.Items.Add("  - file encrypted");
-            LstDisplay.Items.Add("  - file password protected");
-            LstDisplay.Items.Add("  - binary Office Document (View Contents with Tools | Structured Storage Viewer)");
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Unable to open file, possible causes are:");
+            sb.AppendLine("  - file corruption");
+            sb.AppendLine("  - file encrypted");
+            sb.AppendLine("  - file password protected");
+            sb.AppendLine("  - binary Office Document (View Contents with Tools | Structured Storage Viewer)");
+            LstDisplay.Items.Add(sb.ToString());
         }
 
         /// <summary>
@@ -322,8 +323,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// function to open the file in the SDK
-        /// if the SDK fails to open the file, it is not a valid docx
+        /// open a file in the SDK, any failure means it is not a valid docx
         /// </summary>
         /// <param name="file">the path to the initial fix attempt</param>
         public bool OpenWithSdk(string file)
@@ -576,8 +576,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// there are scenarios where strings like "Fixed" or "Copy" need to be appended to the file name
-        /// this function helps facilitate that by taking the file as is and the scenario text and combining them
+        /// append strings like "Fixed" or "Copy" to the file name
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="TextToAdd"></param>
@@ -591,7 +590,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// minor cleanup before the app exits
+        /// cleanup before the app exits
         /// </summary>
         public static void AppExitWork()
         {

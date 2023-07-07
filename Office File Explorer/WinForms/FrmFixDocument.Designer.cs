@@ -49,10 +49,10 @@ namespace Office_File_Explorer.WinForms
             rdoFixNotesPageSizeCustomP = new System.Windows.Forms.RadioButton();
             rdoFixNotesPageSizeP = new System.Windows.Forms.RadioButton();
             groupBox3 = new System.Windows.Forms.GroupBox();
+            rdoFixCorruptDrawingsXL = new System.Windows.Forms.RadioButton();
             rdoFixStrictX = new System.Windows.Forms.RadioButton();
             BtnOk = new System.Windows.Forms.Button();
             BtnCancel = new System.Windows.Forms.Button();
-            rdoFixCorruptDrawingsXL = new System.Windows.Forms.RadioButton();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -240,7 +240,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoFixDataTags.AutoSize = true;
             rdoFixDataTags.Enabled = false;
-            rdoFixDataTags.Location = new System.Drawing.Point(12, 95);
+            rdoFixDataTags.Location = new System.Drawing.Point(6, 95);
             rdoFixDataTags.Name = "rdoFixDataTags";
             rdoFixDataTags.Size = new System.Drawing.Size(159, 19);
             rdoFixDataTags.TabIndex = 3;
@@ -252,7 +252,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoResetBulletMargins.AutoSize = true;
             rdoResetBulletMargins.Enabled = false;
-            rdoResetBulletMargins.Location = new System.Drawing.Point(12, 72);
+            rdoResetBulletMargins.Location = new System.Drawing.Point(6, 72);
             rdoResetBulletMargins.Name = "rdoResetBulletMargins";
             rdoResetBulletMargins.Size = new System.Drawing.Size(132, 19);
             rdoResetBulletMargins.TabIndex = 2;
@@ -264,7 +264,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoFixNotesPageSizeCustomP.AutoSize = true;
             rdoFixNotesPageSizeCustomP.Enabled = false;
-            rdoFixNotesPageSizeCustomP.Location = new System.Drawing.Point(12, 47);
+            rdoFixNotesPageSizeCustomP.Location = new System.Drawing.Point(6, 47);
             rdoFixNotesPageSizeCustomP.Name = "rdoFixNotesPageSizeCustomP";
             rdoFixNotesPageSizeCustomP.Size = new System.Drawing.Size(179, 19);
             rdoFixNotesPageSizeCustomP.TabIndex = 1;
@@ -276,7 +276,7 @@ namespace Office_File_Explorer.WinForms
             // 
             rdoFixNotesPageSizeP.AutoSize = true;
             rdoFixNotesPageSizeP.Enabled = false;
-            rdoFixNotesPageSizeP.Location = new System.Drawing.Point(12, 22);
+            rdoFixNotesPageSizeP.Location = new System.Drawing.Point(6, 22);
             rdoFixNotesPageSizeP.Name = "rdoFixNotesPageSizeP";
             rdoFixNotesPageSizeP.Size = new System.Drawing.Size(126, 19);
             rdoFixNotesPageSizeP.TabIndex = 0;
@@ -294,6 +294,18 @@ namespace Office_File_Explorer.WinForms
             groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "Excel Document";
+            // 
+            // rdoFixCorruptDrawingsXL
+            // 
+            rdoFixCorruptDrawingsXL.AutoSize = true;
+            rdoFixCorruptDrawingsXL.Enabled = false;
+            rdoFixCorruptDrawingsXL.Location = new System.Drawing.Point(6, 43);
+            rdoFixCorruptDrawingsXL.Name = "rdoFixCorruptDrawingsXL";
+            rdoFixCorruptDrawingsXL.Size = new System.Drawing.Size(136, 19);
+            rdoFixCorruptDrawingsXL.TabIndex = 1;
+            rdoFixCorruptDrawingsXL.TabStop = true;
+            rdoFixCorruptDrawingsXL.Text = "Fix Corrupt Drawings";
+            rdoFixCorruptDrawingsXL.UseVisualStyleBackColor = true;
             // 
             // rdoFixStrictX
             // 
@@ -326,17 +338,6 @@ namespace Office_File_Explorer.WinForms
             BtnCancel.Text = "Cancel";
             BtnCancel.UseVisualStyleBackColor = true;
             BtnCancel.Click += BtnCancel_Click;
-            // 
-            // rdoFixCorruptDrawingsXL
-            // 
-            rdoFixCorruptDrawingsXL.AutoSize = true;
-            rdoFixCorruptDrawingsXL.Location = new System.Drawing.Point(6, 43);
-            rdoFixCorruptDrawingsXL.Name = "rdoFixCorruptDrawingsXL";
-            rdoFixCorruptDrawingsXL.Size = new System.Drawing.Size(136, 19);
-            rdoFixCorruptDrawingsXL.TabIndex = 1;
-            rdoFixCorruptDrawingsXL.TabStop = true;
-            rdoFixCorruptDrawingsXL.Text = "Fix Corrupt Drawings";
-            rdoFixCorruptDrawingsXL.UseVisualStyleBackColor = true;
             // 
             // FrmFixDocument
             // 
