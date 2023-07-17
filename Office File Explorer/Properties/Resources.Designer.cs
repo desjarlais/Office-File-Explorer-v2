@@ -63,6 +63,16 @@ namespace Office_File_Explorer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _90_904004_pixel_ms_office_word_2007_logo {
+            get {
+                object obj = ResourceManager.GetObject("90-904004_pixel-ms-office-word-2007-logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AboutBox {
             get {
                 object obj = ResourceManager.GetObject("AboutBox", resourceCulture);
@@ -333,6 +343,16 @@ namespace Office_File_Explorer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ModifyPropertyTrivial {
+            get {
+                object obj = ResourceManager.GetObject("ModifyPropertyTrivial", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap NumericUpOrDown_691_32 {
             get {
                 object obj = ResourceManager.GetObject("NumericUpOrDown_691_32", resourceCulture);
@@ -526,6 +546,16 @@ namespace Office_File_Explorer.Properties {
         internal static System.Drawing.Bitmap word {
             get {
                 object obj = ResourceManager.GetObject("word", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap XmlFile {
+            get {
+                object obj = ResourceManager.GetObject("XmlFile", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
