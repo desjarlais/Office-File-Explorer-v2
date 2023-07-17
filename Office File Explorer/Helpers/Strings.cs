@@ -7,10 +7,10 @@ namespace Office_File_Explorer.Helpers
     public class Strings
     {
         // char values
-        public const char dblQuote = '"';
-        public const char lessThan = '<';
-        public const char greaterThan = '>';
-        public const char backslash = '/';
+        public const char chDblQuote = '"';
+        public const char chLessThan = '<';
+        public const char chGreaterThan = '>';
+        public const char chBackslash = '/';
 
         // byte values
         public const string bZero = "0";
@@ -43,6 +43,7 @@ namespace Office_File_Explorer.Helpers
         public const string oAppUnknown = "Unknown";
         public const string oAppTitle = "Office File Explorer";
         public const string wCopyFileParentheses = "(Copy)";
+        public const string wBackupFileParentheses = "(Backup)";
         public const string wCancel = "Cancel";
         public const string wColonBuffer = " : ";
         public const string wErrorText = "Error: ";

@@ -44,6 +44,7 @@ namespace Office_File_Explorer
             clipboardViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             base64DecoderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             structuredStorageViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            openXmlPartViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,9 +53,7 @@ namespace Office_File_Explorer
             BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
             BtnExcelSheetViewer = new System.Windows.Forms.Button();
             BtnValidateDoc = new System.Windows.Forms.Button();
-            BtnViewCustomUI = new System.Windows.Forms.Button();
             BtnFixCorruptDoc = new System.Windows.Forms.Button();
-            BtnCustomXml = new System.Windows.Forms.Button();
             BtnDocProps = new System.Windows.Forms.Button();
             BtnViewImages = new System.Windows.Forms.Button();
             lblFileType = new System.Windows.Forms.Label();
@@ -139,7 +138,7 @@ namespace Office_File_Explorer
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, structuredStorageViewerToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, structuredStorageViewerToolStripMenuItem, openXmlPartViewerToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             toolsToolStripMenuItem.Text = "&Tools";
@@ -177,6 +176,14 @@ namespace Office_File_Explorer
             structuredStorageViewerToolStripMenuItem.Text = "Structured Storage Viewer";
             structuredStorageViewerToolStripMenuItem.Click += structuredStorageViewerToolStripMenuItem_Click;
             // 
+            // openXmlPartViewerToolStripMenuItem
+            // 
+            openXmlPartViewerToolStripMenuItem.Enabled = false;
+            openXmlPartViewerToolStripMenuItem.Name = "openXmlPartViewerToolStripMenuItem";
+            openXmlPartViewerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            openXmlPartViewerToolStripMenuItem.Text = "Open Xml Part Viewer";
+            openXmlPartViewerToolStripMenuItem.Click += openXmlPartViewerToolStripMenuItem_Click;
+            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { aboutToolStripMenuItem, feedbackToolStripMenuItem });
@@ -206,9 +213,7 @@ namespace Office_File_Explorer
             groupBox1.Controls.Add(BtnRemoveCustomFileProps);
             groupBox1.Controls.Add(BtnExcelSheetViewer);
             groupBox1.Controls.Add(BtnValidateDoc);
-            groupBox1.Controls.Add(BtnViewCustomUI);
             groupBox1.Controls.Add(BtnFixCorruptDoc);
-            groupBox1.Controls.Add(BtnCustomXml);
             groupBox1.Controls.Add(BtnDocProps);
             groupBox1.Controls.Add(BtnViewImages);
             groupBox1.Controls.Add(lblFileType);
@@ -228,7 +233,7 @@ namespace Office_File_Explorer
             // 
             // BtnRemoveCustomXmlParts
             // 
-            BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(525, 107);
+            BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(386, 107);
             BtnRemoveCustomXmlParts.Name = "BtnRemoveCustomXmlParts";
             BtnRemoveCustomXmlParts.Size = new System.Drawing.Size(134, 23);
             BtnRemoveCustomXmlParts.TabIndex = 13;
@@ -238,7 +243,7 @@ namespace Office_File_Explorer
             // 
             // BtnRemoveCustomFileProps
             // 
-            BtnRemoveCustomFileProps.Location = new System.Drawing.Point(665, 107);
+            BtnRemoveCustomFileProps.Location = new System.Drawing.Point(526, 107);
             BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
             BtnRemoveCustomFileProps.Size = new System.Drawing.Size(157, 23);
             BtnRemoveCustomFileProps.TabIndex = 12;
@@ -248,7 +253,7 @@ namespace Office_File_Explorer
             // 
             // BtnExcelSheetViewer
             // 
-            BtnExcelSheetViewer.Location = new System.Drawing.Point(653, 78);
+            BtnExcelSheetViewer.Location = new System.Drawing.Point(406, 78);
             BtnExcelSheetViewer.Name = "BtnExcelSheetViewer";
             BtnExcelSheetViewer.Size = new System.Drawing.Size(126, 23);
             BtnExcelSheetViewer.TabIndex = 11;
@@ -258,23 +263,13 @@ namespace Office_File_Explorer
             // 
             // BtnValidateDoc
             // 
-            BtnValidateDoc.Location = new System.Drawing.Point(785, 78);
+            BtnValidateDoc.Location = new System.Drawing.Point(538, 78);
             BtnValidateDoc.Name = "BtnValidateDoc";
             BtnValidateDoc.Size = new System.Drawing.Size(135, 23);
             BtnValidateDoc.TabIndex = 10;
             BtnValidateDoc.Text = "Validate Document";
             BtnValidateDoc.UseVisualStyleBackColor = true;
             BtnValidateDoc.Click += BtnValidateDoc_Click;
-            // 
-            // BtnViewCustomUI
-            // 
-            BtnViewCustomUI.Location = new System.Drawing.Point(538, 78);
-            BtnViewCustomUI.Name = "BtnViewCustomUI";
-            BtnViewCustomUI.Size = new System.Drawing.Size(109, 23);
-            BtnViewCustomUI.TabIndex = 4;
-            BtnViewCustomUI.Text = "View Custom UI";
-            BtnViewCustomUI.UseVisualStyleBackColor = true;
-            BtnViewCustomUI.Click += BtnViewCustomUI_Click;
             // 
             // BtnFixCorruptDoc
             // 
@@ -285,16 +280,6 @@ namespace Office_File_Explorer
             BtnFixCorruptDoc.Text = "Fix Corrupt Document";
             BtnFixCorruptDoc.UseVisualStyleBackColor = true;
             BtnFixCorruptDoc.Click += BtnFixCorruptDoc_Click;
-            // 
-            // BtnCustomXml
-            // 
-            BtnCustomXml.Location = new System.Drawing.Point(406, 78);
-            BtnCustomXml.Name = "BtnCustomXml";
-            BtnCustomXml.Size = new System.Drawing.Size(126, 23);
-            BtnCustomXml.TabIndex = 8;
-            BtnCustomXml.Text = "View Custom Xml";
-            BtnCustomXml.UseVisualStyleBackColor = true;
-            BtnCustomXml.Click += BtnCustomXml_Click;
             // 
             // BtnDocProps
             // 
@@ -336,7 +321,7 @@ namespace Office_File_Explorer
             // 
             // BtnSearchAndReplace
             // 
-            BtnSearchAndReplace.Location = new System.Drawing.Point(386, 107);
+            BtnSearchAndReplace.Location = new System.Drawing.Point(679, 78);
             BtnSearchAndReplace.Name = "BtnSearchAndReplace";
             BtnSearchAndReplace.Size = new System.Drawing.Size(133, 23);
             BtnSearchAndReplace.TabIndex = 1;
@@ -495,14 +480,12 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem feedbackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openErrorLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.Button BtnCustomXml;
         private System.Windows.Forms.Button BtnDocProps;
         private System.Windows.Forms.Button BtnViewImages;
         private System.Windows.Forms.Button BtnFixCorruptDoc;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyAllLinesToolStripMenuItem;
-        private System.Windows.Forms.Button BtnViewCustomUI;
         private System.Windows.Forms.ToolStripMenuItem base64DecoderToolStripMenuItem;
         public System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button BtnValidateDoc;
@@ -511,6 +494,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.Button BtnRemoveCustomFileProps;
         private System.Windows.Forms.Button BtnRemoveCustomXmlParts;
         private System.Windows.Forms.ToolStripMenuItem structuredStorageViewerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openXmlPartViewerToolStripMenuItem;
     }
 }
 

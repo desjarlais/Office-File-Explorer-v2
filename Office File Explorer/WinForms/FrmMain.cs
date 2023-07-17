@@ -39,7 +39,7 @@ namespace Office_File_Explorer
         // corrupt doc legacy
         private static string StrCopiedFileName = string.Empty;
         private static string StrOfficeApp = string.Empty;
-        private static char PrevChar = '<';
+        private static char PrevChar = Strings.chLessThan;
         private bool IsRegularXmlTag;
         private bool IsFixed;
         private static string FixedFallback = string.Empty;
@@ -98,11 +98,9 @@ namespace Office_File_Explorer
             BtnModifyContent.Enabled = false;
             BtnFixDocument.Enabled = false;
             BtnSearchAndReplace.Enabled = false;
-            BtnCustomXml.Enabled = false;
             BtnDocProps.Enabled = false;
             BtnViewImages.Enabled = false;
             BtnFixCorruptDoc.Enabled = false;
-            BtnViewCustomUI.Enabled = false;
             BtnValidateDoc.Enabled = false;
             BtnExcelSheetViewer.Enabled = false;
             BtnRemoveCustomFileProps.Enabled = false;
@@ -116,12 +114,11 @@ namespace Office_File_Explorer
             BtnFixDocument.Enabled = true;
             BtnSearchAndReplace.Enabled = true;
             BtnViewImages.Enabled = true;
-            BtnCustomXml.Enabled = true;
             BtnDocProps.Enabled = true;
-            BtnViewCustomUI.Enabled = true;
             BtnValidateDoc.Enabled = true;
             BtnRemoveCustomXmlParts.Enabled = true;
             BtnRemoveCustomFileProps.Enabled = true;
+            openXmlPartViewerToolStripMenuItem.Enabled = true;
         }
 
         public void CopyAllItems()
@@ -171,13 +168,11 @@ namespace Office_File_Explorer
 
         public void DisplayInvalidFileFormatError()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Unable to open file, possible causes are:");
-            sb.AppendLine("  - file corruption");
-            sb.AppendLine("  - file encrypted");
-            sb.AppendLine("  - file password protected");
-            sb.AppendLine("  - binary Office Document (View Contents with Tools | Structured Storage Viewer)");
-            LstDisplay.Items.Add(sb.ToString());
+            LstDisplay.Items.Add("Unable to open file, possible causes are:");
+            LstDisplay.Items.Add(" - file corruption");
+            LstDisplay.Items.Add(" - file encrypted");
+            LstDisplay.Items.Add(" - file password protected");
+            LstDisplay.Items.Add(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)");
         }
 
         /// <summary>
@@ -238,7 +233,7 @@ namespace Office_File_Explorer
                                 // make a backup copy of the file and use it going forward
                                 if (Properties.Settings.Default.BackupOnOpen == true)
                                 {
-                                    string backupFileName = AddTextToFileName(lblFilePath.Text, "(Backup)");
+                                    string backupFileName = AddTextToFileName(lblFilePath.Text, Strings.wBackupFileParentheses);
                                     File.Copy(lblFilePath.Text, backupFileName, true);
                                     lblFilePath.Text = backupFileName;
                                 }
@@ -1377,7 +1372,7 @@ namespace Office_File_Explorer
                                     string strOutputFileName = strOutputPath + Path.GetFileNameWithoutExtension(strOriginalFile) + Strings.wFixedFileParentheses + strFileExtension;
 
                                     // run the command to convert the file "excelcnv.exe -nme -oice "strict-file-path" "converted-file-path""
-                                    string cParams = " -nme -oice " + Strings.dblQuote + lblFilePath.Text + Strings.dblQuote + Strings.wSpaceChar + Strings.dblQuote + strOutputFileName + Strings.dblQuote;
+                                    string cParams = " -nme -oice " + Strings.chDblQuote + lblFilePath.Text + Strings.chDblQuote + Strings.wSpaceChar + Strings.chDblQuote + strOutputFileName + Strings.chDblQuote;
                                     var proc = Process.Start(excelcnvPath, cParams);
                                     proc.Close();
                                     LstDisplay.Items.Add(Strings.fileConvertSuccessful);
@@ -1572,27 +1567,6 @@ namespace Office_File_Explorer
             if (count == 0)
             {
                 LogInformation(LogInfoType.EmptyCount, Strings.wCustomDocProps, string.Empty);
-            }
-        }
-
-        private void BtnCustomXml_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-
-                using (var f = new FrmCustomXmlViewer(lblFilePath.Text, lblFileType.Text))
-                {
-                    var result = f.ShowDialog();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogInformation(LogInfoType.LogException, "BtnViewCustomXml Error: ", ex.Message);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
             }
         }
 
@@ -1800,7 +1774,7 @@ namespace Office_File_Explorer
                                             // opening tag
                                             switch (charEnum.Current)
                                             {
-                                                case '<':
+                                                case Strings.chLessThan:
                                                     // if we haven't hit a close, but hit another '<' char
                                                     // we are not a true open tag so add it like a regular char
                                                     if (sbNodeBuffer.Length > 0)
@@ -1811,12 +1785,12 @@ namespace Office_File_Explorer
                                                     Node(charEnum.Current);
                                                     break;
 
-                                                case '>':
+                                                case Strings.chGreaterThan:
                                                     // there are 2 ways to close out a tag
                                                     // 1. self contained tag like <w:sz w:val="28"/>
                                                     // 2. standard xml <w:t>test</w:t>
                                                     // if previous char is '/', then we are an end tag
-                                                    if (PrevChar == '/' || IsRegularXmlTag)
+                                                    if (PrevChar == Strings.chBackslash || IsRegularXmlTag)
                                                     {
                                                         Node(charEnum.Current);
                                                         IsRegularXmlTag = false;
@@ -1828,7 +1802,7 @@ namespace Office_File_Explorer
 
                                                 default:
                                                     // this is the second xml closing style, keep track of char
-                                                    if (PrevChar == '<' && charEnum.Current == '/')
+                                                    if (PrevChar == Strings.chLessThan && charEnum.Current == Strings.chBackslash)
                                                     {
                                                         IsRegularXmlTag = true;
                                                     }
@@ -1926,8 +1900,7 @@ namespace Office_File_Explorer
                 FixedFallback = string.Empty;
                 StrExtension = string.Empty;
                 StrDestFileName = string.Empty;
-                PrevChar = '<';
-
+                PrevChar = Strings.chLessThan;
                 Cursor = Cursors.Default;
             }
         }
@@ -1950,14 +1923,6 @@ namespace Office_File_Explorer
         private void CopyAllLinesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CopyAllItems();
-        }
-
-        private void BtnViewCustomUI_Click(object sender, EventArgs e)
-        {
-            using (var f = new FrmCustomUI(lblFilePath.Text))
-            {
-                var result = f.ShowDialog();
-            }
         }
 
         private void Base64DecoderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2077,6 +2042,14 @@ namespace Office_File_Explorer
         private void structuredStorageViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenEncryptedOfficeDocument(lblFilePath.Text, true);
+        }
+
+        private void openXmlPartViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var f = new FrmOpenXmlPartViewer(lblFilePath.Text))
+            {
+                var result = f.ShowDialog();
+            }
         }
     }
 }

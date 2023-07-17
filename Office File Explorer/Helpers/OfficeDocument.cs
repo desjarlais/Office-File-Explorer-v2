@@ -21,6 +21,15 @@ namespace Office_File_Explorer.Helpers
 
 			_xmlParts = new List<OfficePart>();
 
+
+
+			// clp 
+			foreach (PackageRelationship pr in _package.GetRelationshipsByType(Strings.schemaClpRelationship))
+			{
+				_xmlParts.Add(new OfficePart(_package.GetPart(pr.TargetUri), XMLParts.LabelInfo, pr.Id));
+			}
+
+			// office 2010 custom ui parts
 			foreach (PackageRelationship relationship in _package.GetRelationshipsByType(Strings.CustomUI14PartRelType))
 			{
 				Uri customUIUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
@@ -31,6 +40,7 @@ namespace Office_File_Explorer.Helpers
 				break;
 			}
 
+			// office 2007 custom ui parts
 			foreach (PackageRelationship relationship in _package.GetRelationshipsByType(Strings.CustomUIPartRelType))
 			{
 				Uri customUIUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
@@ -41,6 +51,7 @@ namespace Office_File_Explorer.Helpers
 				break;
 			}
 
+			// qat parts
 			foreach (PackageRelationship relationship in _package.GetRelationshipsByType(Strings.QATPartRelType))
 			{
 				Uri qatUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
@@ -103,7 +114,43 @@ namespace Office_File_Explorer.Helpers
 
 			switch (partType)
 			{
-				case XMLParts.RibbonX12:
+				case XMLParts.fontTable:
+					relativePath = "/fontTable.xml";
+					relType = Strings.schemaMsft2006 + "fontTable";
+					break;
+                case XMLParts.Styles:
+                    relativePath = "/styles.xml";
+                    relType = Strings.schemaMsft2006 + "styles.xml";
+                    break;
+                case XMLParts.Theme:
+                    relativePath = "/theme/theme.xml";
+                    relType = Strings.schemaMsft2006 + "/theme/theme1.xml";
+                    break;
+                case XMLParts.webSettings:
+                    relativePath = "/webSettings.xml";
+                    relType = Strings.schemaMsft2006 + "webSettings.xml";
+                    break;
+                case XMLParts.Settings:
+                    relativePath = "/settings.xml";
+                    relType = Strings.schemaMsft2006 + "settings.xml";
+                    break;
+				case XMLParts.CoreProps:
+                    relativePath = "/docProps/core.xml";
+                    relType = Strings.schemaMsft2006 + "metadata/core-properties/docProps/core.xml";
+                    break;
+				case XMLParts.AppProps:
+                    relativePath = "/docProps/app.xml";
+                    relType = Strings.schemaMsft2006 + "extended-properties/docProps/app.xml";
+                    break;
+				case XMLParts.Document:
+                    relativePath = "/word/document.xml";
+                    relType = Strings.schemaMsft2006 + "officeDocument/word/document.xml";
+                    break;
+                case XMLParts.LabelInfo:
+                    relativePath = "/docMetadata/LabelInfo.xml";
+                    relType = Strings.schemaClpRelationship;
+                    break;
+                case XMLParts.RibbonX12:
 					relativePath = "/customUI/customUI.xml";
 					relType = Strings.CustomUIPartRelType;
 					break;
@@ -324,9 +371,8 @@ namespace Office_File_Explorer.Helpers
 			FileUtilities.WriteToLog(Strings.fLogFilePath, "Fail to create image relationship.");
 			if (imageRel is null) return null;
 
-			PackagePart imagePart = _part.Package.CreatePart(
-				PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri),
-				OfficePart.MapImageContentType(Path.GetExtension(fileName)));
+			PackagePart imagePart = _part.Package.CreatePart(PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri),
+				MapImageContentType(Path.GetExtension(fileName)));
 
 			FileUtilities.WriteToLog(Strings.fLogFilePath, "Fail to create image part.");
 			if (imagePart is null) return null;
@@ -428,6 +474,15 @@ namespace Office_File_Explorer.Helpers
 
 	public enum XMLParts
 	{
+		webSettings,
+		Settings,
+		Styles,
+		fontTable,
+		Theme,
+		AppProps,
+		CoreProps,
+		Document,
+		LabelInfo,
 		QAT12,
 		RibbonX12,
 		RibbonX14,
