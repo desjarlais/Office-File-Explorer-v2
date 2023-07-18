@@ -5,14 +5,18 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using System;
 using Office_File_Explorer.Helpers;
+using System.Diagnostics;
+using System.Xml.Schema;
+using System.Text;
+using System.Xml;
 
 namespace Office_File_Explorer.WinForms
 {
     public partial class FrmOpenXmlPartViewer : Form
     {
         List<PackagePart> pParts = new List<PackagePart>();
-        PackagePart currentPart;
         Package package;
+        bool hasXmlError;
 
         public FrmOpenXmlPartViewer(string path)
         {
@@ -50,22 +54,6 @@ namespace Office_File_Explorer.WinForms
             package.Close();
         }
 
-        public void EnableIcons()
-        {
-            toolStripButtonGenerateCallbacks.Enabled = true;
-            toolStripButtonValidateXml.Enabled = true;
-            toolStripDropDownButton1.Enabled = true;
-        }
-
-        public void DisableIcons()
-        {
-            toolStripDropDownButton1.Enabled = false;
-            toolStripButtonSave.Enabled = false;
-            toolStripButtonGenerateCallbacks.Enabled = false;
-            toolStripButtonValidateXml.Enabled = false;
-            toolStripButtonInsertIcon.Enabled = false;
-        }
-
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
@@ -75,18 +63,17 @@ namespace Office_File_Explorer.WinForms
                     // for customui files, allow additional editing
                     if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
                     {
-                        //EnableIcons();
+                        EnableCustomUIIcons();
                     }
                     else
                     {
-                        DisableIcons();
+                        DisableCustomUIIcons();
                     }
 
                     foreach (PackagePart pp in pParts)
                     {
                         if (pp.Uri.ToString() == treeView1.SelectedNode.Text)
                         {
-                            currentPart = pp;
                             using (StreamReader sr = new StreamReader(pp.GetStream()))
                             {
                                 string contents = sr.ReadToEnd();
@@ -134,11 +121,11 @@ namespace Office_File_Explorer.WinForms
                         partStream.SetLength(0);
                         ms.WriteTo(partStream);
                     }
-                    
+
                     break;
                 }
             }
-            
+
             package.Flush();
 
             // update ui
@@ -157,6 +144,155 @@ namespace Office_File_Explorer.WinForms
             rtbPartContents.ReadOnly = true;
             toolStripButtonSave.Enabled = false;
             toolStripButtonModifyXml.Enabled = true;
+        }
+
+        public void EnableCustomUIIcons()
+        {
+            toolStripButtonGenerateCallbacks.Enabled = true;
+            toolStripButtonValidateXml.Enabled = true;
+            toolStripDropDownButton1.Enabled = true;
+        }
+
+        public void DisableCustomUIIcons()
+        {
+            toolStripDropDownButton1.Enabled = false;
+            toolStripButtonSave.Enabled = false;
+            toolStripButtonGenerateCallbacks.Enabled = false;
+            toolStripButtonValidateXml.Enabled = false;
+            toolStripButtonInsertIcon.Enabled = false;
+        }
+
+        private void ShowError(string errorText)
+        {
+            MessageBox.Show(this, errorText, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        static void ValidationCallback(object sender, ValidationEventArgs args)
+        {
+            if (args.Severity == XmlSeverityType.Warning)
+            {
+                Console.Write("WARNING: ");
+            }
+            else if (args.Severity == XmlSeverityType.Error)
+            {
+                Console.Write("ERROR: ");
+            }
+        }
+
+        public bool ValidateXml(bool showValidMessage)
+        {
+            if (rtbPartContents.Text == null || rtbPartContents.Text.Length == 0)
+            {
+                return false;
+            }
+
+            rtbPartContents.SuspendLayout();
+
+            try
+            {
+                XmlTextReader xtr = new XmlTextReader(@".\Schemas\customui14.xsd");
+                XmlSchema schema = XmlSchema.Read(xtr, ValidationCallback);
+
+                XmlDocument xmlDoc = new XmlDocument();
+
+                if (schema == null)
+                {
+                    return false;
+                }
+
+                xmlDoc.Schemas.Add(schema);
+                xmlDoc.LoadXml(rtbPartContents.Text);
+
+                if (xmlDoc.DocumentElement.NamespaceURI.ToString() != schema.TargetNamespace)
+                {
+                    StringBuilder errorText = new StringBuilder();
+                    errorText.Append("Unknown Namespace".Replace("|1", xmlDoc.DocumentElement.NamespaceURI.ToString()));
+                    errorText.Append("\n" + "CustomUI Namespace".Replace("|1", schema.TargetNamespace));
+
+                    ShowError(errorText.ToString());
+                    return false;
+                }
+
+                hasXmlError = false;
+                xmlDoc.Validate(XmlValidationEventHandler);
+            }
+            catch (XmlException ex)
+            {
+                ShowError("Invalid Xml" + "\n" + ex.Message);
+                return false;
+            }
+
+            rtbPartContents.ResumeLayout();
+
+            if (!hasXmlError)
+            {
+                if (showValidMessage)
+                {
+                    MessageBox.Show(this, "Valid Xml", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private void XmlValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            lock (this)
+            {
+                hasXmlError = true;
+            }
+            MessageBox.Show(this, e.Message, e.Severity.ToString(), MessageBoxButtons.OK,
+                (e.Severity == XmlSeverityType.Error ? MessageBoxIcon.Error : MessageBoxIcon.Warning));
+        }
+
+        private void toolStripButtonValidateXml_Click(object sender, EventArgs e)
+        {
+            ValidateXml(true);
+        }
+
+        private void toolStripButtonGenerateCallbacks_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuInsertO14CustomUI_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuInsertO12CustomUIPart_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void xmlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbPartContents.Text = Strings.xmlCustomOutspace;
+        }
+
+        private void customTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbPartContents.Text = Strings.xmlCustomTab;
+        }
+
+        private void excelCustomTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbPartContents.Text = Strings.xmlExcelCustomTab;
+        }
+
+        private void repurposeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbPartContents.Text = Strings.xmlRepurpose;
+        }
+
+        private void wordGroupOnInsertTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbPartContents.Text = Strings.xmlWordGroupInsertTab;
+        }
+
+        private void toolStripButtonInsertIcon_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

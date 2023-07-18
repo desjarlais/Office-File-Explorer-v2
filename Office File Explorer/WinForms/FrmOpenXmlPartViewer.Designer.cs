@@ -36,10 +36,10 @@
             toolStripButtonValidateXml = new System.Windows.Forms.ToolStripButton();
             toolStripButtonGenerateCallbacks = new System.Windows.Forms.ToolStripButton();
             toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuInsertO14CustomUI = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuInsertO12CustomUIPart = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            xmlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            customOutspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             customTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             excelCustomTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             repurposeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,6 +93,7 @@
             toolStripButtonInsertIcon.Name = "toolStripButtonInsertIcon";
             toolStripButtonInsertIcon.Size = new System.Drawing.Size(23, 22);
             toolStripButtonInsertIcon.Text = "toolStripButton1";
+            toolStripButtonInsertIcon.Click += toolStripButtonInsertIcon_Click;
             // 
             // toolStripButtonValidateXml
             // 
@@ -103,6 +104,7 @@
             toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
             toolStripButtonValidateXml.Size = new System.Drawing.Size(23, 22);
             toolStripButtonValidateXml.Text = "toolStripButton2";
+            toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
             // 
             // toolStripButtonGenerateCallbacks
             // 
@@ -113,11 +115,12 @@
             toolStripButtonGenerateCallbacks.Name = "toolStripButtonGenerateCallbacks";
             toolStripButtonGenerateCallbacks.Size = new System.Drawing.Size(23, 22);
             toolStripButtonGenerateCallbacks.Text = "toolStripButton3";
+            toolStripButtonGenerateCallbacks.Click += toolStripButtonGenerateCallbacks_Click;
             // 
             // toolStripDropDownButton1
             // 
             toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItem2, toolStripMenuItem3, toolStripMenuItem1 });
+            toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuInsertO14CustomUI, toolStripMenuInsertO12CustomUIPart, toolStripMenuItem1 });
             toolStripDropDownButton1.Enabled = false;
             toolStripDropDownButton1.Image = (System.Drawing.Image)resources.GetObject("toolStripDropDownButton1.Image");
             toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -125,33 +128,36 @@
             toolStripDropDownButton1.Size = new System.Drawing.Size(49, 22);
             toolStripDropDownButton1.Text = "Insert";
             // 
-            // toolStripMenuItem2
+            // toolStripMenuInsertO14CustomUI
             // 
-            toolStripMenuItem2.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItem2.Image");
-            toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new System.Drawing.Size(216, 22);
-            toolStripMenuItem2.Text = "Office 2010 Custom UI Part";
+            toolStripMenuInsertO14CustomUI.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuInsertO14CustomUI.Image");
+            toolStripMenuInsertO14CustomUI.Name = "toolStripMenuInsertO14CustomUI";
+            toolStripMenuInsertO14CustomUI.Size = new System.Drawing.Size(216, 22);
+            toolStripMenuInsertO14CustomUI.Text = "Office 2010 Custom UI Part";
+            toolStripMenuInsertO14CustomUI.Click += toolStripMenuInsertO14CustomUI_Click;
             // 
-            // toolStripMenuItem3
+            // toolStripMenuInsertO12CustomUIPart
             // 
-            toolStripMenuItem3.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItem3.Image");
-            toolStripMenuItem3.Name = "toolStripMenuItem3";
-            toolStripMenuItem3.Size = new System.Drawing.Size(216, 22);
-            toolStripMenuItem3.Text = "Office 2007 Custom UI Part";
+            toolStripMenuInsertO12CustomUIPart.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuInsertO12CustomUIPart.Image");
+            toolStripMenuInsertO12CustomUIPart.Name = "toolStripMenuInsertO12CustomUIPart";
+            toolStripMenuInsertO12CustomUIPart.Size = new System.Drawing.Size(216, 22);
+            toolStripMenuInsertO12CustomUIPart.Text = "Office 2007 Custom UI Part";
+            toolStripMenuInsertO12CustomUIPart.Click += toolStripMenuInsertO12CustomUIPart_Click;
             // 
             // toolStripMenuItem1
             // 
-            toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { xmlToolStripMenuItem, customTabToolStripMenuItem, excelCustomTabToolStripMenuItem, repurposeToolStripMenuItem, wordGroupOnInsertTabToolStripMenuItem });
+            toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { customOutspaceToolStripMenuItem, customTabToolStripMenuItem, excelCustomTabToolStripMenuItem, repurposeToolStripMenuItem, wordGroupOnInsertTabToolStripMenuItem });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new System.Drawing.Size(216, 22);
             toolStripMenuItem1.Text = "Sample XML";
             // 
-            // xmlToolStripMenuItem
+            // customOutspaceToolStripMenuItem
             // 
-            xmlToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("xmlToolStripMenuItem.Image");
-            xmlToolStripMenuItem.Name = "xmlToolStripMenuItem";
-            xmlToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            xmlToolStripMenuItem.Text = "Custom Outspace";
+            customOutspaceToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("customOutspaceToolStripMenuItem.Image");
+            customOutspaceToolStripMenuItem.Name = "customOutspaceToolStripMenuItem";
+            customOutspaceToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            customOutspaceToolStripMenuItem.Text = "Custom Outspace";
+            customOutspaceToolStripMenuItem.Click += xmlToolStripMenuItem_Click;
             // 
             // customTabToolStripMenuItem
             // 
@@ -159,6 +165,7 @@
             customTabToolStripMenuItem.Name = "customTabToolStripMenuItem";
             customTabToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             customTabToolStripMenuItem.Text = "Custom Tab";
+            customTabToolStripMenuItem.Click += customTabToolStripMenuItem_Click;
             // 
             // excelCustomTabToolStripMenuItem
             // 
@@ -166,6 +173,7 @@
             excelCustomTabToolStripMenuItem.Name = "excelCustomTabToolStripMenuItem";
             excelCustomTabToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             excelCustomTabToolStripMenuItem.Text = "Excel - Custom Tab";
+            excelCustomTabToolStripMenuItem.Click += excelCustomTabToolStripMenuItem_Click;
             // 
             // repurposeToolStripMenuItem
             // 
@@ -173,6 +181,7 @@
             repurposeToolStripMenuItem.Name = "repurposeToolStripMenuItem";
             repurposeToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             repurposeToolStripMenuItem.Text = "Repurpose";
+            repurposeToolStripMenuItem.Click += repurposeToolStripMenuItem_Click;
             // 
             // wordGroupOnInsertTabToolStripMenuItem
             // 
@@ -180,6 +189,7 @@
             wordGroupOnInsertTabToolStripMenuItem.Name = "wordGroupOnInsertTabToolStripMenuItem";
             wordGroupOnInsertTabToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             wordGroupOnInsertTabToolStripMenuItem.Text = "Word - Group on Insert Tab";
+            wordGroupOnInsertTabToolStripMenuItem.Click += wordGroupOnInsertTabToolStripMenuItem_Click;
             // 
             // splitContainer1
             // 
@@ -252,10 +262,10 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonValidateXml;
         private System.Windows.Forms.ToolStripButton toolStripButtonGenerateCallbacks;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuInsertO14CustomUI;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuInsertO12CustomUIPart;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem xmlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem customOutspaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customTabToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem excelCustomTabToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem repurposeToolStripMenuItem;

@@ -20,6 +20,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Schemas\customUI.xsd" />
+    <None Remove="Schemas\customui14.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Schemas\customUI.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\customui14.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
   </ItemGroup>
 
