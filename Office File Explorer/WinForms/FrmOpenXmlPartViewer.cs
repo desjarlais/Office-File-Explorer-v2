@@ -7,7 +7,7 @@ using Office_File_Explorer.Helpers;
 using System.Xml.Schema;
 using System.Text;
 using System.Xml;
-using System.Diagnostics;
+using System.Drawing;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -90,7 +90,6 @@ namespace Office_File_Explorer.WinForms
         {
             try
             {
-                // currently only displaying xml and rel file types
                 if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
                 {
                     // customui files have additional editing options
@@ -112,7 +111,24 @@ namespace Office_File_Explorer.WinForms
                             {
                                 string contents = sr.ReadToEnd();
                                 rtbPartContents.Rtf = XmlColorizer.Colorize(contents);
+                                return;
                             }
+                        }
+                    }
+                }
+                else if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Image)
+                {
+                    foreach (PackagePart pp in pParts)
+                    {
+                        if (pp.Uri.ToString() == treeView1.SelectedNode.Text)
+                        {
+                            Stream imageSource = pp.GetStream();
+                            Image image = Image.FromStream(imageSource);
+                            using (var f = new FrmBinaryPartViewer(image))
+                            {
+                                var result = f.ShowDialog();
+                            }
+                            return;
                         }
                     }
                 }
@@ -140,7 +156,7 @@ namespace Office_File_Explorer.WinForms
                 case ".xlsm":
                 case ".xltm":
                 case ".xltx":
-                case ".xlsb":  
+                case ".xlsb":
                     return OpenXmlInnerFileTypes.Excel;
                 case ".pptx":
                 case ".pptm":
@@ -423,16 +439,17 @@ namespace Office_File_Explorer.WinForms
             // if we have valid xml, then generate the callback code
             try
             {
+                DisableCustomUIIcons();
                 XmlDocument customUI = new XmlDocument();
                 customUI.LoadXml(rtbPartContents.Text);
                 StringBuilder callbacks = CallbackBuilder.GenerateCallback(customUI);
+                callbacks.Append("}");
 
-                // show the callback code in a new window
-                FrmCallbackViewer fCallbacks = new FrmCallbackViewer(callbacks)
+                // display the callbacks
+                using (var f = new FrmBinaryPartViewer(callbacks))
                 {
-                    Owner = this
-                };
-                fCallbacks.ShowDialog();
+                    var result = f.ShowDialog();
+                }
 
                 if (callbacks == null || callbacks.Length == 0)
                 {
