@@ -404,8 +404,7 @@ namespace Office_File_Explorer.Helpers
                                             <xsd:element name=""labelList"" type=""CT_ClassificationLabelList"" />
                                         </xsd:schema>";
 
-        public const string xmlCustomOutspace = @"<?xml version=""1.0"" encoding=""utf-8""?>
-            <customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
+        public const string xmlCustomOutspace = @"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
 	            <backstage>
 		        <tab id=""customTab"" label=""Custom"">
 			    <firstColumn>
@@ -422,53 +421,53 @@ namespace Office_File_Explorer.Helpers
             </customUI>";
 
         public const string xmlCustomTab = @"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
-	<ribbon startFromScratch=""false"">
-		<tabs>
-			<tab id=""customTab"" label=""Custom Tab"">
-				<group id=""customGroup"" label=""Custom Group"">
-					<button id=""customButton"" label=""Custom Button"" imageMso=""HappyFace"" size=""large"" onAction=""Callback"" />
-				</group>
-			</tab>
-		</tabs>
-	</ribbon>
-</customUI>";
+	        <ribbon startFromScratch=""false"">
+		        <tabs>
+			        <tab id=""customTab"" label=""Custom Tab"">
+				        <group id=""customGroup"" label=""Custom Group"">
+					        <button id=""customButton"" label=""Custom Button"" imageMso=""HappyFace"" size=""large"" onAction=""Callback"" />
+				        </group>
+			        </tab>
+		        </tabs>
+	        </ribbon>
+        </customUI>";
 
         public const string xmlExcelCustomTab = @"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
-	<ribbon>
-		<tabs>
-			<tab id=""customTab"" label=""Contoso"" insertAfterMso=""TabHome"">
-				<group idMso=""GroupClipboard"" />
-				<group idMso=""GroupFont"" />
-				<group id=""customGroup"" label=""Contoso Tools"">
-					<button id=""customButton1"" label=""ConBold"" size=""large"" onAction=""conBoldSub"" imageMso=""Bold"" />
-					<button id=""customButton2"" label=""ConItalic"" size=""large"" onAction=""conItalicSub"" imageMso=""Italic"" />
-					<button id=""customButton3"" label=""ConUnderline"" size=""large"" onAction=""conUnderlineSub"" imageMso=""Underline"" />
-				</group>
-				<group idMso=""GroupEnterDataAlignment"" />
-				<group idMso=""GroupEnterDataNumber"" />
-				<group idMso=""GroupQuickFormatting"" />
-			</tab>
-		</tabs>
-	</ribbon>
-</customUI>";
+	        <ribbon>
+		        <tabs>
+			        <tab id=""customTab"" label=""Contoso"" insertAfterMso=""TabHome"">
+				        <group idMso=""GroupClipboard"" />
+				        <group idMso=""GroupFont"" />
+				        <group id=""customGroup"" label=""Contoso Tools"">
+					        <button id=""customButton1"" label=""ConBold"" size=""large"" onAction=""conBoldSub"" imageMso=""Bold"" />
+					        <button id=""customButton2"" label=""ConItalic"" size=""large"" onAction=""conItalicSub"" imageMso=""Italic"" />
+					        <button id=""customButton3"" label=""ConUnderline"" size=""large"" onAction=""conUnderlineSub"" imageMso=""Underline"" />
+				        </group>
+				        <group idMso=""GroupEnterDataAlignment"" />
+				        <group idMso=""GroupEnterDataNumber"" />
+				        <group idMso=""GroupQuickFormatting"" />
+			        </tab>
+		        </tabs>
+	        </ribbon>
+        </customUI>";
 
         public const string xmlRepurpose = @"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
-	<commands>
-		<command idMso=""Bold"" enabled=""false""/>
-		<command idMso=""Save"" onAction=""MySave""/>
-	</commands>
-</customUI>";
+	        <commands>
+		        <command idMso=""Bold"" enabled=""false""/>
+		        <command idMso=""Save"" onAction=""MySave""/>
+	        </commands>
+        </customUI>";
+
         public const string xmlWordGroupInsertTab = @"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
-	<ribbon>
-		<tabs>
-			<tab idMso=""TabInsert"">
-				<group id=""customGroup"" label=""Contoso"" insertAfterMso=""GroupIllustrations"">
-					<button id=""customButton"" label=""Document ID"" size=""large"" imageMso=""ListNumVal"" onAction=""insertDocID"" />
-				</group>
-			</tab>
-		</tabs>
-	</ribbon>
-</customUI>
-";
+	        <ribbon>
+		        <tabs>
+			        <tab idMso=""TabInsert"">
+				        <group id=""customGroup"" label=""Contoso"" insertAfterMso=""GroupIllustrations"">
+					        <button id=""customButton"" label=""Document ID"" size=""large"" imageMso=""ListNumVal"" onAction=""insertDocID"" />
+				        </group>
+			        </tab>
+		        </tabs>
+	        </ribbon>
+        </customUI>";
     }
 }

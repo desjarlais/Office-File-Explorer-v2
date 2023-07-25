@@ -193,7 +193,7 @@ namespace Office_File_Explorer.Helpers
 			return SUB + callback + "(" + CONTROL_STRING + ", <blue>ByRef<black> returnedVal)" + "\n\treturnedVal = BackstageGroupStyle.BackstageGroupStyleWarning" + ENDSUB;
 		}
 
-		private static BaseCallbackType MapToBase(System.Xml.XmlAttribute callback)
+		private static BaseCallbackType MapToBase(XmlAttribute callback)
 		{
 			switch (callback.Name)
 			{

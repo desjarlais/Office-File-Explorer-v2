@@ -179,6 +179,7 @@ namespace Office_File_Explorer
             // openXmlPartViewerToolStripMenuItem
             // 
             openXmlPartViewerToolStripMenuItem.Enabled = false;
+            openXmlPartViewerToolStripMenuItem.Image = Properties.Resources.XmlFile;
             openXmlPartViewerToolStripMenuItem.Name = "openXmlPartViewerToolStripMenuItem";
             openXmlPartViewerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             openXmlPartViewerToolStripMenuItem.Text = "Open Xml Part Viewer";
@@ -233,7 +234,7 @@ namespace Office_File_Explorer
             // 
             // BtnRemoveCustomXmlParts
             // 
-            BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(386, 107);
+            BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(398, 107);
             BtnRemoveCustomXmlParts.Name = "BtnRemoveCustomXmlParts";
             BtnRemoveCustomXmlParts.Size = new System.Drawing.Size(134, 23);
             BtnRemoveCustomXmlParts.TabIndex = 13;
@@ -243,7 +244,7 @@ namespace Office_File_Explorer
             // 
             // BtnRemoveCustomFileProps
             // 
-            BtnRemoveCustomFileProps.Location = new System.Drawing.Point(526, 107);
+            BtnRemoveCustomFileProps.Location = new System.Drawing.Point(538, 107);
             BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
             BtnRemoveCustomFileProps.Size = new System.Drawing.Size(157, 23);
             BtnRemoveCustomFileProps.TabIndex = 12;
@@ -275,7 +276,7 @@ namespace Office_File_Explorer
             // 
             BtnFixCorruptDoc.Location = new System.Drawing.Point(233, 107);
             BtnFixCorruptDoc.Name = "BtnFixCorruptDoc";
-            BtnFixCorruptDoc.Size = new System.Drawing.Size(147, 23);
+            BtnFixCorruptDoc.Size = new System.Drawing.Size(159, 23);
             BtnFixCorruptDoc.TabIndex = 9;
             BtnFixCorruptDoc.Text = "Fix Corrupt Document";
             BtnFixCorruptDoc.UseVisualStyleBackColor = true;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmOpenXmlPartViewer));
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             toolStripButtonModifyXml = new System.Windows.Forms.ToolStripButton();
@@ -46,6 +47,7 @@
             wordGroupOnInsertTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             treeView1 = new System.Windows.Forms.TreeView();
+            tvImageList = new System.Windows.Forms.ImageList(components);
             rtbPartContents = new System.Windows.Forms.RichTextBox();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -70,7 +72,7 @@
             toolStripButtonModifyXml.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonModifyXml.Name = "toolStripButtonModifyXml";
             toolStripButtonModifyXml.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonModifyXml.Text = "toolStripButton1";
+            toolStripButtonModifyXml.Text = "Modify Xml";
             toolStripButtonModifyXml.Click += toolStripButtonModifyXml_Click;
             // 
             // toolStripButtonSave
@@ -82,6 +84,7 @@
             toolStripButtonSave.Name = "toolStripButtonSave";
             toolStripButtonSave.Size = new System.Drawing.Size(23, 22);
             toolStripButtonSave.Text = "toolStripButton1";
+            toolStripButtonSave.ToolTipText = "Save Document Part";
             toolStripButtonSave.Click += toolStripButtonSave_Click;
             // 
             // toolStripButtonInsertIcon
@@ -93,6 +96,7 @@
             toolStripButtonInsertIcon.Name = "toolStripButtonInsertIcon";
             toolStripButtonInsertIcon.Size = new System.Drawing.Size(23, 22);
             toolStripButtonInsertIcon.Text = "toolStripButton1";
+            toolStripButtonInsertIcon.ToolTipText = "Insert Icon";
             toolStripButtonInsertIcon.Click += toolStripButtonInsertIcon_Click;
             // 
             // toolStripButtonValidateXml
@@ -104,6 +108,7 @@
             toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
             toolStripButtonValidateXml.Size = new System.Drawing.Size(23, 22);
             toolStripButtonValidateXml.Text = "toolStripButton2";
+            toolStripButtonValidateXml.ToolTipText = "Validate Xml";
             toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
             // 
             // toolStripButtonGenerateCallbacks
@@ -115,13 +120,13 @@
             toolStripButtonGenerateCallbacks.Name = "toolStripButtonGenerateCallbacks";
             toolStripButtonGenerateCallbacks.Size = new System.Drawing.Size(23, 22);
             toolStripButtonGenerateCallbacks.Text = "toolStripButton3";
+            toolStripButtonGenerateCallbacks.ToolTipText = "Generate Callback";
             toolStripButtonGenerateCallbacks.Click += toolStripButtonGenerateCallbacks_Click;
             // 
             // toolStripDropDownButton1
             // 
             toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuInsertO14CustomUI, toolStripMenuInsertO12CustomUIPart, toolStripMenuItem1 });
-            toolStripDropDownButton1.Enabled = false;
             toolStripDropDownButton1.Image = (System.Drawing.Image)resources.GetObject("toolStripDropDownButton1.Image");
             toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -211,11 +216,28 @@
             // treeView1
             // 
             treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            treeView1.ImageIndex = 0;
+            treeView1.ImageList = tvImageList;
             treeView1.Location = new System.Drawing.Point(0, 0);
             treeView1.Name = "treeView1";
+            treeView1.SelectedImageIndex = 0;
             treeView1.Size = new System.Drawing.Size(266, 425);
             treeView1.TabIndex = 0;
             treeView1.AfterSelect += treeView1_AfterSelect;
+            // 
+            // tvImageList
+            // 
+            tvImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            tvImageList.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("tvImageList.ImageStream");
+            tvImageList.TransparentColor = System.Drawing.Color.Transparent;
+            tvImageList.Images.SetKeyName(0, "worddoc.bmp");
+            tvImageList.Images.SetKeyName(1, "pptpre.bmp");
+            tvImageList.Images.SetKeyName(2, "excelwkb.bmp");
+            tvImageList.Images.SetKeyName(3, "xml.png");
+            tvImageList.Images.SetKeyName(4, "insertPicture.png");
+            tvImageList.Images.SetKeyName(5, "BinaryFile.png");
+            tvImageList.Images.SetKeyName(6, "folder.png");
+            tvImageList.Images.SetKeyName(7, "textfile icon.png");
             // 
             // rtbPartContents
             // 
@@ -270,5 +292,6 @@
         private System.Windows.Forms.ToolStripMenuItem excelCustomTabToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem repurposeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wordGroupOnInsertTabToolStripMenuItem;
+        private System.Windows.Forms.ImageList tvImageList;
     }
 }
