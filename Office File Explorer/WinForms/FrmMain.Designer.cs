@@ -69,7 +69,6 @@ namespace Office_File_Explorer
             contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(components);
             copySelectedLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             copyAllLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            imageList1 = new System.Windows.Forms.ImageList(components);
             mnuMainMenu.SuspendLayout();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -196,7 +195,7 @@ namespace Office_File_Explorer
             // 
             aboutToolStripMenuItem.Image = Properties.Resources.AboutBox;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
@@ -204,7 +203,7 @@ namespace Office_File_Explorer
             // 
             feedbackToolStripMenuItem.Image = Properties.Resources.Feedback;
             feedbackToolStripMenuItem.Name = "feedbackToolStripMenuItem";
-            feedbackToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            feedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             feedbackToolStripMenuItem.Text = "Feedback";
             feedbackToolStripMenuItem.Click += FeedbackToolStripMenuItem_Click;
             // 
@@ -420,16 +419,6 @@ namespace Office_File_Explorer
             copyAllLinesToolStripMenuItem.Text = "Copy All Lines";
             copyAllLinesToolStripMenuItem.Click += CopyAllLinesToolStripMenuItem_Click;
             // 
-            // imageList1
-            // 
-            imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            imageList1.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("imageList1.ImageStream");
-            imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            imageList1.Images.SetKeyName(0, "excel.png");
-            imageList1.Images.SetKeyName(1, "powerpoint.png");
-            imageList1.Images.SetKeyName(2, "word.png");
-            imageList1.Images.SetKeyName(3, "XMLFile_789_32.ico");
-            // 
             // FrmMain
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -488,7 +477,6 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyAllLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem base64DecoderToolStripMenuItem;
-        public System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button BtnValidateDoc;
         private System.Windows.Forms.ToolStripMenuItem openFileBackupFolderToolStripMenuItem;
         private System.Windows.Forms.Button BtnExcelSheetViewer;

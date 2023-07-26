@@ -8,6 +8,9 @@ using System.Xml.Schema;
 using System.Text;
 using System.Xml;
 using System.Drawing;
+using System.Text.RegularExpressions;
+using Color = System.Drawing.Color;
+using System.Linq;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -102,7 +105,7 @@ namespace Office_File_Explorer.WinForms
                         DisableCustomUIIcons();
                     }
 
-                    // load file contents and format the xml
+                    // load file contents
                     foreach (PackagePart pp in pParts)
                     {
                         if (pp.Uri.ToString() == treeView1.SelectedNode.Text)
@@ -110,7 +113,48 @@ namespace Office_File_Explorer.WinForms
                             using (StreamReader sr = new StreamReader(pp.GetStream()))
                             {
                                 string contents = sr.ReadToEnd();
-                                rtbPartContents.Rtf = XmlColorizer.Colorize(contents);
+
+                                // first convert the contents to xml for indenting purposes
+                                XmlDocument doc = new XmlDocument();
+                                doc.LoadXml(contents);
+                                StringBuilder sb = new StringBuilder();
+                                XmlWriterSettings settings = new XmlWriterSettings
+                                {
+                                    Indent = true,
+                                    IndentChars = "  ",
+                                    NewLineChars = "\r\n",
+                                    NewLineHandling = NewLineHandling.Replace
+                                };
+                                using (XmlWriter writer = XmlWriter.Create(sb, settings))
+                                {
+                                    doc.Save(writer);
+                                }
+
+                                rtbPartContents.Text = sb.ToString();
+
+                                // now format the xml for colors
+                                string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)" + @"(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
+                                foreach (Match m in Regex.Matches(rtbPartContents.Text, pattern))
+                                {
+                                    rtbPartContents.Select(m.Index, m.Length);
+                                    rtbPartContents.SelectionColor = Color.DarkBlue;
+
+                                    var tagName = m.Groups["tagName"].Value;
+                                    rtbPartContents.Select(m.Groups["tagName"].Index, m.Groups["tagName"].Length);
+                                    rtbPartContents.SelectionColor = Color.DarkRed;
+
+                                    var attGroup = m.Groups["attName"];
+                                    if (attGroup is not null)
+                                    {
+                                        var atts = attGroup.Captures;
+                                        for (int i = 0; i < atts.Count; i++)
+                                        {
+                                            rtbPartContents.Select(atts[i].Index, atts[i].Length);
+                                            rtbPartContents.SelectionColor = Color.Red;
+                                        }
+                                    }
+                                }
+
                                 return;
                             }
                         }
@@ -176,8 +220,6 @@ namespace Office_File_Explorer.WinForms
                 case ".xml":
                 case ".rels":
                     return OpenXmlInnerFileTypes.XML;
-                case ".bin":
-                    return OpenXmlInnerFileTypes.Binary;
                 case ".mp4":
                 case ".avi":
                 case ".wmv":
@@ -189,6 +231,10 @@ namespace Office_File_Explorer.WinForms
                     return OpenXmlInnerFileTypes.Audio;
                 case ".txt":
                     return OpenXmlInnerFileTypes.Text;
+                case ".bin":
+                case ".sigs":
+                case ".odttf":
+                    return OpenXmlInnerFileTypes.Binary;
                 default:
                     return OpenXmlInnerFileTypes.Binary;
             }

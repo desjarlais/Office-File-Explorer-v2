@@ -360,6 +360,33 @@ namespace Office_File_Explorer.Helpers
         public const string VideoPartType = schemaOxml2006 + "video";
         public const string HyperlinkPartType = schemaOxml2006 + "hyperlink";
 
+        // Xml Rtf Color Replacements
+        public const string rtfString = @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fmodern\fprq1\fcharset0 Courier New;}}{\colortbl	;\red0\green0\blue255;\red128\green0\blue0;\red255\green0\blue0;\red0\green128\blue0;}\pard\f0\fs20 ";
+        public const string rtfAttributeName = @"\cf3 ";
+        public const string rtfAttributeValue = @"\cf1 ";
+        public const string rtfDelimiter = @"\cf1 ";
+        public const string rtfAttributeQuote = @"\cf0 ";
+        public const string rtfName = @"\cf2 ";
+        public const string rtfComment = @"\cf4 ";
+
+        /* RTF Color Codes
+			cf1 = black
+			cf2 = red
+			cf3 = green
+			cf4 = brown
+			cf5 = blue
+			cf6 = purple
+			cf7 = cyan
+			cf8 = gray
+			cf9 = darkGray
+			cf10 = light Red
+			cf11 = light green
+			cf12 = yellow
+			cf13 = light blue
+			cf14 = indigo
+			cf15 = light cyan
+			cf16 = white */
+
         // LabelInfo schema
         public const string xsdMarkup = @"<xsd:schema elementFormDefault=""qualified"" 
                                             xmlns:clbl=""http://schemas.microsoft.com/office/2020/mipLabelMetadata""

@@ -13,7 +13,7 @@ namespace Office_File_Explorer.Helpers
 		public static StringBuilder GenerateCallback(XmlDocument customUIXml)
 		{
 			StringBuilder result = new StringBuilder();
-			result.Append(XmlColorizer.rtfString);
+			result.Append(Strings.rtfString);
 			if (attributeList is null)
 			{
 				attributeList = new System.Collections.Hashtable();
@@ -65,9 +65,9 @@ namespace Office_File_Explorer.Helpers
 		private static StringBuilder ColorizingCallbacks(StringBuilder callbacks)
 		{
 			callbacks.Replace("\n", "\\par ");
-			callbacks.Replace("<green>", XmlColorizer.rtfComment);
-			callbacks.Replace("<blue>", XmlColorizer.rtfAttributeValue);
-			callbacks.Replace("<black>", XmlColorizer.rtfAttributeQuote);
+			callbacks.Replace("<green>", Strings.rtfComment);
+			callbacks.Replace("<blue>", Strings.rtfAttributeValue);
+			callbacks.Replace("<black>", Strings.rtfAttributeQuote);
 			return callbacks;
 		}
 
