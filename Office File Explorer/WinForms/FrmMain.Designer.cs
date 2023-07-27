@@ -39,45 +39,66 @@ namespace Office_File_Explorer
             settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            editToolStripMenuFindReplace = new System.Windows.Forms.ToolStripMenuItem();
+            editToolStripMenuItemModifyContents = new System.Windows.Forms.ToolStripMenuItem();
+            editToolStripMenuItemRemoveCustomDocProps = new System.Windows.Forms.ToolStripMenuItem();
+            editToolStripMenuItemRemoveCustomXml = new System.Windows.Forms.ToolStripMenuItem();
             toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             batchFileProcessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             clipboardViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             base64DecoderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             structuredStorageViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            openXmlPartViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             excelSheetViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            groupBox1 = new System.Windows.Forms.GroupBox();
-            BtnRemoveCustomXmlParts = new System.Windows.Forms.Button();
-            BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
-            BtnValidateDoc = new System.Windows.Forms.Button();
-            BtnFixCorruptDoc = new System.Windows.Forms.Button();
-            BtnDocProps = new System.Windows.Forms.Button();
-            BtnViewImages = new System.Windows.Forms.Button();
-            lblFileType = new System.Windows.Forms.Label();
-            label2 = new System.Windows.Forms.Label();
-            BtnSearchAndReplace = new System.Windows.Forms.Button();
-            BtnFixDocument = new System.Windows.Forms.Button();
-            lblFilePath = new System.Windows.Forms.Label();
-            BtnModifyContent = new System.Windows.Forms.Button();
-            label1 = new System.Windows.Forms.Label();
-            BtnViewContents = new System.Windows.Forms.Button();
-            groupBox2 = new System.Windows.Forms.GroupBox();
-            LstDisplay = new System.Windows.Forms.ListBox();
             contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(components);
             copySelectedLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             copyAllLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStrip1 = new System.Windows.Forms.ToolStrip();
+            toolStripButtonViewContents = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonViewDocProps = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonValidateDoc = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonFixCorruptDoc = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonFixDoc = new System.Windows.Forms.ToolStripButton();
+            toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            toolStripButtonModify = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonInsertIcon = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonValidateXml = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonGenerateCallback = new System.Windows.Forms.ToolStripButton();
+            toolStripDropDownButtonInsert = new System.Windows.Forms.ToolStripDropDownButton();
+            office2010CustomUIPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            office2007CustomUIPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            customOutspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            customTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            excelCustomTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            repurposeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            wordGroupOnInsertTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            statusStrip1 = new System.Windows.Forms.StatusStrip();
+            toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            toolStripStatusLabelFilePath = new System.Windows.Forms.ToolStripStatusLabel();
+            toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            toolStripStatusLabelDocType = new System.Windows.Forms.ToolStripStatusLabel();
+            splitContainer1 = new System.Windows.Forms.SplitContainer();
+            tvFiles = new System.Windows.Forms.TreeView();
+            rtbDisplay = new System.Windows.Forms.RichTextBox();
+            tvImageList = new System.Windows.Forms.ImageList(components);
             mnuMainMenu.SuspendLayout();
-            groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
+            toolStrip1.SuspendLayout();
+            statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
             SuspendLayout();
             // 
             // mnuMainMenu
             // 
-            mnuMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
+            mnuMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
             mnuMainMenu.Location = new System.Drawing.Point(0, 0);
             mnuMainMenu.Name = "mnuMainMenu";
             mnuMainMenu.Size = new System.Drawing.Size(924, 24);
@@ -135,9 +156,44 @@ namespace Office_File_Explorer
             exitToolStripMenuItem.Text = "E&xit";
             exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
             // 
+            // editToolStripMenuItem
+            // 
+            editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { editToolStripMenuFindReplace, editToolStripMenuItemModifyContents, editToolStripMenuItemRemoveCustomDocProps, editToolStripMenuItemRemoveCustomXml });
+            editToolStripMenuItem.Name = "editToolStripMenuItem";
+            editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            editToolStripMenuItem.Text = "&Edit";
+            // 
+            // editToolStripMenuFindReplace
+            // 
+            editToolStripMenuFindReplace.Name = "editToolStripMenuFindReplace";
+            editToolStripMenuFindReplace.Size = new System.Drawing.Size(277, 22);
+            editToolStripMenuFindReplace.Text = "Find and Replace";
+            editToolStripMenuFindReplace.Click += editToolStripMenuFindReplace_Click;
+            // 
+            // editToolStripMenuItemModifyContents
+            // 
+            editToolStripMenuItemModifyContents.Name = "editToolStripMenuItemModifyContents";
+            editToolStripMenuItemModifyContents.Size = new System.Drawing.Size(277, 22);
+            editToolStripMenuItemModifyContents.Text = "File Contents";
+            editToolStripMenuItemModifyContents.Click += editToolStripMenuItemModifyContents_Click;
+            // 
+            // editToolStripMenuItemRemoveCustomDocProps
+            // 
+            editToolStripMenuItemRemoveCustomDocProps.Name = "editToolStripMenuItemRemoveCustomDocProps";
+            editToolStripMenuItemRemoveCustomDocProps.Size = new System.Drawing.Size(277, 22);
+            editToolStripMenuItemRemoveCustomDocProps.Text = "Remove Custom Document Properties";
+            editToolStripMenuItemRemoveCustomDocProps.Click += editToolStripMenuItemRemoveCustomDocProps_Click;
+            // 
+            // editToolStripMenuItemRemoveCustomXml
+            // 
+            editToolStripMenuItemRemoveCustomXml.Name = "editToolStripMenuItemRemoveCustomXml";
+            editToolStripMenuItemRemoveCustomXml.Size = new System.Drawing.Size(277, 22);
+            editToolStripMenuItemRemoveCustomXml.Text = "Remove Custom Xml";
+            editToolStripMenuItemRemoveCustomXml.Click += editToolStripMenuItemRemoveCustomXml_Click;
+            // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, structuredStorageViewerToolStripMenuItem, openXmlPartViewerToolStripMenuItem, excelSheetViewerToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, structuredStorageViewerToolStripMenuItem, excelSheetViewerToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             toolsToolStripMenuItem.Text = "&Tools";
@@ -175,15 +231,6 @@ namespace Office_File_Explorer
             structuredStorageViewerToolStripMenuItem.Text = "Structured Storage Viewer";
             structuredStorageViewerToolStripMenuItem.Click += structuredStorageViewerToolStripMenuItem_Click;
             // 
-            // openXmlPartViewerToolStripMenuItem
-            // 
-            openXmlPartViewerToolStripMenuItem.Enabled = false;
-            openXmlPartViewerToolStripMenuItem.Image = Properties.Resources.XmlFile;
-            openXmlPartViewerToolStripMenuItem.Name = "openXmlPartViewerToolStripMenuItem";
-            openXmlPartViewerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            openXmlPartViewerToolStripMenuItem.Text = "Open Xml Part Viewer";
-            openXmlPartViewerToolStripMenuItem.Click += openXmlPartViewerToolStripMenuItem_Click;
-            // 
             // excelSheetViewerToolStripMenuItem
             // 
             excelSheetViewerToolStripMenuItem.Enabled = false;
@@ -216,187 +263,6 @@ namespace Office_File_Explorer
             feedbackToolStripMenuItem.Text = "Feedback";
             feedbackToolStripMenuItem.Click += FeedbackToolStripMenuItem_Click;
             // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(BtnRemoveCustomXmlParts);
-            groupBox1.Controls.Add(BtnRemoveCustomFileProps);
-            groupBox1.Controls.Add(BtnValidateDoc);
-            groupBox1.Controls.Add(BtnFixCorruptDoc);
-            groupBox1.Controls.Add(BtnDocProps);
-            groupBox1.Controls.Add(BtnViewImages);
-            groupBox1.Controls.Add(lblFileType);
-            groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(BtnSearchAndReplace);
-            groupBox1.Controls.Add(BtnFixDocument);
-            groupBox1.Controls.Add(lblFilePath);
-            groupBox1.Controls.Add(BtnModifyContent);
-            groupBox1.Controls.Add(label1);
-            groupBox1.Controls.Add(BtnViewContents);
-            groupBox1.Location = new System.Drawing.Point(3, 27);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(924, 136);
-            groupBox1.TabIndex = 2;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Document Information";
-            // 
-            // BtnRemoveCustomXmlParts
-            // 
-            BtnRemoveCustomXmlParts.Location = new System.Drawing.Point(398, 107);
-            BtnRemoveCustomXmlParts.Name = "BtnRemoveCustomXmlParts";
-            BtnRemoveCustomXmlParts.Size = new System.Drawing.Size(134, 23);
-            BtnRemoveCustomXmlParts.TabIndex = 13;
-            BtnRemoveCustomXmlParts.Text = "Remove Custom Xml";
-            BtnRemoveCustomXmlParts.UseVisualStyleBackColor = true;
-            BtnRemoveCustomXmlParts.Click += BtnRemoveCustomXmlParts_Click;
-            // 
-            // BtnRemoveCustomFileProps
-            // 
-            BtnRemoveCustomFileProps.Location = new System.Drawing.Point(538, 107);
-            BtnRemoveCustomFileProps.Name = "BtnRemoveCustomFileProps";
-            BtnRemoveCustomFileProps.Size = new System.Drawing.Size(157, 23);
-            BtnRemoveCustomFileProps.TabIndex = 12;
-            BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
-            BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
-            BtnRemoveCustomFileProps.Click += BtnRemoveCustomFileProps_Click;
-            // 
-            // BtnValidateDoc
-            // 
-            BtnValidateDoc.Location = new System.Drawing.Point(538, 78);
-            BtnValidateDoc.Name = "BtnValidateDoc";
-            BtnValidateDoc.Size = new System.Drawing.Size(135, 23);
-            BtnValidateDoc.TabIndex = 10;
-            BtnValidateDoc.Text = "Validate Document";
-            BtnValidateDoc.UseVisualStyleBackColor = true;
-            BtnValidateDoc.Click += BtnValidateDoc_Click;
-            // 
-            // BtnFixCorruptDoc
-            // 
-            BtnFixCorruptDoc.Location = new System.Drawing.Point(233, 107);
-            BtnFixCorruptDoc.Name = "BtnFixCorruptDoc";
-            BtnFixCorruptDoc.Size = new System.Drawing.Size(159, 23);
-            BtnFixCorruptDoc.TabIndex = 9;
-            BtnFixCorruptDoc.Text = "Fix Corrupt Document";
-            BtnFixCorruptDoc.UseVisualStyleBackColor = true;
-            BtnFixCorruptDoc.Click += BtnFixCorruptDoc_Click;
-            // 
-            // BtnDocProps
-            // 
-            BtnDocProps.Location = new System.Drawing.Point(232, 78);
-            BtnDocProps.Name = "BtnDocProps";
-            BtnDocProps.Size = new System.Drawing.Size(168, 23);
-            BtnDocProps.TabIndex = 7;
-            BtnDocProps.Text = "View Document Properties";
-            BtnDocProps.UseVisualStyleBackColor = true;
-            BtnDocProps.Click += BtnDocProps_Click;
-            // 
-            // BtnViewImages
-            // 
-            BtnViewImages.Location = new System.Drawing.Point(119, 78);
-            BtnViewImages.Name = "BtnViewImages";
-            BtnViewImages.Size = new System.Drawing.Size(107, 23);
-            BtnViewImages.TabIndex = 6;
-            BtnViewImages.Text = "View Images";
-            BtnViewImages.UseVisualStyleBackColor = true;
-            BtnViewImages.Click += BtnViewImages_Click;
-            // 
-            // lblFileType
-            // 
-            lblFileType.AutoSize = true;
-            lblFileType.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            lblFileType.Location = new System.Drawing.Point(46, 46);
-            lblFileType.Name = "lblFileType";
-            lblFileType.Size = new System.Drawing.Size(2, 17);
-            lblFileType.TabIndex = 3;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(3, 46);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(37, 15);
-            label2.TabIndex = 2;
-            label2.Text = "Type: ";
-            // 
-            // BtnSearchAndReplace
-            // 
-            BtnSearchAndReplace.Location = new System.Drawing.Point(679, 78);
-            BtnSearchAndReplace.Name = "BtnSearchAndReplace";
-            BtnSearchAndReplace.Size = new System.Drawing.Size(133, 23);
-            BtnSearchAndReplace.TabIndex = 1;
-            BtnSearchAndReplace.Text = "Search and Replace";
-            BtnSearchAndReplace.UseVisualStyleBackColor = true;
-            BtnSearchAndReplace.Click += BtnSearchAndReplace_Click;
-            // 
-            // BtnFixDocument
-            // 
-            BtnFixDocument.Location = new System.Drawing.Point(119, 107);
-            BtnFixDocument.Name = "BtnFixDocument";
-            BtnFixDocument.Size = new System.Drawing.Size(108, 23);
-            BtnFixDocument.TabIndex = 3;
-            BtnFixDocument.Text = "Fix Document";
-            BtnFixDocument.UseVisualStyleBackColor = true;
-            BtnFixDocument.Click += BtnFixDocument_Click;
-            // 
-            // lblFilePath
-            // 
-            lblFilePath.AutoSize = true;
-            lblFilePath.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            lblFilePath.Location = new System.Drawing.Point(46, 19);
-            lblFilePath.Name = "lblFilePath";
-            lblFilePath.Size = new System.Drawing.Size(2, 17);
-            lblFilePath.TabIndex = 1;
-            // 
-            // BtnModifyContent
-            // 
-            BtnModifyContent.Location = new System.Drawing.Point(6, 107);
-            BtnModifyContent.Name = "BtnModifyContent";
-            BtnModifyContent.Size = new System.Drawing.Size(107, 23);
-            BtnModifyContent.TabIndex = 2;
-            BtnModifyContent.Text = "Modify Contents";
-            BtnModifyContent.UseVisualStyleBackColor = true;
-            BtnModifyContent.Click += BtnModifyContent_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(3, 19);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(28, 15);
-            label1.TabIndex = 0;
-            label1.Text = "File:";
-            // 
-            // BtnViewContents
-            // 
-            BtnViewContents.Location = new System.Drawing.Point(6, 78);
-            BtnViewContents.Name = "BtnViewContents";
-            BtnViewContents.Size = new System.Drawing.Size(107, 23);
-            BtnViewContents.TabIndex = 0;
-            BtnViewContents.Text = "View Contents";
-            BtnViewContents.UseVisualStyleBackColor = true;
-            BtnViewContents.Click += BtnViewContents_Click;
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(LstDisplay);
-            groupBox2.Location = new System.Drawing.Point(0, 169);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new System.Drawing.Size(924, 389);
-            groupBox2.TabIndex = 3;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Output";
-            // 
-            // LstDisplay
-            // 
-            LstDisplay.ContextMenuStrip = contextMenuStrip1;
-            LstDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
-            LstDisplay.FormattingEnabled = true;
-            LstDisplay.HorizontalScrollbar = true;
-            LstDisplay.ItemHeight = 15;
-            LstDisplay.Location = new System.Drawing.Point(3, 19);
-            LstDisplay.Name = "LstDisplay";
-            LstDisplay.Size = new System.Drawing.Size(918, 367);
-            LstDisplay.TabIndex = 0;
-            // 
             // contextMenuStrip1
             // 
             contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { copySelectedLineToolStripMenuItem, copyAllLinesToolStripMenuItem });
@@ -417,13 +283,280 @@ namespace Office_File_Explorer
             copyAllLinesToolStripMenuItem.Text = "Copy All Lines";
             copyAllLinesToolStripMenuItem.Click += CopyAllLinesToolStripMenuItem_Click;
             // 
+            // toolStrip1
+            // 
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonViewDocProps, toolStripButtonValidateDoc, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonValidateXml, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert });
+            toolStrip1.Location = new System.Drawing.Point(0, 24);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.Size = new System.Drawing.Size(924, 25);
+            toolStrip1.TabIndex = 3;
+            toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonViewContents
+            // 
+            toolStripButtonViewContents.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonViewContents.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonViewContents.Image");
+            toolStripButtonViewContents.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonViewContents.Name = "toolStripButtonViewContents";
+            toolStripButtonViewContents.Size = new System.Drawing.Size(87, 22);
+            toolStripButtonViewContents.Text = "View Contents";
+            toolStripButtonViewContents.Click += toolStripButtonViewContents_Click;
+            // 
+            // toolStripButtonViewDocProps
+            // 
+            toolStripButtonViewDocProps.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonViewDocProps.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonViewDocProps.Image");
+            toolStripButtonViewDocProps.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonViewDocProps.Name = "toolStripButtonViewDocProps";
+            toolStripButtonViewDocProps.Size = new System.Drawing.Size(128, 22);
+            toolStripButtonViewDocProps.Text = "View Document Props";
+            toolStripButtonViewDocProps.Click += toolStripButtonViewDocProps_Click;
+            // 
+            // toolStripButtonValidateDoc
+            // 
+            toolStripButtonValidateDoc.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonValidateDoc.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateDoc.Image");
+            toolStripButtonValidateDoc.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonValidateDoc.Name = "toolStripButtonValidateDoc";
+            toolStripButtonValidateDoc.Size = new System.Drawing.Size(111, 22);
+            toolStripButtonValidateDoc.Text = "Validate Document";
+            toolStripButtonValidateDoc.Click += toolStripButtonValidateDoc_Click;
+            // 
+            // toolStripButtonFixCorruptDoc
+            // 
+            toolStripButtonFixCorruptDoc.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonFixCorruptDoc.Enabled = false;
+            toolStripButtonFixCorruptDoc.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonFixCorruptDoc.Image");
+            toolStripButtonFixCorruptDoc.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonFixCorruptDoc.Name = "toolStripButtonFixCorruptDoc";
+            toolStripButtonFixCorruptDoc.Size = new System.Drawing.Size(129, 22);
+            toolStripButtonFixCorruptDoc.Text = "Fix Corrupt Document";
+            toolStripButtonFixCorruptDoc.Click += toolStripButtonFixCorruptDoc_Click;
+            // 
+            // toolStripButtonFixDoc
+            // 
+            toolStripButtonFixDoc.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonFixDoc.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonFixDoc.Image");
+            toolStripButtonFixDoc.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonFixDoc.Name = "toolStripButtonFixDoc";
+            toolStripButtonFixDoc.Size = new System.Drawing.Size(85, 22);
+            toolStripButtonFixDoc.Text = "Fix Document";
+            toolStripButtonFixDoc.Click += toolStripButtonFixDoc_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonModify
+            // 
+            toolStripButtonModify.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonModify.Image = Properties.Resources.ModifyPropertyTrivial;
+            toolStripButtonModify.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonModify.Name = "toolStripButtonModify";
+            toolStripButtonModify.Size = new System.Drawing.Size(23, 22);
+            toolStripButtonModify.Text = "toolStripButton7";
+            toolStripButtonModify.Click += toolStripButtonModify_Click;
+            // 
+            // toolStripButtonSave
+            // 
+            toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonSave.Image = Properties.Resources.Save;
+            toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonSave.Name = "toolStripButtonSave";
+            toolStripButtonSave.Size = new System.Drawing.Size(23, 22);
+            toolStripButtonSave.Text = "toolStripButton8";
+            toolStripButtonSave.Click += toolStripButtonSave_Click;
+            // 
+            // toolStripButtonInsertIcon
+            // 
+            toolStripButtonInsertIcon.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonInsertIcon.Enabled = false;
+            toolStripButtonInsertIcon.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonInsertIcon.Image");
+            toolStripButtonInsertIcon.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonInsertIcon.Name = "toolStripButtonInsertIcon";
+            toolStripButtonInsertIcon.Size = new System.Drawing.Size(23, 22);
+            toolStripButtonInsertIcon.Text = "toolStripButton9";
+            toolStripButtonInsertIcon.Click += toolStripButtonInsertIcon_Click;
+            // 
+            // toolStripButtonValidateXml
+            // 
+            toolStripButtonValidateXml.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonValidateXml.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateXml.Image");
+            toolStripButtonValidateXml.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
+            toolStripButtonValidateXml.Size = new System.Drawing.Size(23, 22);
+            toolStripButtonValidateXml.Text = "toolStripButton10";
+            toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
+            // 
+            // toolStripButtonGenerateCallback
+            // 
+            toolStripButtonGenerateCallback.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonGenerateCallback.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonGenerateCallback.Image");
+            toolStripButtonGenerateCallback.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonGenerateCallback.Name = "toolStripButtonGenerateCallback";
+            toolStripButtonGenerateCallback.Size = new System.Drawing.Size(23, 22);
+            toolStripButtonGenerateCallback.Text = "toolStripButton1";
+            toolStripButtonGenerateCallback.Click += toolStripButtonGenerateCallback_Click;
+            // 
+            // toolStripDropDownButtonInsert
+            // 
+            toolStripDropDownButtonInsert.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButtonInsert.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { office2010CustomUIPartToolStripMenuItem, office2007CustomUIPartToolStripMenuItem, toolStripMenuItem1 });
+            toolStripDropDownButtonInsert.Image = (System.Drawing.Image)resources.GetObject("toolStripDropDownButtonInsert.Image");
+            toolStripDropDownButtonInsert.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripDropDownButtonInsert.Name = "toolStripDropDownButtonInsert";
+            toolStripDropDownButtonInsert.Size = new System.Drawing.Size(49, 22);
+            toolStripDropDownButtonInsert.Text = "Insert";
+            // 
+            // office2010CustomUIPartToolStripMenuItem
+            // 
+            office2010CustomUIPartToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("office2010CustomUIPartToolStripMenuItem.Image");
+            office2010CustomUIPartToolStripMenuItem.Name = "office2010CustomUIPartToolStripMenuItem";
+            office2010CustomUIPartToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            office2010CustomUIPartToolStripMenuItem.Text = "Office 2010 Custom UI Part";
+            office2010CustomUIPartToolStripMenuItem.Click += office2010CustomUIPartToolStripMenuItem_Click;
+            // 
+            // office2007CustomUIPartToolStripMenuItem
+            // 
+            office2007CustomUIPartToolStripMenuItem.Image = Properties.Resources._90_904004_pixel_ms_office_word_2007_logo;
+            office2007CustomUIPartToolStripMenuItem.Name = "office2007CustomUIPartToolStripMenuItem";
+            office2007CustomUIPartToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            office2007CustomUIPartToolStripMenuItem.Text = "Office 2007 Custom UI Part";
+            office2007CustomUIPartToolStripMenuItem.Click += office2007CustomUIPartToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { customOutspaceToolStripMenuItem, customTabToolStripMenuItem, excelCustomTabToolStripMenuItem, repurposeToolStripMenuItem, wordGroupOnInsertTabToolStripMenuItem });
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new System.Drawing.Size(216, 22);
+            toolStripMenuItem1.Text = "Sample XML";
+            // 
+            // customOutspaceToolStripMenuItem
+            // 
+            customOutspaceToolStripMenuItem.Name = "customOutspaceToolStripMenuItem";
+            customOutspaceToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            customOutspaceToolStripMenuItem.Text = "Custom Outspace";
+            customOutspaceToolStripMenuItem.Click += customOutspaceToolStripMenuItem_Click;
+            // 
+            // customTabToolStripMenuItem
+            // 
+            customTabToolStripMenuItem.Name = "customTabToolStripMenuItem";
+            customTabToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            customTabToolStripMenuItem.Text = "Custom Tab";
+            customTabToolStripMenuItem.Click += customTabToolStripMenuItem_Click;
+            // 
+            // excelCustomTabToolStripMenuItem
+            // 
+            excelCustomTabToolStripMenuItem.Name = "excelCustomTabToolStripMenuItem";
+            excelCustomTabToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            excelCustomTabToolStripMenuItem.Text = "Excel - Custom Tab";
+            excelCustomTabToolStripMenuItem.Click += excelCustomTabToolStripMenuItem_Click;
+            // 
+            // repurposeToolStripMenuItem
+            // 
+            repurposeToolStripMenuItem.Name = "repurposeToolStripMenuItem";
+            repurposeToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            repurposeToolStripMenuItem.Text = "Repurpose";
+            repurposeToolStripMenuItem.Click += repurposeToolStripMenuItem_Click;
+            // 
+            // wordGroupOnInsertTabToolStripMenuItem
+            // 
+            wordGroupOnInsertTabToolStripMenuItem.Name = "wordGroupOnInsertTabToolStripMenuItem";
+            wordGroupOnInsertTabToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            wordGroupOnInsertTabToolStripMenuItem.Text = "Word - Group on Insert Tab";
+            wordGroupOnInsertTabToolStripMenuItem.Click += wordGroupOnInsertTabToolStripMenuItem_Click;
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabelFilePath, toolStripStatusLabel3, toolStripStatusLabelDocType });
+            statusStrip1.Location = new System.Drawing.Point(0, 541);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new System.Drawing.Size(924, 22);
+            statusStrip1.TabIndex = 4;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new System.Drawing.Size(55, 17);
+            toolStripStatusLabel1.Text = "File Path:";
+            // 
+            // toolStripStatusLabelFilePath
+            // 
+            toolStripStatusLabelFilePath.Name = "toolStripStatusLabelFilePath";
+            toolStripStatusLabelFilePath.Size = new System.Drawing.Size(36, 17);
+            toolStripStatusLabelFilePath.Text = "None";
+            // 
+            // toolStripStatusLabel3
+            // 
+            toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            toolStripStatusLabel3.Size = new System.Drawing.Size(55, 17);
+            toolStripStatusLabel3.Text = "File Type:";
+            // 
+            // toolStripStatusLabelDocType
+            // 
+            toolStripStatusLabelDocType.Name = "toolStripStatusLabelDocType";
+            toolStripStatusLabelDocType.Size = new System.Drawing.Size(36, 17);
+            toolStripStatusLabelDocType.Text = "None";
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            splitContainer1.Location = new System.Drawing.Point(0, 49);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(tvFiles);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(rtbDisplay);
+            splitContainer1.Size = new System.Drawing.Size(924, 492);
+            splitContainer1.SplitterDistance = 308;
+            splitContainer1.TabIndex = 5;
+            // 
+            // tvFiles
+            // 
+            tvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            tvFiles.Location = new System.Drawing.Point(0, 0);
+            tvFiles.Name = "tvFiles";
+            tvFiles.Size = new System.Drawing.Size(308, 492);
+            tvFiles.TabIndex = 0;
+            tvFiles.AfterSelect += tvFiles_AfterSelect;
+            // 
+            // rtbDisplay
+            // 
+            rtbDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            rtbDisplay.Location = new System.Drawing.Point(0, 0);
+            rtbDisplay.Name = "rtbDisplay";
+            rtbDisplay.Size = new System.Drawing.Size(612, 492);
+            rtbDisplay.TabIndex = 0;
+            rtbDisplay.Text = "";
+            // 
+            // tvImageList
+            // 
+            tvImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            tvImageList.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("tvImageList.ImageStream");
+            tvImageList.TransparentColor = System.Drawing.Color.Transparent;
+            tvImageList.Images.SetKeyName(0, "worddoc.bmp");
+            tvImageList.Images.SetKeyName(1, "pptpre.bmp");
+            tvImageList.Images.SetKeyName(2, "excelwkb.bmp");
+            tvImageList.Images.SetKeyName(3, "xml.png");
+            tvImageList.Images.SetKeyName(4, "insertPicture.png");
+            tvImageList.Images.SetKeyName(5, "BinaryFile.png");
+            tvImageList.Images.SetKeyName(6, "folder.png");
+            tvImageList.Images.SetKeyName(7, "file.png");
+            // 
             // FrmMain
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(924, 563);
-            Controls.Add(groupBox2);
-            Controls.Add(groupBox1);
+            Controls.Add(splitContainer1);
+            Controls.Add(statusStrip1);
+            Controls.Add(toolStrip1);
             Controls.Add(mnuMainMenu);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = mnuMainMenu;
@@ -434,10 +567,15 @@ namespace Office_File_Explorer
             FormClosing += FrmMain_FormClosing;
             mnuMainMenu.ResumeLayout(false);
             mnuMainMenu.PerformLayout();
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
-            groupBox2.ResumeLayout(false);
             contextMenuStrip1.ResumeLayout(false);
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -449,16 +587,8 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label lblFileType;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lblFilePath;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ListBox LstDisplay;
-        private System.Windows.Forms.Button BtnFixDocument;
-        private System.Windows.Forms.Button BtnModifyContent;
-        private System.Windows.Forms.Button BtnSearchAndReplace;
-        private System.Windows.Forms.Button BtnViewContents;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
@@ -468,20 +598,48 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem feedbackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openErrorLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.Button BtnDocProps;
-        private System.Windows.Forms.Button BtnViewImages;
-        private System.Windows.Forms.Button BtnFixCorruptDoc;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyAllLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem base64DecoderToolStripMenuItem;
-        private System.Windows.Forms.Button BtnValidateDoc;
         private System.Windows.Forms.ToolStripMenuItem openFileBackupFolderToolStripMenuItem;
-        private System.Windows.Forms.Button BtnRemoveCustomFileProps;
-        private System.Windows.Forms.Button BtnRemoveCustomXmlParts;
         private System.Windows.Forms.ToolStripMenuItem structuredStorageViewerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openXmlPartViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem excelSheetViewerToolStripMenuItem;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonViewContents;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFilePath;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripButton toolStripButtonValidateDoc;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFixCorruptDoc;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFixDoc;
+        private System.Windows.Forms.ToolStripButton toolStripButtonModify;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSave;
+        private System.Windows.Forms.ToolStripButton toolStripButtonInsertIcon;
+        private System.Windows.Forms.ToolStripButton toolStripButtonValidateXml;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuFindReplace;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItemModifyContents;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItemRemoveCustomDocProps;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItemRemoveCustomXml;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButtonInsert;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.TreeView tvFiles;
+        private System.Windows.Forms.RichTextBox rtbDisplay;
+        private System.Windows.Forms.ToolStripButton toolStripButtonGenerateCallback;
+        private System.Windows.Forms.ToolStripMenuItem office2010CustomUIPartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem office2007CustomUIPartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem customOutspaceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem customTabToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem excelCustomTabToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem repurposeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wordGroupOnInsertTabToolStripMenuItem;
+        private System.Windows.Forms.ImageList tvImageList;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelDocType;
+        private System.Windows.Forms.ToolStripButton toolStripButtonViewDocProps;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 
