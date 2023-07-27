@@ -45,13 +45,13 @@ namespace Office_File_Explorer
             base64DecoderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             structuredStorageViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             openXmlPartViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            excelSheetViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             BtnRemoveCustomXmlParts = new System.Windows.Forms.Button();
             BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
-            BtnExcelSheetViewer = new System.Windows.Forms.Button();
             BtnValidateDoc = new System.Windows.Forms.Button();
             BtnFixCorruptDoc = new System.Windows.Forms.Button();
             BtnDocProps = new System.Windows.Forms.Button();
@@ -137,7 +137,7 @@ namespace Office_File_Explorer
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, structuredStorageViewerToolStripMenuItem, openXmlPartViewerToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, structuredStorageViewerToolStripMenuItem, openXmlPartViewerToolStripMenuItem, excelSheetViewerToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             toolsToolStripMenuItem.Text = "&Tools";
@@ -184,6 +184,15 @@ namespace Office_File_Explorer
             openXmlPartViewerToolStripMenuItem.Text = "Open Xml Part Viewer";
             openXmlPartViewerToolStripMenuItem.Click += openXmlPartViewerToolStripMenuItem_Click;
             // 
+            // excelSheetViewerToolStripMenuItem
+            // 
+            excelSheetViewerToolStripMenuItem.Enabled = false;
+            excelSheetViewerToolStripMenuItem.Image = Properties.Resources.excel;
+            excelSheetViewerToolStripMenuItem.Name = "excelSheetViewerToolStripMenuItem";
+            excelSheetViewerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            excelSheetViewerToolStripMenuItem.Text = "Excel Sheet Viewer";
+            excelSheetViewerToolStripMenuItem.Click += excelSheetViewerToolStripMenuItem_Click;
+            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { aboutToolStripMenuItem, feedbackToolStripMenuItem });
@@ -195,7 +204,7 @@ namespace Office_File_Explorer
             // 
             aboutToolStripMenuItem.Image = Properties.Resources.AboutBox;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            aboutToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
@@ -203,7 +212,7 @@ namespace Office_File_Explorer
             // 
             feedbackToolStripMenuItem.Image = Properties.Resources.Feedback;
             feedbackToolStripMenuItem.Name = "feedbackToolStripMenuItem";
-            feedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            feedbackToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             feedbackToolStripMenuItem.Text = "Feedback";
             feedbackToolStripMenuItem.Click += FeedbackToolStripMenuItem_Click;
             // 
@@ -211,7 +220,6 @@ namespace Office_File_Explorer
             // 
             groupBox1.Controls.Add(BtnRemoveCustomXmlParts);
             groupBox1.Controls.Add(BtnRemoveCustomFileProps);
-            groupBox1.Controls.Add(BtnExcelSheetViewer);
             groupBox1.Controls.Add(BtnValidateDoc);
             groupBox1.Controls.Add(BtnFixCorruptDoc);
             groupBox1.Controls.Add(BtnDocProps);
@@ -250,16 +258,6 @@ namespace Office_File_Explorer
             BtnRemoveCustomFileProps.Text = "Remove Custom File Props";
             BtnRemoveCustomFileProps.UseVisualStyleBackColor = true;
             BtnRemoveCustomFileProps.Click += BtnRemoveCustomFileProps_Click;
-            // 
-            // BtnExcelSheetViewer
-            // 
-            BtnExcelSheetViewer.Location = new System.Drawing.Point(406, 78);
-            BtnExcelSheetViewer.Name = "BtnExcelSheetViewer";
-            BtnExcelSheetViewer.Size = new System.Drawing.Size(126, 23);
-            BtnExcelSheetViewer.TabIndex = 11;
-            BtnExcelSheetViewer.Text = "Excel Sheet Viewer";
-            BtnExcelSheetViewer.UseVisualStyleBackColor = true;
-            BtnExcelSheetViewer.Click += BtnExcelSheetViewer_Click;
             // 
             // BtnValidateDoc
             // 
@@ -479,11 +477,11 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem base64DecoderToolStripMenuItem;
         private System.Windows.Forms.Button BtnValidateDoc;
         private System.Windows.Forms.ToolStripMenuItem openFileBackupFolderToolStripMenuItem;
-        private System.Windows.Forms.Button BtnExcelSheetViewer;
         private System.Windows.Forms.Button BtnRemoveCustomFileProps;
         private System.Windows.Forms.Button BtnRemoveCustomXmlParts;
         private System.Windows.Forms.ToolStripMenuItem structuredStorageViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openXmlPartViewerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem excelSheetViewerToolStripMenuItem;
     }
 }
 

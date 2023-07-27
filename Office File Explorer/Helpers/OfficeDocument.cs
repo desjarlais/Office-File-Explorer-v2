@@ -21,8 +21,6 @@ namespace Office_File_Explorer.Helpers
 
 			_xmlParts = new List<OfficePart>();
 
-
-
 			// clp 
 			foreach (PackageRelationship pr in _package.GetRelationshipsByType(Strings.schemaClpRelationship))
 			{

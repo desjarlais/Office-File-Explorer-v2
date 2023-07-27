@@ -610,6 +610,8 @@ namespace Office_File_Explorer
 
         #endregion
 
+        #region Button Events
+
         private void BtnViewContents_Click(object sender, EventArgs e)
         {
             try
@@ -1983,14 +1985,6 @@ namespace Office_File_Explorer
             AppUtilities.PlatformSpecificProcessStart(Path.GetDirectoryName(Application.LocalUserAppDataPath));
         }
 
-        private void BtnExcelSheetViewer_Click(object sender, EventArgs e)
-        {
-            using (var f = new FrmSheetViewer(lblFilePath.Text))
-            {
-                var result = f.ShowDialog();
-            }
-        }
-
         private void BtnRemoveCustomFileProps_Click(object sender, EventArgs e)
         {
             try
@@ -2051,5 +2045,15 @@ namespace Office_File_Explorer
                 var result = f.ShowDialog();
             }
         }
+
+        private void excelSheetViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var f = new FrmSheetViewer(lblFilePath.Text))
+            {
+                var result = f.ShowDialog();
+            }
+        }
+
+        #endregion
     }
 }

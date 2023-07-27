@@ -51,8 +51,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(pictureBox1);
-            splitContainer1.Size = new System.Drawing.Size(670, 501);
-            splitContainer1.SplitterDistance = 324;
+            splitContainer1.Size = new System.Drawing.Size(769, 552);
+            splitContainer1.SplitterDistance = 371;
             splitContainer1.TabIndex = 0;
             // 
             // rtbRTFContent
@@ -60,7 +60,7 @@
             rtbRTFContent.Dock = System.Windows.Forms.DockStyle.Fill;
             rtbRTFContent.Location = new System.Drawing.Point(0, 0);
             rtbRTFContent.Name = "rtbRTFContent";
-            rtbRTFContent.Size = new System.Drawing.Size(324, 501);
+            rtbRTFContent.Size = new System.Drawing.Size(371, 552);
             rtbRTFContent.TabIndex = 0;
             rtbRTFContent.Text = "";
             // 
@@ -69,7 +69,8 @@
             pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             pictureBox1.Location = new System.Drawing.Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new System.Drawing.Size(342, 501);
+            pictureBox1.Size = new System.Drawing.Size(394, 552);
+            pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
@@ -77,7 +78,7 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(670, 501);
+            ClientSize = new System.Drawing.Size(769, 552);
             Controls.Add(splitContainer1);
             MaximizeBox = false;
             MinimizeBox = false;
@@ -86,6 +87,7 @@
             Text = "Binary Part Viewer";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

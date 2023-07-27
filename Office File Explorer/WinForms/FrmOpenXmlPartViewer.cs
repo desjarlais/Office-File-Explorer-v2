@@ -10,7 +10,7 @@ using System.Xml;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using Color = System.Drawing.Color;
-using System.Linq;
+using System.Diagnostics;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -57,6 +57,7 @@ namespace Office_File_Explorer.WinForms
                 treeView1.SelectedImageIndex = 1;
             }
 
+            // populate the treeview with inner files
             foreach (PackagePart part in package.GetParts())
             {
                 tRoot.Nodes.Add(part.Uri.ToString());
@@ -82,6 +83,7 @@ namespace Office_File_Explorer.WinForms
             }
 
             treeView1.Nodes.Add(tRoot);
+            treeView1.ExpandAll();
         }
 
         private void FrmOpenXmlPartViewer_FormClosing(object sender, FormClosingEventArgs e)
@@ -114,7 +116,7 @@ namespace Office_File_Explorer.WinForms
                             {
                                 string contents = sr.ReadToEnd();
 
-                                // first convert the contents to xml for indenting purposes
+                                // convert the contents to indented xml
                                 XmlDocument doc = new XmlDocument();
                                 doc.LoadXml(contents);
                                 StringBuilder sb = new StringBuilder();
@@ -130,14 +132,15 @@ namespace Office_File_Explorer.WinForms
                                     doc.Save(writer);
                                 }
 
+                                treeView1.SuspendLayout();
                                 rtbPartContents.Text = sb.ToString();
-
-                                // now format the xml for colors
+                                
+                                // format the xml for colors
                                 string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)" + @"(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
                                 foreach (Match m in Regex.Matches(rtbPartContents.Text, pattern))
                                 {
                                     rtbPartContents.Select(m.Index, m.Length);
-                                    rtbPartContents.SelectionColor = Color.DarkBlue;
+                                    rtbPartContents.SelectionColor = Color.Blue;
 
                                     var tagName = m.Groups["tagName"].Value;
                                     rtbPartContents.Select(m.Groups["tagName"].Index, m.Groups["tagName"].Length);
@@ -155,6 +158,7 @@ namespace Office_File_Explorer.WinForms
                                     }
                                 }
 
+                                treeView1.ResumeLayout();
                                 return;
                             }
                         }
@@ -172,6 +176,20 @@ namespace Office_File_Explorer.WinForms
                             {
                                 var result = f.ShowDialog();
                             }
+                            return;
+                        }
+                    }
+                }
+                else if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Binary)
+                {
+                    foreach (PackagePart pp in pParts)
+                    {
+                        if (pp.Uri.ToString() == treeView1.SelectedNode.Text)
+                        {
+                            Stream imageSource = pp.GetStream();
+                            byte[] bytes = BitConverter.GetBytes(imageSource.Length);
+                            rtbPartContents.Text = BitConverter.ToString(bytes);
+                            imageSource.Close();
                             return;
                         }
                     }
@@ -302,6 +320,7 @@ namespace Office_File_Explorer.WinForms
             toolStripButtonGenerateCallbacks.Enabled = true;
             toolStripButtonValidateXml.Enabled = true;
             toolStripDropDownButton1.Enabled = true;
+            //toolStripButtonInsertIcon.Enabled = true;
         }
 
         public void DisableCustomUIIcons()
@@ -310,7 +329,7 @@ namespace Office_File_Explorer.WinForms
             toolStripButtonSave.Enabled = false;
             toolStripButtonGenerateCallbacks.Enabled = false;
             toolStripButtonValidateXml.Enabled = false;
-            toolStripButtonInsertIcon.Enabled = false;
+            //toolStripButtonInsertIcon.Enabled = false;
         }
 
         private void ShowError(string errorText)
@@ -422,6 +441,27 @@ namespace Office_File_Explorer.WinForms
             node.ImageIndex = 3;
             node.SelectedImageIndex = 3;
             return node;
+        }
+
+        private OfficePart RetrieveCustomPart(XMLParts partType)
+        {
+            if (pParts == null || pParts.Count == 0) return null;
+
+            OfficePart oPart;
+
+            foreach (PackagePart pp in pParts)
+            {
+                if (pp.Uri.ToString() == Strings.CustomUI14PartRelType)
+                {
+                    return oPart = new OfficePart(pp, XMLParts.RibbonX14, Strings.CustomUI14PartRelType);
+                }
+                else if (pp.Uri.ToString() == Strings.CustomUIPartRelType)
+                {
+                    return oPart = new OfficePart(pp, XMLParts.RibbonX14, Strings.CustomUIPartRelType);
+                }
+            }
+
+            return null;
         }
 
         private OfficePart CreateCustomUIPart(XMLParts partType)
@@ -546,7 +586,53 @@ namespace Office_File_Explorer.WinForms
 
         private void toolStripButtonInsertIcon_Click(object sender, EventArgs e)
         {
+            OpenFileDialog fDialog = new OpenFileDialog
+            {
+                Title = "Insert Custom Icon",
+                Filter = "Supported Icons | *.ico; *.bmp; *.png; *.jpg; *.jpeg; *.tif;| All Files | *.*;",
+                RestoreDirectory = true,
+                InitialDirectory = @"%userprofile%"
+            };
 
+            if (fDialog.ShowDialog() == DialogResult.OK)
+            {
+                XMLParts partType = XMLParts.RibbonX14;
+                OfficePart part = RetrieveCustomPart(partType);
+                treeView1.SuspendLayout();
+
+                foreach (string fileName in (sender as OpenFileDialog).FileNames)
+                {
+                    try
+                    {
+                        string id = XmlConvert.EncodeName(Path.GetFileNameWithoutExtension(fileName));
+                        Stream imageStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        Image image = Image.FromStream(imageStream, true, true);
+
+                        // The file is a valid image at this point.
+                        id = part.AddImage(fileName, id);
+
+                        Debug.Assert(id != null, "Cannot create image part.");
+                        if (id == null) continue;
+
+                        imageStream.Close();
+
+                        TreeNode imageNode = new TreeNode(id);
+                        imageNode.ImageKey = "_" + id;
+                        imageNode.SelectedImageKey = imageNode.ImageKey;
+                        imageNode.Tag = partType;
+
+                        treeView1.ImageList.Images.Add(imageNode.ImageKey, image);
+                        treeView1.Nodes.Add(imageNode);
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowError(ex.Message);
+                        continue;
+                    }
+                }
+
+                treeView1.ResumeLayout();
+            }
         }
     }
 }

@@ -49,6 +49,7 @@
             treeView1 = new System.Windows.Forms.TreeView();
             tvImageList = new System.Windows.Forms.ImageList(components);
             rtbPartContents = new System.Windows.Forms.RichTextBox();
+            openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -249,6 +250,10 @@
             rtbPartContents.TabIndex = 0;
             rtbPartContents.Text = "";
             // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
+            // 
             // FrmOpenXmlPartViewer
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -293,5 +298,6 @@
         private System.Windows.Forms.ToolStripMenuItem repurposeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wordGroupOnInsertTabToolStripMenuItem;
         private System.Windows.Forms.ImageList tvImageList;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
