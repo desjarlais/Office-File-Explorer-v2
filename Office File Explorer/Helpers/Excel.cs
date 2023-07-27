@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -232,13 +233,13 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
-        public static List<string> GetLinks(string path, bool addItemCount)
+        public static List<string> GetLinks(Package pkg, bool addItemCount)
         {
             List<string> tList = new List<string>();
 
             try
             {
-                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
                 {
                     WorkbookPart wbPart = excelDoc.WorkbookPart;
                     int ExtRelCount = 0;
@@ -267,11 +268,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetComments(string path)
+        public static List<string> GetComments(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
             {
                 WorkbookPart wbPart = excelDoc.WorkbookPart;
                 int commentCount = 0;
@@ -294,11 +295,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetSheetInfo(string path)
+        public static List<string> GetSheetInfo(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument mySpreadsheet = SpreadsheetDocument.Open(path, false))
+            using (SpreadsheetDocument mySpreadsheet = SpreadsheetDocument.Open(pkg))
             {
                 Sheets sheets = mySpreadsheet.WorkbookPart.Workbook.Sheets;
 
@@ -322,11 +323,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetHyperlinks(string path)
+        public static List<string> GetHyperlinks(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
             {
                 int count = 0;
 
@@ -466,12 +467,12 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
-        public static List<string> GetSharedStrings(string path)
+        public static List<string> GetSharedStrings(Package pkg)
         {
             List<string> tList = new List<string>();
             int sharedStringCount = 0;
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
             {
                 WorkbookPart wbPart = excelDoc.WorkbookPart;
                 if (wbPart.SharedStringTablePart != null)
@@ -554,12 +555,12 @@ namespace Office_File_Explorer.Helpers
             return returnValue;
         }
 
-        public static List<string> GetDefinedNames(string path)
+        public static List<string> GetDefinedNames(Package pkg)
         {
             List<string> tList = new List<string>();
             int nameCount = 0;
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
             {
                 WorkbookPart wbPart = excelDoc.WorkbookPart;
 
@@ -580,11 +581,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetConnections(string path)
+        public static List<string> GetConnections(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
             {
                 WorkbookPart wbPart = excelDoc.WorkbookPart;
                 ConnectionsPart cPart = wbPart.ConnectionsPart;
@@ -633,11 +634,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetHiddenRowCols(string path)
+        public static List<string> GetHiddenRowCols(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
             {
                 WorkbookPart wbPart = excelDoc.WorkbookPart;
                 Sheets theSheets = wbPart.Workbook.Sheets;
@@ -698,11 +699,11 @@ namespace Office_File_Explorer.Helpers
 
         // The DOM approach.
         // Note that the code below works only for cells that contain numeric values.
-        public static List<string> ReadExcelFileDOM(string fileName)
+        public static List<string> ReadExcelFileDOM(Package pkg)
         {
             List<string> values = new List<string>();
 
-            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(fileName, false))
+            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(pkg))
             {
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
@@ -724,11 +725,11 @@ namespace Office_File_Explorer.Helpers
         }
 
         // The SAX approach.
-        public static List<string> ReadExcelFileSAX(string fileName)
+        public static List<string> ReadExcelFileSAX(Package pkg)
         {
             List<string> values = new List<string>();
 
-            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(fileName, false))
+            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(pkg))
             {
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
@@ -749,7 +750,7 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
-        public static bool DeleteSheet(string fileName, string sheetToDelete)
+        public static bool DeleteSheet(Package pkg, string sheetToDelete)
         {
             // Delete the specified sheet from within the specified workbook.
             // Return True if the sheet was found and deleted, False if it was not.
@@ -757,7 +758,7 @@ namespace Office_File_Explorer.Helpers
             // in the shared strings table. You must take care when adding new strings, for example. 
             // The XLInsertStringIntoCell snippet handles this problem for you.
 
-            using (SpreadsheetDocument document = SpreadsheetDocument.Open(fileName, true))
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(pkg))
             {
                 WorkbookPart wbPart = document.WorkbookPart;
 

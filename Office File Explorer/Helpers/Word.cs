@@ -879,11 +879,11 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
-        public static List<string> LstFieldCodes(string fPath)
+        public static List<string> LstFieldCodes(Package pkg)
         {
             List<string> ltFieldCodes = new List<string>();
 
-            using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument package = WordprocessingDocument.Open(pkg))
             {
                 IEnumerable<Run> rList = package.MainDocumentPart.Document.Descendants<Run>();
                 IEnumerable<Paragraph> pList = package.MainDocumentPart.Document.Descendants<Paragraph>();
@@ -977,11 +977,11 @@ namespace Office_File_Explorer.Helpers
             return ltFieldCodes;
         }
 
-        public static List<string> LstFieldCodesInHeader(string fPath)
+        public static List<string> LstFieldCodesInHeader(Package pkg)
         {
             List<string> ltFieldCodes = new List<string>();
 
-            using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument package = WordprocessingDocument.Open(pkg))
             {
                 foreach (HeaderPart hp in package.MainDocumentPart.HeaderParts)
                 {
@@ -1078,11 +1078,11 @@ namespace Office_File_Explorer.Helpers
             return ltFieldCodes;
         }
 
-        public static List<string> LstFieldCodesInFooter(string fPath)
+        public static List<string> LstFieldCodesInFooter(Package pkg)
         {
             List<string> ltFieldCodes = new List<string>();
 
-            using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument package = WordprocessingDocument.Open(pkg))
             {
                 foreach (FooterPart fp in package.MainDocumentPart.FooterParts)
                 {
@@ -1179,11 +1179,11 @@ namespace Office_File_Explorer.Helpers
             return ltFieldCodes;
         }
 
-        public static List<string> LstTables(string fPath)
+        public static List<string> LstTables(Package pkg)
         {
             List<string> ltTables = new List<string>();
 
-            using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument package = WordprocessingDocument.Open(pkg))
             {
                 IEnumerable<Table> tList = package.MainDocumentPart.Document.Descendants<Table>();
                 int tableCount = 0;
@@ -1233,11 +1233,11 @@ namespace Office_File_Explorer.Helpers
             return ltTables;
         }
 
-        public static List<string> LstComments(string fPath)
+        public static List<string> LstComments(Package pkg)
         {
             List<string> ltComments = new List<string>();
 
-            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg))
             {
                 int count = 0;
 
@@ -1276,11 +1276,11 @@ namespace Office_File_Explorer.Helpers
             return ltComments;
         }
 
-        public static List<string> LstBookmarks(string fPath)
+        public static List<string> LstBookmarks(Package pkg)
         {
             List<string> ltBookmarks = new List<string>();
 
-            using (WordprocessingDocument package = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument package = WordprocessingDocument.Open(pkg))
             {
                 IEnumerable<BookmarkStart> bkList = package.MainDocumentPart.Document.Descendants<BookmarkStart>();
                 ltBookmarks.Add("** Document Bookmarks **");
@@ -1400,7 +1400,7 @@ namespace Office_File_Explorer.Helpers
             return docSecurity;
         }
 
-        public static List<string> LstDocProps(string fPath)
+        public static List<string> LstDocProps(Package pkg)
         {
             List<string> ltDocProps = new List<string>();
             List<string> compatList = new List<string>();
@@ -1414,7 +1414,7 @@ namespace Office_File_Explorer.Helpers
             compatList.Add("---- Compatibility Settings ---- ");
             settingList.Add("---- Document Settings ---- ");
 
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
             {
                 DocumentSettingsPart docSettingsPart = doc.MainDocumentPart.DocumentSettingsPart;
 
@@ -1660,11 +1660,11 @@ namespace Office_File_Explorer.Helpers
             return ltDocProps.Concat(compatList).Concat(settingList).Concat(rsidList).Concat(mathPrList).ToList();
         }
 
-        public static List<string> LstFootnotes(string fPath)
+        public static List<string> LstFootnotes(Package pkg)
         {
             List<string> ltFootnotes = new List<string>();
 
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
             {
                 FootnotesPart footnotePart = doc.MainDocumentPart.FootnotesPart;
                 if (footnotePart is not null)
@@ -1684,11 +1684,11 @@ namespace Office_File_Explorer.Helpers
             return ltFootnotes;
         }
 
-        public static List<string> LstEndnotes(string fPath)
+        public static List<string> LstEndnotes(Package pkg)
         {
             List<string> ltEndnotes = new List<string>();
 
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
             {
                 EndnotesPart endnotePart = doc.MainDocumentPart.EndnotesPart;
                 if (endnotePart is not null)
@@ -1708,13 +1708,13 @@ namespace Office_File_Explorer.Helpers
             return ltEndnotes;
         }
 
-        public static List<string> LstFonts(string fPath)
+        public static List<string> LstFonts(Package pkg)
         {
             List<string> ltFonts = new List<string>();
 
             int count = 0;
 
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
             {
                 foreach (Font ft in doc.MainDocumentPart.FontTablePart.Fonts)
                 {
@@ -1726,11 +1726,11 @@ namespace Office_File_Explorer.Helpers
             return ltFonts;
         }
 
-        public static List<string> LstRunFonts(string fPath)
+        public static List<string> LstRunFonts(Package pkg)
         {
             List<string> ltRunFonts = new List<string>();
 
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
             {
                 // loop each paragraph and get the run props
                 // display props for each run
@@ -1739,7 +1739,7 @@ namespace Office_File_Explorer.Helpers
             return ltRunFonts;
         }
 
-        public static List<string> LstListTemplates(string fPath, bool onlyReturnUnused)
+        public static List<string> LstListTemplates(Package pkg, bool onlyReturnUnused)
         {
             List<string> ltList = new List<string>();
 
@@ -1749,7 +1749,7 @@ namespace Office_File_Explorer.Helpers
             List<int> numIdList = new List<int>();
             List<string> unusedListTemplates = new List<string>();
 
-            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg))
             {
                 MainDocumentPart mainPart = myDoc.MainDocumentPart;
                 NumberingDefinitionsPart numPart = mainPart.NumberingDefinitionsPart;
@@ -1900,11 +1900,11 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
-        public static List<string> LstHyperlinks(string fPath)
+        public static List<string> LstHyperlinks(Package pkg)
         {
             List<string> hlinkList = new List<string>();
 
-            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg))
             {
                 int count = 0;
 
@@ -1953,7 +1953,7 @@ namespace Office_File_Explorer.Helpers
             return hlinkList;
         }
 
-        public static List<string> LstStyles(string fPath)
+        public static List<string> LstStyles(Package pkg)
         {
             List<string> stylesList = new List<string>();
 
@@ -1964,7 +1964,7 @@ namespace Office_File_Explorer.Helpers
             bool styleInUse = false;
             int count = 0;
 
-            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg))
             {
                 MainDocumentPart mainPart = myDoc.MainDocumentPart;
                 StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
@@ -2072,27 +2072,24 @@ namespace Office_File_Explorer.Helpers
                 stylesList.Add("# List of paragraph styles #");
                 count = 0;
 
-                using (Package wdPackage = Package.Open(fPath, FileMode.Open, FileAccess.Read))
+                PackageRelationship docPackageRelationship = pkg.GetRelationshipsByType(Strings.MainDocumentPartType).FirstOrDefault();
+                if (docPackageRelationship is not null)
                 {
-                    PackageRelationship docPackageRelationship = wdPackage.GetRelationshipsByType(Strings.MainDocumentPartType).FirstOrDefault();
-                    if (docPackageRelationship is not null)
+                    Uri documentUri = PackUriHelper.ResolvePartUri(new Uri("/", UriKind.Relative), docPackageRelationship.TargetUri);
+                    PackagePart documentPart = pkg.GetPart(documentUri);
+
+                    //  Load the document XML in the part into an XDocument instance.
+                    xDoc = XDocument.Load(XmlReader.Create(documentPart.GetStream()));
+
+                    //  Find the styles part. There will only be one.
+                    PackageRelationship styleRelation = documentPart.GetRelationshipsByType(Strings.StyleDefsPartType).FirstOrDefault();
+                    if (styleRelation is not null)
                     {
-                        Uri documentUri = PackUriHelper.ResolvePartUri(new Uri("/", UriKind.Relative), docPackageRelationship.TargetUri);
-                        PackagePart documentPart = wdPackage.GetPart(documentUri);
+                        Uri styleUri = PackUriHelper.ResolvePartUri(documentUri, styleRelation.TargetUri);
+                        PackagePart stylePart = pkg.GetPart(styleUri);
 
-                        //  Load the document XML in the part into an XDocument instance.
-                        xDoc = XDocument.Load(XmlReader.Create(documentPart.GetStream()));
-
-                        //  Find the styles part. There will only be one.
-                        PackageRelationship styleRelation = documentPart.GetRelationshipsByType(Strings.StyleDefsPartType).FirstOrDefault();
-                        if (styleRelation is not null)
-                        {
-                            Uri styleUri = PackUriHelper.ResolvePartUri(documentUri, styleRelation.TargetUri);
-                            PackagePart stylePart = wdPackage.GetPart(styleUri);
-
-                            //  Load the style XML in the part into an XDocument instance.
-                            styleDoc = XDocument.Load(XmlReader.Create(stylePart.GetStream()));
-                        }
+                        //  Load the style XML in the part into an XDocument instance.
+                        styleDoc = XDocument.Load(XmlReader.Create(stylePart.GetStream()));
                     }
                 }
 
@@ -2132,11 +2129,11 @@ namespace Office_File_Explorer.Helpers
             return stylesList;
         }
 
-        public static List<string> LstContentControls(string fPath)
+        public static List<string> LstContentControls(Package pkg)
         {
             List<string> ccList = new List<string>();
 
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(fPath, false))
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
             {
                 int count = 0;
 

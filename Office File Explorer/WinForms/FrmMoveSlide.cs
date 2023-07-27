@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using Office_File_Explorer.Helpers;
 using System;
+using System.IO.Packaging;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms
@@ -9,12 +10,13 @@ namespace Office_File_Explorer.WinForms
     {
         string fName;
         int slideCount;
-        public FrmMoveSlide(string path)
+
+        public FrmMoveSlide(Package pkg, string path)
         {
             InitializeComponent();
             fName = path;
 
-            slideCount = PowerPoint.RetrieveNumberOfSlides(path);
+            slideCount = PowerPoint.RetrieveNumberOfSlides(pkg);
 
             // for ui-only, use non zero based values
             for (int i = 0; i < slideCount; i++)

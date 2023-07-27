@@ -13,6 +13,7 @@ using DocumentFormat.OpenXml;
 using ShapeStyle = DocumentFormat.OpenXml.Presentation.ShapeStyle;
 using ModernComment = DocumentFormat.OpenXml.Office2021.PowerPoint.Comment;
 using Comment = DocumentFormat.OpenXml.Presentation.Comment;
+using System.IO.Packaging;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -20,12 +21,12 @@ namespace Office_File_Explorer.Helpers
     {
         public static bool fSuccess;
 
-        public static List<string> GetFonts(string path)
+        public static List<string> GetFonts(Package pkg)
         {
             List<string> fonts = new List<string>();
             int fCount = 0;
 
-            using (PresentationDocument pptDoc = PresentationDocument.Open(path, true))
+            using (PresentationDocument pptDoc = PresentationDocument.Open(pkg))
             {
                 // list the embedded fonts
                 if (pptDoc.PresentationPart.Presentation.EmbeddedFontList is null)
@@ -171,11 +172,11 @@ namespace Office_File_Explorer.Helpers
         /// <param name="fileName">path to the file</param>
         /// <param name="includeHidden">default is true, pass false if you don't want hidden slides counted</param>
         /// <returns></returns>
-        public static int RetrieveNumberOfSlides(string fileName, bool includeHidden = true)
+        public static int RetrieveNumberOfSlides(Package pkg, bool includeHidden = true)
         {
             int slidesCount = 0;
 
-            using (PresentationDocument doc = PresentationDocument.Open(fileName, false))
+            using (PresentationDocument doc = PresentationDocument.Open(pkg))
             {
                 // Get the presentation part of the document.
                 PresentationPart presentationPart = doc.PresentationPart;
@@ -199,14 +200,14 @@ namespace Office_File_Explorer.Helpers
             return slidesCount;
         }
 
-        public static List<string> GetHyperlinks(string path)
+        public static List<string> GetHyperlinks(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (PresentationDocument document = PresentationDocument.Open(path, false))
+            using (PresentationDocument document = PresentationDocument.Open(pkg))
             {
                 int linkCount = 0;
-                foreach (string s in GetAllExternalHyperlinksInPresentation(path))
+                foreach (string s in GetAllExternalHyperlinksInPresentation(pkg))
                 {
                     linkCount++;
                     tList.Add(linkCount + Strings.wPeriod + s);
@@ -221,11 +222,11 @@ namespace Office_File_Explorer.Helpers
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static List<string> GetComments(string path)
+        public static List<string> GetComments(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (PresentationDocument presentationDocument = PresentationDocument.Open(path, false))
+            using (PresentationDocument presentationDocument = PresentationDocument.Open(pkg))
             {
                 PresentationPart pPart = presentationDocument.PresentationPart;
                 int commentCount = 0;
@@ -271,11 +272,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetSlideTitles(string path)
+        public static List<string> GetSlideTitles(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (PresentationDocument presentationDocument = PresentationDocument.Open(path, false))
+            using (PresentationDocument presentationDocument = PresentationDocument.Open(pkg))
             {
                 int slideCount = 0;
 
@@ -289,18 +290,18 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetSlideText(string path)
+        public static List<string> GetSlideText(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            int sCount = RetrieveNumberOfSlides(path);
+            int sCount = RetrieveNumberOfSlides(pkg);
             if (sCount > 0)
             {
                 int count = 0;
 
                 do
                 {
-                    GetSlideIdAndText(out string sldText, path, count);
+                    GetSlideIdAndText(out string sldText, pkg, count);
                     tList.Add("Slide " + (count + 1) + Strings.wPeriod + sldText);
                     count++;
                 } while (count < sCount);
@@ -309,11 +310,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetSlideTransitions(string path)
+        public static List<string> GetSlideTransitions(Package pkg)
         {
             List<string> tList = new List<string>();
 
-            using (PresentationDocument ppt = PresentationDocument.Open(path, false))
+            using (PresentationDocument ppt = PresentationDocument.Open(pkg))
             {
                 int transitionCount = 0;
 
@@ -382,9 +383,9 @@ namespace Office_File_Explorer.Helpers
         /// <param name="sldText">string returned to caller</param>
         /// <param name="docName">path to powerpoint file</param>
         /// <param name="index">slide number</param>
-        public static void GetSlideIdAndText(out string sldText, string docName, int index)
+        public static void GetSlideIdAndText(out string sldText, Package pkg, int index)
         {
-            using (PresentationDocument ppt = PresentationDocument.Open(docName, false))
+            using (PresentationDocument ppt = PresentationDocument.Open(pkg))
             {
                 // Get the relationship ID of the first slide.
                 PresentationPart part = ppt.PresentationPart;
@@ -516,13 +517,13 @@ namespace Office_File_Explorer.Helpers
         }
 
         // Returns all the external hyperlinks in the slides of a presentation.
-        public static IEnumerable<String> GetAllExternalHyperlinksInPresentation(string fileName)
+        public static IEnumerable<String> GetAllExternalHyperlinksInPresentation(Package pkg)
         {
             // Declare a list of strings.
             List<string> ret = new List<string>();
 
             // Open the presentation file as read-only.
-            using (PresentationDocument document = PresentationDocument.Open(fileName, false))
+            using (PresentationDocument document = PresentationDocument.Open(pkg))
             {
                 // Iterate through all the slide parts in the presentation part.
                 foreach (SlidePart slidePart in document.PresentationPart.SlideParts)

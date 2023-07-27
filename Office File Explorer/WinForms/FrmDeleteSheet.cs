@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using Office_File_Explorer.Helpers;
 using System;
+using System.IO.Packaging;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms
@@ -10,14 +11,16 @@ namespace Office_File_Explorer.WinForms
     {
         public string sheetName;
         public string filePath;
+        Package fPkg;
 
-        public FrmDeleteSheet(string fPath)
+        public FrmDeleteSheet(Package pkg, string fPath)
         {
             InitializeComponent();
             sheetName = string.Empty;
             filePath = fPath;
+            fPkg = pkg;
 
-            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(fPath, false))
+            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(fPkg))
             {
                 foreach (Sheet s in spreadsheetDocument.WorkbookPart.Workbook.Sheets)
                 {
@@ -28,7 +31,7 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnOK_Click(object sender, EventArgs e)
         {
-            if (Excel.DeleteSheet(filePath, cbxSheets.SelectedItem.ToString()))
+            if (Excel.DeleteSheet(fPkg, cbxSheets.SelectedItem.ToString()))
             {
                 sheetName = cbxSheets.SelectedItem.ToString();
             }

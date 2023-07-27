@@ -27,6 +27,7 @@ using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Presentation;
 using System.IO.Compression;
+using System.IO.Packaging;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -735,13 +736,13 @@ namespace Office_File_Explorer.Helpers
         /// </summary>
         /// <param name="mPart"></param>
         /// <returns></returns>
-        public static List<string> GetEmbeddedObjectProperties(string path, string fileType)
+        public static List<string> GetEmbeddedObjectProperties(Package pkg, string fileType)
         {
             List<string> tList = new List<string>();
 
             if (fileType == Strings.oAppWord)
             {
-                using (WordprocessingDocument myDoc = WordprocessingDocument.Open(path, false))
+                using (WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg))
                 {
                     foreach (EmbeddedObjectPart oep in myDoc.MainDocumentPart.EmbeddedObjectParts)
                     {
@@ -761,7 +762,7 @@ namespace Office_File_Explorer.Helpers
             }
             else if (fileType == Strings.oAppExcel)
             {
-                using (SpreadsheetDocument doc = SpreadsheetDocument.Open(path, false))
+                using (SpreadsheetDocument doc = SpreadsheetDocument.Open(pkg))
                 {
                     foreach (WorksheetPart wp in doc.WorkbookPart.WorksheetParts)
                     {
@@ -784,7 +785,7 @@ namespace Office_File_Explorer.Helpers
             }
             else if (fileType == Strings.oAppPowerPoint)
             {
-                using (PresentationDocument doc = PresentationDocument.Open(path, false))
+                using (PresentationDocument doc = PresentationDocument.Open(pkg))
                 {
                     foreach (SlidePart sp in doc.PresentationPart.SlideParts)
                     {
@@ -809,7 +810,7 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetShapes(string path, string fileType)
+        public static List<string> GetShapes(Package pkg, string fileType)
         {
             List<string> tList = new List<string>();
             List<string> groupedShapes = new List<string>();
@@ -818,7 +819,7 @@ namespace Office_File_Explorer.Helpers
             if (fileType == Strings.oAppWord)
             {
                 // with Word, we can just run through the entire body and get the shapes
-                using (WordprocessingDocument document = WordprocessingDocument.Open(path, false))
+                using (WordprocessingDocument document = WordprocessingDocument.Open(pkg))
                 {
                     foreach (O.Vml.Group group in document.MainDocumentPart.Document.Body.Descendants<O.Vml.Group>())
                     {
@@ -938,7 +939,7 @@ namespace Office_File_Explorer.Helpers
             else if (fileType == Strings.oAppExcel)
             {
                 // with XL, we would need to check all sheets
-                using (SpreadsheetDocument document = SpreadsheetDocument.Open(path, false))
+                using (SpreadsheetDocument document = SpreadsheetDocument.Open(pkg))
                 {
                     foreach (Sheet sheet in document.WorkbookPart.Workbook.Sheets)
                     {
@@ -1001,7 +1002,7 @@ namespace Office_File_Explorer.Helpers
             else if (fileType == Strings.oAppPowerPoint)
             {
                 // with PPT, we need to run through all slides
-                using (PresentationDocument document = PresentationDocument.Open(path, false))
+                using (PresentationDocument document = PresentationDocument.Open(pkg))
                 {
                     foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
                     {
@@ -1103,13 +1104,13 @@ namespace Office_File_Explorer.Helpers
             return signatureDetails;
         }
 
-        public static List<string> GetSignatures(string path, string fileType)
+        public static List<string> GetSignatures(Package pkg, string fileType)
         {
             List<string> tList = new List<string>();
             if (fileType == Strings.oAppWord)
             {
                 // with Word, we can just run through the entire body and get the shapes
-                using (WordprocessingDocument document = WordprocessingDocument.Open(path, false))
+                using (WordprocessingDocument document = WordprocessingDocument.Open(pkg))
                 {
                     if (document.DigitalSignatureOriginPart is not null)
                     {
@@ -1120,7 +1121,7 @@ namespace Office_File_Explorer.Helpers
             else if (fileType == Strings.oAppExcel)
             {
                 // with XL, we would need to check all sheets
-                using (SpreadsheetDocument document = SpreadsheetDocument.Open(path, false))
+                using (SpreadsheetDocument document = SpreadsheetDocument.Open(pkg))
                 {
                     if (document.DigitalSignatureOriginPart is not null)
                     {
@@ -1131,7 +1132,7 @@ namespace Office_File_Explorer.Helpers
             else if (fileType == Strings.oAppPowerPoint)
             {
                 // with PPT, we need to run through all slides
-                using (PresentationDocument document = PresentationDocument.Open(path, false))
+                using (PresentationDocument document = PresentationDocument.Open(pkg))
                 {
                     if (document.DigitalSignatureOriginPart is not null)
                     {

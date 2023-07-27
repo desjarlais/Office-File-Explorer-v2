@@ -34,6 +34,7 @@ namespace Office_File_Explorer
         private string findText;
         private string replaceText;
         private string fromChangeTemplate;
+        public static string fWorkingFilePath;
 
         // openmcdf
         private FileStream fs;
@@ -55,9 +56,9 @@ namespace Office_File_Explorer
         private List<string> oNumIdList = new List<string>();
 
         // part viewer globals
-        List<PackagePart> pkgParts = new List<PackagePart>();
-        Package package;
-        bool hasXmlError;
+        public List<PackagePart> pkgParts = new List<PackagePart>();
+        public Package package;
+        public bool hasXmlError;
 
         public enum OpenXmlInnerFileTypes
         {
@@ -88,9 +89,6 @@ namespace Office_File_Explorer
             {
                 File.Create(Strings.fLogFilePath);
             }
-
-            // disable buttons
-            DisableUI();
         }
 
         #region Class Properties
@@ -115,12 +113,32 @@ namespace Office_File_Explorer
 
         public void DisableUI()
         {
-
+            // disable app feature related buttons
+            toolStripButtonViewContents.Enabled = false;
+            toolStripButtonViewDocProps.Enabled = false;
+            toolStripButtonValidateDoc.Enabled = false;
+            toolStripButtonFixDoc.Enabled = false;
+            editToolStripMenuFindReplace.Enabled = false;
+            editToolStripMenuItemModifyContents.Enabled = false;
+            editToolStripMenuItemRemoveCustomDocProps.Enabled = false;
+            editToolStripMenuItemRemoveCustomXml.Enabled = false;
+            excelSheetViewerToolStripMenuItem.Enabled = false;
+            fileToolStripMenuItemClose.Enabled = false;
         }
 
         public void EnableUI()
         {
-
+            // disable app feature related buttons
+            toolStripButtonViewContents.Enabled = true;
+            toolStripButtonViewDocProps.Enabled = true;
+            toolStripButtonValidateDoc.Enabled = true;
+            toolStripButtonFixDoc.Enabled = true;
+            editToolStripMenuFindReplace.Enabled = true;
+            editToolStripMenuItemModifyContents.Enabled = true;
+            editToolStripMenuItemRemoveCustomDocProps.Enabled = true;
+            editToolStripMenuItemRemoveCustomXml.Enabled = true;
+            toolStripButtonModify.Enabled = true;
+            fileToolStripMenuItemClose.Enabled = true;
         }
 
         public void CopyAllItems()
@@ -240,22 +258,27 @@ namespace Office_File_Explorer
                                     toolStripStatusLabelFilePath.Text = backupFileName;
                                 }
 
+                                // create a copy of the file for the part viewer to use
+                                fWorkingFilePath = AddTextToFileName(Strings.fBackupFilePath + "\\" + Path.GetFileNameWithoutExtension(toolStripStatusLabelFilePath.Text), Strings.wBackupFileParentheses + Path.GetExtension(toolStripStatusLabelFilePath.Text));
+                                File.Copy(toolStripStatusLabelFilePath.Text, fWorkingFilePath, true);
+
                                 // populate the treeview
-                                package = Package.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.ReadWrite);
+                                package = Package.Open(fWorkingFilePath, FileMode.Open, FileAccess.ReadWrite);
 
                                 TreeNode tRoot = new TreeNode();
-                                tRoot.Text = toolStripStatusLabelFilePath.Text;
+                                tRoot.Text = fWorkingFilePath;
+                                toolStripStatusLabelFilePath.Text = fWorkingFilePath;
 
                                 // update app icon
-                                if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Word)
+                                if (GetFileType(fWorkingFilePath) == OpenXmlInnerFileTypes.Word)
                                 {
                                     tvFiles.SelectedImageIndex = 0;
                                 }
-                                else if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Excel)
+                                else if (GetFileType(fWorkingFilePath) == OpenXmlInnerFileTypes.Excel)
                                 {
                                     tvFiles.SelectedImageIndex = 2;
                                 }
-                                else if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.PowerPoint)
+                                else if (GetFileType(fWorkingFilePath) == OpenXmlInnerFileTypes.PowerPoint)
                                 {
                                     tvFiles.SelectedImageIndex = 1;
                                 }
@@ -701,6 +724,11 @@ namespace Office_File_Explorer
                 }
 
                 Properties.Settings.Default.Save();
+
+                if (File.Exists(fWorkingFilePath))
+                {
+                    File.Delete(fWorkingFilePath);
+                }   
             }
             catch (Exception ex)
             {
@@ -716,11 +744,6 @@ namespace Office_File_Explorer
 
         #region Button Events
 
-        public void ViewContents()
-        {
-
-        }
-
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             structuredStorageViewerToolStripMenuItem.Enabled = false;
@@ -734,25 +757,10 @@ namespace Office_File_Explorer
             }
         }
 
-        private void BtnSearchAndReplace_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void BtnFixDocument_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmSettings form = new FrmSettings();
             form.Show();
-        }
-
-        private void BtnModifyContent_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void BatchFileProcessingToolStripMenuItem_Click(object sender, EventArgs e)
@@ -766,11 +774,16 @@ namespace Office_File_Explorer
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (package is not null)
+            {
+                package.Close();
+            }
             AppExitWork();
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            package.Close();
             AppExitWork();
         }
 
@@ -1392,65 +1405,65 @@ namespace Office_File_Explorer
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.ContentControls))
                         {
-                            DisplayListContents(Word.LstContentControls(toolStripStatusLabelFilePath.Text), Strings.wContentControls);
+                            DisplayListContents(Word.LstContentControls(package), Strings.wContentControls);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Styles))
                         {
-                            DisplayListContents(Word.LstStyles(toolStripStatusLabelFilePath.Text), Strings.wStyles);
+                            DisplayListContents(Word.LstStyles(package), Strings.wStyles);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Hyperlinks))
                         {
-                            DisplayListContents(Word.LstHyperlinks(toolStripStatusLabelFilePath.Text), Strings.wHyperlinks);
+                            DisplayListContents(Word.LstHyperlinks(package), Strings.wHyperlinks);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.ListTemplates))
                         {
-                            DisplayListContents(Word.LstListTemplates(toolStripStatusLabelFilePath.Text, false), Strings.wListTemplates);
+                            DisplayListContents(Word.LstListTemplates(package, false), Strings.wListTemplates);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Fonts))
                         {
-                            DisplayListContents(Word.LstFonts(toolStripStatusLabelFilePath.Text), Strings.wFonts);
-                            DisplayListContents(Word.LstRunFonts(toolStripStatusLabelFilePath.Text), Strings.wRunFonts);
+                            DisplayListContents(Word.LstFonts(package), Strings.wFonts);
+                            DisplayListContents(Word.LstRunFonts(package), Strings.wRunFonts);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Footnotes))
                         {
-                            DisplayListContents(Word.LstFootnotes(toolStripStatusLabelFilePath.Text), Strings.wFootnotes);
+                            DisplayListContents(Word.LstFootnotes(package), Strings.wFootnotes);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Endnotes))
                         {
-                            DisplayListContents(Word.LstEndnotes(toolStripStatusLabelFilePath.Text), Strings.wEndnotes);
+                            DisplayListContents(Word.LstEndnotes(package), Strings.wEndnotes);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.DocumentProperties))
                         {
-                            DisplayListContents(Word.LstDocProps(toolStripStatusLabelFilePath.Text), Strings.wDocProps);
+                            DisplayListContents(Word.LstDocProps(package), Strings.wDocProps);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Bookmarks))
                         {
-                            DisplayListContents(Word.LstBookmarks(toolStripStatusLabelFilePath.Text), Strings.wBookmarks);
+                            DisplayListContents(Word.LstBookmarks(package), Strings.wBookmarks);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Comments))
                         {
-                            DisplayListContents(Word.LstComments(toolStripStatusLabelFilePath.Text), Strings.wComments);
+                            DisplayListContents(Word.LstComments(package), Strings.wComments);
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.FieldCodes))
                         {
-                            DisplayListContents(Word.LstFieldCodes(toolStripStatusLabelFilePath.Text), Strings.wFldCodes);
-                            DisplayListContents(Word.LstFieldCodesInHeader(toolStripStatusLabelFilePath.Text), " ** Header Field Codes **");
-                            DisplayListContents(Word.LstFieldCodesInFooter(toolStripStatusLabelFilePath.Text), " ** Footer Field Codes **");
+                            DisplayListContents(Word.LstFieldCodes(package), Strings.wFldCodes);
+                            DisplayListContents(Word.LstFieldCodesInHeader(package), " ** Header Field Codes **");
+                            DisplayListContents(Word.LstFieldCodesInFooter(package), " ** Footer Field Codes **");
                         }
 
                         if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Tables))
                         {
-                            DisplayListContents(Word.LstTables(toolStripStatusLabelFilePath.Text), Strings.wTables);
+                            DisplayListContents(Word.LstTables(package), Strings.wTables);
                         }
                     }
                 }
@@ -1475,42 +1488,42 @@ namespace Office_File_Explorer
 
                         if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Links))
                         {
-                            DisplayListContents(Excel.GetLinks(toolStripStatusLabelFilePath.Text, true), Strings.wLinks);
+                            DisplayListContents(Excel.GetLinks(package, true), Strings.wLinks);
                         }
 
                         if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Comments))
                         {
-                            DisplayListContents(Excel.GetComments(toolStripStatusLabelFilePath.Text), Strings.wComments);
+                            DisplayListContents(Excel.GetComments(package), Strings.wComments);
                         }
 
                         if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Hyperlinks))
                         {
-                            DisplayListContents(Excel.GetHyperlinks(toolStripStatusLabelFilePath.Text), Strings.wHyperlinks);
+                            DisplayListContents(Excel.GetHyperlinks(package), Strings.wHyperlinks);
                         }
 
                         if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.WorksheetInfo))
                         {
-                            DisplayListContents(Excel.GetSheetInfo(toolStripStatusLabelFilePath.Text), Strings.wWorksheetInfo);
+                            DisplayListContents(Excel.GetSheetInfo(package), Strings.wWorksheetInfo);
                         }
 
                         if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.SharedStrings))
                         {
-                            DisplayListContents(Excel.GetSharedStrings(toolStripStatusLabelFilePath.Text), Strings.wSharedStrings);
+                            DisplayListContents(Excel.GetSharedStrings(package), Strings.wSharedStrings);
                         }
 
                         if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.DefinedNames))
                         {
-                            DisplayListContents(Excel.GetDefinedNames(toolStripStatusLabelFilePath.Text), Strings.wDefinedNames);
+                            DisplayListContents(Excel.GetDefinedNames(package), Strings.wDefinedNames);
                         }
 
                         if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Connections))
                         {
-                            DisplayListContents(Excel.GetConnections(toolStripStatusLabelFilePath.Text), Strings.wConnections);
+                            DisplayListContents(Excel.GetConnections(package), Strings.wConnections);
                         }
 
                         if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.HiddenRowsCols))
                         {
-                            DisplayListContents(Excel.GetHiddenRowCols(toolStripStatusLabelFilePath.Text), Strings.wHiddenRowCol);
+                            DisplayListContents(Excel.GetHiddenRowCols(package), Strings.wHiddenRowCol);
                         }
                     }
                 }
@@ -1535,32 +1548,32 @@ namespace Office_File_Explorer
 
                         if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Hyperlinks))
                         {
-                            DisplayListContents(PowerPoint.GetHyperlinks(toolStripStatusLabelFilePath.Text), Strings.wHyperlinks);
+                            DisplayListContents(PowerPoint.GetHyperlinks(package), Strings.wHyperlinks);
                         }
 
                         if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Comments))
                         {
-                            DisplayListContents(PowerPoint.GetComments(toolStripStatusLabelFilePath.Text), Strings.wComments);
+                            DisplayListContents(PowerPoint.GetComments(package), Strings.wComments);
                         }
 
                         if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideText))
                         {
-                            DisplayListContents(PowerPoint.GetSlideText(toolStripStatusLabelFilePath.Text), Strings.wSlideText);
+                            DisplayListContents(PowerPoint.GetSlideText(package), Strings.wSlideText);
                         }
 
                         if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideTitles))
                         {
-                            DisplayListContents(PowerPoint.GetSlideTitles(toolStripStatusLabelFilePath.Text), Strings.wSlideText);
+                            DisplayListContents(PowerPoint.GetSlideTitles(package), Strings.wSlideText);
                         }
 
                         if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideTransitions))
                         {
-                            DisplayListContents(PowerPoint.GetSlideTransitions(toolStripStatusLabelFilePath.Text), Strings.wSlideTransitions);
+                            DisplayListContents(PowerPoint.GetSlideTransitions(package), Strings.wSlideTransitions);
                         }
 
                         if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Fonts))
                         {
-                            DisplayListContents(PowerPoint.GetFonts(toolStripStatusLabelFilePath.Text), Strings.wFonts);
+                            DisplayListContents(PowerPoint.GetFonts(package), Strings.wFonts);
                         }
                     }
                 }
@@ -1568,12 +1581,12 @@ namespace Office_File_Explorer
                 // display selected Office features
                 if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
                 {
-                    DisplayListContents(Office.GetEmbeddedObjectProperties(toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects);
+                    DisplayListContents(Office.GetEmbeddedObjectProperties(package, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects);
                 }
 
                 if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.Shapes))
                 {
-                    DisplayListContents(Office.GetShapes(toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text), Strings.wShapes);
+                    DisplayListContents(Office.GetShapes(package, toolStripStatusLabelDocType.Text), Strings.wShapes);
                 }
 
                 if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.PackageParts))
@@ -1583,7 +1596,7 @@ namespace Office_File_Explorer
 
                 if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.XmlSignatures))
                 {
-                    DisplayListContents(Office.GetSignatures(toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures);
+                    DisplayListContents(Office.GetSignatures(package, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures);
                 }
             }
             catch (Exception ex)
@@ -1606,21 +1619,21 @@ namespace Office_File_Explorer
                 // check for xml validation errors
                 if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
                 {
-                    using (WordprocessingDocument myDoc = WordprocessingDocument.Open(toolStripStatusLabelFilePath.Text, false))
+                    using (WordprocessingDocument myDoc = WordprocessingDocument.Open(package))
                     {
                         DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
                 {
-                    using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(toolStripStatusLabelFilePath.Text, false))
+                    using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(package))
                     {
                         DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
                 {
-                    using (PresentationDocument myDoc = PresentationDocument.Open(toolStripStatusLabelFilePath.Text, false))
+                    using (PresentationDocument myDoc = PresentationDocument.Open(package))
                     {
                         DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
@@ -2076,7 +2089,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanLT)
                         {
-                            oNumIdList = Word.LstListTemplates(toolStripStatusLabelFilePath.Text, true);
+                            oNumIdList = Word.LstListTemplates(package, true);
                             foreach (object orphanLT in oNumIdList)
                             {
                                 Word.RemoveListTemplatesNumId(toolStripStatusLabelFilePath.Text, orphanLT.ToString());
@@ -2319,7 +2332,7 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelLink)
                         {
-                            using (var fDelLink = new FrmExcelDelLink(toolStripStatusLabelFilePath.Text))
+                            using (var fDelLink = new FrmExcelDelLink(package, toolStripStatusLabelFilePath.Text))
                             {
                                 if (fDelLink.fHasLinks)
                                 {
@@ -2358,7 +2371,7 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelSheet)
                         {
-                            using (var fds = new FrmDeleteSheet(toolStripStatusLabelFilePath.Text))
+                            using (var fds = new FrmDeleteSheet(package, toolStripStatusLabelFilePath.Text))
                             {
                                 fds.ShowDialog();
 
@@ -2536,7 +2549,7 @@ namespace Office_File_Explorer
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.MoveSlide)
                         {
-                            FrmMoveSlide mvFrm = new FrmMoveSlide(toolStripStatusLabelFilePath.Text)
+                            FrmMoveSlide mvFrm = new FrmMoveSlide(package, toolStripStatusLabelFilePath.Text)
                             {
                                 Owner = this
                             };
@@ -2612,21 +2625,21 @@ namespace Office_File_Explorer
 
                 if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
                 {
-                    using (WordprocessingDocument document = WordprocessingDocument.Open(toolStripStatusLabelFilePath.Text, false))
+                    using (WordprocessingDocument document = WordprocessingDocument.Open(package))
                     {
                         AddCustomDocPropsToList(document.CustomFilePropertiesPart);
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
                 {
-                    using (SpreadsheetDocument document = SpreadsheetDocument.Open(toolStripStatusLabelFilePath.Text, false))
+                    using (SpreadsheetDocument document = SpreadsheetDocument.Open(package))
                     {
                         AddCustomDocPropsToList(document.CustomFilePropertiesPart);
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
                 {
-                    using (PresentationDocument document = PresentationDocument.Open(toolStripStatusLabelFilePath.Text, false))
+                    using (PresentationDocument document = PresentationDocument.Open(package))
                     {
                         AddCustomDocPropsToList(document.CustomFilePropertiesPart);
                     }
@@ -2651,7 +2664,15 @@ namespace Office_File_Explorer
             }
         }
 
-        #endregion
+        private void fileToolStripMenuItemClose_Click(object sender, EventArgs e)
+        {
+            DisableCustomUIIcons();
+            DisableModifyUI();
+            DisableUI();
+            package.Close();
+            tvFiles.Nodes.Clear();
+        }
 
+        #endregion
     }
 }

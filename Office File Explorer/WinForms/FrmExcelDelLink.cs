@@ -1,5 +1,6 @@
 ﻿using Office_File_Explorer.Helpers;
 using System;
+using System.IO.Packaging;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -10,14 +11,14 @@ namespace Office_File_Explorer.WinForms
         string fPath = string.Empty;
         public bool fHasLinks = false;
 
-        public FrmExcelDelLink(string path)
+        public FrmExcelDelLink(Package pkg, string path)
         {
             InitializeComponent();
             fPath = path;
 
-            if (Excel.GetLinks(path, false).Any())
+            if (Excel.GetLinks(pkg, false).Any())
             {
-                foreach (string s in Excel.GetLinks(path, false))
+                foreach (string s in Excel.GetLinks(pkg, false))
                 {
                     cboLinks.Items.Add(s);
                     fHasLinks = true;

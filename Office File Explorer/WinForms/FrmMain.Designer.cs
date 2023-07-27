@@ -33,12 +33,13 @@ namespace Office_File_Explorer
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             mnuMainMenu = new System.Windows.Forms.MenuStrip();
             fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            openErrorLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            openFileBackupFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            fileToolStripMenuItemOpen = new System.Windows.Forms.ToolStripMenuItem();
+            fileToolStripMenuItemOpenErrorLog = new System.Windows.Forms.ToolStripMenuItem();
+            fileToolStripMenuItemOpenFileBackup = new System.Windows.Forms.ToolStripMenuItem();
+            fileToolStripMenuItemClose = new System.Windows.Forms.ToolStripMenuItem();
+            fileToolStripMenuItemSettings = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            fileToolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             editToolStripMenuFindReplace = new System.Windows.Forms.ToolStripMenuItem();
             editToolStripMenuItemModifyContents = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,54 +108,62 @@ namespace Office_File_Explorer
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { openToolStripMenuItem, openErrorLogToolStripMenuItem, openFileBackupFolderToolStripMenuItem, settingsToolStripMenuItem, toolStripSeparator1, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItemOpen, fileToolStripMenuItemOpenErrorLog, fileToolStripMenuItemOpenFileBackup, fileToolStripMenuItemClose, fileToolStripMenuItemSettings, toolStripSeparator1, fileToolStripMenuItemExit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             fileToolStripMenuItem.Text = "&File";
             // 
-            // openToolStripMenuItem
+            // fileToolStripMenuItemOpen
             // 
-            openToolStripMenuItem.Image = Properties.Resources.OpenFile;
-            openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            openToolStripMenuItem.Text = "O&pen";
-            openToolStripMenuItem.Click += OpenToolStripMenuItem_Click;
+            fileToolStripMenuItemOpen.Image = Properties.Resources.OpenFile;
+            fileToolStripMenuItemOpen.Name = "fileToolStripMenuItemOpen";
+            fileToolStripMenuItemOpen.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemOpen.Text = "O&pen";
+            fileToolStripMenuItemOpen.Click += OpenToolStripMenuItem_Click;
             // 
-            // openErrorLogToolStripMenuItem
+            // fileToolStripMenuItemOpenErrorLog
             // 
-            openErrorLogToolStripMenuItem.Image = Properties.Resources.ErrorSummary;
-            openErrorLogToolStripMenuItem.Name = "openErrorLogToolStripMenuItem";
-            openErrorLogToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            openErrorLogToolStripMenuItem.Text = "Open Error Log";
-            openErrorLogToolStripMenuItem.Click += OpenErrorLogToolStripMenuItem_Click;
+            fileToolStripMenuItemOpenErrorLog.Image = Properties.Resources.ErrorSummary;
+            fileToolStripMenuItemOpenErrorLog.Name = "fileToolStripMenuItemOpenErrorLog";
+            fileToolStripMenuItemOpenErrorLog.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemOpenErrorLog.Text = "Open Error Log";
+            fileToolStripMenuItemOpenErrorLog.Click += OpenErrorLogToolStripMenuItem_Click;
             // 
-            // openFileBackupFolderToolStripMenuItem
+            // fileToolStripMenuItemOpenFileBackup
             // 
-            openFileBackupFolderToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("openFileBackupFolderToolStripMenuItem.Image");
-            openFileBackupFolderToolStripMenuItem.Name = "openFileBackupFolderToolStripMenuItem";
-            openFileBackupFolderToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            openFileBackupFolderToolStripMenuItem.Text = "Open File Backup Folder";
-            openFileBackupFolderToolStripMenuItem.Click += openFileBackupFolderToolStripMenuItem_Click;
+            fileToolStripMenuItemOpenFileBackup.Image = (System.Drawing.Image)resources.GetObject("fileToolStripMenuItemOpenFileBackup.Image");
+            fileToolStripMenuItemOpenFileBackup.Name = "fileToolStripMenuItemOpenFileBackup";
+            fileToolStripMenuItemOpenFileBackup.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemOpenFileBackup.Text = "Open File Backup Folder";
+            fileToolStripMenuItemOpenFileBackup.Click += openFileBackupFolderToolStripMenuItem_Click;
             // 
-            // settingsToolStripMenuItem
+            // fileToolStripMenuItemClose
             // 
-            settingsToolStripMenuItem.Image = Properties.Resources.Settings;
-            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            settingsToolStripMenuItem.Text = "&Settings";
-            settingsToolStripMenuItem.Click += SettingsToolStripMenuItem_Click;
+            fileToolStripMenuItemClose.Enabled = false;
+            fileToolStripMenuItemClose.Name = "fileToolStripMenuItemClose";
+            fileToolStripMenuItemClose.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemClose.Text = "Close";
+            fileToolStripMenuItemClose.Click += fileToolStripMenuItemClose_Click;
+            // 
+            // fileToolStripMenuItemSettings
+            // 
+            fileToolStripMenuItemSettings.Image = Properties.Resources.Settings;
+            fileToolStripMenuItemSettings.Name = "fileToolStripMenuItemSettings";
+            fileToolStripMenuItemSettings.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemSettings.Text = "&Settings";
+            fileToolStripMenuItemSettings.Click += SettingsToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
             toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
             // 
-            // exitToolStripMenuItem
+            // fileToolStripMenuItemExit
             // 
-            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            exitToolStripMenuItem.Text = "E&xit";
-            exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
+            fileToolStripMenuItemExit.Name = "fileToolStripMenuItemExit";
+            fileToolStripMenuItemExit.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemExit.Text = "E&xit";
+            fileToolStripMenuItemExit.Click += ExitToolStripMenuItem_Click;
             // 
             // editToolStripMenuItem
             // 
@@ -165,6 +174,7 @@ namespace Office_File_Explorer
             // 
             // editToolStripMenuFindReplace
             // 
+            editToolStripMenuFindReplace.Enabled = false;
             editToolStripMenuFindReplace.Name = "editToolStripMenuFindReplace";
             editToolStripMenuFindReplace.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuFindReplace.Text = "Find and Replace";
@@ -172,6 +182,7 @@ namespace Office_File_Explorer
             // 
             // editToolStripMenuItemModifyContents
             // 
+            editToolStripMenuItemModifyContents.Enabled = false;
             editToolStripMenuItemModifyContents.Name = "editToolStripMenuItemModifyContents";
             editToolStripMenuItemModifyContents.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuItemModifyContents.Text = "File Contents";
@@ -179,6 +190,7 @@ namespace Office_File_Explorer
             // 
             // editToolStripMenuItemRemoveCustomDocProps
             // 
+            editToolStripMenuItemRemoveCustomDocProps.Enabled = false;
             editToolStripMenuItemRemoveCustomDocProps.Name = "editToolStripMenuItemRemoveCustomDocProps";
             editToolStripMenuItemRemoveCustomDocProps.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuItemRemoveCustomDocProps.Text = "Remove Custom Document Properties";
@@ -186,6 +198,7 @@ namespace Office_File_Explorer
             // 
             // editToolStripMenuItemRemoveCustomXml
             // 
+            editToolStripMenuItemRemoveCustomXml.Enabled = false;
             editToolStripMenuItemRemoveCustomXml.Name = "editToolStripMenuItemRemoveCustomXml";
             editToolStripMenuItemRemoveCustomXml.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuItemRemoveCustomXml.Text = "Remove Custom Xml";
@@ -295,6 +308,7 @@ namespace Office_File_Explorer
             // toolStripButtonViewContents
             // 
             toolStripButtonViewContents.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonViewContents.Enabled = false;
             toolStripButtonViewContents.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonViewContents.Image");
             toolStripButtonViewContents.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonViewContents.Name = "toolStripButtonViewContents";
@@ -305,6 +319,7 @@ namespace Office_File_Explorer
             // toolStripButtonViewDocProps
             // 
             toolStripButtonViewDocProps.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonViewDocProps.Enabled = false;
             toolStripButtonViewDocProps.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonViewDocProps.Image");
             toolStripButtonViewDocProps.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonViewDocProps.Name = "toolStripButtonViewDocProps";
@@ -315,6 +330,7 @@ namespace Office_File_Explorer
             // toolStripButtonValidateDoc
             // 
             toolStripButtonValidateDoc.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonValidateDoc.Enabled = false;
             toolStripButtonValidateDoc.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateDoc.Image");
             toolStripButtonValidateDoc.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonValidateDoc.Name = "toolStripButtonValidateDoc";
@@ -336,6 +352,7 @@ namespace Office_File_Explorer
             // toolStripButtonFixDoc
             // 
             toolStripButtonFixDoc.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripButtonFixDoc.Enabled = false;
             toolStripButtonFixDoc.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonFixDoc.Image");
             toolStripButtonFixDoc.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonFixDoc.Name = "toolStripButtonFixDoc";
@@ -351,21 +368,24 @@ namespace Office_File_Explorer
             // toolStripButtonModify
             // 
             toolStripButtonModify.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonModify.Enabled = false;
             toolStripButtonModify.Image = Properties.Resources.ModifyPropertyTrivial;
             toolStripButtonModify.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonModify.Name = "toolStripButtonModify";
             toolStripButtonModify.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonModify.Text = "toolStripButton7";
+            toolStripButtonModify.Text = "Modify Xml";
+            toolStripButtonModify.ToolTipText = "Modify Xml";
             toolStripButtonModify.Click += toolStripButtonModify_Click;
             // 
             // toolStripButtonSave
             // 
             toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonSave.Enabled = false;
             toolStripButtonSave.Image = Properties.Resources.Save;
             toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonSave.Name = "toolStripButtonSave";
             toolStripButtonSave.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonSave.Text = "toolStripButton8";
+            toolStripButtonSave.Text = "Save Xml";
             toolStripButtonSave.Click += toolStripButtonSave_Click;
             // 
             // toolStripButtonInsertIcon
@@ -376,38 +396,42 @@ namespace Office_File_Explorer
             toolStripButtonInsertIcon.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonInsertIcon.Name = "toolStripButtonInsertIcon";
             toolStripButtonInsertIcon.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonInsertIcon.Text = "toolStripButton9";
+            toolStripButtonInsertIcon.Text = "Insert Icon";
             toolStripButtonInsertIcon.Click += toolStripButtonInsertIcon_Click;
             // 
             // toolStripButtonValidateXml
             // 
             toolStripButtonValidateXml.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonValidateXml.Enabled = false;
             toolStripButtonValidateXml.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateXml.Image");
             toolStripButtonValidateXml.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
             toolStripButtonValidateXml.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonValidateXml.Text = "toolStripButton10";
+            toolStripButtonValidateXml.Text = "Validate Xml";
             toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
             // 
             // toolStripButtonGenerateCallback
             // 
             toolStripButtonGenerateCallback.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButtonGenerateCallback.Enabled = false;
             toolStripButtonGenerateCallback.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonGenerateCallback.Image");
             toolStripButtonGenerateCallback.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonGenerateCallback.Name = "toolStripButtonGenerateCallback";
             toolStripButtonGenerateCallback.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonGenerateCallback.Text = "toolStripButton1";
+            toolStripButtonGenerateCallback.Text = "Generate Callbacks";
             toolStripButtonGenerateCallback.Click += toolStripButtonGenerateCallback_Click;
             // 
             // toolStripDropDownButtonInsert
             // 
             toolStripDropDownButtonInsert.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             toolStripDropDownButtonInsert.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { office2010CustomUIPartToolStripMenuItem, office2007CustomUIPartToolStripMenuItem, toolStripMenuItem1 });
+            toolStripDropDownButtonInsert.Enabled = false;
             toolStripDropDownButtonInsert.Image = (System.Drawing.Image)resources.GetObject("toolStripDropDownButtonInsert.Image");
             toolStripDropDownButtonInsert.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripDropDownButtonInsert.Name = "toolStripDropDownButtonInsert";
             toolStripDropDownButtonInsert.Size = new System.Drawing.Size(49, 22);
             toolStripDropDownButtonInsert.Text = "Insert";
+            toolStripDropDownButtonInsert.ToolTipText = "Insert Custom UI";
             // 
             // office2010CustomUIPartToolStripMenuItem
             // 
@@ -531,6 +555,7 @@ namespace Office_File_Explorer
             rtbDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             rtbDisplay.Location = new System.Drawing.Point(0, 0);
             rtbDisplay.Name = "rtbDisplay";
+            rtbDisplay.ReadOnly = true;
             rtbDisplay.Size = new System.Drawing.Size(612, 492);
             rtbDisplay.TabIndex = 0;
             rtbDisplay.Text = "";
@@ -586,23 +611,20 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemOpen;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemSettings;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemExit;
         private System.Windows.Forms.ToolStripMenuItem batchFileProcessingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clipboardViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem feedbackToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openErrorLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemOpenErrorLog;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyAllLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem base64DecoderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openFileBackupFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemOpenFileBackup;
         private System.Windows.Forms.ToolStripMenuItem structuredStorageViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem excelSheetViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
@@ -640,6 +662,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelDocType;
         private System.Windows.Forms.ToolStripButton toolStripButtonViewDocProps;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemClose;
     }
 }
 

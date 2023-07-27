@@ -181,6 +181,7 @@ namespace Office_File_Explorer.Helpers
 
         // file locations
         public static string fLogFilePath = Path.GetDirectoryName(Application.LocalUserAppDataPath) + "\\offexp.txt";
+        public static string fBackupFilePath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
         public static string fNormalTemplatePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Templates\\Normal.dotm";
 
         // win32 dll refs
