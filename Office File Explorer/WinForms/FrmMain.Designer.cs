@@ -85,8 +85,8 @@ namespace Office_File_Explorer
             toolStripStatusLabelDocType = new System.Windows.Forms.ToolStripStatusLabel();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             tvFiles = new System.Windows.Forms.TreeView();
-            rtbDisplay = new System.Windows.Forms.RichTextBox();
             tvImageList = new System.Windows.Forms.ImageList(components);
+            rtbDisplay = new System.Windows.Forms.RichTextBox();
             mnuMainMenu.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -509,8 +509,8 @@ namespace Office_File_Explorer
             // toolStripStatusLabelFilePath
             // 
             toolStripStatusLabelFilePath.Name = "toolStripStatusLabelFilePath";
-            toolStripStatusLabelFilePath.Size = new System.Drawing.Size(36, 17);
-            toolStripStatusLabelFilePath.Text = "None";
+            toolStripStatusLabelFilePath.Size = new System.Drawing.Size(22, 17);
+            toolStripStatusLabelFilePath.Text = "---";
             // 
             // toolStripStatusLabel3
             // 
@@ -521,8 +521,8 @@ namespace Office_File_Explorer
             // toolStripStatusLabelDocType
             // 
             toolStripStatusLabelDocType.Name = "toolStripStatusLabelDocType";
-            toolStripStatusLabelDocType.Size = new System.Drawing.Size(36, 17);
-            toolStripStatusLabelDocType.Text = "None";
+            toolStripStatusLabelDocType.Size = new System.Drawing.Size(22, 17);
+            toolStripStatusLabelDocType.Text = "---";
             // 
             // splitContainer1
             // 
@@ -544,21 +544,14 @@ namespace Office_File_Explorer
             // tvFiles
             // 
             tvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            tvFiles.ImageIndex = 0;
+            tvFiles.ImageList = tvImageList;
             tvFiles.Location = new System.Drawing.Point(0, 0);
             tvFiles.Name = "tvFiles";
+            tvFiles.SelectedImageIndex = 0;
             tvFiles.Size = new System.Drawing.Size(308, 492);
             tvFiles.TabIndex = 0;
             tvFiles.AfterSelect += tvFiles_AfterSelect;
-            // 
-            // rtbDisplay
-            // 
-            rtbDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
-            rtbDisplay.Location = new System.Drawing.Point(0, 0);
-            rtbDisplay.Name = "rtbDisplay";
-            rtbDisplay.ReadOnly = true;
-            rtbDisplay.Size = new System.Drawing.Size(612, 492);
-            rtbDisplay.TabIndex = 0;
-            rtbDisplay.Text = "";
             // 
             // tvImageList
             // 
@@ -573,6 +566,16 @@ namespace Office_File_Explorer
             tvImageList.Images.SetKeyName(5, "BinaryFile.png");
             tvImageList.Images.SetKeyName(6, "folder.png");
             tvImageList.Images.SetKeyName(7, "file.png");
+            // 
+            // rtbDisplay
+            // 
+            rtbDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            rtbDisplay.Location = new System.Drawing.Point(0, 0);
+            rtbDisplay.Name = "rtbDisplay";
+            rtbDisplay.ReadOnly = true;
+            rtbDisplay.Size = new System.Drawing.Size(612, 492);
+            rtbDisplay.TabIndex = 0;
+            rtbDisplay.Text = "";
             // 
             // FrmMain
             // 

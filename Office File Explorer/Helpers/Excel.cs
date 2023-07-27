@@ -471,27 +471,24 @@ namespace Office_File_Explorer.Helpers
         {
             List<string> tList = new List<string>();
             int sharedStringCount = 0;
-
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg);
+            WorkbookPart wbPart = excelDoc.WorkbookPart;
+            if (wbPart.SharedStringTablePart != null)
             {
-                WorkbookPart wbPart = excelDoc.WorkbookPart;
-                if (wbPart.SharedStringTablePart != null)
-                {
-                    SharedStringTable sst = wbPart.SharedStringTablePart.SharedStringTable;
-                    tList.Add("SharedString Count = " + sst.Count());
-                    tList.Add("Unique Count = " + sst.UniqueCount);
-                    tList.Add(string.Empty);
+                SharedStringTable sst = wbPart.SharedStringTablePart.SharedStringTable;
+                tList.Add("SharedString Count = " + sst.Count());
+                tList.Add("Unique Count = " + sst.UniqueCount);
+                tList.Add(string.Empty);
 
-                    foreach (SharedStringItem ssi in sst)
+                foreach (SharedStringItem ssi in sst)
+                {
+                    sharedStringCount++;
+                    if (ssi is not null)
                     {
-                        sharedStringCount++;
-                        if (ssi is not null)
+                        Text ssValue = ssi.Text;
+                        if (ssValue is not null)
                         {
-                            Text ssValue = ssi.Text;
-                            if (ssValue is not null)
-                            {
-                                tList.Add(sharedStringCount + Strings.wPeriod + ssValue.Text);
-                            }
+                            tList.Add(sharedStringCount + Strings.wPeriod + ssValue.Text);
                         }
                     }
                 }
@@ -504,23 +501,21 @@ namespace Office_File_Explorer.Helpers
         {
             List<string> tList = new List<string>();
             int sharedStringCount = 0;
-
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false))
+            
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, false);
+            WorkbookPart wbPart = excelDoc.WorkbookPart;
+            if (wbPart.SharedStringTablePart is not null)
             {
-                WorkbookPart wbPart = excelDoc.WorkbookPart;
-                if (wbPart.SharedStringTablePart is not null)
+                SharedStringTable sst = wbPart.SharedStringTablePart.SharedStringTable;
+                foreach (SharedStringItem ssi in sst)
                 {
-                    SharedStringTable sst = wbPart.SharedStringTablePart.SharedStringTable;
-                    foreach (SharedStringItem ssi in sst)
+                    sharedStringCount++;
+                    if (ssi.Text is not null)
                     {
-                        sharedStringCount++;
-                        if (ssi.Text is not null)
+                        Text ssValue = ssi.Text;
+                        if (ssValue.Text is not null)
                         {
-                            Text ssValue = ssi.Text;
-                            if (ssValue.Text is not null)
-                            {
-                                tList.Add(ssValue.Text);
-                            }
+                            tList.Add(ssValue.Text);
                         }
                     }
                 }
@@ -559,22 +554,19 @@ namespace Office_File_Explorer.Helpers
         {
             List<string> tList = new List<string>();
             int nameCount = 0;
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg);
+            WorkbookPart wbPart = excelDoc.WorkbookPart;
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
+            // Retrieve a reference to the defined names collection.
+            DefinedNames definedNames = wbPart.Workbook.DefinedNames;
+
+            // If there are defined names, add them to the dictionary.
+            if (definedNames is not null)
             {
-                WorkbookPart wbPart = excelDoc.WorkbookPart;
-
-                // Retrieve a reference to the defined names collection.
-                DefinedNames definedNames = wbPart.Workbook.DefinedNames;
-
-                // If there are defined names, add them to the dictionary.
-                if (definedNames is not null)
+                foreach (DefinedName dn in definedNames)
                 {
-                    foreach (DefinedName dn in definedNames)
-                    {
-                        nameCount++;
-                        tList.Add(nameCount + Strings.wPeriod + dn.Name.Value + " = " + dn.Text);
-                    }
+                    nameCount++;
+                    tList.Add(nameCount + Strings.wPeriod + dn.Name.Value + " = " + dn.Text);
                 }
             }
 
@@ -584,48 +576,45 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetConnections(Package pkg)
         {
             List<string> tList = new List<string>();
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg);
+            WorkbookPart wbPart = excelDoc.WorkbookPart;
+            ConnectionsPart cPart = wbPart.ConnectionsPart;
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
+            if (cPart is null)
             {
-                WorkbookPart wbPart = excelDoc.WorkbookPart;
-                ConnectionsPart cPart = wbPart.ConnectionsPart;
+                return tList;
+            }
 
-                if (cPart is null)
+            int cCount = 0;
+
+            foreach (Connection c in cPart.Connections)
+            {
+                cCount++;
+                if (c.DatabaseProperties is null)
                 {
+                    tList.Add("Invalid connections.xml");
                     return tList;
                 }
 
-                int cCount = 0;
-
-                foreach (Connection c in cPart.Connections)
+                if (c.DatabaseProperties.Connection is not null)
                 {
-                    cCount++;
-                    if (c.DatabaseProperties is null)
+                    string cn = c.DatabaseProperties.Connection;
+                    string[] cArray = cn.Split(';');
+
+                    tList.Add(cCount + ". Connection= " + c.Name);
+                    foreach (var s in cArray)
                     {
-                        tList.Add("Invalid connections.xml");
-                        return tList;
+                        tList.Add("    " + s);
                     }
 
-                    if (c.DatabaseProperties.Connection is not null)
+                    if (c.ConnectionFile is not null)
                     {
-                        string cn = c.DatabaseProperties.Connection;
-                        string[] cArray = cn.Split(';');
+                        tList.Add(string.Empty);
+                        tList.Add("    Connection File= " + c.ConnectionFile);
 
-                        tList.Add(cCount + ". Connection= " + c.Name);
-                        foreach (var s in cArray)
+                        if (c.OlapProperties is not null)
                         {
-                            tList.Add("    " + s);
-                        }
-
-                        if (c.ConnectionFile is not null)
-                        {
-                            tList.Add(string.Empty);
-                            tList.Add("    Connection File= " + c.ConnectionFile);
-
-                            if (c.OlapProperties is not null)
-                            {
-                                tList.Add("    Row Drill Count= " + c.OlapProperties.RowDrillCount);
-                            }
+                            tList.Add("    Row Drill Count= " + c.OlapProperties.RowDrillCount);
                         }
                     }
                 }
@@ -637,61 +626,58 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetHiddenRowCols(Package pkg)
         {
             List<string> tList = new List<string>();
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg);
+            WorkbookPart wbPart = excelDoc.WorkbookPart;
+            Sheets theSheets = wbPart.Workbook.Sheets;
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
+            foreach (Sheet sheet in theSheets)
             {
-                WorkbookPart wbPart = excelDoc.WorkbookPart;
-                Sheets theSheets = wbPart.Workbook.Sheets;
+                Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().Where((s) => s.Name == sheet.Name).FirstOrDefault();
 
-                foreach (Sheet sheet in theSheets)
+                if (theSheet is null)
                 {
-                    Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().Where((s) => s.Name == sheet.Name).FirstOrDefault();
-
-                    if (theSheet is null)
-                    {
-                        return tList;
-                    }
-                    else
-                    {
-                        tList.Add("Worksheet Name = " + sheet.Name);
-
-                        // The sheet does exist.
-                        WorksheetPart wsPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
-                        Worksheet ws = wsPart.Worksheet;
-                        int rowCount = 0;
-                        int colCount = 0;
-
-                        tList.Add("##    ROWS    ##");
-                        IEnumerable<Row> rows = ws.Descendants<Row>().Where((r) => r.Hidden is not null && r.Hidden.Value);
-                        foreach (Row row in rows)
-                        {
-                            rowCount++;
-                            tList.Add(rowCount + Strings.wPeriod + row.InnerText);
-                        }
-
-                        if (rowCount == 0)
-                        {
-                            tList.Add("    None");
-                        }
-
-                        tList.Add("##    COLUMNS    ##");
-                        IEnumerable<Column> cols = ws.Descendants<Column>().Where((c) => c.Hidden is not null && c.Hidden.Value);
-                        foreach (Column item in cols)
-                        {
-                            for (uint i = item.Min.Value; i <= item.Max.Value; i++)
-                            {
-                                colCount++;
-                                tList.Add(colCount + ". Column " + i);
-                            }
-                        }
-
-                        if (colCount == 0)
-                        {
-                            tList.Add("    None");
-                        }
-                    }
-                    tList.Add(string.Empty);
+                    return tList;
                 }
+                else
+                {
+                    tList.Add("Worksheet Name = " + sheet.Name);
+
+                    // The sheet does exist.
+                    WorksheetPart wsPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
+                    Worksheet ws = wsPart.Worksheet;
+                    int rowCount = 0;
+                    int colCount = 0;
+
+                    tList.Add("##    ROWS    ##");
+                    IEnumerable<Row> rows = ws.Descendants<Row>().Where((r) => r.Hidden is not null && r.Hidden.Value);
+                    foreach (Row row in rows)
+                    {
+                        rowCount++;
+                        tList.Add(rowCount + Strings.wPeriod + row.InnerText);
+                    }
+
+                    if (rowCount == 0)
+                    {
+                        tList.Add("    None");
+                    }
+
+                    tList.Add("##    COLUMNS    ##");
+                    IEnumerable<Column> cols = ws.Descendants<Column>().Where((c) => c.Hidden is not null && c.Hidden.Value);
+                    foreach (Column item in cols)
+                    {
+                        for (uint i = item.Min.Value; i <= item.Max.Value; i++)
+                        {
+                            colCount++;
+                            tList.Add(colCount + ". Column " + i);
+                        }
+                    }
+
+                    if (colCount == 0)
+                    {
+                        tList.Add("    None");
+                    }
+                }
+                tList.Add(string.Empty);
             }
 
             return tList;
@@ -702,52 +688,46 @@ namespace Office_File_Explorer.Helpers
         public static List<string> ReadExcelFileDOM(Package pkg)
         {
             List<string> values = new List<string>();
+            SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(pkg);
+            WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
+            WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+            SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
 
-            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(pkg))
+            foreach (Row r in sheetData.Elements<Row>())
             {
-                WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
-                WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-                SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-
-                foreach (Row r in sheetData.Elements<Row>())
+                foreach (Cell c in r.Elements<Cell>())
                 {
-                    foreach (Cell c in r.Elements<Cell>())
+                    if (c.CellValue is not null)
                     {
-                        if (c.CellValue is not null)
-                        {
-                            values.Add(c.CellReference + Strings.wColonBuffer + c.CellValue.Text + Strings.wSpaceChar);
-                        }
+                        values.Add(c.CellReference + Strings.wColonBuffer + c.CellValue.Text + Strings.wSpaceChar);
                     }
                 }
-
-                return values;
             }
+
+            return values;
         }
 
         // The SAX approach.
         public static List<string> ReadExcelFileSAX(Package pkg)
         {
             List<string> values = new List<string>();
+            SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(pkg);
+            WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
+            WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
 
-            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(pkg))
+            OpenXmlReader reader = OpenXmlReader.Create(worksheetPart);
+            string text;
+
+            while (reader.Read())
             {
-                WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
-                WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-
-                OpenXmlReader reader = OpenXmlReader.Create(worksheetPart);
-                string text;
-
-                while (reader.Read())
+                if (reader.ElementType == typeof(CellValue))
                 {
-                    if (reader.ElementType == typeof(CellValue))
-                    {
-                        text = reader.GetText();
-                        values.Add(text + Strings.wSpaceChar);
-                    }
+                    text = reader.GetText();
+                    values.Add(text + Strings.wSpaceChar);
                 }
-
-                return values;
             }
+
+            return values;
         }
 
         public static bool DeleteSheet(Package pkg, string sheetToDelete)
@@ -758,28 +738,27 @@ namespace Office_File_Explorer.Helpers
             // in the shared strings table. You must take care when adding new strings, for example. 
             // The XLInsertStringIntoCell snippet handles this problem for you.
 
-            using (SpreadsheetDocument document = SpreadsheetDocument.Open(pkg))
+            SpreadsheetDocument document = SpreadsheetDocument.Open(pkg);
+            WorkbookPart wbPart = document.WorkbookPart;
+
+            Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().
+              Where(s => s.Name == sheetToDelete).FirstOrDefault();
+            if (theSheet == null)
             {
-                WorkbookPart wbPart = document.WorkbookPart;
-
-                Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().
-                  Where(s => s.Name == sheetToDelete).FirstOrDefault();
-                if (theSheet == null)
-                {
-                    // The specified sheet doesn't exist.
-                    return false;
-                }
-
-                // Remove the sheet reference from the workbook.
-                WorksheetPart worksheetPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
-                theSheet.Remove();
-
-                // Delete the worksheet part.
-                wbPart.DeletePart(worksheetPart);
-
-                // Save the workbook.
-                wbPart.Workbook.Save();
+                // The specified sheet doesn't exist.
+                return false;
             }
+
+            // Remove the sheet reference from the workbook.
+            WorksheetPart worksheetPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
+            theSheet.Remove();
+
+            // Delete the worksheet part.
+            wbPart.DeletePart(worksheetPart);
+
+            // Save the workbook.
+            wbPart.Workbook.Save();
+            
             return true;
         }
 

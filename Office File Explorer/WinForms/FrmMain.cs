@@ -720,7 +720,7 @@ namespace Office_File_Explorer
                 if (File.Exists(fWorkingFilePath))
                 {
                     File.Delete(fWorkingFilePath);
-                }   
+                }
             }
             catch (Exception ex)
             {
@@ -1094,6 +1094,8 @@ namespace Office_File_Explorer
         {
             try
             {
+                Cursor = Cursors.WaitCursor;
+
                 if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
                 {
                     // customui files have additional editing options
@@ -1201,6 +1203,10 @@ namespace Office_File_Explorer
             catch (Exception ex)
             {
                 rtbDisplay.Text = "Error: " + ex.Message;
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 
@@ -2617,24 +2623,18 @@ namespace Office_File_Explorer
 
                 if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
                 {
-                    using (WordprocessingDocument document = WordprocessingDocument.Open(package))
-                    {
-                        AddCustomDocPropsToList(document.CustomFilePropertiesPart);
-                    }
+                    WordprocessingDocument document = WordprocessingDocument.Open(package);
+                    AddCustomDocPropsToList(document.CustomFilePropertiesPart);
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
                 {
-                    using (SpreadsheetDocument document = SpreadsheetDocument.Open(package))
-                    {
-                        AddCustomDocPropsToList(document.CustomFilePropertiesPart);
-                    }
+                    SpreadsheetDocument document = SpreadsheetDocument.Open(package);
+                    AddCustomDocPropsToList(document.CustomFilePropertiesPart);
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
                 {
-                    using (PresentationDocument document = PresentationDocument.Open(package))
-                    {
-                        AddCustomDocPropsToList(document.CustomFilePropertiesPart);
-                    }
+                    PresentationDocument document = PresentationDocument.Open(package);
+                    AddCustomDocPropsToList(document.CustomFilePropertiesPart);
                 }
                 else
                 {
@@ -2663,6 +2663,9 @@ namespace Office_File_Explorer
             DisableUI();
             package.Close();
             tvFiles.Nodes.Clear();
+            toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
+            toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
+            rtbDisplay.Clear();
         }
 
         #endregion

@@ -203,15 +203,12 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetHyperlinks(Package pkg)
         {
             List<string> tList = new List<string>();
-
-            using (PresentationDocument document = PresentationDocument.Open(pkg))
+            
+            int linkCount = 0;
+            foreach (string s in GetAllExternalHyperlinksInPresentation(pkg))
             {
-                int linkCount = 0;
-                foreach (string s in GetAllExternalHyperlinksInPresentation(pkg))
-                {
-                    linkCount++;
-                    tList.Add(linkCount + Strings.wPeriod + s);
-                }
+                linkCount++;
+                tList.Add(linkCount + Strings.wPeriod + s);
             }
 
             return tList;
@@ -226,44 +223,42 @@ namespace Office_File_Explorer.Helpers
         {
             List<string> tList = new List<string>();
 
-            using (PresentationDocument presentationDocument = PresentationDocument.Open(pkg))
+            PresentationDocument presentationDocument = PresentationDocument.Open(pkg);
+            PresentationPart pPart = presentationDocument.PresentationPart;
+            int commentCount = 0;
+
+            foreach (SlidePart sPart in pPart.SlideParts)
             {
-                PresentationPart pPart = presentationDocument.PresentationPart;
-                int commentCount = 0;
-
-                foreach (SlidePart sPart in pPart.SlideParts)
+                // legacy comments
+                SlideCommentsPart sCPart = sPart.SlideCommentsPart;
+                if (sCPart is not null)
                 {
-                    // legacy comments
-                    SlideCommentsPart sCPart = sPart.SlideCommentsPart;
-                    if (sCPart is not null)
+                    foreach (Comment cmt in sCPart.CommentList)
                     {
-                        foreach (Comment cmt in sCPart.CommentList)
-                        {
-                            commentCount++;
-                            tList.Add(commentCount + Strings.wPeriod + cmt.InnerText);
-                        }
+                        commentCount++;
+                        tList.Add(commentCount + Strings.wPeriod + cmt.InnerText);
                     }
+                }
 
-                    // modern comments
-                    if (sPart.commentParts is not null)
+                // modern comments
+                if (sPart.commentParts is not null)
+                {
+                    IEnumerable<PowerPointCommentPart> modernComments = sPart.commentParts;
+                    foreach (PowerPointCommentPart modernComment in modernComments)
                     {
-                        IEnumerable<PowerPointCommentPart> modernComments = sPart.commentParts;
-                        foreach (PowerPointCommentPart modernComment in modernComments)
+                        foreach (ModernComment.Comment c in modernComment.CommentList)
                         {
-                            foreach (ModernComment.Comment c in modernComment.CommentList)
+                            string commentAuthor = string.Empty;
+                            foreach (ModernComment.Author a in pPart.authorsPart.AuthorList)
                             {
-                                string commentAuthor = string.Empty;
-                                foreach (ModernComment.Author a in pPart.authorsPart.AuthorList)
+                                if (a.Id == c.AuthorId)
                                 {
-                                    if (a.Id == c.AuthorId)
-                                    {
-                                        commentAuthor = a.Name;
-                                    }
+                                    commentAuthor = a.Name;
                                 }
-
-                                commentCount++;
-                                tList.Add(commentCount + Strings.wPeriod + "Author: " + commentAuthor + " Comment: " + c.InnerText);
                             }
+
+                            commentCount++;
+                            tList.Add(commentCount + Strings.wPeriod + "Author: " + commentAuthor + " Comment: " + c.InnerText);
                         }
                     }
                 }
@@ -275,16 +270,13 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetSlideTitles(Package pkg)
         {
             List<string> tList = new List<string>();
+            PresentationDocument presentationDocument = PresentationDocument.Open(pkg);
+            int slideCount = 0;
 
-            using (PresentationDocument presentationDocument = PresentationDocument.Open(pkg))
+            foreach (string s in GetSlideTitles(presentationDocument))
             {
-                int slideCount = 0;
-
-                foreach (string s in GetSlideTitles(presentationDocument))
-                {
-                    slideCount++;
-                    tList.Add(slideCount + Strings.wPeriod + s);
-                }
+                slideCount++;
+                tList.Add(slideCount + Strings.wPeriod + s);
             }
 
             return tList;
@@ -313,16 +305,12 @@ namespace Office_File_Explorer.Helpers
         public static List<string> GetSlideTransitions(Package pkg)
         {
             List<string> tList = new List<string>();
-
-            using (PresentationDocument ppt = PresentationDocument.Open(pkg))
+            PresentationDocument ppt = PresentationDocument.Open(pkg);
+            int transitionCount = 0;
+            foreach (string s in GetSlideTransitions(ppt))
             {
-                int transitionCount = 0;
-
-                foreach (string s in GetSlideTransitions(ppt))
-                {
-                    transitionCount++;
-                    tList.Add(transitionCount + Strings.wPeriod + s);
-                }
+                transitionCount++;
+                tList.Add(transitionCount + Strings.wPeriod + s);
             }
 
             return tList;
@@ -385,28 +373,27 @@ namespace Office_File_Explorer.Helpers
         /// <param name="index">slide number</param>
         public static void GetSlideIdAndText(out string sldText, Package pkg, int index)
         {
-            using (PresentationDocument ppt = PresentationDocument.Open(pkg))
+            PresentationDocument ppt = PresentationDocument.Open(pkg);
+
+            // Get the relationship ID of the first slide.
+            PresentationPart part = ppt.PresentationPart;
+            OpenXmlElementList slideIds = part.Presentation.SlideIdList.ChildElements;
+
+            string relId = (slideIds[index] as SlideId).RelationshipId;
+
+            // Get the slide part from the relationship ID.
+            SlidePart slide = (SlidePart)part.GetPartById(relId);
+
+            // Build a StringBuilder object.
+            StringBuilder paragraphText = new StringBuilder();
+
+            // Get the inner text of the slide:
+            IEnumerable<A.Text> texts = slide.Slide.Descendants<A.Text>();
+            foreach (A.Text text in texts)
             {
-                // Get the relationship ID of the first slide.
-                PresentationPart part = ppt.PresentationPart;
-                OpenXmlElementList slideIds = part.Presentation.SlideIdList.ChildElements;
-
-                string relId = (slideIds[index] as SlideId).RelationshipId;
-
-                // Get the slide part from the relationship ID.
-                SlidePart slide = (SlidePart)part.GetPartById(relId);
-
-                // Build a StringBuilder object.
-                StringBuilder paragraphText = new StringBuilder();
-
-                // Get the inner text of the slide:
-                IEnumerable<A.Text> texts = slide.Slide.Descendants<A.Text>();
-                foreach (A.Text text in texts)
-                {
-                    paragraphText.Append(text.Text);
-                }
-                sldText = paragraphText.ToString();
+                paragraphText.Append(text.Text);
             }
+            sldText = paragraphText.ToString();
         }
 
         public static IList<string> GetSlideTitles(PresentationDocument presentationDocument)
@@ -522,26 +509,24 @@ namespace Office_File_Explorer.Helpers
             // Declare a list of strings.
             List<string> ret = new List<string>();
 
-            // Open the presentation file as read-only.
-            using (PresentationDocument document = PresentationDocument.Open(pkg))
-            {
-                // Iterate through all the slide parts in the presentation part.
-                foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
-                {
-                    IEnumerable<HyperlinkType> links = slidePart.Slide.Descendants<HyperlinkType>();
+            PresentationDocument document = PresentationDocument.Open(pkg);
 
-                    // Iterate through all the links in the slide part.
-                    foreach (HyperlinkType link in links)
+            // Iterate through all the slide parts in the presentation part.
+            foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
+            {
+                IEnumerable<HyperlinkType> links = slidePart.Slide.Descendants<HyperlinkType>();
+
+                // Iterate through all the links in the slide part.
+                foreach (HyperlinkType link in links)
+                {
+                    // Iterate through all the external relationships in the slide part. 
+                    foreach (HyperlinkRelationship relation in slidePart.HyperlinkRelationships)
                     {
-                        // Iterate through all the external relationships in the slide part. 
-                        foreach (HyperlinkRelationship relation in slidePart.HyperlinkRelationships)
+                        // If the relationship ID matches the link ID
+                        if (relation.Id.Equals(link.Id))
                         {
-                            // If the relationship ID matches the link ID
-                            if (relation.Id.Equals(link.Id))
-                            {
-                                // Add the URI of the external relationship to the list of strings.
-                                ret.Add(relation.Uri.AbsoluteUri);
-                            }
+                            // Add the URI of the external relationship to the list of strings.
+                            ret.Add(relation.Uri.AbsoluteUri);
                         }
                     }
                 }
@@ -555,83 +540,81 @@ namespace Office_File_Explorer.Helpers
         public static bool DeleteComments(string fileName, string author)
         {
             bool isChanged = false;
+            PresentationDocument doc = PresentationDocument.Open(fileName, true);
 
-            using (PresentationDocument doc = PresentationDocument.Open(fileName, true))
+            // Get the authors part.
+            CommentAuthorsPart authorsPart = doc.PresentationPart.GetPartsOfType<CommentAuthorsPart>().FirstOrDefault();
+
+            if (authorsPart is null)
             {
-                // Get the authors part.
-                CommentAuthorsPart authorsPart = doc.PresentationPart.GetPartsOfType<CommentAuthorsPart>().FirstOrDefault();
+                // There's no authors part, so just
+                // fail. If no authors, there can't be any comments.
+                return isChanged;
+            }
 
-                if (authorsPart is null)
+            // Get the comment authors, or the specified author if supplied:
+            var commentAuthors = authorsPart.CommentAuthorList.Elements<CommentAuthor>();
+            if (!string.IsNullOrEmpty(author))
+            {
+                commentAuthors = commentAuthors.Where(e => e.Name.Value.Equals(author));
+            }
+
+            bool changed = false;
+            foreach (var commentAuthor in commentAuthors.ToArray())
+            {
+                var authorId = commentAuthor.Id;
+
+                // Iterate through all the slides and get the slide parts.
+                foreach (var slide in doc.PresentationPart.GetPartsOfType<SlidePart>())
                 {
-                    // There's no authors part, so just
-                    // fail. If no authors, there can't be any comments.
-                    return isChanged;
-                }
+                    // Iterate through the slide parts and find the slide comment parts.
+                    var slideCommentParts = slide.GetPartsOfType<SlideCommentsPart>().ToArray();
 
-                // Get the comment authors, or the specified author if supplied:
-                var commentAuthors = authorsPart.CommentAuthorList.Elements<CommentAuthor>();
-                if (!string.IsNullOrEmpty(author))
-                {
-                    commentAuthors = commentAuthors.Where(e => e.Name.Value.Equals(author));
-                }
-
-                bool changed = false;
-                foreach (var commentAuthor in commentAuthors.ToArray())
-                {
-                    var authorId = commentAuthor.Id;
-
-                    // Iterate through all the slides and get the slide parts.
-                    foreach (var slide in doc.PresentationPart.GetPartsOfType<SlidePart>())
+                    foreach (var slideCommentsPart in slideCommentParts)
                     {
-                        // Iterate through the slide parts and find the slide comment parts.
-                        var slideCommentParts = slide.GetPartsOfType<SlideCommentsPart>().ToArray();
+                        // Get the list of comments.
+                        var commentList = slideCommentsPart.CommentList.Elements<Comment>().
+                          Where(e => e.AuthorId.Value == authorId.Value);
 
-                        foreach (var slideCommentsPart in slideCommentParts)
+                        foreach (var comment in commentList.ToArray())
                         {
-                            // Get the list of comments.
-                            var commentList = slideCommentsPart.CommentList.Elements<Comment>().
-                              Where(e => e.AuthorId.Value == authorId.Value);
+                            // Delete all the comments by the specified author.
+                            slideCommentsPart.CommentList.RemoveChild<Comment>(comment);
+                            isChanged = true;
+                        }
 
-                            foreach (var comment in commentList.ToArray())
-                            {
-                                // Delete all the comments by the specified author.
-                                slideCommentsPart.CommentList.RemoveChild<Comment>(comment);
-                                isChanged = true;
-                            }
-
-                            // No comments left? Delete the comments part for this slide.
-                            if (slideCommentsPart.CommentList.Count() == 0)
-                            {
-                                slide.DeletePart(slideCommentsPart);
-                            }
-                            else
-                            {
-                                // Save the slide comments part.
-                                slideCommentsPart.CommentList.Save();
-                            }
+                        // No comments left? Delete the comments part for this slide.
+                        if (slideCommentsPart.CommentList.Count() == 0)
+                        {
+                            slide.DeletePart(slideCommentsPart);
+                        }
+                        else
+                        {
+                            // Save the slide comments part.
+                            slideCommentsPart.CommentList.Save();
                         }
                     }
-
-                    // Delete the comment author from the comment authors part.
-                    authorsPart.CommentAuthorList.RemoveChild<CommentAuthor>(commentAuthor);
-
-                    changed = true;
                 }
 
-                // Changed will only be false if the caller requested comments
-                // for a particular author, and that author has no comments.
-                if (changed)
+                // Delete the comment author from the comment authors part.
+                authorsPart.CommentAuthorList.RemoveChild<CommentAuthor>(commentAuthor);
+
+                changed = true;
+            }
+
+            // Changed will only be false if the caller requested comments
+            // for a particular author, and that author has no comments.
+            if (changed)
+            {
+                if (authorsPart.CommentAuthorList.Count() == 0)
                 {
-                    if (authorsPart.CommentAuthorList.Count() == 0)
-                    {
-                        // No authors left, so delete the part.
-                        doc.PresentationPart.DeletePart(authorsPart);
-                    }
-                    else
-                    {
-                        // Save the comment authors part.
-                        authorsPart.CommentAuthorList.Save();
-                    }
+                    // No authors left, so delete the part.
+                    doc.PresentationPart.DeletePart(authorsPart);
+                }
+                else
+                {
+                    // Save the comment authors part.
+                    authorsPart.CommentAuthorList.Save();
                 }
             }
 

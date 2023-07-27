@@ -1663,20 +1663,17 @@ namespace Office_File_Explorer.Helpers
         public static List<string> LstFootnotes(Package pkg)
         {
             List<string> ltFootnotes = new List<string>();
-
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
+            WordprocessingDocument doc = WordprocessingDocument.Open(pkg);
+            FootnotesPart footnotePart = doc.MainDocumentPart.FootnotesPart;
+            if (footnotePart is not null)
             {
-                FootnotesPart footnotePart = doc.MainDocumentPart.FootnotesPart;
-                if (footnotePart is not null)
+                int count = 0;
+                foreach (Footnote fn in footnotePart.Footnotes)
                 {
-                    int count = 0;
-                    foreach (Footnote fn in footnotePart.Footnotes)
+                    if (fn.InnerText != string.Empty)
                     {
-                        if (fn.InnerText != string.Empty)
-                        {
-                            count++;
-                            ltFootnotes.Add(count + Strings.wPeriod + fn.InnerText);
-                        }
+                        count++;
+                        ltFootnotes.Add(count + Strings.wPeriod + fn.InnerText);
                     }
                 }
             }
@@ -1687,20 +1684,17 @@ namespace Office_File_Explorer.Helpers
         public static List<string> LstEndnotes(Package pkg)
         {
             List<string> ltEndnotes = new List<string>();
-
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
+            WordprocessingDocument doc = WordprocessingDocument.Open(pkg);
+            EndnotesPart endnotePart = doc.MainDocumentPart.EndnotesPart;
+            if (endnotePart is not null)
             {
-                EndnotesPart endnotePart = doc.MainDocumentPart.EndnotesPart;
-                if (endnotePart is not null)
+                int count = 0;
+                foreach (Endnote en in endnotePart.Endnotes)
                 {
-                    int count = 0;
-                    foreach (Endnote en in endnotePart.Endnotes)
+                    if (en.InnerText != string.Empty)
                     {
-                        if (en.InnerText != string.Empty)
-                        {
-                            count++;
-                            ltEndnotes.Add(count + Strings.wPeriod + en.InnerText);
-                        }
+                        count++;
+                        ltEndnotes.Add(count + Strings.wPeriod + en.InnerText);
                     }
                 }
             }
@@ -1711,31 +1705,23 @@ namespace Office_File_Explorer.Helpers
         public static List<string> LstFonts(Package pkg)
         {
             List<string> ltFonts = new List<string>();
-
             int count = 0;
-
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
+            WordprocessingDocument doc = WordprocessingDocument.Open(pkg);
+            foreach (Font ft in doc.MainDocumentPart.FontTablePart.Fonts)
             {
-                foreach (Font ft in doc.MainDocumentPart.FontTablePart.Fonts)
-                {
-                    count++;
-                    ltFonts.Add(count + Strings.wPeriod + ft.Name);
-                }
+                count++;
+                ltFonts.Add(count + Strings.wPeriod + ft.Name);
             }
-
             return ltFonts;
         }
 
         public static List<string> LstRunFonts(Package pkg)
         {
             List<string> ltRunFonts = new List<string>();
-
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
-            {
-                // loop each paragraph and get the run props
-                // display props for each run
-            }
-
+            WordprocessingDocument doc = WordprocessingDocument.Open(pkg);
+            // loop each paragraph and get the run props
+            // display props for each run
+            
             return ltRunFonts;
         }
 
@@ -1749,145 +1735,142 @@ namespace Office_File_Explorer.Helpers
             List<int> numIdList = new List<int>();
             List<string> unusedListTemplates = new List<string>();
 
-            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg))
+            WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg);
+            MainDocumentPart mainPart = myDoc.MainDocumentPart;
+            NumberingDefinitionsPart numPart = mainPart.NumberingDefinitionsPart;
+            StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
+
+            // Loop each paragraph, get the NumberingId and add it to the array
+            foreach (OpenXmlElement el in mainPart.Document.Descendants<Paragraph>())
             {
-                MainDocumentPart mainPart = myDoc.MainDocumentPart;
-                NumberingDefinitionsPart numPart = mainPart.NumberingDefinitionsPart;
-                StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
-
-                // Loop each paragraph, get the NumberingId and add it to the array
-                foreach (OpenXmlElement el in mainPart.Document.Descendants<Paragraph>())
+                if (el.Descendants<NumberingId>().Any())
                 {
-                    if (el.Descendants<NumberingId>().Any())
+                    foreach (NumberingId pNumId in el.Descendants<NumberingId>())
                     {
-                        foreach (NumberingId pNumId in el.Descendants<NumberingId>())
+                        numIdList.Add(pNumId.Val);
+                    }
+                }
+            }
+
+            // Loop each header, get the NumId and add it to the array
+            foreach (HeaderPart hdrPart in mainPart.HeaderParts)
+            {
+                foreach (OpenXmlElement el in hdrPart.Header.Elements())
+                {
+                    foreach (NumberingId hNumId in el.Descendants<NumberingId>())
+                    {
+                        numIdList.Add(hNumId.Val);
+                    }
+                }
+            }
+
+            // Loop each footer, get the NumId and add it to the array
+            foreach (FooterPart ftrPart in mainPart.FooterParts)
+            {
+                foreach (OpenXmlElement el in ftrPart.Footer.Elements())
+                {
+                    foreach (NumberingId fNumdId in el.Descendants<NumberingId>())
+                    {
+                        numIdList.Add(fNumdId.Val);
+                    }
+                }
+            }
+
+            // Loop through each style in document and get NumId
+            foreach (OpenXmlElement el in stylePart.Styles.Elements())
+            {
+                try
+                {
+                    string styleEl = el.GetAttribute("styleId", Strings.wordMainAttributeNamespace).Value;
+                    int pStyle = ParagraphsByStyleName(mainPart, styleEl).Count();
+
+                    if (pStyle > 0)
+                    {
+                        foreach (NumberingId sEl in el.Descendants<NumberingId>())
                         {
-                            numIdList.Add(pNumId.Val);
+                            numIdList.Add(sEl.Val);
                         }
                     }
                 }
-
-                // Loop each header, get the NumId and add it to the array
-                foreach (HeaderPart hdrPart in mainPart.HeaderParts)
+                catch (Exception ex)
                 {
-                    foreach (OpenXmlElement el in hdrPart.Header.Elements())
+                    // Not all style elements have a styleID, so just skip these scenarios
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListTemplates_Click : " + ex.Message);
+                }
+            }
+
+            // remove dupes
+            numIdList = numIdList.Distinct().ToList();
+
+            // display the active document lists
+            ltList.Add("Active List Templates in this document:");
+
+            // if we don't have any active templates, just continue checking for orphaned
+            if (numIdList.Count == 0)
+            {
+                ltList.Clear();
+            }
+
+            // since we have lists, display them
+            int count = 0;
+            foreach (object item in numIdList)
+            {
+                count++;
+                ltList.Add(count + Strings.wNumId + item);
+
+                // Word is limited to 2047 total active lists in a document
+                if (count == 2047)
+                {
+                    ltList.Add("## You have too many lists in this file. Word will only display up to 2047 lists. ##");
+                }
+            }
+
+            // Loop through each AbstractNumId
+            ltList.Add(string.Empty);
+            ltList.Add("All List Templates in document:");
+            int aCount = 0;
+
+            if (numPart is not null)
+            {
+                foreach (OpenXmlElement el in numPart.Numbering.Elements())
+                {
+                    foreach (AbstractNumId aNumId in el.Descendants<AbstractNumId>())
                     {
-                        foreach (NumberingId hNumId in el.Descendants<NumberingId>())
-                        {
-                            numIdList.Add(hNumId.Val);
-                        }
+                        string strNumId = el.GetAttribute("numId", Strings.wordMainAttributeNamespace).Value;
+                        aNumIdList.Add(int.Parse(strNumId));
+                        aCount++;
+                        ltList.Add(aCount + Strings.wNumId + strNumId);
                     }
                 }
+            }
+            else
+            {
+                ltList.Add(Strings.wNone);
+            }
 
-                // Loop each footer, get the NumId and add it to the array
-                foreach (FooterPart ftrPart in mainPart.FooterParts)
+            // get the unused list templates
+            oNumIdList = OrphanedListTemplates(numIdList, aNumIdList);
+
+            ltList.Add(string.Empty);
+            ltList.Add("Orphaned List Templates:");
+
+            if (oNumIdList.Count > 0)
+            {
+                int oCount = 0;
+                foreach (object item in oNumIdList)
                 {
-                    foreach (OpenXmlElement el in ftrPart.Footer.Elements())
+                    oCount++;
+                    ltList.Add(oCount + Strings.wNumId + item);
+
+                    if (onlyReturnUnused)
                     {
-                        foreach (NumberingId fNumdId in el.Descendants<NumberingId>())
-                        {
-                            numIdList.Add(fNumdId.Val);
-                        }
+                        unusedListTemplates.Add(item.ToString());
                     }
                 }
-
-                // Loop through each style in document and get NumId
-                foreach (OpenXmlElement el in stylePart.Styles.Elements())
-                {
-                    try
-                    {
-                        string styleEl = el.GetAttribute("styleId", Strings.wordMainAttributeNamespace).Value;
-                        int pStyle = ParagraphsByStyleName(mainPart, styleEl).Count();
-
-                        if (pStyle > 0)
-                        {
-                            foreach (NumberingId sEl in el.Descendants<NumberingId>())
-                            {
-                                numIdList.Add(sEl.Val);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Not all style elements have a styleID, so just skip these scenarios
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListTemplates_Click : " + ex.Message);
-                    }
-                }
-
-                // remove dupes
-                numIdList = numIdList.Distinct().ToList();
-
-                // display the active document lists
-                ltList.Add("Active List Templates in this document:");
-
-                // if we don't have any active templates, just continue checking for orphaned
-                if (numIdList.Count == 0)
-                {
-                    ltList.Clear();
-                }
-
-                // since we have lists, display them
-                int count = 0;
-                foreach (object item in numIdList)
-                {
-                    count++;
-                    ltList.Add(count + Strings.wNumId + item);
-
-                    // Word is limited to 2047 total active lists in a document
-                    if (count == 2047)
-                    {
-                        ltList.Add("## You have too many lists in this file. Word will only display up to 2047 lists. ##");
-                    }
-                }
-
-                // Loop through each AbstractNumId
-                ltList.Add(string.Empty);
-                ltList.Add("All List Templates in document:");
-                int aCount = 0;
-
-                if (numPart is not null)
-                {
-                    foreach (OpenXmlElement el in numPart.Numbering.Elements())
-                    {
-                        foreach (AbstractNumId aNumId in el.Descendants<AbstractNumId>())
-                        {
-                            string strNumId = el.GetAttribute("numId", Strings.wordMainAttributeNamespace).Value;
-                            aNumIdList.Add(int.Parse(strNumId));
-                            aCount++;
-                            ltList.Add(aCount + Strings.wNumId + strNumId);
-                        }
-                    }
-                }
-                else
-                {
-                    ltList.Add(Strings.wNone);
-                }
-
-                // get the unused list templates
-                oNumIdList = OrphanedListTemplates(numIdList, aNumIdList);
-
-                ltList.Add(string.Empty);
-                ltList.Add("Orphaned List Templates:");
-                
-                if (oNumIdList.Count > 0)
-                {
-                    int oCount = 0;
-                    foreach (object item in oNumIdList)
-                    {
-                        oCount++;
-                        ltList.Add(oCount + Strings.wNumId + item);
-
-                        if (onlyReturnUnused)
-                        {
-                            unusedListTemplates.Add(item.ToString());
-                        }
-                    }
-                }
-                else
-                {
-                    ltList.Add(Strings.wNone);
-                }
-
+            }
+            else
+            {
+                ltList.Add(Strings.wNone);
             }
 
             if (onlyReturnUnused)
@@ -1903,53 +1886,49 @@ namespace Office_File_Explorer.Helpers
         public static List<string> LstHyperlinks(Package pkg)
         {
             List<string> hlinkList = new List<string>();
+            WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg);
+            int count = 0;
 
-            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg))
+            IEnumerable<Hyperlink> hLinks = myDoc.MainDocumentPart.Document.Descendants<Hyperlink>();
+
+            // handle if no links are found
+            if (!myDoc.MainDocumentPart.HyperlinkRelationships.Any() && !myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>().Any() && !hLinks.Any())
             {
-                int count = 0;
-
-                IEnumerable<Hyperlink> hLinks = myDoc.MainDocumentPart.Document.Descendants<Hyperlink>();
-
-                // handle if no links are found
-                if (!myDoc.MainDocumentPart.HyperlinkRelationships.Any() && !myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>().Any() && !hLinks.Any())
+                return hlinkList;
+            }
+            else
+            {
+                // loop through regular hyperlinks
+                foreach (Hyperlink h in hLinks)
                 {
-                    return hlinkList;
-                }
-                else
-                {
-                    // loop through regular hyperlinks
-                    foreach (Hyperlink h in hLinks)
+                    count++;
+
+                    string hRelUri = null;
+
+                    // then check for hyperlinks relationships
+                    foreach (HyperlinkRelationship hRel in myDoc.MainDocumentPart.HyperlinkRelationships)
                     {
-                        count++;
-
-                        string hRelUri = null;
-
-                        // then check for hyperlinks relationships
-                        foreach (HyperlinkRelationship hRel in myDoc.MainDocumentPart.HyperlinkRelationships)
+                        if (h.Id == hRel.Id)
                         {
-                            if (h.Id == hRel.Id)
-                            {
-                                hRelUri = hRel.Uri.ToString();
-                            }
+                            hRelUri = hRel.Uri.ToString();
                         }
-
-                        hlinkList.Add(count + Strings.wPeriod + h.InnerText + " Uri = " + hRelUri);
                     }
 
-                    // now we need to check for field hyperlinks
-                    foreach (var field in myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>())
+                    hlinkList.Add(count + Strings.wPeriod + h.InnerText + " Uri = " + hRelUri);
+                }
+
+                // now we need to check for field hyperlinks
+                foreach (var field in myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>())
+                {
+                    string fldText;
+                    if (field.InnerText.StartsWith(" HYPERLINK"))
                     {
-                        string fldText;
-                        if (field.InnerText.StartsWith(" HYPERLINK"))
-                        {
-                            count++;
-                            fldText = field.InnerText.Remove(0, 11);
-                            hlinkList.Add(count + Strings.wPeriod + fldText);
-                        }
+                        count++;
+                        fldText = field.InnerText.Remove(0, 11);
+                        hlinkList.Add(count + Strings.wPeriod + fldText);
                     }
                 }
             }
-
             return hlinkList;
         }
 
@@ -1964,101 +1943,99 @@ namespace Office_File_Explorer.Helpers
             bool styleInUse = false;
             int count = 0;
 
-            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg))
+            WordprocessingDocument myDoc = WordprocessingDocument.Open(pkg);
+            MainDocumentPart mainPart = myDoc.MainDocumentPart;
+            StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
+
+            stylesList.Add("# Style Summary #");
+
+            try
             {
-                MainDocumentPart mainPart = myDoc.MainDocumentPart;
-                StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
-
-                stylesList.Add("# Style Summary #");
-
-                try
+                // loop the styles in style.xml
+                foreach (OpenXmlElement el in stylePart.Styles.Elements())
                 {
-                    // loop the styles in style.xml
-                    foreach (OpenXmlElement el in stylePart.Styles.Elements())
+                    string sName = string.Empty;
+                    string sType = string.Empty;
+
+                    if (el.LocalName == "style")
                     {
-                        string sName = string.Empty;
-                        string sType = string.Empty;
+                        Style s = (Style)el;
+                        sName = s.StyleId;
+                        sType = s.Type;
+                        styleInUse = false;
 
-                        if (el.LocalName == "style")
+                        int pStyleCount = ParagraphsByStyleName(mainPart, sName).Count();
+                        if (sType == "paragraph")
                         {
-                            Style s = (Style)el;
-                            sName = s.StyleId;
-                            sType = s.Type;
-                            styleInUse = false;
-
-                            int pStyleCount = ParagraphsByStyleName(mainPart, sName).Count();
-                            if (sType == "paragraph")
-                            {
-                                if (pStyleCount > 0)
-                                {
-                                    count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + pStyleCount + " paragraphs");
-                                    containStyle = true;
-                                    styleInUse = true;
-                                    continue;
-                                }
-                            }
-
-                            int rStyleCount = RunsByStyleName(mainPart, sName).Count();
-                            if (sType == "character")
-                            {
-                                if (rStyleCount > 0)
-                                {
-                                    count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + rStyleCount + " runs");
-                                    containStyle = true;
-                                    styleInUse = true;
-                                    continue;
-                                }
-                            }
-
-                            int tStyleCount = TablesByStyleName(mainPart, sName).Count();
-                            if (sType == "table")
-                            {
-                                if (tStyleCount > 0)
-                                {
-                                    count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + tStyleCount + " tables");
-                                    containStyle = true;
-                                    styleInUse = true;
-                                    continue;
-                                }
-                            }
-
-                            if (styleInUse == false)
+                            if (pStyleCount > 0)
                             {
                                 count += 1;
-                                stylesList.Add(count + Strings.wPeriod + sName + " -> (Not Used)");
+                                stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + pStyleCount + " paragraphs");
+                                containStyle = true;
+                                styleInUse = true;
+                                continue;
                             }
+                        }
 
-                            if (count == 4079)
+                        int rStyleCount = RunsByStyleName(mainPart, sName).Count();
+                        if (sType == "character")
+                        {
+                            if (rStyleCount > 0)
                             {
-                                stylesList.Add("WARNING: Max Count of Styles for a document is 4079");
+                                count += 1;
+                                stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + rStyleCount + " runs");
+                                containStyle = true;
+                                styleInUse = true;
+                                continue;
                             }
                         }
-                    }
 
-                    // add latent style information
-                    stylesList.Add(string.Empty);
-                    stylesList.Add("# Latent Style Summary #");
-                    foreach (LatentStyleExceptionInfo lex in stylePart.Styles.LatentStyles)
-                    {
-                        count += 1;
-                        if (lex.UnhideWhenUsed is not null)
+                        int tStyleCount = TablesByStyleName(mainPart, sName).Count();
+                        if (sType == "table")
                         {
-                            stylesList.Add(count + Strings.wPeriod + lex.Name + " (Hidden)");
+                            if (tStyleCount > 0)
+                            {
+                                count += 1;
+                                stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + tStyleCount + " tables");
+                                containStyle = true;
+                                styleInUse = true;
+                                continue;
+                            }
                         }
-                        else
+
+                        if (styleInUse == false)
                         {
-                            stylesList.Add(count + Strings.wPeriod + lex.Name);
+                            count += 1;
+                            stylesList.Add(count + Strings.wPeriod + sName + " -> (Not Used)");
+                        }
+
+                        if (count == 4079)
+                        {
+                            stylesList.Add("WARNING: Max Count of Styles for a document is 4079");
                         }
                     }
-
                 }
-                catch (NullReferenceException)
+
+                // add latent style information
+                stylesList.Add(string.Empty);
+                stylesList.Add("# Latent Style Summary #");
+                foreach (LatentStyleExceptionInfo lex in stylePart.Styles.LatentStyles)
                 {
-                    stylesList.Add("** Missing StylesWithEffects part **");
+                    count += 1;
+                    if (lex.UnhideWhenUsed is not null)
+                    {
+                        stylesList.Add(count + Strings.wPeriod + lex.Name + " (Hidden)");
+                    }
+                    else
+                    {
+                        stylesList.Add(count + Strings.wPeriod + lex.Name);
+                    }
                 }
+
+            }
+            catch (NullReferenceException)
+            {
+                stylesList.Add("** Missing StylesWithEffects part **");
             }
 
             if (containStyle == false)
@@ -2086,10 +2063,10 @@ namespace Office_File_Explorer.Helpers
                     if (styleRelation is not null)
                     {
                         Uri styleUri = PackUriHelper.ResolvePartUri(documentUri, styleRelation.TargetUri);
-                        PackagePart stylePart = pkg.GetPart(styleUri);
+                        PackagePart stylePackagePart = pkg.GetPart(styleUri);
 
                         //  Load the style XML in the part into an XDocument instance.
-                        styleDoc = XDocument.Load(XmlReader.Create(stylePart.GetStream()));
+                        styleDoc = XDocument.Load(XmlReader.Create(stylePackagePart.GetStream()));
                     }
                 }
 
@@ -2133,78 +2110,76 @@ namespace Office_File_Explorer.Helpers
         {
             List<string> ccList = new List<string>();
 
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(pkg))
+            WordprocessingDocument doc = WordprocessingDocument.Open(pkg);
+            int count = 0;
+
+            foreach (var cc in doc.ContentControls())
             {
-                int count = 0;
+                string ccType = string.Empty;
+                bool PropFound = false;
+                SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
 
-                foreach (var cc in doc.ContentControls())
+                // loop the properties and get the type
+                foreach (OpenXmlElement oxe in props.ChildElements)
                 {
-                    string ccType = string.Empty;
-                    bool PropFound = false;
-                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
-
-                    // loop the properties and get the type
-                    foreach (OpenXmlElement oxe in props.ChildElements)
+                    if (oxe.GetType().Name == "SdtContentText")
                     {
-                        if (oxe.GetType().Name == "SdtContentText")
-                        {
-                            ccType = "Plain Text";
-                            PropFound = true;
-                        }
-
-                        if (oxe.GetType().Name == "SdtContentDropDownList")
-                        {
-                            ccType = "Drop Down List";
-                            PropFound = true;
-                        }
-
-                        if (oxe.GetType().Name == "SdtContentDocPartList")
-                        {
-                            ccType = "Building Block Gallery";
-                            PropFound = true;
-                        }
-
-                        if (oxe.GetType().Name == "SdtContentCheckBox")
-                        {
-                            ccType = "Check Box";
-                            PropFound = true;
-                        }
-
-                        if (oxe.GetType().Name == "SdtContentPicture")
-                        {
-                            ccType = "Picture";
-                            PropFound = true;
-                        }
-
-                        if (oxe.GetType().Name == "SdtContentComboBox")
-                        {
-                            ccType = "Combo Box";
-                            PropFound = true;
-                        }
-
-                        if (oxe.GetType().Name == "SdtContentDate")
-                        {
-                            ccType = "Date Picker";
-                            PropFound = true;
-                        }
-
-                        if (oxe.GetType().Name == "SdtRepeatedSection")
-                        {
-                            ccType = "Repeating Section";
-                            PropFound = true;
-                        }
+                        ccType = "Plain Text";
+                        PropFound = true;
                     }
 
-                    // display the cc type
-                    count++;
-                    if (PropFound == true)
+                    if (oxe.GetType().Name == "SdtContentDropDownList")
                     {
-                        ccList.Add(count + Strings.wPeriod + ccType);
+                        ccType = "Drop Down List";
+                        PropFound = true;
                     }
-                    else
+
+                    if (oxe.GetType().Name == "SdtContentDocPartList")
                     {
-                        ccList.Add(count + Strings.wPeriod + "Rich Text");
+                        ccType = "Building Block Gallery";
+                        PropFound = true;
                     }
+
+                    if (oxe.GetType().Name == "SdtContentCheckBox")
+                    {
+                        ccType = "Check Box";
+                        PropFound = true;
+                    }
+
+                    if (oxe.GetType().Name == "SdtContentPicture")
+                    {
+                        ccType = "Picture";
+                        PropFound = true;
+                    }
+
+                    if (oxe.GetType().Name == "SdtContentComboBox")
+                    {
+                        ccType = "Combo Box";
+                        PropFound = true;
+                    }
+
+                    if (oxe.GetType().Name == "SdtContentDate")
+                    {
+                        ccType = "Date Picker";
+                        PropFound = true;
+                    }
+
+                    if (oxe.GetType().Name == "SdtRepeatedSection")
+                    {
+                        ccType = "Repeating Section";
+                        PropFound = true;
+                    }
+                }
+
+                // display the cc type
+                count++;
+                if (PropFound == true)
+                {
+                    ccList.Add(count + Strings.wPeriod + ccType);
+                }
+                else
+                {
+                    ccList.Add(count + Strings.wPeriod + "Rich Text");
                 }
             }
 
