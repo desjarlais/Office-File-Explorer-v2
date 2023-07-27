@@ -30,291 +30,278 @@ namespace Office_File_Explorer.WinForms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSettings));
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ckbDeleteOnlyCommentBookmarks = new System.Windows.Forms.CheckBox();
-            this.ckbFixGroupedShapes = new System.Windows.Forms.CheckBox();
-            this.ckbListRsids = new System.Windows.Forms.CheckBox();
-            this.ckbRemoveFallbackTags = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ckbResetNotes = new System.Windows.Forms.CheckBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.ckbBackupOnOpen = new System.Windows.Forms.CheckBox();
-            this.ckbZipItemCorrupt = new System.Windows.Forms.CheckBox();
-            this.ckbDeleteOnExit = new System.Windows.Forms.CheckBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.rdoSAX = new System.Windows.Forms.RadioButton();
-            this.rdoDOM = new System.Windows.Forms.RadioButton();
-            this.BtnOk = new System.Windows.Forms.Button();
-            this.BtnCancel = new System.Windows.Forms.Button();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
-            this.rdoUseSPGuid = new System.Windows.Forms.RadioButton();
-            this.rdoUseCCGuid = new System.Windows.Forms.RadioButton();
-            this.ckbRemoveCustDataTags = new System.Windows.Forms.CheckBox();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox6.SuspendLayout();
-            this.SuspendLayout();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            ckbDeleteOnlyCommentBookmarks = new System.Windows.Forms.CheckBox();
+            ckbFixGroupedShapes = new System.Windows.Forms.CheckBox();
+            ckbListRsids = new System.Windows.Forms.CheckBox();
+            ckbRemoveFallbackTags = new System.Windows.Forms.CheckBox();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            ckbRemoveCustDataTags = new System.Windows.Forms.CheckBox();
+            ckbResetNotes = new System.Windows.Forms.CheckBox();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            ckbZipItemCorrupt = new System.Windows.Forms.CheckBox();
+            ckbDeleteOnExit = new System.Windows.Forms.CheckBox();
+            groupBox4 = new System.Windows.Forms.GroupBox();
+            rdoSAX = new System.Windows.Forms.RadioButton();
+            rdoDOM = new System.Windows.Forms.RadioButton();
+            BtnOk = new System.Windows.Forms.Button();
+            BtnCancel = new System.Windows.Forms.Button();
+            groupBox6 = new System.Windows.Forms.GroupBox();
+            rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
+            rdoUseSPGuid = new System.Windows.Forms.RadioButton();
+            rdoUseCCGuid = new System.Windows.Forms.RadioButton();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
+            groupBox6.SuspendLayout();
+            SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.ckbDeleteOnlyCommentBookmarks);
-            this.groupBox1.Controls.Add(this.ckbFixGroupedShapes);
-            this.groupBox1.Controls.Add(this.ckbListRsids);
-            this.groupBox1.Controls.Add(this.ckbRemoveFallbackTags);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(287, 169);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Word Corrupt Document";
+            groupBox1.Controls.Add(ckbDeleteOnlyCommentBookmarks);
+            groupBox1.Controls.Add(ckbFixGroupedShapes);
+            groupBox1.Controls.Add(ckbListRsids);
+            groupBox1.Controls.Add(ckbRemoveFallbackTags);
+            groupBox1.Location = new System.Drawing.Point(12, 12);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new System.Drawing.Size(287, 169);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Word Corrupt Document";
             // 
             // ckbDeleteOnlyCommentBookmarks
             // 
-            this.ckbDeleteOnlyCommentBookmarks.AutoSize = true;
-            this.ckbDeleteOnlyCommentBookmarks.Location = new System.Drawing.Point(19, 91);
-            this.ckbDeleteOnlyCommentBookmarks.Name = "ckbDeleteOnlyCommentBookmarks";
-            this.ckbDeleteOnlyCommentBookmarks.Size = new System.Drawing.Size(224, 19);
-            this.ckbDeleteOnlyCommentBookmarks.TabIndex = 4;
-            this.ckbDeleteOnlyCommentBookmarks.Text = "Delete Only Bookmarks In Comments";
-            this.ckbDeleteOnlyCommentBookmarks.UseVisualStyleBackColor = true;
+            ckbDeleteOnlyCommentBookmarks.AutoSize = true;
+            ckbDeleteOnlyCommentBookmarks.Location = new System.Drawing.Point(19, 91);
+            ckbDeleteOnlyCommentBookmarks.Name = "ckbDeleteOnlyCommentBookmarks";
+            ckbDeleteOnlyCommentBookmarks.Size = new System.Drawing.Size(224, 19);
+            ckbDeleteOnlyCommentBookmarks.TabIndex = 4;
+            ckbDeleteOnlyCommentBookmarks.Text = "Delete Only Bookmarks In Comments";
+            ckbDeleteOnlyCommentBookmarks.UseVisualStyleBackColor = true;
             // 
             // ckbFixGroupedShapes
             // 
-            this.ckbFixGroupedShapes.AutoSize = true;
-            this.ckbFixGroupedShapes.Location = new System.Drawing.Point(19, 66);
-            this.ckbFixGroupedShapes.Name = "ckbFixGroupedShapes";
-            this.ckbFixGroupedShapes.Size = new System.Drawing.Size(130, 19);
-            this.ckbFixGroupedShapes.TabIndex = 2;
-            this.ckbFixGroupedShapes.Text = "Fix Grouped Shapes";
-            this.ckbFixGroupedShapes.UseVisualStyleBackColor = true;
+            ckbFixGroupedShapes.AutoSize = true;
+            ckbFixGroupedShapes.Location = new System.Drawing.Point(19, 66);
+            ckbFixGroupedShapes.Name = "ckbFixGroupedShapes";
+            ckbFixGroupedShapes.Size = new System.Drawing.Size(130, 19);
+            ckbFixGroupedShapes.TabIndex = 2;
+            ckbFixGroupedShapes.Text = "Fix Grouped Shapes";
+            ckbFixGroupedShapes.UseVisualStyleBackColor = true;
             // 
             // ckbListRsids
             // 
-            this.ckbListRsids.AutoSize = true;
-            this.ckbListRsids.Location = new System.Drawing.Point(19, 44);
-            this.ckbListRsids.Name = "ckbListRsids";
-            this.ckbListRsids.Size = new System.Drawing.Size(159, 19);
-            this.ckbListRsids.TabIndex = 1;
-            this.ckbListRsids.Text = "List Rsids With Doc Props";
-            this.ckbListRsids.UseVisualStyleBackColor = true;
+            ckbListRsids.AutoSize = true;
+            ckbListRsids.Location = new System.Drawing.Point(19, 44);
+            ckbListRsids.Name = "ckbListRsids";
+            ckbListRsids.Size = new System.Drawing.Size(159, 19);
+            ckbListRsids.TabIndex = 1;
+            ckbListRsids.Text = "List Rsids With Doc Props";
+            ckbListRsids.UseVisualStyleBackColor = true;
             // 
             // ckbRemoveFallbackTags
             // 
-            this.ckbRemoveFallbackTags.AutoSize = true;
-            this.ckbRemoveFallbackTags.Location = new System.Drawing.Point(19, 19);
-            this.ckbRemoveFallbackTags.Name = "ckbRemoveFallbackTags";
-            this.ckbRemoveFallbackTags.Size = new System.Drawing.Size(158, 19);
-            this.ckbRemoveFallbackTags.TabIndex = 0;
-            this.ckbRemoveFallbackTags.Text = "Remove All Fallback Tags";
-            this.ckbRemoveFallbackTags.UseVisualStyleBackColor = true;
+            ckbRemoveFallbackTags.AutoSize = true;
+            ckbRemoveFallbackTags.Location = new System.Drawing.Point(19, 19);
+            ckbRemoveFallbackTags.Name = "ckbRemoveFallbackTags";
+            ckbRemoveFallbackTags.Size = new System.Drawing.Size(158, 19);
+            ckbRemoveFallbackTags.TabIndex = 0;
+            ckbRemoveFallbackTags.Text = "Remove All Fallback Tags";
+            ckbRemoveFallbackTags.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.ckbRemoveCustDataTags);
-            this.groupBox2.Controls.Add(this.ckbResetNotes);
-            this.groupBox2.Location = new System.Drawing.Point(305, 12);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(238, 85);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "PowerPoint Options";
-            // 
-            // ckbResetNotes
-            // 
-            this.ckbResetNotes.AutoSize = true;
-            this.ckbResetNotes.Location = new System.Drawing.Point(8, 19);
-            this.ckbResetNotes.Name = "ckbResetNotes";
-            this.ckbResetNotes.Size = new System.Drawing.Size(217, 19);
-            this.ckbResetNotes.TabIndex = 0;
-            this.ckbResetNotes.Text = "Reset Notes Slides and Notes Master";
-            this.ckbResetNotes.UseVisualStyleBackColor = true;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.ckbBackupOnOpen);
-            this.groupBox3.Controls.Add(this.ckbZipItemCorrupt);
-            this.groupBox3.Controls.Add(this.ckbDeleteOnExit);
-            this.groupBox3.Location = new System.Drawing.Point(305, 187);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(238, 100);
-            this.groupBox3.TabIndex = 0;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "App Settings";
-            // 
-            // ckbBackupOnOpen
-            // 
-            this.ckbBackupOnOpen.AutoSize = true;
-            this.ckbBackupOnOpen.Location = new System.Drawing.Point(19, 73);
-            this.ckbBackupOnOpen.Name = "ckbBackupOnOpen";
-            this.ckbBackupOnOpen.Size = new System.Drawing.Size(216, 19);
-            this.ckbBackupOnOpen.TabIndex = 3;
-            this.ckbBackupOnOpen.Text = "Make Backup Copy Of File On Open";
-            this.ckbBackupOnOpen.UseVisualStyleBackColor = true;
-            // 
-            // ckbZipItemCorrupt
-            // 
-            this.ckbZipItemCorrupt.AutoSize = true;
-            this.ckbZipItemCorrupt.Location = new System.Drawing.Point(19, 48);
-            this.ckbZipItemCorrupt.Name = "ckbZipItemCorrupt";
-            this.ckbZipItemCorrupt.Size = new System.Drawing.Size(191, 19);
-            this.ckbZipItemCorrupt.TabIndex = 3;
-            this.ckbZipItemCorrupt.Text = "Check Zip Corruption On Open";
-            this.ckbZipItemCorrupt.UseVisualStyleBackColor = true;
-            // 
-            // ckbDeleteOnExit
-            // 
-            this.ckbDeleteOnExit.AutoSize = true;
-            this.ckbDeleteOnExit.Location = new System.Drawing.Point(19, 22);
-            this.ckbDeleteOnExit.Name = "ckbDeleteOnExit";
-            this.ckbDeleteOnExit.Size = new System.Drawing.Size(167, 19);
-            this.ckbDeleteOnExit.TabIndex = 0;
-            this.ckbDeleteOnExit.Text = "Delete Copied Files On Exit";
-            this.ckbDeleteOnExit.UseVisualStyleBackColor = true;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.rdoSAX);
-            this.groupBox4.Controls.Add(this.rdoDOM);
-            this.groupBox4.Location = new System.Drawing.Point(305, 103);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(238, 78);
-            this.groupBox4.TabIndex = 0;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Excel Cell Value Option";
-            // 
-            // rdoSAX
-            // 
-            this.rdoSAX.AutoSize = true;
-            this.rdoSAX.Location = new System.Drawing.Point(6, 22);
-            this.rdoSAX.Name = "rdoSAX";
-            this.rdoSAX.Size = new System.Drawing.Size(79, 19);
-            this.rdoSAX.TabIndex = 3;
-            this.rdoSAX.TabStop = true;
-            this.rdoSAX.Text = "SAX Styles";
-            this.rdoSAX.UseVisualStyleBackColor = true;
-            // 
-            // rdoDOM
-            // 
-            this.rdoDOM.AutoSize = true;
-            this.rdoDOM.Location = new System.Drawing.Point(6, 47);
-            this.rdoDOM.Name = "rdoDOM";
-            this.rdoDOM.Size = new System.Drawing.Size(86, 19);
-            this.rdoDOM.TabIndex = 4;
-            this.rdoDOM.TabStop = true;
-            this.rdoDOM.Text = "DOM Styles";
-            this.rdoDOM.UseVisualStyleBackColor = true;
-            // 
-            // BtnOk
-            // 
-            this.BtnOk.Location = new System.Drawing.Point(387, 293);
-            this.BtnOk.Name = "BtnOk";
-            this.BtnOk.Size = new System.Drawing.Size(75, 23);
-            this.BtnOk.TabIndex = 1;
-            this.BtnOk.Text = "OK";
-            this.BtnOk.UseVisualStyleBackColor = true;
-            this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
-            // 
-            // BtnCancel
-            // 
-            this.BtnCancel.Location = new System.Drawing.Point(468, 293);
-            this.BtnCancel.Name = "BtnCancel";
-            this.BtnCancel.Size = new System.Drawing.Size(75, 23);
-            this.BtnCancel.TabIndex = 2;
-            this.BtnCancel.Text = "Cancel";
-            this.BtnCancel.UseVisualStyleBackColor = true;
-            this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.rdoUserSelectedCC);
-            this.groupBox6.Controls.Add(this.rdoUseSPGuid);
-            this.groupBox6.Controls.Add(this.rdoUseCCGuid);
-            this.groupBox6.Location = new System.Drawing.Point(12, 187);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(287, 100);
-            this.groupBox6.TabIndex = 5;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Fix Content Control Prefix Mappings";
-            // 
-            // rdoUserSelectedCC
-            // 
-            this.rdoUserSelectedCC.AutoSize = true;
-            this.rdoUserSelectedCC.Location = new System.Drawing.Point(6, 72);
-            this.rdoUserSelectedCC.Name = "rdoUserSelectedCC";
-            this.rdoUserSelectedCC.Size = new System.Drawing.Size(214, 19);
-            this.rdoUserSelectedCC.TabIndex = 5;
-            this.rdoUserSelectedCC.TabStop = true;
-            this.rdoUserSelectedCC.Text = "Use User Selected Custom Xml Guid";
-            this.rdoUserSelectedCC.UseVisualStyleBackColor = true;
-            // 
-            // rdoUseSPGuid
-            // 
-            this.rdoUseSPGuid.AutoSize = true;
-            this.rdoUseSPGuid.Location = new System.Drawing.Point(6, 22);
-            this.rdoUseSPGuid.Name = "rdoUseSPGuid";
-            this.rdoUseSPGuid.Size = new System.Drawing.Size(201, 19);
-            this.rdoUseSPGuid.TabIndex = 3;
-            this.rdoUseSPGuid.TabStop = true;
-            this.rdoUseSPGuid.Text = "Use SharePoint Custom Xml Guid";
-            this.rdoUseSPGuid.UseVisualStyleBackColor = true;
-            // 
-            // rdoUseCCGuid
-            // 
-            this.rdoUseCCGuid.AutoSize = true;
-            this.rdoUseCCGuid.Location = new System.Drawing.Point(6, 47);
-            this.rdoUseCCGuid.Name = "rdoUseCCGuid";
-            this.rdoUseCCGuid.Size = new System.Drawing.Size(161, 19);
-            this.rdoUseCCGuid.TabIndex = 4;
-            this.rdoUseCCGuid.TabStop = true;
-            this.rdoUseCCGuid.Text = "Use Content Control Guid";
-            this.rdoUseCCGuid.UseVisualStyleBackColor = true;
+            groupBox2.Controls.Add(ckbRemoveCustDataTags);
+            groupBox2.Controls.Add(ckbResetNotes);
+            groupBox2.Location = new System.Drawing.Point(305, 12);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new System.Drawing.Size(238, 85);
+            groupBox2.TabIndex = 0;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "PowerPoint Options";
             // 
             // ckbRemoveCustDataTags
             // 
-            this.ckbRemoveCustDataTags.AutoSize = true;
-            this.ckbRemoveCustDataTags.Location = new System.Drawing.Point(8, 44);
-            this.ckbRemoveCustDataTags.Name = "ckbRemoveCustDataTags";
-            this.ckbRemoveCustDataTags.Size = new System.Drawing.Size(167, 19);
-            this.ckbRemoveCustDataTags.TabIndex = 6;
-            this.ckbRemoveCustDataTags.Text = "Remove Custom Data Tags";
-            this.ckbRemoveCustDataTags.UseVisualStyleBackColor = true;
+            ckbRemoveCustDataTags.AutoSize = true;
+            ckbRemoveCustDataTags.Location = new System.Drawing.Point(8, 44);
+            ckbRemoveCustDataTags.Name = "ckbRemoveCustDataTags";
+            ckbRemoveCustDataTags.Size = new System.Drawing.Size(167, 19);
+            ckbRemoveCustDataTags.TabIndex = 6;
+            ckbRemoveCustDataTags.Text = "Remove Custom Data Tags";
+            ckbRemoveCustDataTags.UseVisualStyleBackColor = true;
+            // 
+            // ckbResetNotes
+            // 
+            ckbResetNotes.AutoSize = true;
+            ckbResetNotes.Location = new System.Drawing.Point(8, 19);
+            ckbResetNotes.Name = "ckbResetNotes";
+            ckbResetNotes.Size = new System.Drawing.Size(217, 19);
+            ckbResetNotes.TabIndex = 0;
+            ckbResetNotes.Text = "Reset Notes Slides and Notes Master";
+            ckbResetNotes.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(ckbZipItemCorrupt);
+            groupBox3.Controls.Add(ckbDeleteOnExit);
+            groupBox3.Location = new System.Drawing.Point(305, 187);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(238, 100);
+            groupBox3.TabIndex = 0;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "App Settings";
+            // 
+            // ckbZipItemCorrupt
+            // 
+            ckbZipItemCorrupt.AutoSize = true;
+            ckbZipItemCorrupt.Location = new System.Drawing.Point(19, 48);
+            ckbZipItemCorrupt.Name = "ckbZipItemCorrupt";
+            ckbZipItemCorrupt.Size = new System.Drawing.Size(191, 19);
+            ckbZipItemCorrupt.TabIndex = 3;
+            ckbZipItemCorrupt.Text = "Check Zip Corruption On Open";
+            ckbZipItemCorrupt.UseVisualStyleBackColor = true;
+            // 
+            // ckbDeleteOnExit
+            // 
+            ckbDeleteOnExit.AutoSize = true;
+            ckbDeleteOnExit.Location = new System.Drawing.Point(19, 22);
+            ckbDeleteOnExit.Name = "ckbDeleteOnExit";
+            ckbDeleteOnExit.Size = new System.Drawing.Size(167, 19);
+            ckbDeleteOnExit.TabIndex = 0;
+            ckbDeleteOnExit.Text = "Delete Copied Files On Exit";
+            ckbDeleteOnExit.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(rdoSAX);
+            groupBox4.Controls.Add(rdoDOM);
+            groupBox4.Location = new System.Drawing.Point(305, 103);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(238, 78);
+            groupBox4.TabIndex = 0;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Excel Cell Value Option";
+            // 
+            // rdoSAX
+            // 
+            rdoSAX.AutoSize = true;
+            rdoSAX.Location = new System.Drawing.Point(6, 22);
+            rdoSAX.Name = "rdoSAX";
+            rdoSAX.Size = new System.Drawing.Size(79, 19);
+            rdoSAX.TabIndex = 3;
+            rdoSAX.TabStop = true;
+            rdoSAX.Text = "SAX Styles";
+            rdoSAX.UseVisualStyleBackColor = true;
+            // 
+            // rdoDOM
+            // 
+            rdoDOM.AutoSize = true;
+            rdoDOM.Location = new System.Drawing.Point(6, 47);
+            rdoDOM.Name = "rdoDOM";
+            rdoDOM.Size = new System.Drawing.Size(86, 19);
+            rdoDOM.TabIndex = 4;
+            rdoDOM.TabStop = true;
+            rdoDOM.Text = "DOM Styles";
+            rdoDOM.UseVisualStyleBackColor = true;
+            // 
+            // BtnOk
+            // 
+            BtnOk.Location = new System.Drawing.Point(387, 293);
+            BtnOk.Name = "BtnOk";
+            BtnOk.Size = new System.Drawing.Size(75, 23);
+            BtnOk.TabIndex = 1;
+            BtnOk.Text = "OK";
+            BtnOk.UseVisualStyleBackColor = true;
+            BtnOk.Click += BtnOk_Click;
+            // 
+            // BtnCancel
+            // 
+            BtnCancel.Location = new System.Drawing.Point(468, 293);
+            BtnCancel.Name = "BtnCancel";
+            BtnCancel.Size = new System.Drawing.Size(75, 23);
+            BtnCancel.TabIndex = 2;
+            BtnCancel.Text = "Cancel";
+            BtnCancel.UseVisualStyleBackColor = true;
+            BtnCancel.Click += BtnCancel_Click;
+            // 
+            // groupBox6
+            // 
+            groupBox6.Controls.Add(rdoUserSelectedCC);
+            groupBox6.Controls.Add(rdoUseSPGuid);
+            groupBox6.Controls.Add(rdoUseCCGuid);
+            groupBox6.Location = new System.Drawing.Point(12, 187);
+            groupBox6.Name = "groupBox6";
+            groupBox6.Size = new System.Drawing.Size(287, 100);
+            groupBox6.TabIndex = 5;
+            groupBox6.TabStop = false;
+            groupBox6.Text = "Fix Content Control Prefix Mappings";
+            // 
+            // rdoUserSelectedCC
+            // 
+            rdoUserSelectedCC.AutoSize = true;
+            rdoUserSelectedCC.Location = new System.Drawing.Point(6, 72);
+            rdoUserSelectedCC.Name = "rdoUserSelectedCC";
+            rdoUserSelectedCC.Size = new System.Drawing.Size(214, 19);
+            rdoUserSelectedCC.TabIndex = 5;
+            rdoUserSelectedCC.TabStop = true;
+            rdoUserSelectedCC.Text = "Use User Selected Custom Xml Guid";
+            rdoUserSelectedCC.UseVisualStyleBackColor = true;
+            // 
+            // rdoUseSPGuid
+            // 
+            rdoUseSPGuid.AutoSize = true;
+            rdoUseSPGuid.Location = new System.Drawing.Point(6, 22);
+            rdoUseSPGuid.Name = "rdoUseSPGuid";
+            rdoUseSPGuid.Size = new System.Drawing.Size(201, 19);
+            rdoUseSPGuid.TabIndex = 3;
+            rdoUseSPGuid.TabStop = true;
+            rdoUseSPGuid.Text = "Use SharePoint Custom Xml Guid";
+            rdoUseSPGuid.UseVisualStyleBackColor = true;
+            // 
+            // rdoUseCCGuid
+            // 
+            rdoUseCCGuid.AutoSize = true;
+            rdoUseCCGuid.Location = new System.Drawing.Point(6, 47);
+            rdoUseCCGuid.Name = "rdoUseCCGuid";
+            rdoUseCCGuid.Size = new System.Drawing.Size(161, 19);
+            rdoUseCCGuid.TabIndex = 4;
+            rdoUseCCGuid.TabStop = true;
+            rdoUseCCGuid.Text = "Use Content Control Guid";
+            rdoUseCCGuid.UseVisualStyleBackColor = true;
             // 
             // FrmSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 326);
-            this.Controls.Add(this.groupBox6);
-            this.Controls.Add(this.BtnCancel);
-            this.Controls.Add(this.BtnOk);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.KeyPreview = true;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FrmSettings";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Settings";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmSettings_KeyDown);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(546, 326);
+            Controls.Add(groupBox6);
+            Controls.Add(BtnCancel);
+            Controls.Add(BtnOk);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox3);
+            Controls.Add(groupBox4);
+            Controls.Add(groupBox1);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "FrmSettings";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "Settings";
+            KeyDown += FrmSettings_KeyDown;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            groupBox6.ResumeLayout(false);
+            groupBox6.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -333,7 +320,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoSAX;
         private System.Windows.Forms.RadioButton rdoDOM;
         private System.Windows.Forms.CheckBox ckbZipItemCorrupt;
-        private System.Windows.Forms.CheckBox ckbBackupOnOpen;
         private System.Windows.Forms.CheckBox ckbDeleteOnlyCommentBookmarks;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.RadioButton rdoUseCCGuid;

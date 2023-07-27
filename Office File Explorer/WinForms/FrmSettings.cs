@@ -49,11 +49,6 @@ namespace Office_File_Explorer.WinForms
                 ckbZipItemCorrupt.Checked = true;
             }
 
-            if (Properties.Settings.Default.BackupOnOpen == true)
-            {
-                ckbBackupOnOpen.Checked = true;
-            }
-
             if (Properties.Settings.Default.DeleteOnlyCommentBookmarks == true)
             {
                 ckbDeleteOnlyCommentBookmarks.Checked = true;
@@ -86,7 +81,6 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.ResetNotesMaster = ckbResetNotes.Checked;
             Properties.Settings.Default.DeleteCopiesOnExit = ckbDeleteOnExit.Checked;
             Properties.Settings.Default.CheckZipItemCorrupt = ckbZipItemCorrupt.Checked;
-            Properties.Settings.Default.BackupOnOpen = ckbBackupOnOpen.Checked;
             Properties.Settings.Default.DeleteOnlyCommentBookmarks = ckbDeleteOnlyCommentBookmarks.Checked;
             Properties.Settings.Default.RemoveCustDataTags = ckbRemoveCustDataTags.Checked;
 
@@ -98,7 +92,7 @@ namespace Office_File_Explorer.WinForms
             {
                 Properties.Settings.Default.UseContentControlGuid = false;
             }
-            
+
             if (rdoUserSelectedCC.Checked)
             {
                 Properties.Settings.Default.UseUserSelectedCCGuid = true;

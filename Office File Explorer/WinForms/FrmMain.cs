@@ -250,14 +250,6 @@ namespace Office_File_Explorer
                                     }
                                 }
 
-                                // make a backup copy of the file and use it going forward
-                                if (Properties.Settings.Default.BackupOnOpen == true)
-                                {
-                                    string backupFileName = AddTextToFileName(toolStripStatusLabelFilePath.Text, Strings.wBackupFileParentheses);
-                                    File.Copy(toolStripStatusLabelFilePath.Text, backupFileName, true);
-                                    toolStripStatusLabelFilePath.Text = backupFileName;
-                                }
-
                                 // create a copy of the file for the part viewer to use
                                 fWorkingFilePath = AddTextToFileName(Strings.fBackupFilePath + "\\" + Path.GetFileNameWithoutExtension(toolStripStatusLabelFilePath.Text), Strings.wBackupFileParentheses + Path.GetExtension(toolStripStatusLabelFilePath.Text));
                                 File.Copy(toolStripStatusLabelFilePath.Text, fWorkingFilePath, true);
