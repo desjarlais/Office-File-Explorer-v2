@@ -336,27 +336,27 @@ namespace Office_File_Explorer.Helpers
         /// </summary>
         /// <param name="path"></param>
         /// <param name="app"></param>
-        public static bool RemoveCustomDocProperties(string path, string app)
+        public static bool RemoveCustomDocProperties(Package pkg, string app)
         {
             isFixed = false;
 
             if (app == Strings.oAppWord)
             {
-                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
+                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(pkg))
                 {
                     wordDoc.DeletePart(wordDoc.CustomFilePropertiesPart);
                 }
             }
             else if (app == Strings.oAppPowerPoint)
             {
-                using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
+                using (PresentationDocument presDoc = PresentationDocument.Open(pkg))
                 {
                     presDoc.DeletePart(presDoc.CustomFilePropertiesPart);
                 }
             }
             else
             {
-                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
+                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
                 {
                     excelDoc.DeletePart(excelDoc.CustomFilePropertiesPart);
                 }
@@ -371,12 +371,12 @@ namespace Office_File_Explorer.Helpers
         /// </summary>
         /// <param name="path"></param>
         /// <param name="app"></param>
-        public static bool RemoveCustomXmlParts(string path, string app)
+        public static bool RemoveCustomXmlParts(Package pkg, string path, string app)
         {
             isFixed = false;
             if (app == Strings.oAppWord)
             {
-                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
+                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(pkg))
                 {
                     foreach (CustomXmlPart cxp in wordDoc.MainDocumentPart.CustomXmlParts)
                     {
@@ -390,7 +390,7 @@ namespace Office_File_Explorer.Helpers
             {
                 if (Properties.Settings.Default.RemoveCustDataTags)
                 {
-                    using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
+                    using (PresentationDocument presDoc = PresentationDocument.Open(pkg))
                     {
                         // step 1. check slide, slidelayout and notesslide
                         // todo: add check for non custom xml referenced customerdatatags
@@ -522,7 +522,7 @@ namespace Office_File_Explorer.Helpers
                 }
                 else
                 {
-                    using (PresentationDocument presDoc = PresentationDocument.Open(path, true))
+                    using (PresentationDocument presDoc = PresentationDocument.Open(pkg))
                     {
                         if (presDoc.PresentationPart.CustomXmlParts is not null)
                         {

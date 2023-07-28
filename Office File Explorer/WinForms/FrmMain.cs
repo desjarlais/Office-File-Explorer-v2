@@ -757,7 +757,7 @@ namespace Office_File_Explorer
 
         private void BatchFileProcessingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmBatch bFrm = new FrmBatch()
+            FrmBatch bFrm = new FrmBatch(package)
             {
                 Owner = this
             };
@@ -1379,223 +1379,54 @@ namespace Office_File_Explorer
         {
             try
             {
-                AppUtilities.OfficeViewCmds offCmds = AppUtilities.OfficeViewCmds.None;
+                rtbDisplay.Clear();
+                Cursor = Cursors.WaitCursor;
 
                 // display file contents based on user selection
                 if (StrOfficeApp == Strings.oAppWord)
                 {
-                    using (var f = new FrmWordCommands(toolStripStatusLabelFilePath.Text))
-                    {
-                        var result = f.ShowDialog();
-
-                        if (f.dr == DialogResult.Cancel)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            rtbDisplay.Clear();
-                        }
-
-                        Cursor = Cursors.WaitCursor;
-                        AppUtilities.WordViewCmds wdCmds = f.wdCmds;
-                        offCmds = f.offCmds;
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.ContentControls))
-                        {
-                            DisplayListContents(Word.LstContentControls(package), Strings.wContentControls);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Styles))
-                        {
-                            DisplayListContents(Word.LstStyles(package), Strings.wStyles);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Hyperlinks))
-                        {
-                            DisplayListContents(Word.LstHyperlinks(package), Strings.wHyperlinks);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.ListTemplates))
-                        {
-                            DisplayListContents(Word.LstListTemplates(package, false), Strings.wListTemplates);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Fonts))
-                        {
-                            DisplayListContents(Word.LstFonts(package), Strings.wFonts);
-                            DisplayListContents(Word.LstRunFonts(package), Strings.wRunFonts);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Footnotes))
-                        {
-                            DisplayListContents(Word.LstFootnotes(package), Strings.wFootnotes);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Endnotes))
-                        {
-                            DisplayListContents(Word.LstEndnotes(package), Strings.wEndnotes);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.DocumentProperties))
-                        {
-                            DisplayListContents(Word.LstDocProps(package), Strings.wDocProps);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Bookmarks))
-                        {
-                            DisplayListContents(Word.LstBookmarks(package), Strings.wBookmarks);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Comments))
-                        {
-                            DisplayListContents(Word.LstComments(package), Strings.wComments);
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.FieldCodes))
-                        {
-                            DisplayListContents(Word.LstFieldCodes(package), Strings.wFldCodes);
-                            DisplayListContents(Word.LstFieldCodesInHeader(package), " ** Header Field Codes **");
-                            DisplayListContents(Word.LstFieldCodesInFooter(package), " ** Footer Field Codes **");
-                        }
-
-                        if (wdCmds.HasFlag(AppUtilities.WordViewCmds.Tables))
-                        {
-                            DisplayListContents(Word.LstTables(package), Strings.wTables);
-                        }
-                    }
+                    DisplayListContents(Word.LstContentControls(package), Strings.wContentControls);
+                    DisplayListContents(Word.LstTables(package), Strings.wTables);
+                    DisplayListContents(Word.LstStyles(package), Strings.wStyles);
+                    DisplayListContents(Word.LstHyperlinks(package), Strings.wHyperlinks);
+                    DisplayListContents(Word.LstListTemplates(package, false), Strings.wListTemplates);
+                    DisplayListContents(Word.LstFonts(package), Strings.wFonts);
+                    DisplayListContents(Word.LstRunFonts(package), Strings.wRunFonts);
+                    DisplayListContents(Word.LstFootnotes(package), Strings.wFootnotes);
+                    DisplayListContents(Word.LstEndnotes(package), Strings.wEndnotes);
+                    DisplayListContents(Word.LstDocProps(package), Strings.wDocProps);
+                    DisplayListContents(Word.LstBookmarks(package), Strings.wBookmarks);
+                    DisplayListContents(Word.LstFieldCodes(package), Strings.wFldCodes);
+                    DisplayListContents(Word.LstFieldCodesInHeader(package), " ** Header Field Codes **");
+                    DisplayListContents(Word.LstFieldCodesInFooter(package), " ** Footer Field Codes **");
+                    DisplayListContents(Word.LstTables(package), Strings.wTables);
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)
                 {
-                    using (var f = new FrmExcelCommands())
-                    {
-                        var result = f.ShowDialog();
-
-                        if (f.dr == DialogResult.Cancel)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            rtbDisplay.Clear();
-                        }
-
-                        Cursor = Cursors.WaitCursor;
-                        AppUtilities.ExcelViewCmds xlCmds = f.xlCmds;
-                        offCmds = f.offCmds;
-
-                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Links))
-                        {
-                            DisplayListContents(Excel.GetLinks(package, true), Strings.wLinks);
-                        }
-
-                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Comments))
-                        {
-                            DisplayListContents(Excel.GetComments(package), Strings.wComments);
-                        }
-
-                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Hyperlinks))
-                        {
-                            DisplayListContents(Excel.GetHyperlinks(package), Strings.wHyperlinks);
-                        }
-
-                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.WorksheetInfo))
-                        {
-                            DisplayListContents(Excel.GetSheetInfo(package), Strings.wWorksheetInfo);
-                        }
-
-                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.SharedStrings))
-                        {
-                            DisplayListContents(Excel.GetSharedStrings(package), Strings.wSharedStrings);
-                        }
-
-                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.DefinedNames))
-                        {
-                            DisplayListContents(Excel.GetDefinedNames(package), Strings.wDefinedNames);
-                        }
-
-                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.Connections))
-                        {
-                            DisplayListContents(Excel.GetConnections(package), Strings.wConnections);
-                        }
-
-                        if (xlCmds.HasFlag(AppUtilities.ExcelViewCmds.HiddenRowsCols))
-                        {
-                            DisplayListContents(Excel.GetHiddenRowCols(package), Strings.wHiddenRowCol);
-                        }
-                    }
+                    DisplayListContents(Excel.GetLinks(package, true), Strings.wLinks);
+                    DisplayListContents(Excel.GetComments(package), Strings.wComments);
+                    DisplayListContents(Excel.GetHyperlinks(package), Strings.wHyperlinks);
+                    DisplayListContents(Excel.GetSheetInfo(package), Strings.wWorksheetInfo);
+                    DisplayListContents(Excel.GetSharedStrings(package), Strings.wSharedStrings);
+                    DisplayListContents(Excel.GetDefinedNames(package), Strings.wDefinedNames);
+                    DisplayListContents(Excel.GetConnections(package), Strings.wConnections);
+                    DisplayListContents(Excel.GetHiddenRowCols(package), Strings.wHiddenRowCol);
                 }
                 else if (StrOfficeApp == Strings.oAppPowerPoint)
                 {
-                    using (var f = new FrmPPTCommands())
-                    {
-                        var result = f.ShowDialog();
-
-                        if (f.dr == DialogResult.Cancel)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            rtbDisplay.Clear();
-                        }
-
-                        Cursor = Cursors.WaitCursor;
-                        AppUtilities.PowerPointViewCmds pptCmds = f.pptCmds;
-                        offCmds = f.offCmds;
-
-                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Hyperlinks))
-                        {
-                            DisplayListContents(PowerPoint.GetHyperlinks(package), Strings.wHyperlinks);
-                        }
-
-                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Comments))
-                        {
-                            DisplayListContents(PowerPoint.GetComments(package), Strings.wComments);
-                        }
-
-                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideText))
-                        {
-                            DisplayListContents(PowerPoint.GetSlideText(package), Strings.wSlideText);
-                        }
-
-                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideTitles))
-                        {
-                            DisplayListContents(PowerPoint.GetSlideTitles(package), Strings.wSlideText);
-                        }
-
-                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.SlideTransitions))
-                        {
-                            DisplayListContents(PowerPoint.GetSlideTransitions(package), Strings.wSlideTransitions);
-                        }
-
-                        if (pptCmds.HasFlag(AppUtilities.PowerPointViewCmds.Fonts))
-                        {
-                            DisplayListContents(PowerPoint.GetFonts(package), Strings.wFonts);
-                        }
-                    }
+                    DisplayListContents(PowerPoint.GetHyperlinks(package), Strings.wHyperlinks);
+                    DisplayListContents(PowerPoint.GetComments(package), Strings.wComments);
+                    DisplayListContents(PowerPoint.GetSlideText(package), Strings.wSlideText);
+                    DisplayListContents(PowerPoint.GetSlideTitles(package), Strings.wSlideText);
+                    DisplayListContents(PowerPoint.GetSlideTransitions(package), Strings.wSlideTransitions);
+                    DisplayListContents(PowerPoint.GetFonts(package), Strings.wFonts);
                 }
 
                 // display selected Office features
-                if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.OleObjects))
-                {
-                    DisplayListContents(Office.GetEmbeddedObjectProperties(package, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects);
-                }
-
-                if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.Shapes))
-                {
-                    DisplayListContents(Office.GetShapes(package, toolStripStatusLabelDocType.Text), Strings.wShapes);
-                }
-
-                if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.PackageParts))
-                {
-                    DisplayListContents(pParts, Strings.wPackageParts);
-                }
-
-                if (offCmds.HasFlag(AppUtilities.OfficeViewCmds.XmlSignatures))
-                {
-                    DisplayListContents(Office.GetSignatures(package, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures);
-                }
+                DisplayListContents(Office.GetEmbeddedObjectProperties(package, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects);
+                DisplayListContents(Office.GetShapes(package, toolStripStatusLabelDocType.Text), Strings.wShapes);
+                DisplayListContents(pParts, Strings.wPackageParts);
+                DisplayListContents(Office.GetSignatures(package, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures);
             }
             catch (Exception ex)
             {
@@ -2571,7 +2402,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-                if (Office.RemoveCustomDocProperties(toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text))
+                if (Office.RemoveCustomDocProperties(package, toolStripStatusLabelDocType.Text))
                 {
                     LogInformation(LogInfoType.ClearAndAdd, "Custom File Properties Removed.", string.Empty);
                 }
@@ -2595,7 +2426,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-                if (Office.RemoveCustomXmlParts(toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text))
+                if (Office.RemoveCustomXmlParts(package, toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text))
                 {
                     LogInformation(LogInfoType.ClearAndAdd, "Custom Xml Parts Removed.", string.Empty);
                 }

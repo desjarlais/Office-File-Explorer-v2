@@ -2109,7 +2109,7 @@ namespace Office_File_Explorer.Helpers
         public static List<string> LstContentControls(Package pkg)
         {
             List<string> ccList = new List<string>();
-
+            
             WordprocessingDocument doc = WordprocessingDocument.Open(pkg);
             int count = 0;
 

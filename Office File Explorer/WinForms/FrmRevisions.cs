@@ -9,14 +9,12 @@ using System.Linq;
 
 namespace Office_File_Explorer.WinForms
 {
-    public partial class FrmWordCommands : Form
+    public partial class FrmRevisions : Form
     {
-        public AppUtilities.WordViewCmds wdCmds = new AppUtilities.WordViewCmds();
-        public AppUtilities.OfficeViewCmds offCmds = new AppUtilities.OfficeViewCmds();
         string filePath;
         public DialogResult dr;
 
-        public FrmWordCommands(string fPath)
+        public FrmRevisions(string fPath)
         {
             InitializeComponent();
             filePath = fPath;
@@ -24,152 +22,6 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnOk_Click(object sender, EventArgs e)
         {
-            // check Word features
-            if (ckbContentControls.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.ContentControls;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.ContentControls;
-            }
-
-            if (ckbStyles.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.Styles;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.Styles;
-            }
-
-            if (ckbHyperlinks.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.Hyperlinks;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.Hyperlinks;
-            }
-
-            if (ckbListTemplates.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.ListTemplates;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.ListTemplates;
-            }
-
-            if (ckbFonts.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.Fonts;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.Fonts;
-            }
-
-            if (ckbFootnotes.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.Footnotes;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.Footnotes;
-            }
-
-            if (ckbEndnotes.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.Endnotes;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.Endnotes;
-            }
-
-            if (ckbDocProps.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.DocumentProperties;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.DocumentProperties;
-            }
-
-            if (ckbBookmarks.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.Bookmarks;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.Bookmarks;
-            }
-
-            if (ckbComments.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.Comments;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.Comments;
-            }
-
-            if (ckbFieldCodes.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.FieldCodes;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.FieldCodes;
-            }
-
-            if (ckbTables.Checked)
-            {
-                wdCmds |= AppUtilities.WordViewCmds.Tables;
-            }
-            else
-            {
-                wdCmds &= ~AppUtilities.WordViewCmds.Tables;
-            }
-
-            // check Office features
-            if (ckbShapes.Checked)
-            {
-                offCmds |= AppUtilities.OfficeViewCmds.Shapes;
-            }
-            else
-            {
-                offCmds &= ~AppUtilities.OfficeViewCmds.Shapes;
-            }
-
-            if (ckbOleObjects.Checked)
-            {
-                offCmds |= AppUtilities.OfficeViewCmds.OleObjects;
-            }
-            else
-            {
-                offCmds &= ~AppUtilities.OfficeViewCmds.OleObjects;
-            }
-
-            if (ckbPackageParts.Checked)
-            {
-                offCmds |= AppUtilities.OfficeViewCmds.PackageParts;
-            }
-            else
-            {
-                offCmds &= ~AppUtilities.OfficeViewCmds.PackageParts;
-            }
-
-            if (ckbSignatures.Checked)
-            {
-                offCmds |= AppUtilities.OfficeViewCmds.XmlSignatures;
-            }
-            else
-            {
-                offCmds &= ~AppUtilities.OfficeViewCmds.XmlSignatures;
-            }
-
             dr = DialogResult.OK;
             Close();
         }
@@ -313,7 +165,7 @@ namespace Office_File_Explorer.WinForms
                         hdrInserted = hp.Header.Descendants<InsertedRun>().ToList();
                         revCountHeader = hdrParagraphChanged.Count + hdrRunChanged.Count + hdrDeleted.Count + hdrDeletedParagraph.Count + hdrInserted.Count;
                     }
-                    
+
                     foreach (FooterPart fp in doc.MainDocumentPart.FooterParts)
                     {
                         ftrParagraphChanged = fp.Footer.Descendants<ParagraphPropertiesChange>().ToList();
@@ -449,7 +301,7 @@ namespace Office_File_Explorer.WinForms
                                         }
                                     }
                                 }
-                                
+
                                 if (revCountFooter > 0)
                                 {
                                     var tempFtrParagraphChanged = ftrParagraphChanged.Where(item => item.Author == s).ToList();
@@ -502,7 +354,7 @@ namespace Office_File_Explorer.WinForms
                                             }
                                         }
                                     }
-                                }                                
+                                }
                             }
 
                             if (revCount + revCountHeader + revCountFooter == 0)
@@ -610,7 +462,7 @@ namespace Office_File_Explorer.WinForms
                                     }
                                 }
                             }
-                                                        
+
                             if (revCountFooter > 0)
                             {
                                 var tempFtrParagraphChanged = ftrParagraphChanged.Where(item => item.Author == cbAuthors.SelectedItem.ToString()).ToList();
@@ -659,7 +511,7 @@ namespace Office_File_Explorer.WinForms
                                     }
                                 }
                             }
-                            
+
                             if (revCount + revCountFooter + revCountHeader == 0)
                             {
                                 lbRevisions.Items.Add(cbAuthors.SelectedItem.ToString() + " has no changes.");
@@ -681,48 +533,6 @@ namespace Office_File_Explorer.WinForms
             finally
             {
                 Cursor = Cursors.Default;
-            }
-        }
-
-        private void CkbSelectAll_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ckbSelectAll.Checked)
-            {
-                ckbShapes.Checked =  true;
-                ckbStyles.Checked = true;
-                ckbPackageParts.Checked = true;
-                ckbOleObjects.Checked = true;
-                ckbListTemplates.Checked = true;
-                ckbHyperlinks.Checked = true;
-                ckbFootnotes.Checked = true;
-                ckbFonts.Checked = true;
-                ckbFieldCodes.Checked = true;
-                ckbEndnotes.Checked = true;
-                ckbDocProps.Checked = true;
-                ckbContentControls.Checked = true;
-                ckbComments.Checked = true;
-                ckbBookmarks.Checked = true;
-                ckbTables.Checked = true;
-                ckbSignatures.Checked = true;
-            }
-            else
-            {
-                ckbShapes.Checked = false;
-                ckbStyles.Checked = false;
-                ckbPackageParts.Checked = false;
-                ckbOleObjects.Checked = false;
-                ckbListTemplates.Checked = false;
-                ckbHyperlinks.Checked = false;
-                ckbFootnotes.Checked = false;
-                ckbFonts.Checked = false;
-                ckbFieldCodes.Checked = false;
-                ckbEndnotes.Checked = false;
-                ckbDocProps.Checked = false;
-                ckbContentControls.Checked = false;
-                ckbComments.Checked = false;
-                ckbBookmarks.Checked = false;
-                ckbTables.Checked = false;
-                ckbSignatures.Checked = false;
             }
         }
 

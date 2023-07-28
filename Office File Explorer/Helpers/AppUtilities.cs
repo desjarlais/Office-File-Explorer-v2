@@ -1,70 +1,10 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Xml;
 
 namespace Office_File_Explorer.Helpers
 {
     public class AppUtilities
     {
-        [Flags]
-        public enum WordViewCmds
-        {
-            None = 0,
-            ContentControls = 1,
-            Styles = 2,
-            Hyperlinks = 4,
-            ListTemplates = 8,
-            Fonts = 16,
-            Footnotes = 32,
-            Endnotes = 64,
-            DocumentProperties = 128,
-            Bookmarks = 256,
-            Comments = 512,
-            FieldCodes = 1024,
-            Tables = 2048
-        }
-
-        [Flags]
-        public enum ExcelViewCmds
-        {
-            None = 0,
-            Links = 1,
-            Comments = 2,
-            WorksheetInfo = 4,
-            HiddenRowsCols = 8,
-            SharedStrings = 16,
-            Hyperlinks = 32,
-            DefinedNames = 64,
-            Connections = 128
-        }
-
-        [Flags]
-        public enum PowerPointViewCmds
-        {
-            None = 0,
-            Hyperlinks = 1,
-            SlideTitles = 2,
-            Comments = 4,
-            SlideText = 8,
-            SlideTransitions = 16,
-            Fonts = 32
-        }
-
-        [Flags]
-        public enum OfficeViewCmds
-        {
-            None = 0,
-            OleObjects = 1,
-            Shapes = 2,
-            PackageParts = 4,
-            CustomProperties = 8,
-            CustomXml = 16,
-            Images = 32,
-            XmlSignatures = 64
-        }
-
         public enum WordModifyCmds
         {
             None,

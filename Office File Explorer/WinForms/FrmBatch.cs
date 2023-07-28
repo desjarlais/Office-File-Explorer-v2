@@ -16,7 +16,6 @@ using System.IO;
 using System.IO.Compression;
 using System.IO.Packaging;
 using System.Linq;
-using System.Net.Security;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -37,11 +36,13 @@ namespace Office_File_Explorer.WinForms
         public bool nodeDeleted = false;
         public bool nodeChanged = false;
         public string fromChangeTemplate;
+        public Package pkg;
 
-        public FrmBatch()
+        public FrmBatch(Package package)
         {
             InitializeComponent();
             DisableUI();
+            pkg = package;
         }
 
         public string GetFileExtension()
@@ -2028,15 +2029,15 @@ namespace Office_File_Explorer.WinForms
                 {
                     if (rdoWord.Checked)
                     {
-                        Office.RemoveCustomXmlParts(f, Strings.oAppWord);
+                        Office.RemoveCustomXmlParts(pkg, f, Strings.oAppWord);
                     }
                     else if (rdoExcel.Checked)
                     {
-                        Office.RemoveCustomXmlParts(f, Strings.oAppExcel);
+                        Office.RemoveCustomXmlParts(pkg, f, Strings.oAppExcel);
                     }
                     else if (rdoPowerPoint.Checked)
                     {
-                        Office.RemoveCustomXmlParts(f, Strings.oAppPowerPoint);
+                        Office.RemoveCustomXmlParts(pkg, f, Strings.oAppPowerPoint);
                     }
                 }
                 catch (Exception ex)

@@ -124,8 +124,8 @@
   <data name="Dialog_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dialog_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FindInFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FindInFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="table" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\table.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -142,14 +142,17 @@
   <data name="Exit_16x1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Exit_16x1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="RichTextBox_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RichTextBox_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ListsofTests_8643_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ListsofTests_8643_32.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Font" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Font.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DocumentViewer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DocumentViewer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Memory_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Memory_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -159,6 +162,9 @@
   </data>
   <data name="presentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\presentation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="XmlFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\XmlFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="powerpoint" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\powerpoint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -172,11 +178,11 @@
   <data name="recoverytxt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\recoverytxt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ErrorSummary" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ErrorSummary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="FolderOpened" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FolderOpened.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="disk" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\disk.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,8 +196,14 @@
   <data name="ListBox_686_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ListBox_686_32.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="90-904004_pixel-ms-office-word-2007-logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\90-904004_pixel-ms-office-word-2007-logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="recoverytable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\recoverytable.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SendEmail_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SendEmail_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="NumericUpOrDown_691_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NumericUpOrDown_691_32.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,8 +214,8 @@
   <data name="Login_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Login_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ListsofTests_8643_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ListsofTests_8643_32.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SaveAs_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SaveAs_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -217,8 +229,8 @@
   <data name="HyperLink_733_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HyperLink_733_32.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SendEmail_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SendEmail_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="exceltable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\exceltable.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Strings_7959-0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Strings_7959-0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -235,8 +247,8 @@
   <data name="word" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\word.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="XmlFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\XmlFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ErrorSummary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ErrorSummary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BinaryFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BinaryFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -244,8 +256,11 @@
   <data name="OpenFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OpenFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="exceltable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\exceltable.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CloseDocument" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CloseDocument.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RichTextBox_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RichTextBox_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="HelpTableOfContents" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HelpTableOfContents.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -265,7 +280,7 @@
   <data name="ImageIcon_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ImageIcon_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="90-904004_pixel-ms-office-word-2007-logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\90-904004_pixel-ms-office-word-2007-logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="DeleteTag" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeleteTag.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

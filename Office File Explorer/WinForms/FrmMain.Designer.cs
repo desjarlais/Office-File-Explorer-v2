@@ -140,9 +140,10 @@ namespace Office_File_Explorer
             // fileToolStripMenuItemClose
             // 
             fileToolStripMenuItemClose.Enabled = false;
+            fileToolStripMenuItemClose.Image = Properties.Resources.CloseDocument;
             fileToolStripMenuItemClose.Name = "fileToolStripMenuItemClose";
             fileToolStripMenuItemClose.Size = new System.Drawing.Size(202, 22);
-            fileToolStripMenuItemClose.Text = "Close";
+            fileToolStripMenuItemClose.Text = "&Close";
             fileToolStripMenuItemClose.Click += fileToolStripMenuItemClose_Click;
             // 
             // fileToolStripMenuItemSettings
@@ -175,6 +176,7 @@ namespace Office_File_Explorer
             // editToolStripMenuFindReplace
             // 
             editToolStripMenuFindReplace.Enabled = false;
+            editToolStripMenuFindReplace.Image = Properties.Resources.FindInFile;
             editToolStripMenuFindReplace.Name = "editToolStripMenuFindReplace";
             editToolStripMenuFindReplace.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuFindReplace.Text = "Find and Replace";
@@ -183,6 +185,7 @@ namespace Office_File_Explorer
             // editToolStripMenuItemModifyContents
             // 
             editToolStripMenuItemModifyContents.Enabled = false;
+            editToolStripMenuItemModifyContents.Image = Properties.Resources.Edit;
             editToolStripMenuItemModifyContents.Name = "editToolStripMenuItemModifyContents";
             editToolStripMenuItemModifyContents.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuItemModifyContents.Text = "File Contents";
@@ -191,6 +194,7 @@ namespace Office_File_Explorer
             // editToolStripMenuItemRemoveCustomDocProps
             // 
             editToolStripMenuItemRemoveCustomDocProps.Enabled = false;
+            editToolStripMenuItemRemoveCustomDocProps.Image = (System.Drawing.Image)resources.GetObject("editToolStripMenuItemRemoveCustomDocProps.Image");
             editToolStripMenuItemRemoveCustomDocProps.Name = "editToolStripMenuItemRemoveCustomDocProps";
             editToolStripMenuItemRemoveCustomDocProps.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuItemRemoveCustomDocProps.Text = "Remove Custom Document Properties";
@@ -199,6 +203,7 @@ namespace Office_File_Explorer
             // editToolStripMenuItemRemoveCustomXml
             // 
             editToolStripMenuItemRemoveCustomXml.Enabled = false;
+            editToolStripMenuItemRemoveCustomXml.Image = Properties.Resources.DeleteTag;
             editToolStripMenuItemRemoveCustomXml.Name = "editToolStripMenuItemRemoveCustomXml";
             editToolStripMenuItemRemoveCustomXml.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuItemRemoveCustomXml.Text = "Remove Custom Xml";
@@ -247,7 +252,7 @@ namespace Office_File_Explorer
             // excelSheetViewerToolStripMenuItem
             // 
             excelSheetViewerToolStripMenuItem.Enabled = false;
-            excelSheetViewerToolStripMenuItem.Image = Properties.Resources.excel;
+            excelSheetViewerToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("excelSheetViewerToolStripMenuItem.Image");
             excelSheetViewerToolStripMenuItem.Name = "excelSheetViewerToolStripMenuItem";
             excelSheetViewerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             excelSheetViewerToolStripMenuItem.Text = "Excel Sheet Viewer";
