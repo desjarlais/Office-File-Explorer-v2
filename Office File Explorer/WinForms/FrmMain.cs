@@ -1960,15 +1960,15 @@ namespace Office_File_Explorer
                             }
                         }
 
-                        //if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanLT)
-                        //{
-                        //    oNumIdList = Word.LstListTemplates(doc, true);
-                        //    foreach (object orphanLT in oNumIdList)
-                        //    {
-                        //        Word.RemoveListTemplatesNumId(toolStripStatusLabelFilePath.Text, orphanLT.ToString());
-                        //    }
-                        //    LogInformation(LogInfoType.ClearAndAdd, "Unused List Templates Removed", string.Empty);
-                        //}
+                        if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanLT)
+                        {
+                            oNumIdList = Word.LstListTemplates(toolStripStatusLabelFilePath.Text, true);
+                            foreach (object orphanLT in oNumIdList)
+                            {
+                                Word.RemoveListTemplatesNumId(toolStripStatusLabelFilePath.Text, orphanLT.ToString());
+                            }
+                            LogInformation(LogInfoType.ClearAndAdd, "Unused List Templates Removed", string.Empty);
+                        }
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanStyles)
                         {
