@@ -233,13 +233,13 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
-        public static List<string> GetLinks(Package pkg, bool addItemCount)
+        public static List<string> GetLinks(string fPath, bool addItemCount)
         {
             List<string> tList = new List<string>();
 
             try
             {
-                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
+                using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(fPath, false))
                 {
                     WorkbookPart wbPart = excelDoc.WorkbookPart;
                     int ExtRelCount = 0;
@@ -268,11 +268,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetComments(Package pkg)
+        public static List<string> GetComments(string fPath)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(fPath, false))
             {
                 WorkbookPart wbPart = excelDoc.WorkbookPart;
                 int commentCount = 0;
@@ -295,11 +295,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetSheetInfo(Package pkg)
+        public static List<string> GetSheetInfo(string fPath)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument mySpreadsheet = SpreadsheetDocument.Open(pkg))
+            using (SpreadsheetDocument mySpreadsheet = SpreadsheetDocument.Open(fPath, false))
             {
                 Sheets sheets = mySpreadsheet.WorkbookPart.Workbook.Sheets;
 
@@ -323,11 +323,11 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetHyperlinks(Package pkg)
+        public static List<string> GetHyperlinks(string fPath)
         {
             List<string> tList = new List<string>();
 
-            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg))
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(fPath, false))
             {
                 int count = 0;
 
@@ -467,11 +467,11 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
-        public static List<string> GetSharedStrings(Package pkg)
+        public static List<string> GetSharedStrings(string fPath)
         {
             List<string> tList = new List<string>();
             int sharedStringCount = 0;
-            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg);
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(fPath, false);
             WorkbookPart wbPart = excelDoc.WorkbookPart;
             if (wbPart.SharedStringTablePart != null)
             {
@@ -550,11 +550,11 @@ namespace Office_File_Explorer.Helpers
             return returnValue;
         }
 
-        public static List<string> GetDefinedNames(Package pkg)
+        public static List<string> GetDefinedNames(string fPath)
         {
             List<string> tList = new List<string>();
             int nameCount = 0;
-            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg);
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(fPath, false);
             WorkbookPart wbPart = excelDoc.WorkbookPart;
 
             // Retrieve a reference to the defined names collection.
@@ -573,10 +573,10 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetConnections(Package pkg)
+        public static List<string> GetConnections(string fPath)
         {
             List<string> tList = new List<string>();
-            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg);
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(fPath, false);
             WorkbookPart wbPart = excelDoc.WorkbookPart;
             ConnectionsPart cPart = wbPart.ConnectionsPart;
 
@@ -623,10 +623,10 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
-        public static List<string> GetHiddenRowCols(Package pkg)
+        public static List<string> GetHiddenRowCols(string fPath)
         {
             List<string> tList = new List<string>();
-            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(pkg);
+            SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(fPath, false);
             WorkbookPart wbPart = excelDoc.WorkbookPart;
             Sheets theSheets = wbPart.Workbook.Sheets;
 

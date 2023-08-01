@@ -1,6 +1,6 @@
 ﻿namespace Office_File_Explorer.WinForms
 {
-    partial class FrmBinaryPartViewer
+    partial class FrmDisplayOutput
     {
         /// <summary>
         /// Required designer variable.
@@ -84,7 +84,7 @@
             MinimizeBox = false;
             Name = "FrmBinaryPartViewer";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Binary Part Viewer";
+            Text = "Sample Form";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             splitContainer1.Panel2.PerformLayout();

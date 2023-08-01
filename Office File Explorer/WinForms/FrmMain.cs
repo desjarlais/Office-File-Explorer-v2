@@ -34,7 +34,6 @@ namespace Office_File_Explorer
         private string findText;
         private string replaceText;
         private string fromChangeTemplate;
-        public static string fWorkingFilePath;
 
         // openmcdf
         private FileStream fs;
@@ -50,6 +49,9 @@ namespace Office_File_Explorer
         private static string StrDestFileName = string.Empty;
         static StringBuilder sbNodeBuffer = new StringBuilder();
 
+        // temp files
+        public static string tempFileReadOnly, tempFilePackageViewer;
+
         // lists
         private static List<string> corruptNodes = new List<string>();
         private static List<string> pParts = new List<string>();
@@ -57,7 +59,10 @@ namespace Office_File_Explorer
 
         // part viewer globals
         public List<PackagePart> pkgParts = new List<PackagePart>();
+        
+        // package is for viewing of contents only
         public Package package;
+
         public bool hasXmlError;
 
         public enum OpenXmlInnerFileTypes
@@ -111,6 +116,30 @@ namespace Office_File_Explorer
 
         #region Functions
 
+        /// <summary>
+        /// tempFileReadOnly is used for the View Contents feature
+        /// tempFilePackageViewer is used for the main form part viewer
+        /// changes made in the part viewer are then saved back to the toolstripstatusfilepath
+        /// </summary>
+        public void TempFileSetup()
+        {
+            try
+            {
+                // make sure the backup file is created for viewing
+                tempFileReadOnly = Path.GetTempFileName().Replace(".tmp", ".docx");
+                File.Copy(toolStripStatusLabelFilePath.Text, tempFileReadOnly, true);
+
+                tempFilePackageViewer = Path.GetTempFileName().Replace(".tmp", ".docx");
+                File.Copy(toolStripStatusLabelFilePath.Text, tempFilePackageViewer, true);
+
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "Temp File Error:");
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+            }
+        }
+
         public void DisableUI()
         {
             // disable app feature related buttons
@@ -124,6 +153,7 @@ namespace Office_File_Explorer
             editToolStripMenuItemRemoveCustomXml.Enabled = false;
             excelSheetViewerToolStripMenuItem.Enabled = false;
             fileToolStripMenuItemClose.Enabled = false;
+            toolStripButtonModify.Enabled = false;
         }
 
         public void EnableUI()
@@ -139,6 +169,7 @@ namespace Office_File_Explorer
             editToolStripMenuItemRemoveCustomXml.Enabled = true;
             toolStripButtonModify.Enabled = true;
             fileToolStripMenuItemClose.Enabled = true;
+            toolStripButtonModify.Enabled = true;
         }
 
         public void CopyAllItems()
@@ -250,27 +281,25 @@ namespace Office_File_Explorer
                                     }
                                 }
 
-                                // create a copy of the file for the part viewer to use
-                                fWorkingFilePath = AddTextToFileName(Strings.fBackupFilePath + "\\" + Path.GetFileNameWithoutExtension(toolStripStatusLabelFilePath.Text), Strings.wBackupFileParentheses + Path.GetExtension(toolStripStatusLabelFilePath.Text));
-                                File.Copy(toolStripStatusLabelFilePath.Text, fWorkingFilePath, true);
+                                // setup temp files
+                                TempFileSetup();
 
                                 // populate the treeview
-                                package = Package.Open(fWorkingFilePath, FileMode.Open, FileAccess.ReadWrite);
+                                package = Package.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.Read);
 
                                 TreeNode tRoot = new TreeNode();
-                                tRoot.Text = fWorkingFilePath;
-                                toolStripStatusLabelFilePath.Text = fWorkingFilePath;
+                                tRoot.Text = toolStripStatusLabelFilePath.Text;
 
                                 // update app icon
-                                if (GetFileType(fWorkingFilePath) == OpenXmlInnerFileTypes.Word)
+                                if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Word)
                                 {
                                     tvFiles.SelectedImageIndex = 0;
                                 }
-                                else if (GetFileType(fWorkingFilePath) == OpenXmlInnerFileTypes.Excel)
+                                else if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Excel)
                                 {
                                     tvFiles.SelectedImageIndex = 2;
                                 }
-                                else if (GetFileType(fWorkingFilePath) == OpenXmlInnerFileTypes.PowerPoint)
+                                else if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.PowerPoint)
                                 {
                                     tvFiles.SelectedImageIndex = 1;
                                 }
@@ -319,8 +348,9 @@ namespace Office_File_Explorer
                 {
                     // user cancelled dialog, disable the UI and go back to the form
                     DisableUI();
-                    toolStripStatusLabelFilePath.Text = string.Empty;
-                    toolStripStatusLabelDocType.Text = string.Empty;
+                    DisableModifyUI();
+                    toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
+                    toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
                     rtbDisplay.Clear();
                     return;
                 }
@@ -575,7 +605,7 @@ namespace Office_File_Explorer
         /// </summary>
         /// <param name="output">the list of content to display</param>
         /// <param name="type">the type of content to display</param>
-        public void DisplayListContents(List<string> output, string type)
+        public StringBuilder DisplayListContents(List<string> output, string type)
         {
             StringBuilder sb = new StringBuilder();
             // add title text for the contents
@@ -584,9 +614,8 @@ namespace Office_File_Explorer
             // no content to display
             if (output.Count == 0)
             {
-                LogInformation(LogInfoType.EmptyCount, type, string.Empty);
                 sb.AppendLine(string.Empty);
-                return;
+                return sb;
             }
 
             // if we have any values, display them
@@ -596,7 +625,7 @@ namespace Office_File_Explorer
             }
 
             sb.AppendLine(string.Empty);
-            rtbDisplay.Text = sb.ToString();
+            return sb;
         }
 
         /// <summary>
@@ -703,6 +732,26 @@ namespace Office_File_Explorer
             return newFileName;
         }
 
+        public static void DeleteTempFiles()
+        {
+            try
+            {
+                if (File.Exists(tempFilePackageViewer))
+                {
+                    File.Delete(tempFilePackageViewer);
+                }
+
+                if (File.Exists(tempFileReadOnly))
+                {
+                    File.Delete(tempFileReadOnly);
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "DeleteTempFiles Error: " + ex.Message);
+            }
+        }
+
         /// <summary>
         /// cleanup before the app exits
         /// </summary>
@@ -716,11 +765,7 @@ namespace Office_File_Explorer
                 }
 
                 Properties.Settings.Default.Save();
-
-                if (File.Exists(fWorkingFilePath))
-                {
-                    File.Delete(fWorkingFilePath);
-                }
+                DeleteTempFiles();
             }
             catch (Exception ex)
             {
@@ -739,8 +784,8 @@ namespace Office_File_Explorer
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             structuredStorageViewerToolStripMenuItem.Enabled = false;
-            DisableUI();
             EnableUI();
+            EnableModifyUI();
             OpenOfficeDocument();
 
             if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
@@ -794,20 +839,6 @@ namespace Office_File_Explorer
         private void OpenErrorLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AppUtilities.PlatformSpecificProcessStart(Strings.fLogFilePath);
-        }
-
-        private void BtnViewImages_Click(object sender, EventArgs e)
-        {
-            FrmViewImages imgFrm = new FrmViewImages(toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text)
-            {
-                Owner = this
-            };
-            imgFrm.ShowDialog();
-        }
-
-        private void BtnDocProps_Click(object sender, EventArgs e)
-        {
-
         }
 
         public void AddCustomDocPropsToList(CustomFilePropertiesPart cfp)
@@ -1173,7 +1204,7 @@ namespace Office_File_Explorer
                         {
                             Stream imageSource = pp.GetStream();
                             Image image = Image.FromStream(imageSource);
-                            using (var f = new FrmBinaryPartViewer(image))
+                            using (var f = new FrmDisplayOutput(image))
                             {
                                 var result = f.ShowDialog();
                             }
@@ -1239,8 +1270,9 @@ namespace Office_File_Explorer
                 callbacks.Append("}");
 
                 // display the callbacks
-                using (var f = new FrmBinaryPartViewer(callbacks))
+                using (var f = new FrmDisplayOutput(callbacks, true))
                 {
+                    f.Text = "Callback Code";
                     var result = f.ShowDialog();
                 }
 
@@ -1379,54 +1411,60 @@ namespace Office_File_Explorer
         {
             try
             {
-                rtbDisplay.Clear();
                 Cursor = Cursors.WaitCursor;
+                StringBuilder sb = new StringBuilder();
 
                 // display file contents based on user selection
                 if (StrOfficeApp == Strings.oAppWord)
                 {
-                    DisplayListContents(Word.LstContentControls(package), Strings.wContentControls);
-                    DisplayListContents(Word.LstTables(package), Strings.wTables);
-                    DisplayListContents(Word.LstStyles(package), Strings.wStyles);
-                    DisplayListContents(Word.LstHyperlinks(package), Strings.wHyperlinks);
-                    DisplayListContents(Word.LstListTemplates(package, false), Strings.wListTemplates);
-                    DisplayListContents(Word.LstFonts(package), Strings.wFonts);
-                    DisplayListContents(Word.LstRunFonts(package), Strings.wRunFonts);
-                    DisplayListContents(Word.LstFootnotes(package), Strings.wFootnotes);
-                    DisplayListContents(Word.LstEndnotes(package), Strings.wEndnotes);
-                    DisplayListContents(Word.LstDocProps(package), Strings.wDocProps);
-                    DisplayListContents(Word.LstBookmarks(package), Strings.wBookmarks);
-                    DisplayListContents(Word.LstFieldCodes(package), Strings.wFldCodes);
-                    DisplayListContents(Word.LstFieldCodesInHeader(package), " ** Header Field Codes **");
-                    DisplayListContents(Word.LstFieldCodesInFooter(package), " ** Footer Field Codes **");
-                    DisplayListContents(Word.LstTables(package), Strings.wTables);
+                    sb.Append(DisplayListContents(Word.LstContentControls(tempFileReadOnly), Strings.wContentControls));
+                    sb.Append(DisplayListContents(Word.LstTables(tempFileReadOnly), Strings.wTables));
+                    //DisplayListContents(Word.LstStyles(tempFileReadOnly), Strings.wStyles);
+                    sb.Append(DisplayListContents(Word.LstHyperlinks(tempFileReadOnly), Strings.wHyperlinks));
+                    //DisplayListContents(Word.LstListTemplates(tempFileReadOnly, false), Strings.wListTemplates);
+                    sb.Append(DisplayListContents(Word.LstFonts(tempFileReadOnly), Strings.wFonts));
+                    sb.Append(DisplayListContents(Word.LstRunFonts(tempFileReadOnly), Strings.wRunFonts));
+                    sb.Append(DisplayListContents(Word.LstFootnotes(tempFileReadOnly), Strings.wFootnotes));
+                    sb.Append(DisplayListContents(Word.LstEndnotes(tempFileReadOnly), Strings.wEndnotes));
+                    sb.Append(DisplayListContents(Word.LstDocProps(tempFileReadOnly), Strings.wDocProps));
+                    sb.Append(DisplayListContents(Word.LstBookmarks(tempFileReadOnly), Strings.wBookmarks));
+                    sb.Append(DisplayListContents(Word.LstFieldCodes(tempFileReadOnly), Strings.wFldCodes));
+                    sb.Append(DisplayListContents(Word.LstFieldCodesInHeader(tempFileReadOnly), " ** Header Field Codes **"));
+                    sb.Append(DisplayListContents(Word.LstFieldCodesInFooter(tempFileReadOnly), " ** Footer Field Codes **"));
+                    sb.Append(DisplayListContents(Word.LstTables(tempFileReadOnly), Strings.wTables));
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)
                 {
-                    DisplayListContents(Excel.GetLinks(package, true), Strings.wLinks);
-                    DisplayListContents(Excel.GetComments(package), Strings.wComments);
-                    DisplayListContents(Excel.GetHyperlinks(package), Strings.wHyperlinks);
-                    DisplayListContents(Excel.GetSheetInfo(package), Strings.wWorksheetInfo);
-                    DisplayListContents(Excel.GetSharedStrings(package), Strings.wSharedStrings);
-                    DisplayListContents(Excel.GetDefinedNames(package), Strings.wDefinedNames);
-                    DisplayListContents(Excel.GetConnections(package), Strings.wConnections);
-                    DisplayListContents(Excel.GetHiddenRowCols(package), Strings.wHiddenRowCol);
+                    DisplayListContents(Excel.GetLinks(tempFileReadOnly, true), Strings.wLinks);
+                    DisplayListContents(Excel.GetComments(tempFileReadOnly), Strings.wComments);
+                    DisplayListContents(Excel.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks);
+                    DisplayListContents(Excel.GetSheetInfo(tempFileReadOnly), Strings.wWorksheetInfo);
+                    DisplayListContents(Excel.GetSharedStrings(tempFileReadOnly), Strings.wSharedStrings);
+                    DisplayListContents(Excel.GetDefinedNames(tempFileReadOnly), Strings.wDefinedNames);
+                    DisplayListContents(Excel.GetConnections(tempFileReadOnly), Strings.wConnections);
+                    DisplayListContents(Excel.GetHiddenRowCols(tempFileReadOnly), Strings.wHiddenRowCol);
                 }
                 else if (StrOfficeApp == Strings.oAppPowerPoint)
                 {
-                    DisplayListContents(PowerPoint.GetHyperlinks(package), Strings.wHyperlinks);
-                    DisplayListContents(PowerPoint.GetComments(package), Strings.wComments);
-                    DisplayListContents(PowerPoint.GetSlideText(package), Strings.wSlideText);
-                    DisplayListContents(PowerPoint.GetSlideTitles(package), Strings.wSlideText);
-                    DisplayListContents(PowerPoint.GetSlideTransitions(package), Strings.wSlideTransitions);
-                    DisplayListContents(PowerPoint.GetFonts(package), Strings.wFonts);
+                    DisplayListContents(PowerPoint.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks);
+                    DisplayListContents(PowerPoint.GetComments(tempFileReadOnly), Strings.wComments);
+                    DisplayListContents(PowerPoint.GetSlideText(tempFileReadOnly), Strings.wSlideText);
+                    DisplayListContents(PowerPoint.GetSlideTitles(tempFileReadOnly), Strings.wSlideText);
+                    DisplayListContents(PowerPoint.GetSlideTransitions(tempFileReadOnly), Strings.wSlideTransitions);
+                    DisplayListContents(PowerPoint.GetFonts(tempFileReadOnly), Strings.wFonts);
                 }
 
                 // display selected Office features
-                DisplayListContents(Office.GetEmbeddedObjectProperties(package, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects);
-                DisplayListContents(Office.GetShapes(package, toolStripStatusLabelDocType.Text), Strings.wShapes);
-                DisplayListContents(pParts, Strings.wPackageParts);
-                DisplayListContents(Office.GetSignatures(package, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures);
+                sb.Append(DisplayListContents(Office.GetEmbeddedObjectProperties(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects));
+                sb.Append(DisplayListContents(Office.GetShapes(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wShapes));
+                sb.Append(DisplayListContents(pParts, Strings.wPackageParts));
+                sb.Append(DisplayListContents(Office.GetSignatures(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures));
+
+                using (var f = new FrmDisplayOutput(sb, false))
+                {
+                    f.Text = "Content";
+                    var result = f.ShowDialog();
+                }
             }
             catch (Exception ex)
             {
@@ -1443,33 +1481,39 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-                rtbDisplay.Clear();
+                StringBuilder validateInfo = new StringBuilder();
 
                 // check for xml validation errors
                 if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
                 {
-                    using (WordprocessingDocument myDoc = WordprocessingDocument.Open(package))
+                    using (WordprocessingDocument myDoc = WordprocessingDocument.Open(tempFileReadOnly, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
+                        validateInfo = DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
                 {
-                    using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(package))
+                    using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(tempFileReadOnly, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
+                        validateInfo = DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
                 {
-                    using (PresentationDocument myDoc = PresentationDocument.Open(package))
+                    using (PresentationDocument myDoc = PresentationDocument.Open(tempFileReadOnly, false))
                     {
-                        DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
+                        validateInfo = DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else
                 {
                     throw new Exception();
+                }
+
+                using (var f = new FrmDisplayOutput(validateInfo, false))
+                {
+                    f.Text = "Document Validation";
+                    var result = f.ShowDialog();
                 }
             }
             catch (Exception ex)
@@ -1916,15 +1960,15 @@ namespace Office_File_Explorer
                             }
                         }
 
-                        if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanLT)
-                        {
-                            oNumIdList = Word.LstListTemplates(package, true);
-                            foreach (object orphanLT in oNumIdList)
-                            {
-                                Word.RemoveListTemplatesNumId(toolStripStatusLabelFilePath.Text, orphanLT.ToString());
-                            }
-                            LogInformation(LogInfoType.ClearAndAdd, "Unused List Templates Removed", string.Empty);
-                        }
+                        //if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanLT)
+                        //{
+                        //    oNumIdList = Word.LstListTemplates(doc, true);
+                        //    foreach (object orphanLT in oNumIdList)
+                        //    {
+                        //        Word.RemoveListTemplatesNumId(toolStripStatusLabelFilePath.Text, orphanLT.ToString());
+                        //    }
+                        //    LogInformation(LogInfoType.ClearAndAdd, "Unused List Templates Removed", string.Empty);
+                        //}
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanStyles)
                         {
@@ -2161,7 +2205,7 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelLink)
                         {
-                            using (var fDelLink = new FrmExcelDelLink(package, toolStripStatusLabelFilePath.Text))
+                            using (var fDelLink = new FrmExcelDelLink(tempFileReadOnly))
                             {
                                 if (fDelLink.fHasLinks)
                                 {
@@ -2378,7 +2422,7 @@ namespace Office_File_Explorer
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.MoveSlide)
                         {
-                            FrmMoveSlide mvFrm = new FrmMoveSlide(package, toolStripStatusLabelFilePath.Text)
+                            FrmMoveSlide mvFrm = new FrmMoveSlide(tempFileReadOnly)
                             {
                                 Owner = this
                             };
@@ -2493,6 +2537,7 @@ namespace Office_File_Explorer
             DisableModifyUI();
             DisableUI();
             package.Close();
+            pkgParts.Clear();
             tvFiles.Nodes.Clear();
             toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
             toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;

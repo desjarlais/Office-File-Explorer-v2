@@ -11,14 +11,14 @@ namespace Office_File_Explorer.WinForms
         string fPath = string.Empty;
         public bool fHasLinks = false;
 
-        public FrmExcelDelLink(Package pkg, string path)
+        public FrmExcelDelLink(string path)
         {
             InitializeComponent();
             fPath = path;
 
-            if (Excel.GetLinks(pkg, false).Any())
+            if (Excel.GetLinks(path, false).Any())
             {
-                foreach (string s in Excel.GetLinks(pkg, false))
+                foreach (string s in Excel.GetLinks(path, false))
                 {
                     cboLinks.Items.Add(s);
                     fHasLinks = true;
