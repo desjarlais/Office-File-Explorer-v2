@@ -135,7 +135,7 @@ namespace Office_File_Explorer
             }
             catch (Exception ex)
             {
-                FileUtilities.WriteToLog(Strings.fLogFilePath, "Temp File Error:");
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "Temp File Setup Error:");
                 FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
             }
         }
