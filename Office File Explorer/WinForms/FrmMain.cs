@@ -1419,9 +1419,9 @@ namespace Office_File_Explorer
                 {
                     sb.Append(DisplayListContents(Word.LstContentControls(tempFileReadOnly), Strings.wContentControls));
                     sb.Append(DisplayListContents(Word.LstTables(tempFileReadOnly), Strings.wTables));
-                    //DisplayListContents(Word.LstStyles(tempFileReadOnly), Strings.wStyles);
+                    sb.Append(DisplayListContents(Word.LstStyles(tempFileReadOnly), Strings.wStyles));
                     sb.Append(DisplayListContents(Word.LstHyperlinks(tempFileReadOnly), Strings.wHyperlinks));
-                    //DisplayListContents(Word.LstListTemplates(tempFileReadOnly, false), Strings.wListTemplates);
+                    sb.Append(DisplayListContents(Word.LstListTemplates(tempFileReadOnly, false), Strings.wListTemplates));
                     sb.Append(DisplayListContents(Word.LstFonts(tempFileReadOnly), Strings.wFonts));
                     sb.Append(DisplayListContents(Word.LstRunFonts(tempFileReadOnly), Strings.wRunFonts));
                     sb.Append(DisplayListContents(Word.LstFootnotes(tempFileReadOnly), Strings.wFootnotes));
@@ -1435,23 +1435,23 @@ namespace Office_File_Explorer
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)
                 {
-                    DisplayListContents(Excel.GetLinks(tempFileReadOnly, true), Strings.wLinks);
-                    DisplayListContents(Excel.GetComments(tempFileReadOnly), Strings.wComments);
-                    DisplayListContents(Excel.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks);
-                    DisplayListContents(Excel.GetSheetInfo(tempFileReadOnly), Strings.wWorksheetInfo);
-                    DisplayListContents(Excel.GetSharedStrings(tempFileReadOnly), Strings.wSharedStrings);
-                    DisplayListContents(Excel.GetDefinedNames(tempFileReadOnly), Strings.wDefinedNames);
-                    DisplayListContents(Excel.GetConnections(tempFileReadOnly), Strings.wConnections);
-                    DisplayListContents(Excel.GetHiddenRowCols(tempFileReadOnly), Strings.wHiddenRowCol);
+                    sb.Append(DisplayListContents(Excel.GetLinks(tempFileReadOnly, true), Strings.wLinks));
+                    sb.Append(DisplayListContents(Excel.GetComments(tempFileReadOnly), Strings.wComments));
+                    sb.Append(DisplayListContents(Excel.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks));
+                    sb.Append(DisplayListContents(Excel.GetSheetInfo(tempFileReadOnly), Strings.wWorksheetInfo));
+                    sb.Append(DisplayListContents(Excel.GetSharedStrings(tempFileReadOnly), Strings.wSharedStrings));
+                    sb.Append(DisplayListContents(Excel.GetDefinedNames(tempFileReadOnly), Strings.wDefinedNames));
+                    sb.Append(DisplayListContents(Excel.GetConnections(tempFileReadOnly), Strings.wConnections));
+                    sb.Append(DisplayListContents(Excel.GetHiddenRowCols(tempFileReadOnly), Strings.wHiddenRowCol));
                 }
                 else if (StrOfficeApp == Strings.oAppPowerPoint)
                 {
-                    DisplayListContents(PowerPoint.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks);
-                    DisplayListContents(PowerPoint.GetComments(tempFileReadOnly), Strings.wComments);
-                    DisplayListContents(PowerPoint.GetSlideText(tempFileReadOnly), Strings.wSlideText);
-                    DisplayListContents(PowerPoint.GetSlideTitles(tempFileReadOnly), Strings.wSlideText);
-                    DisplayListContents(PowerPoint.GetSlideTransitions(tempFileReadOnly), Strings.wSlideTransitions);
-                    DisplayListContents(PowerPoint.GetFonts(tempFileReadOnly), Strings.wFonts);
+                    sb.Append(DisplayListContents(PowerPoint.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks));
+                    sb.Append(DisplayListContents(PowerPoint.GetComments(tempFileReadOnly), Strings.wComments));
+                    sb.Append(DisplayListContents(PowerPoint.GetSlideText(tempFileReadOnly), Strings.wSlideText));
+                    sb.Append(DisplayListContents(PowerPoint.GetSlideTitles(tempFileReadOnly), Strings.wSlideText));
+                    sb.Append(DisplayListContents(PowerPoint.GetSlideTransitions(tempFileReadOnly), Strings.wSlideTransitions));
+                    sb.Append(DisplayListContents(PowerPoint.GetFonts(tempFileReadOnly), Strings.wFonts));
                 }
 
                 // display selected Office features

@@ -1789,40 +1789,27 @@ namespace Office_File_Explorer.Helpers
                 }
 
                 // Loop through each style in document and get NumId
-                foreach (Style style in stylePart.Styles)
+                foreach (OpenXmlElement el in stylePart.Styles.Elements())
                 {
-                    string styleEl = style.GetAttribute("styleId", Strings.wordMainAttributeNamespace).Value;
-                    int pStyle = ParagraphsByStyleName(mainPart, styleEl).Count();
-
-                    if (pStyle > 0)
+                    try
                     {
-                        foreach (NumberingId sEl in style.Descendants<NumberingId>())
+                        string styleEl = el.GetAttribute("styleId", Strings.wordMainAttributeNamespace).Value;
+                        int pStyle = ParagraphsByStyleName(mainPart, styleEl).Count();
+
+                        if (pStyle > 0)
                         {
-                            numIdList.Add(sEl.Val);
+                            foreach (NumberingId sEl in el.Descendants<NumberingId>())
+                            {
+                                numIdList.Add(sEl.Val);
+                            }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        // Not all style elements have a styleID, so just skip these scenarios
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListTemplates_Click : " + ex.Message);
+                    }
                 }
-                //foreach (OpenXmlElement el in stylePart.Styles.Elements())
-                //{
-                //    try
-                //    {
-                //        string styleEl = el.GetAttribute("styleId", Strings.wordMainAttributeNamespace).Value;
-                //        int pStyle = ParagraphsByStyleName(mainPart, styleEl).Count();
-
-                //        if (pStyle > 0)
-                //        {
-                //            foreach (NumberingId sEl in el.Descendants<NumberingId>())
-                //            {
-                //                numIdList.Add(sEl.Val);
-                //            }
-                //        }
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        // Not all style elements have a styleID, so just skip these scenarios
-                //        FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListTemplates_Click : " + ex.Message);
-                //    }
-                //}
 
                 // remove dupes
                 numIdList = numIdList.Distinct().ToList();
@@ -1964,178 +1951,178 @@ namespace Office_File_Explorer.Helpers
         public static List<string> LstStyles(string fPath)
         {
             List<string> stylesList = new List<string>();
+            WordprocessingDocument myDoc = WordprocessingDocument.Open(fPath, false);
 
-            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(fPath, false))
+            XNamespace w = Strings.wordMainAttributeNamespace;
+            XDocument xDoc = null;
+            XDocument styleDoc = null;
+            bool containStyle = false;
+            bool styleInUse = false;
+            int count = 0;
+
+            MainDocumentPart mainPart = myDoc.MainDocumentPart;
+            StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
+
+            stylesList.Add("# Style Summary #");
+
+            try
             {
-                Package pkg = Package.Open(fPath, FileMode.Open, FileAccess.ReadWrite);
-                XNamespace w = Strings.wordMainAttributeNamespace;
-                XDocument xDoc = null;
-                XDocument styleDoc = null;
-                bool containStyle = false;
-                bool styleInUse = false;
-                int count = 0;
-
-                MainDocumentPart mainPart = myDoc.MainDocumentPart;
-                StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
-
-                stylesList.Add("# Style Summary #");
-
-                try
+                // loop the styles in style.xml
+                foreach (OpenXmlElement el in stylePart.Styles.Elements())
                 {
-                    // loop the styles in style.xml
-                    foreach (OpenXmlElement el in stylePart.Styles.Elements())
+                    string sName = string.Empty;
+                    string sType = string.Empty;
+
+                    if (el.LocalName == "style")
                     {
-                        string sName = string.Empty;
-                        string sType = string.Empty;
+                        Style s = (Style)el;
+                        sName = s.StyleId;
+                        sType = s.Type;
+                        styleInUse = false;
 
-                        if (el.LocalName == "style")
+                        int pStyleCount = ParagraphsByStyleName(mainPart, sName).Count();
+                        if (sType == "paragraph")
                         {
-                            Style s = (Style)el;
-                            sName = s.StyleId;
-                            sType = s.Type;
-                            styleInUse = false;
-
-                            int pStyleCount = ParagraphsByStyleName(mainPart, sName).Count();
-                            if (sType == "paragraph")
-                            {
-                                if (pStyleCount > 0)
-                                {
-                                    count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + pStyleCount + " paragraphs");
-                                    // containStyle = true;
-                                    styleInUse = true;
-                                    continue;
-                                }
-                            }
-
-                            int rStyleCount = RunsByStyleName(mainPart, sName).Count();
-                            if (sType == "character")
-                            {
-                                if (rStyleCount > 0)
-                                {
-                                    count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + rStyleCount + " runs");
-                                    // containStyle = true;
-                                    styleInUse = true;
-                                    continue;
-                                }
-                            }
-
-                            int tStyleCount = TablesByStyleName(mainPart, sName).Count();
-                            if (sType == "table")
-                            {
-                                if (tStyleCount > 0)
-                                {
-                                    count += 1;
-                                    stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + tStyleCount + " tables");
-                                    // containStyle = true;
-                                    styleInUse = true;
-                                    continue;
-                                }
-                            }
-
-                            if (styleInUse == false)
+                            if (pStyleCount > 0)
                             {
                                 count += 1;
-                                stylesList.Add(count + Strings.wPeriod + sName + " -> (Not Used)");
+                                stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + pStyleCount + " paragraphs");
+                                // containStyle = true;
+                                styleInUse = true;
+                                continue;
                             }
+                        }
 
-                            if (count == 4079)
+                        int rStyleCount = RunsByStyleName(mainPart, sName).Count();
+                        if (sType == "character")
+                        {
+                            if (rStyleCount > 0)
                             {
-                                stylesList.Add("WARNING: Max Count of Styles for a document is 4079");
+                                count += 1;
+                                stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + rStyleCount + " runs");
+                                // containStyle = true;
+                                styleInUse = true;
+                                continue;
                             }
                         }
-                    }
 
-                    // add latent style information
-                    stylesList.Add(string.Empty);
-                    stylesList.Add("# Latent Style Summary #");
-                    foreach (LatentStyleExceptionInfo lex in stylePart.Styles.LatentStyles)
-                    {
-                        count += 1;
-                        if (lex.UnhideWhenUsed is not null)
+                        int tStyleCount = TablesByStyleName(mainPart, sName).Count();
+                        if (sType == "table")
                         {
-                            stylesList.Add(count + Strings.wPeriod + lex.Name + " (Hidden)");
+                            if (tStyleCount > 0)
+                            {
+                                count += 1;
+                                stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + tStyleCount + " tables");
+                                // containStyle = true;
+                                styleInUse = true;
+                                continue;
+                            }
                         }
-                        else
+
+                        if (styleInUse == false)
                         {
-                            stylesList.Add(count + Strings.wPeriod + lex.Name);
+                            count += 1;
+                            stylesList.Add(count + Strings.wPeriod + sName + " -> (Not Used)");
                         }
-                    }
 
-                }
-                catch (NullReferenceException)
-                {
-                    stylesList.Add("** Missing StylesWithEffects part **");
-                }
-
-                if (containStyle == false)
-                {
-                    return stylesList;
-                }
-                else
-                {
-                    // list the styles for paragraphs
-                    stylesList.Add(string.Empty);
-                    stylesList.Add("# List of paragraph styles #");
-                    count = 0;
-
-                    PackageRelationship docPackageRelationship = pkg.GetRelationshipsByType(Strings.MainDocumentPartType).FirstOrDefault();
-                    if (docPackageRelationship is not null)
-                    {
-                        Uri documentUri = PackUriHelper.ResolvePartUri(new Uri("/", UriKind.Relative), docPackageRelationship.TargetUri);
-                        PackagePart documentPart = pkg.GetPart(documentUri);
-
-                        //  Load the document XML in the part into an XDocument instance.
-                        xDoc = XDocument.Load(XmlReader.Create(documentPart.GetStream()));
-
-                        //  Find the styles part. There will only be one.
-                        PackageRelationship styleRelation = documentPart.GetRelationshipsByType(Strings.StyleDefsPartType).FirstOrDefault();
-                        if (styleRelation is not null)
+                        if (count == 4079)
                         {
-                            Uri styleUri = PackUriHelper.ResolvePartUri(documentUri, styleRelation.TargetUri);
-                            PackagePart stylePackagePart = pkg.GetPart(styleUri);
-
-                            //  Load the style XML in the part into an XDocument instance.
-                            styleDoc = XDocument.Load(XmlReader.Create(stylePackagePart.GetStream()));
+                            stylesList.Add("WARNING: Max Count of Styles for a document is 4079");
                         }
                     }
+                }
 
-                    string defaultStyle = (string)(
-                        from style in styleDoc.Root.Elements(w + "style")
-                        where (string)style.Attribute(w + "type") == "paragraph" && (string)style.Attribute(w + "default") == "1"
-                        select style
-                    ).First().Attribute(w + "styleId");
-
-                    // Find all paragraphs in the document.  
-                    var paragraphs =
-                        from para in xDoc.Root.Element(w + "body").Descendants(w + "p")
-                        let styleNode = para.Elements(w + "pPr").Elements(w + "pStyle").FirstOrDefault()
-                        select new
-                        {
-                            ParagraphNode = para,
-                            StyleName = styleNode is null ? defaultStyle : (string)styleNode.Attribute(w + "val")
-                        };
-
-                    // Retrieve the text of each paragraph.  
-                    var paraWithText =
-                        from para in paragraphs
-                        select new
-                        {
-                            para.ParagraphNode,
-                            para.StyleName,
-                            Text = ParagraphText(para.ParagraphNode)
-                        };
-
-                    foreach (var p in paraWithText)
+                // add latent style information
+                stylesList.Add(string.Empty);
+                stylesList.Add("# Latent Style Summary #");
+                foreach (LatentStyleExceptionInfo lex in stylePart.Styles.LatentStyles)
+                {
+                    count += 1;
+                    if (lex.UnhideWhenUsed is not null)
                     {
-                        count++;
-                        stylesList.Add(count + ". StyleName: " + p.StyleName + " Text: " + p.Text);
+                        stylesList.Add(count + Strings.wPeriod + lex.Name + " (Hidden)");
                     }
+                    else
+                    {
+                        stylesList.Add(count + Strings.wPeriod + lex.Name);
+                    }
+                }
+
+            }
+            catch (NullReferenceException)
+            {
+                stylesList.Add("** Missing StylesWithEffects part **");
+            }
+
+            if (containStyle == false)
+            {
+                return stylesList;
+            }
+            else
+            {
+                // list the styles for paragraphs
+                stylesList.Add(string.Empty);
+                stylesList.Add("# List of paragraph styles #");
+                count = 0;
+                myDoc.Dispose();
+
+                Package pkg = Package.Open(fPath, FileMode.Open, FileAccess.Read);
+                PackageRelationship docPackageRelationship = pkg.GetRelationshipsByType(Strings.MainDocumentPartType).FirstOrDefault();
+                if (docPackageRelationship is not null)
+                {
+                    Uri documentUri = PackUriHelper.ResolvePartUri(new Uri("/", UriKind.Relative), docPackageRelationship.TargetUri);
+                    PackagePart documentPart = pkg.GetPart(documentUri);
+
+                    //  Load the document XML in the part into an XDocument instance.
+                    xDoc = XDocument.Load(XmlReader.Create(documentPart.GetStream()));
+
+                    //  Find the styles part. There will only be one.
+                    PackageRelationship styleRelation = documentPart.GetRelationshipsByType(Strings.StyleDefsPartType).FirstOrDefault();
+                    if (styleRelation is not null)
+                    {
+                        Uri styleUri = PackUriHelper.ResolvePartUri(documentUri, styleRelation.TargetUri);
+                        PackagePart stylePackagePart = pkg.GetPart(styleUri);
+
+                        //  Load the style XML in the part into an XDocument instance.
+                        styleDoc = XDocument.Load(XmlReader.Create(stylePackagePart.GetStream()));
+                    }
+                }
+
+                string defaultStyle = (string)(
+                    from style in styleDoc.Root.Elements(w + "style")
+                    where (string)style.Attribute(w + "type") == "paragraph" && (string)style.Attribute(w + "default") == "1"
+                    select style
+                ).First().Attribute(w + "styleId");
+
+                // Find all paragraphs in the document.  
+                var paragraphs =
+                    from para in xDoc.Root.Element(w + "body").Descendants(w + "p")
+                    let styleNode = para.Elements(w + "pPr").Elements(w + "pStyle").FirstOrDefault()
+                    select new
+                    {
+                        ParagraphNode = para,
+                        StyleName = styleNode is null ? defaultStyle : (string)styleNode.Attribute(w + "val")
+                    };
+
+                // Retrieve the text of each paragraph.  
+                var paraWithText =
+                    from para in paragraphs
+                    select new
+                    {
+                        para.ParagraphNode,
+                        para.StyleName,
+                        Text = ParagraphText(para.ParagraphNode)
+                    };
+
+                foreach (var p in paraWithText)
+                {
+                    count++;
+                    stylesList.Add(count + ". StyleName: " + p.StyleName + " Text: " + p.Text);
                 }
 
                 pkg.Close();
             }
+
 
             return stylesList;
         }
