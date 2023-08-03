@@ -60,7 +60,6 @@ namespace Office_File_Explorer
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             toolStripButtonViewContents = new System.Windows.Forms.ToolStripButton();
             toolStripButtonViewDocProps = new System.Windows.Forms.ToolStripButton();
-            toolStripButtonValidateDoc = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixCorruptDoc = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixDoc = new System.Windows.Forms.ToolStripButton();
             toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -303,7 +302,7 @@ namespace Office_File_Explorer
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonViewDocProps, toolStripButtonValidateDoc, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonValidateXml, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert });
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonViewDocProps, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonValidateXml, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert });
             toolStrip1.Location = new System.Drawing.Point(0, 24);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new System.Drawing.Size(924, 25);
@@ -331,17 +330,6 @@ namespace Office_File_Explorer
             toolStripButtonViewDocProps.Size = new System.Drawing.Size(128, 22);
             toolStripButtonViewDocProps.Text = "View Document Props";
             toolStripButtonViewDocProps.Click += toolStripButtonViewDocProps_Click;
-            // 
-            // toolStripButtonValidateDoc
-            // 
-            toolStripButtonValidateDoc.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            toolStripButtonValidateDoc.Enabled = false;
-            toolStripButtonValidateDoc.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateDoc.Image");
-            toolStripButtonValidateDoc.ImageTransparentColor = System.Drawing.Color.Magenta;
-            toolStripButtonValidateDoc.Name = "toolStripButtonValidateDoc";
-            toolStripButtonValidateDoc.Size = new System.Drawing.Size(111, 22);
-            toolStripButtonValidateDoc.Text = "Validate Document";
-            toolStripButtonValidateDoc.Click += toolStripButtonValidateDoc_Click;
             // 
             // toolStripButtonFixCorruptDoc
             // 
@@ -641,7 +629,6 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFilePath;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
-        private System.Windows.Forms.ToolStripButton toolStripButtonValidateDoc;
         private System.Windows.Forms.ToolStripButton toolStripButtonFixCorruptDoc;
         private System.Windows.Forms.ToolStripButton toolStripButtonFixDoc;
         private System.Windows.Forms.ToolStripButton toolStripButtonModify;

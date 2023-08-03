@@ -23,6 +23,7 @@ namespace Office_File_Explorer.WinForms
             {
                 Helpers.Word.SetPrintOrientation(fName, DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Portrait);
             }
+            Close();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)

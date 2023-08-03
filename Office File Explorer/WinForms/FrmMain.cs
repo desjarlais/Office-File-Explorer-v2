@@ -59,7 +59,7 @@ namespace Office_File_Explorer
 
         // part viewer globals
         public List<PackagePart> pkgParts = new List<PackagePart>();
-        
+
         // package is for viewing of contents only
         public Package package;
 
@@ -145,7 +145,6 @@ namespace Office_File_Explorer
             // disable app feature related buttons
             toolStripButtonViewContents.Enabled = false;
             toolStripButtonViewDocProps.Enabled = false;
-            toolStripButtonValidateDoc.Enabled = false;
             toolStripButtonFixDoc.Enabled = false;
             editToolStripMenuFindReplace.Enabled = false;
             editToolStripMenuItemModifyContents.Enabled = false;
@@ -161,7 +160,6 @@ namespace Office_File_Explorer
             // disable app feature related buttons
             toolStripButtonViewContents.Enabled = true;
             toolStripButtonViewDocProps.Enabled = true;
-            toolStripButtonValidateDoc.Enabled = true;
             toolStripButtonFixDoc.Enabled = true;
             editToolStripMenuFindReplace.Enabled = true;
             editToolStripMenuItemModifyContents.Enabled = true;
@@ -284,6 +282,19 @@ namespace Office_File_Explorer
                                 // setup temp files
                                 TempFileSetup();
 
+                                // clear the previous doc if there was one
+                                tvFiles.Nodes.Clear();
+                                rtbDisplay.Clear();
+                                if (package is not null)
+                                {
+                                    package.Close();
+                                }
+
+                                if (pkgParts is not null)
+                                {
+                                    pkgParts.Clear();
+                                }
+
                                 // populate the treeview
                                 package = Package.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.Read);
 
@@ -294,14 +305,17 @@ namespace Office_File_Explorer
                                 if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Word)
                                 {
                                     tvFiles.SelectedImageIndex = 0;
+                                    tvFiles.ImageIndex = 0;
                                 }
                                 else if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Excel)
                                 {
                                     tvFiles.SelectedImageIndex = 2;
+                                    tvFiles.ImageIndex = 2;
                                 }
                                 else if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.PowerPoint)
                                 {
                                     tvFiles.SelectedImageIndex = 1;
+                                    tvFiles.ImageIndex = 1;
                                 }
 
                                 // populate the treeview with inner files
@@ -351,7 +365,6 @@ namespace Office_File_Explorer
                     DisableModifyUI();
                     toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
                     toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
-                    rtbDisplay.Clear();
                     return;
                 }
             }
@@ -1460,65 +1473,38 @@ namespace Office_File_Explorer
                 sb.Append(DisplayListContents(pParts, Strings.wPackageParts));
                 sb.Append(DisplayListContents(Office.GetSignatures(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures));
 
-                using (var f = new FrmDisplayOutput(sb, false))
-                {
-                    f.Text = "Content";
-                    var result = f.ShowDialog();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogInformation(LogInfoType.LogException, "ViewContents Error:", ex.Message);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
-        }
-
-        private void toolStripButtonValidateDoc_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-                StringBuilder validateInfo = new StringBuilder();
-
-                // check for xml validation errors
+                // validate the file
                 if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
                 {
                     using (WordprocessingDocument myDoc = WordprocessingDocument.Open(tempFileReadOnly, false))
                     {
-                        validateInfo = DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
+                        sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
                 {
                     using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(tempFileReadOnly, false))
                     {
-                        validateInfo = DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
+                        sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
                 {
                     using (PresentationDocument myDoc = PresentationDocument.Open(tempFileReadOnly, false))
                     {
-                        validateInfo = DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
+                        sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
                     }
                 }
-                else
-                {
-                    throw new Exception();
-                }
 
-                using (var f = new FrmDisplayOutput(validateInfo, false))
+                using (var f = new FrmDisplayOutput(sb, false))
                 {
-                    f.Text = "Document Validation";
+                    f.Text = "File Contents";
                     var result = f.ShowDialog();
                 }
             }
             catch (Exception ex)
             {
-                LogInformation(LogInfoType.LogException, "BtnValidateFile_Click Error", ex.Message);
+                LogInformation(LogInfoType.LogException, "ViewContents Error:", ex.Message);
             }
             finally
             {
@@ -2001,7 +1987,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.SetPrintOrientation)
                         {
-                            FrmPrintOrientation pFrm = new FrmPrintOrientation(toolStripStatusLabelFilePath.Text)
+                            FrmPrintOrientation pFrm = new FrmPrintOrientation(tempFilePackageViewer)
                             {
                                 Owner = this
                             };
@@ -2010,7 +1996,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.AcceptRevisions)
                         {
-                            foreach (var s in Word.AcceptRevisions(toolStripStatusLabelFilePath.Text, Strings.allAuthors))
+                            foreach (var s in Word.AcceptRevisions(tempFilePackageViewer, Strings.allAuthors))
                             {
                                 sb.AppendLine(s);
                             }
