@@ -21,10 +21,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
-using File = System.IO.File;
-using Color = System.Drawing.Color;
 using System.Drawing;
 using System.Xml.Schema;
+
+using File = System.IO.File;
+using Color = System.Drawing.Color;
 
 namespace Office_File_Explorer
 {
@@ -150,8 +151,12 @@ namespace Office_File_Explorer
             editToolStripMenuItemRemoveCustomDocProps.Enabled = false;
             editToolStripMenuItemRemoveCustomXml.Enabled = false;
             excelSheetViewerToolStripMenuItem.Enabled = false;
-            fileToolStripMenuItemClose.Enabled = false;
             toolStripButtonModify.Enabled = false;
+
+            if (package is null)
+            {
+                fileToolStripMenuItemClose.Enabled = false;
+            }
         }
 
         public void EnableUI()
@@ -300,7 +305,7 @@ namespace Office_File_Explorer
                                 TreeNode tRoot = new TreeNode();
                                 tRoot.Text = toolStripStatusLabelFilePath.Text;
 
-                                // update app icon
+                                // update file icon
                                 if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Word)
                                 {
                                     tvFiles.SelectedImageIndex = 0;
@@ -317,12 +322,11 @@ namespace Office_File_Explorer
                                     tvFiles.ImageIndex = 1;
                                 }
 
-                                // populate the treeview with inner files
+                                // update inner file icon, need to update both the selected and normal image index
                                 foreach (PackagePart part in package.GetParts())
                                 {
                                     tRoot.Nodes.Add(part.Uri.ToString());
 
-                                    // update file icon, need to update both the selected and normal image index
                                     if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.XML)
                                     {
                                         tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 3;
@@ -332,6 +336,21 @@ namespace Office_File_Explorer
                                     {
                                         tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 4;
                                         tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 4;
+                                    }
+                                    else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Word)
+                                    {
+                                        tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 0;
+                                        tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 0;
+                                    }
+                                    else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Excel)
+                                    {
+                                        tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 2;
+                                        tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 2;
+                                    }
+                                    else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.PowerPoint)
+                                    {
+                                        tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 1;
+                                        tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 1;
                                     }
                                     else
                                     {
@@ -890,7 +909,7 @@ namespace Office_File_Explorer
             {
                 if (rtbDisplay.Text.Length == 0)
                 {
-                    Clipboard.SetText(rtbDisplay.Text);
+                    Clipboard.SetText(rtbDisplay.SelectedText);
                 }
             }
             catch (Exception ex)
@@ -1230,10 +1249,12 @@ namespace Office_File_Explorer
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
-                            Stream imageSource = pp.GetStream();
-                            byte[] bytes = BitConverter.GetBytes(imageSource.Length);
-                            rtbDisplay.Text = BitConverter.ToString(bytes);
-                            imageSource.Close();
+                            using (Stream ppStream = pp.GetStream())
+                            {
+                                byte[] binData = new byte[ppStream.Length];
+                                ppStream.Read(binData, 0, binData.Length);
+                                rtbDisplay.Text = ppStream.ToString();
+                            }
                             return;
                         }
                     }
@@ -1908,12 +1929,12 @@ namespace Office_File_Explorer
                     using (var f = new FrmWordModify())
                     {
                         DialogResult result = f.ShowDialog();
-                        
+
                         if (result == DialogResult.Cancel)
                         {
                             return;
                         }
-                        
+
                         Cursor = Cursors.WaitCursor;
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelHF)

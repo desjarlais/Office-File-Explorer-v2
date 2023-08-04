@@ -562,6 +562,7 @@ namespace Office_File_Explorer
             // 
             // rtbDisplay
             // 
+            rtbDisplay.ContextMenuStrip = contextMenuStrip1;
             rtbDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             rtbDisplay.Location = new System.Drawing.Point(0, 0);
             rtbDisplay.Name = "rtbDisplay";

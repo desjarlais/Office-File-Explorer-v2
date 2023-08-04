@@ -28,14 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             rtbRTFContent = new System.Windows.Forms.RichTextBox();
             pictureBox1 = new System.Windows.Forms.PictureBox();
+            contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(components);
+            copySelectedTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            copyAllTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // splitContainer1
@@ -57,6 +62,7 @@
             // 
             // rtbRTFContent
             // 
+            rtbRTFContent.ContextMenuStrip = contextMenuStrip1;
             rtbRTFContent.Dock = System.Windows.Forms.DockStyle.Fill;
             rtbRTFContent.Location = new System.Drawing.Point(0, 0);
             rtbRTFContent.Name = "rtbRTFContent";
@@ -74,7 +80,27 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
-            // FrmBinaryPartViewer
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { copySelectedTextToolStripMenuItem, copyAllTextToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
+            // 
+            // copySelectedTextToolStripMenuItem
+            // 
+            copySelectedTextToolStripMenuItem.Name = "copySelectedTextToolStripMenuItem";
+            copySelectedTextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            copySelectedTextToolStripMenuItem.Text = "Copy Selected Text";
+            copySelectedTextToolStripMenuItem.Click += copySelectedTextToolStripMenuItem_Click;
+            // 
+            // copyAllTextToolStripMenuItem
+            // 
+            copyAllTextToolStripMenuItem.Name = "copyAllTextToolStripMenuItem";
+            copyAllTextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            copyAllTextToolStripMenuItem.Text = "Copy All Text";
+            copyAllTextToolStripMenuItem.Click += copyAllTextToolStripMenuItem_Click;
+            // 
+            // FrmDisplayOutput
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -82,7 +108,7 @@
             Controls.Add(splitContainer1);
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "FrmBinaryPartViewer";
+            Name = "FrmDisplayOutput";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Sample Form";
             splitContainer1.Panel1.ResumeLayout(false);
@@ -91,6 +117,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -99,5 +126,8 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.RichTextBox rtbRTFContent;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem copySelectedTextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyAllTextToolStripMenuItem;
     }
 }

@@ -24,7 +24,6 @@ using Hyperlink = DocumentFormat.OpenXml.Wordprocessing.Hyperlink;
 using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
 using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 using TableStyle = DocumentFormat.OpenXml.Wordprocessing.TableStyle;
-using System.Runtime.CompilerServices;
 
 namespace Office_File_Explorer.Helpers
 {
