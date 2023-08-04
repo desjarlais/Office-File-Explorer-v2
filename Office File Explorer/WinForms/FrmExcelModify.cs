@@ -50,11 +50,13 @@ namespace Office_File_Explorer.WinForms
                 xlModCmd = AppUtilities.ExcelModifyCmds.DelLink;
             }
 
+            this.DialogResult = DialogResult.OK;
             Close();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             Close();
         }
 

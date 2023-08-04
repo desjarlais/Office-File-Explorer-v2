@@ -36,11 +36,13 @@ namespace Office_File_Explorer.WinForms
                 pptModCmd = AppUtilities.PowerPointModifyCmds.DelComments;
             }
 
+            this.DialogResult = DialogResult.OK;
             Close();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             Close();
         }
 

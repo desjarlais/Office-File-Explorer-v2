@@ -593,13 +593,24 @@ namespace Office_File_Explorer.Helpers
                 mainPart.DeletePart(mainPart.WordprocessingCommentsPart);
 
                 //Find all elements that are associated with comments 
-                IEnumerable<OpenXmlElement> elementList = mainPart.Document.Descendants()
-                .Where(el => el is CommentRangeStart || el is CommentRangeEnd || el is CommentReference);
+                List<CommentRangeStart> crsList = mainPart.Document.Descendants<CommentRangeStart>().ToList();
+                List<CommentRangeEnd> creList = mainPart.Document.Descendants<CommentRangeEnd>().ToList();
+                List<CommentReference> crList = mainPart.Document.Descendants<CommentReference>().ToList();
 
                 //Delete every found element 
-                foreach (OpenXmlElement e in elementList)
+                foreach (CommentRangeStart crs in crsList)
                 {
-                    e.Remove();
+                    crs.Remove();
+                }
+
+                foreach (CommentRangeEnd cre in creList)
+                {
+                    cre.Remove();
+                }
+
+                foreach (CommentReference cr in crList)
+                {
+                    cr.Remove();
                 }
 
                 //Save changes 

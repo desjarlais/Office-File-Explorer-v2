@@ -125,7 +125,6 @@ namespace Office_File_Explorer
         {
             try
             {
-                // make sure the backup file is created for viewing
                 tempFileReadOnly = Path.GetTempFileName().Replace(".tmp", ".docx");
                 File.Copy(toolStripStatusLabelFilePath.Text, tempFileReadOnly, true);
 
@@ -1885,6 +1884,20 @@ namespace Office_File_Explorer
             LogInformation(LogInfoType.ClearAndAdd, "** Search and Replace Finished **", string.Empty);
         }
 
+        /// <summary>
+        /// append strings like "Fixed" or "Copy" to the file name
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="TextToAdd"></param>
+        /// <returns></returns>
+        public static string AddModifiedTextToFileName(string fileName)
+        {
+            string dir = Path.GetDirectoryName(fileName) + "\\";
+            StrExtension = Path.GetExtension(fileName);
+            string newFileName = dir + Path.GetFileNameWithoutExtension(fileName) + Strings.wModified + StrExtension;
+            return newFileName;
+        }
+
         private void editToolStripMenuItemModifyContents_Click(object sender, EventArgs e)
         {
             try
@@ -1894,13 +1907,18 @@ namespace Office_File_Explorer
                 {
                     using (var f = new FrmWordModify())
                     {
-                        var result = f.ShowDialog();
-
+                        DialogResult result = f.ShowDialog();
+                        
+                        if (result == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                        
                         Cursor = Cursors.WaitCursor;
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelHF)
                         {
-                            if (Word.RemoveHeadersFooters(toolStripStatusLabelFilePath.Text) == true)
+                            if (Word.RemoveHeadersFooters(tempFilePackageViewer) == true)
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Headers and Footers Deleted", string.Empty);
                             }
@@ -1912,7 +1930,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelComments)
                         {
-                            if (Word.RemoveComments(toolStripStatusLabelFilePath.Text) == true)
+                            if (Word.RemoveComments(tempFilePackageViewer) == true)
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Comments Deleted", string.Empty);
                             }
@@ -1924,7 +1942,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelEndnotes)
                         {
-                            if (Word.RemoveEndnotes(toolStripStatusLabelFilePath.Text) == true)
+                            if (Word.RemoveEndnotes(tempFilePackageViewer) == true)
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Endnotes Deleted", string.Empty);
                             }
@@ -1936,7 +1954,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelFootnotes)
                         {
-                            if (Word.RemoveFootnotes(toolStripStatusLabelFilePath.Text) == true)
+                            if (Word.RemoveFootnotes(tempFilePackageViewer) == true)
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Footnotes Deleted", string.Empty);
                             }
@@ -1948,22 +1966,22 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanLT)
                         {
-                            oNumIdList = Word.LstListTemplates(toolStripStatusLabelFilePath.Text, true);
+                            oNumIdList = Word.LstListTemplates(tempFilePackageViewer, true);
                             foreach (object orphanLT in oNumIdList)
                             {
-                                Word.RemoveListTemplatesNumId(toolStripStatusLabelFilePath.Text, orphanLT.ToString());
+                                Word.RemoveListTemplatesNumId(tempFilePackageViewer, orphanLT.ToString());
                             }
                             LogInformation(LogInfoType.ClearAndAdd, "Unused List Templates Removed", string.Empty);
                         }
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelOrphanStyles)
                         {
-                            DisplayListContents(Word.RemoveUnusedStyles(toolStripStatusLabelFilePath.Text), Strings.wStyles);
+                            DisplayListContents(Word.RemoveUnusedStyles(tempFilePackageViewer), Strings.wStyles);
                         }
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelHiddenTxt)
                         {
-                            if (Word.DeleteHiddenText(toolStripStatusLabelFilePath.Text) == true)
+                            if (Word.DeleteHiddenText(tempFilePackageViewer) == true)
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Hidden Text Deleted", string.Empty);
                             }
@@ -1975,7 +1993,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelPgBrk)
                         {
-                            if (Word.RemoveBreaks(toolStripStatusLabelFilePath.Text))
+                            if (Word.RemoveBreaks(tempFilePackageViewer))
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Page Breaks Deleted", string.Empty);
                             }
@@ -2008,7 +2026,7 @@ namespace Office_File_Explorer
                             string attachedTemplateId = "rId1";
                             string filePath = string.Empty;
 
-                            using (WordprocessingDocument document = WordprocessingDocument.Open(toolStripStatusLabelFilePath.Text, true))
+                            using (WordprocessingDocument document = WordprocessingDocument.Open(tempFilePackageViewer, true))
                             {
                                 DocumentSettingsPart dsp = document.MainDocumentPart.DocumentSettingsPart;
 
@@ -2098,17 +2116,17 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.ConvertDocmToDocx)
                         {
-                            string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(toolStripStatusLabelFilePath.Text, Strings.oAppWord);
+                            string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(tempFilePackageViewer, Strings.oAppWord);
                             rtbDisplay.Clear();
                             if (fNewName != string.Empty)
                             {
-                                sb.AppendLine(toolStripStatusLabelFilePath.Text + Strings.convertedTo + fNewName);
+                                sb.AppendLine(tempFilePackageViewer + Strings.convertedTo + fNewName);
                             }
                         }
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.RemovePII)
                         {
-                            using (WordprocessingDocument document = WordprocessingDocument.Open(toolStripStatusLabelFilePath.Text, true))
+                            using (WordprocessingDocument document = WordprocessingDocument.Open(tempFilePackageViewer, true))
                             {
                                 if ((Word.HasPersonalInfo(document) == true) && Word.RemovePersonalInfo(document) == true)
                                 {
@@ -2123,7 +2141,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.RemoveCustomTitleProp)
                         {
-                            if (Word.RemoveCustomTitleProp(toolStripStatusLabelFilePath.Text))
+                            if (Word.RemoveCustomTitleProp(tempFilePackageViewer))
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Custom Property 'Title' Removed From File.", string.Empty);
                             }
@@ -2135,7 +2153,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.UpdateCcNamespaceGuid)
                         {
-                            if (WordFixes.FixContentControlNamespaces(toolStripStatusLabelFilePath.Text))
+                            if (WordFixes.FixContentControlNamespaces(tempFilePackageViewer))
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Quick Part Namespaces Updated", string.Empty);
                             }
@@ -2147,7 +2165,7 @@ namespace Office_File_Explorer
 
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.DelBookmarks)
                         {
-                            if (Word.RemoveBookmarks(toolStripStatusLabelFilePath.Text))
+                            if (Word.RemoveBookmarks(tempFilePackageViewer))
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Bookmarks Deleted", string.Empty);
                             }
@@ -2161,7 +2179,7 @@ namespace Office_File_Explorer
                         {
                             Dictionary<string, string> authors = new Dictionary<string, string>();
 
-                            using (WordprocessingDocument document = WordprocessingDocument.Open(toolStripStatusLabelFilePath.Text, true))
+                            using (WordprocessingDocument document = WordprocessingDocument.Open(tempFilePackageViewer, true))
                             {
                                 // check the peoplepart and list those authors
                                 WordprocessingPeoplePart peoplePart = document.MainDocumentPart.WordprocessingPeoplePart;
@@ -2179,13 +2197,24 @@ namespace Office_File_Explorer
                                 var dupeResult = fDupe.ShowDialog();
                             }
                         }
+
+                        if (result == DialogResult.OK)
+                        {
+                            string modifiedPath = AddModifiedTextToFileName(toolStripStatusLabelFilePath.Text);
+                            File.Copy(tempFilePackageViewer, modifiedPath, true);
+                        }
                     }
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)
                 {
                     using (var f = new FrmExcelModify())
                     {
-                        var result = f.ShowDialog();
+                        DialogResult result = f.ShowDialog();
+
+                        if (result == DialogResult.Cancel)
+                        {
+                            return;
+                        }
 
                         Cursor = Cursors.WaitCursor;
 
@@ -2206,7 +2235,7 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelLinks)
                         {
-                            if (Excel.RemoveHyperlinks(toolStripStatusLabelFilePath.Text) == true)
+                            if (Excel.RemoveHyperlinks(tempFilePackageViewer) == true)
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Hyperlinks Deleted", string.Empty);
                             }
@@ -2218,7 +2247,7 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelEmbeddedLinks)
                         {
-                            if (Excel.RemoveLinks(toolStripStatusLabelFilePath.Text) == true)
+                            if (Excel.RemoveLinks(tempFilePackageViewer) == true)
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Embedded Links Deleted", string.Empty);
                             }
@@ -2230,7 +2259,7 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelSheet)
                         {
-                            using (var fds = new FrmDeleteSheet(package, toolStripStatusLabelFilePath.Text))
+                            using (var fds = new FrmDeleteSheet(package, tempFilePackageViewer))
                             {
                                 fds.ShowDialog();
 
@@ -2243,7 +2272,7 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.DelComments)
                         {
-                            if (Excel.RemoveComments(toolStripStatusLabelFilePath.Text) == true)
+                            if (Excel.RemoveComments(tempFilePackageViewer) == true)
                             {
                                 LogInformation(LogInfoType.ClearAndAdd, "Comments Deleted", string.Empty);
                             }
@@ -2255,11 +2284,11 @@ namespace Office_File_Explorer
 
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.ConvertXlsmToXlsx)
                         {
-                            string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(toolStripStatusLabelFilePath.Text, Strings.oAppExcel);
+                            string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(tempFilePackageViewer, Strings.oAppExcel);
                             rtbDisplay.Clear();
                             if (fNewName != string.Empty)
                             {
-                                rtbDisplay.AppendText(toolStripStatusLabelFilePath.Text + Strings.convertedTo + fNewName);
+                                rtbDisplay.AppendText(tempFilePackageViewer + Strings.convertedTo + fNewName);
                             }
                         }
 
@@ -2307,7 +2336,7 @@ namespace Office_File_Explorer
                                 // check if the file is strict, no changes are made to the file yet
                                 bool isStrict = false;
 
-                                using (Package package = Package.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.Read))
+                                using (Package package = Package.Open(tempFilePackageViewer, FileMode.Open, FileAccess.Read))
                                 {
                                     foreach (PackagePart part in package.GetParts())
                                     {
@@ -2338,13 +2367,13 @@ namespace Office_File_Explorer
                                 if (isStrict == true)
                                 {
                                     // setup destination file path
-                                    string strOriginalFile = toolStripStatusLabelFilePath.Text;
+                                    string strOriginalFile = tempFilePackageViewer;
                                     string strOutputPath = Path.GetDirectoryName(strOriginalFile) + "\\";
                                     string strFileExtension = Path.GetExtension(strOriginalFile);
                                     string strOutputFileName = strOutputPath + Path.GetFileNameWithoutExtension(strOriginalFile) + Strings.wFixedFileParentheses + strFileExtension;
 
                                     // run the command to convert the file "excelcnv.exe -nme -oice "strict-file-path" "converted-file-path""
-                                    string cParams = " -nme -oice " + Strings.chDblQuote + toolStripStatusLabelFilePath.Text + Strings.chDblQuote + Strings.wSpaceChar + Strings.chDblQuote + strOutputFileName + Strings.chDblQuote;
+                                    string cParams = " -nme -oice " + Strings.chDblQuote + tempFilePackageViewer + Strings.chDblQuote + Strings.wSpaceChar + Strings.chDblQuote + strOutputFileName + Strings.chDblQuote;
                                     var proc = Process.Start(excelcnvPath, cParams);
                                     proc.Close();
                                     rtbDisplay.AppendText(Strings.fileConvertSuccessful);
@@ -2364,29 +2393,40 @@ namespace Office_File_Explorer
                                 Cursor = Cursors.Default;
                             }
                         }
+
+                        if (result == DialogResult.OK)
+                        {
+                            string modifiedPath = AddModifiedTextToFileName(tempFilePackageViewer);
+                            File.Copy(tempFilePackageViewer, modifiedPath, true);
+                        }
                     }
                 }
                 else if (StrOfficeApp == Strings.oAppPowerPoint)
                 {
                     using (var f = new FrmPowerPointModify())
                     {
-                        var result = f.ShowDialog();
+                        DialogResult result = f.ShowDialog();
+
+                        if (result == DialogResult.Cancel)
+                        {
+                            return;
+                        }
 
                         Cursor = Cursors.WaitCursor;
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.ConvertPptmToPptx)
                         {
-                            string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(toolStripStatusLabelFilePath.Text, Strings.oAppPowerPoint);
+                            string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(tempFilePackageViewer, Strings.oAppPowerPoint);
                             rtbDisplay.Clear();
                             if (fNewName != string.Empty)
                             {
-                                rtbDisplay.AppendText(toolStripStatusLabelFilePath.Text + Strings.convertedTo + fNewName);
+                                rtbDisplay.AppendText(tempFilePackageViewer + Strings.convertedTo + fNewName);
                             }
                         }
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.DelComments)
                         {
-                            if (PowerPoint.DeleteComments(toolStripStatusLabelFilePath.Text, string.Empty))
+                            if (PowerPoint.DeleteComments(tempFilePackageViewer, string.Empty))
                             {
                                 rtbDisplay.AppendText("Comments Removed");
                             }
@@ -2398,7 +2438,7 @@ namespace Office_File_Explorer
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.RemovePIIOnSave)
                         {
-                            using (PresentationDocument document = PresentationDocument.Open(toolStripStatusLabelFilePath.Text, true))
+                            using (PresentationDocument document = PresentationDocument.Open(tempFilePackageViewer, true))
                             {
                                 document.PresentationPart.Presentation.RemovePersonalInfoOnSave = false;
                                 document.PresentationPart.Presentation.Save();
@@ -2413,6 +2453,12 @@ namespace Office_File_Explorer
                                 Owner = this
                             };
                             mvFrm.ShowDialog();
+                        }
+
+                        if (result == DialogResult.OK)
+                        {
+                            string modifiedPath = AddModifiedTextToFileName(tempFilePackageViewer);
+                            File.Copy(tempFilePackageViewer, modifiedPath, true);
                         }
                     }
                 }
@@ -2456,7 +2502,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-                if (Office.RemoveCustomXmlParts(package, toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text))
+                if (Office.RemoveCustomXmlParts(package, tempFilePackageViewer, toolStripStatusLabelDocType.Text))
                 {
                     LogInformation(LogInfoType.ClearAndAdd, "Custom Xml Parts Removed.", string.Empty);
                 }

@@ -44,6 +44,7 @@ namespace Office_File_Explorer.Helpers
         public const string oAppTitle = "Office File Explorer";
         public const string wCopyFileParentheses = "(Copy)";
         public const string wBackupFileParentheses = "(Backup)";
+        public const string wModified = "(Modifed)";
         public const string wCancel = "Cancel";
         public const string wColonBuffer = " : ";
         public const string wErrorText = "Error: ";

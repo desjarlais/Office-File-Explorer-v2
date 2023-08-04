@@ -99,11 +99,13 @@ namespace Office_File_Explorer.WinForms
                 wdModCmd = AppUtilities.WordModifyCmds.DelDupeAuthors;
             }
 
+            this.DialogResult = DialogResult.OK;
             Close();
         }
 
         private void BtnCancel_Click(object sender, System.EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             Close();
         }
 
