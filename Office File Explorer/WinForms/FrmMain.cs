@@ -26,6 +26,7 @@ using System.Xml.Schema;
 
 using File = System.IO.File;
 using Color = System.Drawing.Color;
+using System.Drawing.Imaging;
 
 namespace Office_File_Explorer
 {
@@ -508,9 +509,15 @@ namespace Office_File_Explorer
             {
                 Cursor = Cursors.WaitCursor;
 
+                // add opensettings to get around the fix malformed uri issue
+                var openSettings = new OpenSettings()
+                {
+                    RelationshipErrorHandlerFactory = package => { return new UriRelationshipErrorHandler(); }
+                };
+
                 if (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppWord)
                 {
-                    using (WordprocessingDocument document = WordprocessingDocument.Open(file, false))
+                    using (WordprocessingDocument document = WordprocessingDocument.Open(file, true, openSettings))
                     {
                         // try to get the localname of the document.xml file, if it fails, it is not a Word file
                         StrOfficeApp = Strings.oAppWord;
@@ -520,7 +527,7 @@ namespace Office_File_Explorer
                 }
                 else if (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppExcel)
                 {
-                    using (SpreadsheetDocument document = SpreadsheetDocument.Open(file, false))
+                    using (SpreadsheetDocument document = SpreadsheetDocument.Open(file, true, openSettings))
                     {
                         // try to get the localname of the workbook.xml and file if it fails, its not an Excel file
                         StrOfficeApp = Strings.oAppExcel;
@@ -530,7 +537,7 @@ namespace Office_File_Explorer
                 }
                 else if (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppPowerPoint)
                 {
-                    using (PresentationDocument document = PresentationDocument.Open(file, false))
+                    using (PresentationDocument document = PresentationDocument.Open(file, true, openSettings))
                     {
                         // try to get the presentation.xml local name, if it fails it is not a PPT file
                         StrOfficeApp = Strings.oAppPowerPoint;
@@ -543,74 +550,6 @@ namespace Office_File_Explorer
                     // file is corrupt or not an Office document
                     StrOfficeApp = Strings.oAppUnknown;
                     LogInformation(LogInfoType.ClearAndAdd, "Invalid File", string.Empty);
-                }
-            }
-            catch (OpenXmlPackageException ope)
-            {
-                // if the exception is related to invalid hyperlinks or relationship uri's
-                // use the FixInvalidUri method to change the file
-                // once we change the copied file, we can open it in the SDK
-                if (ope.ToString().Contains("Invalid Hyperlink") || ope.ToString().Contains("malformed URI"))
-                {
-                    // known issue in .NET with malformed hyperlinks causing SDK to throw during parse
-                    // see UriFixHelper for more details
-                    // get the path and make a new file name in the same directory
-                    var StrCopyFileName = AddTextToFileName(toolStripStatusLabelFilePath.Text, Strings.wCopyFileParentheses);
-
-                    // need a copy of the file to change the hyperlinks so we can open the modified version instead of the original
-                    if (!File.Exists(StrCopyFileName))
-                    {
-                        File.Copy(toolStripStatusLabelFilePath.Text, StrCopyFileName);
-                    }
-                    else
-                    {
-                        StrCopyFileName = AddTextToFileName(toolStripStatusLabelFilePath.Text, Strings.wCopyFileParentheses + FileUtilities.GetRandomNumber().ToString());
-                        File.Copy(toolStripStatusLabelFilePath.Text, StrCopyFileName);
-                    }
-
-                    // create the new file with the updated hyperlink
-                    using (FileStream fs = new FileStream(StrCopyFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                    {
-                        UriFix.FixInvalidUri(fs, brokenUri => FileUtilities.FixUri(brokenUri));
-                    }
-
-                    // now use the new file in the open logic from above
-                    if (StrOfficeApp == Strings.oAppWord || (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppWord))
-                    {
-                        using (WordprocessingDocument document = WordprocessingDocument.Open(StrCopyFileName, false))
-                        {
-                            // try to get the localname of the document.xml file, if it fails, it is not a Word file
-                            body = document.MainDocumentPart.Document.LocalName;
-                            fSuccess = true;
-                        }
-                    }
-                    else if (StrOfficeApp == Strings.oAppExcel || (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppExcel))
-                    {
-                        using (SpreadsheetDocument document = SpreadsheetDocument.Open(StrCopyFileName, false))
-                        {
-                            // try to get the localname of the workbook.xml file if it fails, its not an Excel file
-                            body = document.WorkbookPart.Workbook.LocalName;
-                            fSuccess = true;
-                        }
-                    }
-                    else if (StrOfficeApp == Strings.oAppPowerPoint || (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppPowerPoint))
-                    {
-                        using (PresentationDocument document = PresentationDocument.Open(StrCopyFileName, false))
-                        {
-                            // try to get the presentation.xml local name, if it fails it is not a PPT file
-                            body = document.PresentationPart.Presentation.LocalName;
-                            fSuccess = true;
-                        }
-                    }
-
-                    // update the main form UI
-                    toolStripStatusLabelFilePath.Text = StrCopyFileName;
-                    StrCopiedFileName = StrCopyFileName;
-                }
-                else
-                {
-                    // unknown issue opening from .net
-                    LogInformation(LogInfoType.LogException, "OpenWithSDK UriFix Error:", ope.Message);
                 }
             }
             catch (InvalidOperationException ioe)
@@ -1233,6 +1172,13 @@ namespace Office_File_Explorer
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
+                            // need to implement non-bitmap images
+                            if (pp.Uri.ToString().EndsWith(".emf"))
+                            {
+                                rtbDisplay.Text = "No Viewer For File Type";
+                                return;
+                            }
+
                             Stream imageSource = pp.GetStream();
                             Image image = Image.FromStream(imageSource);
                             using (var f = new FrmDisplayOutput(image))
