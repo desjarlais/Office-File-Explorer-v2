@@ -1,6 +1,6 @@
 # Office-File-Explorer-v2
 
-The purpose of this tool is to provide potential file specific troubleshooting of Office Open Xml formatted documents for Word, Excel and PowerPoint (.docx, .dotx, .docm, .xlsx, .xlst, .xlsm, .pptx, .pptm).
+The purpose of this tool is to provide potential file specific troubleshooting of Office Open Xml formatted documents for Word, Excel and PowerPoint (.docx, .dotx, .docm, .xlsx, .xlst, .xlsm, .pptx, .pptm).  It also includes the ability to view the underlying xml files and modify them directly.
 
 The tool can also perform a series of checks for known document corruptions in the underlying xml tags to possibly fix and make the file open in Office.  
 
@@ -13,7 +13,7 @@ Keep in mind if you use this on a production document and choose to use somethin
 If you need assistance (find a bug, have a question or any suggestions or feedback), please report them using the [Issues tab](https://github.com/desjarlais/Office-File-Explorer-v2/issues)
 
 ## Main Window
-![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2.jpg?raw=true)
+![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe-mainform.jpg?raw=true)
 
 ## List of features
 
