@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFixDocument));
             groupBox1 = new System.Windows.Forms.GroupBox();
+            rdoFixTextboxes = new System.Windows.Forms.RadioButton();
             rdoFixListStyles = new System.Windows.Forms.RadioButton();
             rdoFixDataDescriptorW = new System.Windows.Forms.RadioButton();
             rdoFixMathAccentsW = new System.Windows.Forms.RadioButton();
@@ -60,6 +61,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(rdoFixTextboxes);
             groupBox1.Controls.Add(rdoFixListStyles);
             groupBox1.Controls.Add(rdoFixDataDescriptorW);
             groupBox1.Controls.Add(rdoFixMathAccentsW);
@@ -74,10 +76,21 @@ namespace Office_File_Explorer.WinForms
             groupBox1.Controls.Add(rdoFixBookmarksW);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(330, 194);
+            groupBox1.Size = new System.Drawing.Size(330, 223);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Word Document";
+            // 
+            // rdoFixTextboxes
+            // 
+            rdoFixTextboxes.AutoSize = true;
+            rdoFixTextboxes.Location = new System.Drawing.Point(6, 169);
+            rdoFixTextboxes.Name = "rdoFixTextboxes";
+            rdoFixTextboxes.Size = new System.Drawing.Size(95, 19);
+            rdoFixTextboxes.TabIndex = 10;
+            rdoFixTextboxes.TabStop = true;
+            rdoFixTextboxes.Text = "Fix Textboxes";
+            rdoFixTextboxes.UseVisualStyleBackColor = true;
             // 
             // rdoFixListStyles
             // 
@@ -389,5 +402,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoResetBulletMargins;
         private System.Windows.Forms.RadioButton rdoFixDataTags;
         private System.Windows.Forms.RadioButton rdoFixCorruptDrawingsXL;
+        private System.Windows.Forms.RadioButton rdoFixTextboxes;
     }
 }

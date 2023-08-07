@@ -121,6 +121,7 @@ namespace Office_File_Explorer.Helpers
         public const string wSlideTitle = "Slide Titles";
         public const string wShapes = "Shapes";
         public const string wListStyles = "List Styles";
+        public const string wTextboxes = "Textboxes";
         public const string wContentControls = "Content Controls";
         public const string wSlideTransitions = "Slide Transitions";
         public const string wEmbeddedObjects = "Embedded Objects";

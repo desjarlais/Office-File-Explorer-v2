@@ -312,7 +312,7 @@ namespace Office_File_Explorer
                                 pkgParts?.Clear();
 
                                 // populate the treeview
-                                package = Package.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.Read);
+                                package = Package.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.ReadWrite);
 
                                 TreeNode tRoot = new TreeNode();
                                 tRoot.Text = toolStripStatusLabelFilePath.Text;
@@ -375,6 +375,7 @@ namespace Office_File_Explorer
 
                                 tvFiles.Nodes.Add(tRoot);
                                 tvFiles.ExpandAll();
+                                DisableModifyUI();
                             }
                             else
                             {
@@ -904,15 +905,15 @@ namespace Office_File_Explorer
         public void EnableModifyUI()
         {
             rtbDisplay.ReadOnly = false;
+            rtbDisplay.BackColor = SystemColors.Window;
             toolStripButtonSave.Enabled = true;
-            toolStripButtonModify.Enabled = false;
         }
 
         public void DisableModifyUI()
         {
             rtbDisplay.ReadOnly = true;
+            rtbDisplay.BackColor = SystemColors.Control;
             toolStripButtonSave.Enabled = false;
-            toolStripButtonModify.Enabled = true;
         }
 
         public void EnableCustomUIIcons()
@@ -1808,7 +1809,7 @@ namespace Office_File_Explorer
 
         private void toolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
-            using (FrmFixDocument f = new FrmFixDocument(tempFilePackageViewer, toolStripStatusLabelDocType.Text))
+            using (FrmFixDocument f = new FrmFixDocument(tempFilePackageViewer, toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text))
             {
                 f.ShowDialog();
 
@@ -1826,10 +1827,8 @@ namespace Office_File_Explorer
                     else
                     {
                         rtbDisplay.Text = "Corrupt " + f.corruptionChecked + " Found - Document Fixed";
+                        rtbDisplay.Text = "Modified File Location = " + tempFilePackageViewer;
                     }
-
-                    // if there were corruptions found, close the file
-                    FileClose();
 
                     return;
                 }

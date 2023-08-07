@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml;
 using OM = DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Wp = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 
 // .NET refs
 using System;
@@ -1557,6 +1558,80 @@ namespace Office_File_Explorer.Helpers
             }
 
             return corruptEndnotesFound;
+        }
+
+        /// <summary>
+        /// there are times when documents have textboxes containing images with duplicate id's
+        /// this will check for those duplicate id's and change them to a different number
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixTextboxes(string filePath)
+        {
+            bool isFixed = false;
+
+            try
+            {
+                using (WordprocessingDocument package = WordprocessingDocument.Open(filePath, true))
+                {
+                    IEnumerable<Drawing> drwList = package.MainDocumentPart.Document.Descendants<Drawing>();
+                    List<uint> drwIdList = new List<uint>();
+
+                    foreach (Drawing d in drwList)
+                    {
+                        // first get the list of id's
+                        foreach (OpenXmlElement oxe in d.Anchor.ChildElements)
+                        {
+                            if (oxe.LocalName == "docPr")
+                            {
+                                Wp.DocProperties dProps = new Wp.DocProperties();
+                                dProps = (Wp.DocProperties)oxe;
+                                drwIdList.Add(dProps.Id);
+                            }
+                        }
+                    }
+
+                    restartDrawingLoop:
+                    foreach (Drawing d in drwList)
+                    {
+                        foreach (OpenXmlElement oxe in d.Anchor.ChildElements)
+                        {
+                            if (oxe.LocalName == "docPr")
+                            {
+                                Wp.DocProperties dProps = new Wp.DocProperties();
+                                dProps = (Wp.DocProperties)oxe;
+                                foreach (uint i in drwIdList)
+                                {
+                                    if (i == dProps.Id)
+                                    {
+                                        // dupe id's are not allowed, change to a new value
+                                        Random rnd = new Random();
+                                        dProps.Id = dProps.Id + (uint)rnd.Next(1, 1000);
+                                        
+                                        oxe.Remove();
+                                        d.Anchor.AddChild(dProps);
+                                        isFixed = true;
+                                        goto restartDrawingLoop;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // save out the file
+                    if (isFixed)
+                    {
+                        package.Save();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "FixTextboxes Error: " + ex.Message);
+                return isFixed;
+            }
+
+            return isFixed;
         }
 
         /// <summary>

@@ -1,8 +1,11 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Packaging;
 using Office_File_Explorer.Helpers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
+using Path = System.IO.Path;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -11,14 +14,15 @@ namespace Office_File_Explorer.WinForms
         public bool isFileFixed = false;
         public bool tryAllFixes = false;
         public string corruptionChecked = string.Empty;
-        public string filePath, fileType;
+        public string filePath, fileType, modPath;
         public List<string> featureFixed = new List<string>();
 
-        public FrmFixDocument(string fPath, string fType)
+        public FrmFixDocument(string fPath, string modifiedPath, string fType)
         {
             InitializeComponent();
             filePath = fPath;
             fileType = fType;
+            modPath = modifiedPath;
 
             EnableUI(fileType);
         }
@@ -92,6 +96,15 @@ namespace Office_File_Explorer.WinForms
             {
                 SetCorruptionChecked(Strings.wListStyles);
                 if (WordFixes.FixListStyles(filePath))
+                {
+                    isFileFixed = true;
+                }
+            }
+
+            if (rdoFixTextboxes.Checked || tryAllFixes == true)
+            {
+                SetCorruptionChecked(Strings.wTextboxes);
+                if (WordFixes.FixTextboxes(filePath))
                 {
                     isFileFixed = true;
                 }
@@ -291,7 +304,27 @@ namespace Office_File_Explorer.WinForms
                 }
             }
 
+            if (isFileFixed)
+            {
+                string modifiedPath = AddModifiedTextToFileName(filePath);
+                File.Copy(filePath, modifiedPath, true);
+            }
+
             Close();
+        }
+
+        /// <summary>
+        /// need to find the path of the original file opened in the tool
+        /// this is the location of the new modified file with "(Modified)" added to it
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public string AddModifiedTextToFileName(string fileName)
+        {
+            string dir = Path.GetDirectoryName(modPath) + "\\";
+            string fExt = Path.GetExtension(modPath);
+            string newFileName = dir + Path.GetFileNameWithoutExtension(modPath) + Strings.wModified + fExt;
+            return newFileName;
         }
     }
 }

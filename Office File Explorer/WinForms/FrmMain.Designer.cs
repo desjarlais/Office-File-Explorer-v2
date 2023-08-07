@@ -37,8 +37,8 @@ namespace Office_File_Explorer
             fileToolStripMenuItemOpenErrorLog = new System.Windows.Forms.ToolStripMenuItem();
             fileToolStripMenuItemOpenFileBackup = new System.Windows.Forms.ToolStripMenuItem();
             fileToolStripMenuItemClose = new System.Windows.Forms.ToolStripMenuItem();
-            fileToolStripMenuItemSettings = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            fileToolStripMenuItemSettings = new System.Windows.Forms.ToolStripMenuItem();
             fileToolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             editToolStripMenuFindReplace = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,6 +144,11 @@ namespace Office_File_Explorer
             fileToolStripMenuItemClose.Text = "&Close";
             fileToolStripMenuItemClose.Click += fileToolStripMenuItemClose_Click;
             // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
+            // 
             // fileToolStripMenuItemSettings
             // 
             fileToolStripMenuItemSettings.Image = Properties.Resources.Settings;
@@ -151,11 +156,6 @@ namespace Office_File_Explorer
             fileToolStripMenuItemSettings.Size = new System.Drawing.Size(202, 22);
             fileToolStripMenuItemSettings.Text = "&Settings";
             fileToolStripMenuItemSettings.Click += SettingsToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
             // 
             // fileToolStripMenuItemExit
             // 
