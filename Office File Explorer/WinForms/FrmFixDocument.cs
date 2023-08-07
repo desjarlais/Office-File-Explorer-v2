@@ -304,9 +304,12 @@ namespace Office_File_Explorer.WinForms
                 }
             }
 
+            // create a new path in the current file path directory
+            // then copy the fixed file contents from temp into this location
             if (isFileFixed)
             {
                 string modifiedPath = AddModifiedTextToFileName(filePath);
+                modPath = modifiedPath;
                 File.Copy(filePath, modifiedPath, true);
             }
 

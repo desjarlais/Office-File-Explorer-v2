@@ -1826,8 +1826,8 @@ namespace Office_File_Explorer
                     }
                     else
                     {
-                        rtbDisplay.Text = "Corrupt " + f.corruptionChecked + " Found - Document Fixed";
-                        rtbDisplay.Text = "Modified File Location = " + tempFilePackageViewer;
+                        rtbDisplay.Text = "Corrupt " + f.corruptionChecked + " Found - Document Fixed" + "\r\n\r\n";
+                        rtbDisplay.AppendText("Modified File Location = " + f.modPath);
                     }
 
                     return;
