@@ -148,21 +148,13 @@ namespace Office_File_Explorer
             DisableCustomUIIcons();
             DisableModifyUI();
             DisableUI();
-
-            if (package is not null)
-            {
-                package.Close();
-            }
-
-            if (pkgParts is not null)
-            {
-                pkgParts.Clear();
-            }
-
+            package?.Close();
+            pkgParts?.Clear();
             tvFiles.Nodes.Clear();
             toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
             toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
             rtbDisplay.Clear();
+            fileToolStripMenuItemClose.Enabled = false;
         }
 
         /// <summary>
@@ -316,15 +308,8 @@ namespace Office_File_Explorer
                                 // clear the previous doc if there was one
                                 tvFiles.Nodes.Clear();
                                 rtbDisplay.Clear();
-                                if (package is not null)
-                                {
-                                    package.Close();
-                                }
-
-                                if (pkgParts is not null)
-                                {
-                                    pkgParts.Clear();
-                                }
+                                package?.Close();
+                                pkgParts?.Clear();
 
                                 // populate the treeview
                                 package = Package.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.Read);
@@ -807,10 +792,7 @@ namespace Office_File_Explorer
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (package is not null)
-            {
-                package.Close();
-            }
+            package?.Close();
             AppExitWork();
         }
 
@@ -913,7 +895,7 @@ namespace Office_File_Explorer
 
         private void excelSheetViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var f = new FrmSheetViewer(toolStripStatusLabelFilePath.Text))
+            using (var f = new FrmSheetViewer(tempFileReadOnly))
             {
                 var result = f.ShowDialog();
             }
@@ -1520,13 +1502,6 @@ namespace Office_File_Explorer
                 bool isXmlException = false;
                 string strDocText = string.Empty;
                 IsFixed = false;
-
-                // check if file we are about to copy exists and append a number so it is unique
-                if (File.Exists(StrDestFileName))
-                {
-                    StrDestFileName = AddTextToFileName(StrDestFileName, FileUtilities.GetRandomNumber().ToString());
-                }
-
                 rtbDisplay.Clear();
 
                 if (StrExtension == Strings.docxFileExt)
@@ -1538,7 +1513,7 @@ namespace Office_File_Explorer
                     }
                     else
                     {
-                        File.Copy(toolStripStatusLabelFilePath.Text, StrDestFileName);
+                        File.Copy(toolStripStatusLabelFilePath.Text, StrDestFileName, true);
                     }
                 }
 
@@ -1833,7 +1808,7 @@ namespace Office_File_Explorer
 
         private void toolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
-            using (FrmFixDocument f = new FrmFixDocument(toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text))
+            using (FrmFixDocument f = new FrmFixDocument(tempFilePackageViewer, toolStripStatusLabelDocType.Text))
             {
                 f.ShowDialog();
 
@@ -1852,6 +1827,9 @@ namespace Office_File_Explorer
                     {
                         rtbDisplay.Text = "Corrupt " + f.corruptionChecked + " Found - Document Fixed";
                     }
+
+                    // if there were corruptions found, close the file
+                    FileClose();
 
                     return;
                 }

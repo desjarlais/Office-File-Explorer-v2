@@ -106,7 +106,7 @@ namespace Office_File_Explorer
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItemOpen, fileToolStripMenuItemOpenErrorLog, fileToolStripMenuItemOpenFileBackup, fileToolStripMenuItemClose, fileToolStripMenuItemSettings, toolStripSeparator1, fileToolStripMenuItemExit });
+            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItemOpen, fileToolStripMenuItemOpenErrorLog, fileToolStripMenuItemOpenFileBackup, fileToolStripMenuItemClose, toolStripSeparator1, fileToolStripMenuItemSettings, fileToolStripMenuItemExit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             fileToolStripMenuItem.Text = "&File";
