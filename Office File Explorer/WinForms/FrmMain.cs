@@ -26,7 +26,6 @@ using System.Xml.Schema;
 
 using File = System.IO.File;
 using Color = System.Drawing.Color;
-using System.Drawing.Imaging;
 
 namespace Office_File_Explorer
 {
@@ -141,11 +140,37 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// handle when user clicks File | Close
+        /// </summary>
+        public void FileClose()
+        {
+            DisableCustomUIIcons();
+            DisableModifyUI();
+            DisableUI();
+
+            if (package is not null)
+            {
+                package.Close();
+            }
+
+            if (pkgParts is not null)
+            {
+                pkgParts.Clear();
+            }
+
+            tvFiles.Nodes.Clear();
+            toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
+            toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
+            rtbDisplay.Clear();
+        }
+
+        /// <summary>
+        /// disable app feature related buttons
+        /// </summary>
         public void DisableUI()
         {
-            // disable app feature related buttons
             toolStripButtonViewContents.Enabled = false;
-            toolStripButtonViewDocProps.Enabled = false;
             toolStripButtonFixDoc.Enabled = false;
             editToolStripMenuFindReplace.Enabled = false;
             editToolStripMenuItemModifyContents.Enabled = false;
@@ -160,11 +185,12 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// disable app feature related buttons
+        /// </summary>
         public void EnableUI()
         {
-            // disable app feature related buttons
             toolStripButtonViewContents.Enabled = true;
-            toolStripButtonViewDocProps.Enabled = true;
             toolStripButtonFixDoc.Enabled = true;
             editToolStripMenuFindReplace.Enabled = true;
             editToolStripMenuItemModifyContents.Enabled = true;
@@ -811,12 +837,14 @@ namespace Office_File_Explorer
             AppUtilities.PlatformSpecificProcessStart(Strings.fLogFilePath);
         }
 
-        public void AddCustomDocPropsToList(CustomFilePropertiesPart cfp)
+        public List<string> CustomDocPropsList(CustomFilePropertiesPart cfp)
         {
+            List<string> tempCfp = new List<string>();
+
             if (cfp is null)
             {
                 LogInformation(LogInfoType.EmptyCount, Strings.wCustomDocProps, string.Empty);
-                return;
+                return tempCfp;
             }
 
             int count = 0;
@@ -824,13 +852,15 @@ namespace Office_File_Explorer
             foreach (string v in CfpList(cfp))
             {
                 count++;
-                rtbDisplay.AppendText(count + Strings.wPeriod + v);
+                tempCfp.Add(count + Strings.wPeriod + v);
             }
 
             if (count == 0)
             {
                 LogInformation(LogInfoType.EmptyCount, Strings.wCustomDocProps, string.Empty);
             }
+
+            return tempCfp;
         }
 
         private void ClipboardViewerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1242,7 +1272,6 @@ namespace Office_File_Explorer
             // if we have valid xml, then generate the callback code
             try
             {
-                DisableCustomUIIcons();
                 XmlDocument customUI = new XmlDocument();
                 customUI.LoadXml(rtbDisplay.Text);
                 StringBuilder callbacks = CallbackBuilder.GenerateCallback(customUI);
@@ -1434,17 +1463,19 @@ namespace Office_File_Explorer
                 }
 
                 // display selected Office features
+
                 sb.Append(DisplayListContents(Office.GetEmbeddedObjectProperties(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects));
                 sb.Append(DisplayListContents(Office.GetShapes(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wShapes));
                 sb.Append(DisplayListContents(pParts, Strings.wPackageParts));
                 sb.Append(DisplayListContents(Office.GetSignatures(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures));
 
-                // validate the file
+                // validate the file and update custom file props
                 if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
                 {
                     using (WordprocessingDocument myDoc = WordprocessingDocument.Open(tempFileReadOnly, false))
                     {
                         sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
+                        sb.Append(DisplayListContents(CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps));
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
@@ -1452,6 +1483,7 @@ namespace Office_File_Explorer
                     using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(tempFileReadOnly, false))
                     {
                         sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
+                        sb.Append(DisplayListContents(CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps));
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
@@ -1459,6 +1491,7 @@ namespace Office_File_Explorer
                     using (PresentationDocument myDoc = PresentationDocument.Open(tempFileReadOnly, false))
                     {
                         sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
+                        sb.Append(DisplayListContents(CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps));
                     }
                 }
 
@@ -2488,59 +2521,9 @@ namespace Office_File_Explorer
             }
         }
 
-        private void toolStripButtonViewDocProps_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-                rtbDisplay.Clear();
-
-                if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
-                {
-                    WordprocessingDocument document = WordprocessingDocument.Open(package);
-                    AddCustomDocPropsToList(document.CustomFilePropertiesPart);
-                }
-                else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
-                {
-                    SpreadsheetDocument document = SpreadsheetDocument.Open(package);
-                    AddCustomDocPropsToList(document.CustomFilePropertiesPart);
-                }
-                else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
-                {
-                    PresentationDocument document = PresentationDocument.Open(package);
-                    AddCustomDocPropsToList(document.CustomFilePropertiesPart);
-                }
-                else
-                {
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomDocProps - unknown app");
-                    return;
-                }
-            }
-            catch (IOException ioe)
-            {
-                LogInformation(LogInfoType.LogException, Strings.wCustomDocProps, ioe.Message);
-            }
-            catch (Exception ex)
-            {
-                LogInformation(LogInfoType.LogException, "BtnListCustomDocProps Error: ", ex.Message);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
-        }
-
         private void fileToolStripMenuItemClose_Click(object sender, EventArgs e)
         {
-            DisableCustomUIIcons();
-            DisableModifyUI();
-            DisableUI();
-            package.Close();
-            pkgParts.Clear();
-            tvFiles.Nodes.Clear();
-            toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
-            toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
-            rtbDisplay.Clear();
+            FileClose();
         }
 
         #endregion

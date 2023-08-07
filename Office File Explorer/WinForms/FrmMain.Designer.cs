@@ -59,7 +59,6 @@ namespace Office_File_Explorer
             copyAllLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             toolStripButtonViewContents = new System.Windows.Forms.ToolStripButton();
-            toolStripButtonViewDocProps = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixCorruptDoc = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixDoc = new System.Windows.Forms.ToolStripButton();
             toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -78,10 +77,10 @@ namespace Office_File_Explorer
             repurposeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             wordGroupOnInsertTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             statusStrip1 = new System.Windows.Forms.StatusStrip();
-            toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            toolStripStatusLabelFilePath = new System.Windows.Forms.ToolStripStatusLabel();
             toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             toolStripStatusLabelDocType = new System.Windows.Forms.ToolStripStatusLabel();
+            toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            toolStripStatusLabelFilePath = new System.Windows.Forms.ToolStripStatusLabel();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             tvFiles = new System.Windows.Forms.TreeView();
             tvImageList = new System.Windows.Forms.ImageList(components);
@@ -302,7 +301,7 @@ namespace Office_File_Explorer
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonViewDocProps, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonValidateXml, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert });
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonValidateXml, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert });
             toolStrip1.Location = new System.Drawing.Point(0, 24);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new System.Drawing.Size(924, 25);
@@ -319,17 +318,6 @@ namespace Office_File_Explorer
             toolStripButtonViewContents.Size = new System.Drawing.Size(87, 22);
             toolStripButtonViewContents.Text = "View Contents";
             toolStripButtonViewContents.Click += toolStripButtonViewContents_Click;
-            // 
-            // toolStripButtonViewDocProps
-            // 
-            toolStripButtonViewDocProps.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            toolStripButtonViewDocProps.Enabled = false;
-            toolStripButtonViewDocProps.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonViewDocProps.Image");
-            toolStripButtonViewDocProps.ImageTransparentColor = System.Drawing.Color.Magenta;
-            toolStripButtonViewDocProps.Name = "toolStripButtonViewDocProps";
-            toolStripButtonViewDocProps.Size = new System.Drawing.Size(128, 22);
-            toolStripButtonViewDocProps.Text = "View Document Props";
-            toolStripButtonViewDocProps.Click += toolStripButtonViewDocProps_Click;
             // 
             // toolStripButtonFixCorruptDoc
             // 
@@ -486,24 +474,12 @@ namespace Office_File_Explorer
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabelFilePath, toolStripStatusLabel3, toolStripStatusLabelDocType });
+            statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusLabel3, toolStripStatusLabelDocType, toolStripStatusLabel1, toolStripStatusLabelFilePath });
             statusStrip1.Location = new System.Drawing.Point(0, 541);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new System.Drawing.Size(924, 22);
             statusStrip1.TabIndex = 4;
             statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new System.Drawing.Size(55, 17);
-            toolStripStatusLabel1.Text = "File Path:";
-            // 
-            // toolStripStatusLabelFilePath
-            // 
-            toolStripStatusLabelFilePath.Name = "toolStripStatusLabelFilePath";
-            toolStripStatusLabelFilePath.Size = new System.Drawing.Size(22, 17);
-            toolStripStatusLabelFilePath.Text = "---";
             // 
             // toolStripStatusLabel3
             // 
@@ -516,6 +492,18 @@ namespace Office_File_Explorer
             toolStripStatusLabelDocType.Name = "toolStripStatusLabelDocType";
             toolStripStatusLabelDocType.Size = new System.Drawing.Size(22, 17);
             toolStripStatusLabelDocType.Text = "---";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new System.Drawing.Size(61, 17);
+            toolStripStatusLabel1.Text = "| File Path:";
+            // 
+            // toolStripStatusLabelFilePath
+            // 
+            toolStripStatusLabelFilePath.Name = "toolStripStatusLabelFilePath";
+            toolStripStatusLabelFilePath.Size = new System.Drawing.Size(22, 17);
+            toolStripStatusLabelFilePath.Text = "---";
             // 
             // splitContainer1
             // 
@@ -564,6 +552,7 @@ namespace Office_File_Explorer
             // 
             rtbDisplay.ContextMenuStrip = contextMenuStrip1;
             rtbDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            rtbDisplay.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             rtbDisplay.Location = new System.Drawing.Point(0, 0);
             rtbDisplay.Name = "rtbDisplay";
             rtbDisplay.ReadOnly = true;
@@ -656,7 +645,6 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem wordGroupOnInsertTabToolStripMenuItem;
         private System.Windows.Forms.ImageList tvImageList;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelDocType;
-        private System.Windows.Forms.ToolStripButton toolStripButtonViewDocProps;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemClose;
     }
