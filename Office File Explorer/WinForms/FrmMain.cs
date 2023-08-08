@@ -400,10 +400,15 @@ namespace Office_File_Explorer
                     tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 1;
                     tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 1;
                 }
-                else
+                else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Binary)
                 {
                     tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 5;
                     tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 5;
+                }
+                else
+                {
+                    tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 7;
+                    tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 7;
                 }
 
                 pkgParts.Add(part);
@@ -463,7 +468,7 @@ namespace Office_File_Explorer
                 case ".odttf":
                     return OpenXmlInnerFileTypes.Binary;
                 default:
-                    return OpenXmlInnerFileTypes.Binary;
+                    return OpenXmlInnerFileTypes.Other;
             }
         }
 
@@ -1150,7 +1155,7 @@ namespace Office_File_Explorer
                                 tvFiles.SuspendLayout();
                                 rtbDisplay.Text = sb.ToString();
 
-                                // format the xml for colors
+                                // format the xml colors
                                 string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)" + @"(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
                                 foreach (Match m in Regex.Matches(rtbDisplay.Text, pattern))
                                 {
@@ -1186,7 +1191,7 @@ namespace Office_File_Explorer
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
                             // need to implement non-bitmap images
-                            if (pp.Uri.ToString().EndsWith(".emf"))
+                            if (pp.Uri.ToString().EndsWith(".emf") || (pp.Uri.ToString().EndsWith(".svg")))
                             {
                                 rtbDisplay.Text = "No Viewer For File Type";
                                 return;
@@ -1199,8 +1204,6 @@ namespace Office_File_Explorer
                                 var result = f.ShowDialog();
                             }
 
-
-
                             return;
                         }
                     }
@@ -1211,11 +1214,11 @@ namespace Office_File_Explorer
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
-                            using (Stream ppStream = pp.GetStream())
+                            using (var memStream = new MemoryStream())
                             {
-                                byte[] binData = new byte[ppStream.Length];
-                                ppStream.Read(binData, 0, binData.Length);
-                                rtbDisplay.Text = ppStream.ToString();
+                                pp.GetStream().CopyTo(memStream);
+                                byte[] binData = memStream.ToArray();
+                                rtbDisplay.Text = Convert.ToHexString(binData);
                             }
                             return;
                         }
