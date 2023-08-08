@@ -28,6 +28,17 @@ namespace Office_File_Explorer.WinForms
             InitializeComponent();
             splitContainer1.Panel1Collapsed = true;
             pictureBox1.Image = img;
+
+            if (img.Height > pictureBox1.Size.Height || img.Width > pictureBox1.Size.Width) 
+            {
+                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            }
+            else
+            {
+                pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+            }
+
+            this.Text = "Image";
         }
 
         private void copySelectedTextToolStripMenuItem_Click(object sender, System.EventArgs e)

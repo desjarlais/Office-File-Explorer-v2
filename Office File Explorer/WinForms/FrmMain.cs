@@ -1198,6 +1198,9 @@ namespace Office_File_Explorer
                             {
                                 var result = f.ShowDialog();
                             }
+
+
+
                             return;
                         }
                     }
@@ -1252,7 +1255,7 @@ namespace Office_File_Explorer
                 return;
             }
 
-            // if we have valid xml, then generate the callback code
+            // generate the callback code
             try
             {
                 XmlDocument customUI = new XmlDocument();
@@ -1263,7 +1266,7 @@ namespace Office_File_Explorer
                 // display the callbacks
                 using (var f = new FrmDisplayOutput(callbacks, true))
                 {
-                    f.Text = "Callback Code";
+                    f.Text = "VBA Callback Code";
                     var result = f.ShowDialog();
                 }
 
@@ -1340,8 +1343,6 @@ namespace Office_File_Explorer
 
                         // The file is a valid image at this point.
                         id = part.AddImage(fileName, id);
-
-                        Debug.Assert(id != null, "Cannot create image part.");
                         if (id == null) continue;
 
                         imageStream.Close();
