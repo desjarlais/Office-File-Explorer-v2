@@ -54,6 +54,7 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Change theme for a file
 * Validate underlying xml file details
 * View Custom Xml - view custom xml files in Office documents
+* View Custom UI - borrowed most of the code from [office-custom-ui-editor](https://github.com/OfficeDev/office-custom-ui-editor)
 
 ## Batch File Processing Window 
 ![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe2batch.jpg?raw=true)
