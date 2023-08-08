@@ -35,7 +35,6 @@ namespace Office_File_Explorer
             fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             fileToolStripMenuItemOpen = new System.Windows.Forms.ToolStripMenuItem();
             fileToolStripMenuItemOpenErrorLog = new System.Windows.Forms.ToolStripMenuItem();
-            fileToolStripMenuItemOpenFileBackup = new System.Windows.Forms.ToolStripMenuItem();
             fileToolStripMenuItemClose = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             fileToolStripMenuItemSettings = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,7 +105,7 @@ namespace Office_File_Explorer
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItemOpen, fileToolStripMenuItemOpenErrorLog, fileToolStripMenuItemOpenFileBackup, fileToolStripMenuItemClose, toolStripSeparator1, fileToolStripMenuItemSettings, fileToolStripMenuItemExit });
+            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItemOpen, fileToolStripMenuItemOpenErrorLog, fileToolStripMenuItemClose, toolStripSeparator1, fileToolStripMenuItemSettings, fileToolStripMenuItemExit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             fileToolStripMenuItem.Text = "&File";
@@ -115,7 +114,7 @@ namespace Office_File_Explorer
             // 
             fileToolStripMenuItemOpen.Image = Properties.Resources.OpenFile;
             fileToolStripMenuItemOpen.Name = "fileToolStripMenuItemOpen";
-            fileToolStripMenuItemOpen.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemOpen.Text = "O&pen";
             fileToolStripMenuItemOpen.Click += OpenToolStripMenuItem_Click;
             // 
@@ -123,44 +122,36 @@ namespace Office_File_Explorer
             // 
             fileToolStripMenuItemOpenErrorLog.Image = Properties.Resources.ErrorSummary;
             fileToolStripMenuItemOpenErrorLog.Name = "fileToolStripMenuItemOpenErrorLog";
-            fileToolStripMenuItemOpenErrorLog.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemOpenErrorLog.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemOpenErrorLog.Text = "Open Error Log";
             fileToolStripMenuItemOpenErrorLog.Click += OpenErrorLogToolStripMenuItem_Click;
-            // 
-            // fileToolStripMenuItemOpenFileBackup
-            // 
-            fileToolStripMenuItemOpenFileBackup.Image = (System.Drawing.Image)resources.GetObject("fileToolStripMenuItemOpenFileBackup.Image");
-            fileToolStripMenuItemOpenFileBackup.Name = "fileToolStripMenuItemOpenFileBackup";
-            fileToolStripMenuItemOpenFileBackup.Size = new System.Drawing.Size(202, 22);
-            fileToolStripMenuItemOpenFileBackup.Text = "Open File Backup Folder";
-            fileToolStripMenuItemOpenFileBackup.Click += openFileBackupFolderToolStripMenuItem_Click;
             // 
             // fileToolStripMenuItemClose
             // 
             fileToolStripMenuItemClose.Enabled = false;
             fileToolStripMenuItemClose.Image = Properties.Resources.CloseDocument;
             fileToolStripMenuItemClose.Name = "fileToolStripMenuItemClose";
-            fileToolStripMenuItemClose.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemClose.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemClose.Text = "&Close";
             fileToolStripMenuItemClose.Click += fileToolStripMenuItemClose_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
+            toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // fileToolStripMenuItemSettings
             // 
             fileToolStripMenuItemSettings.Image = Properties.Resources.Settings;
             fileToolStripMenuItemSettings.Name = "fileToolStripMenuItemSettings";
-            fileToolStripMenuItemSettings.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemSettings.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemSettings.Text = "&Settings";
             fileToolStripMenuItemSettings.Click += SettingsToolStripMenuItem_Click;
             // 
             // fileToolStripMenuItemExit
             // 
             fileToolStripMenuItemExit.Name = "fileToolStripMenuItemExit";
-            fileToolStripMenuItemExit.Size = new System.Drawing.Size(202, 22);
+            fileToolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemExit.Text = "E&xit";
             fileToolStripMenuItemExit.Click += ExitToolStripMenuItem_Click;
             // 
@@ -610,7 +601,6 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyAllLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem base64DecoderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemOpenFileBackup;
         private System.Windows.Forms.ToolStripMenuItem structuredStorageViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem excelSheetViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
