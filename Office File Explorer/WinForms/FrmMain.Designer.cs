@@ -70,11 +70,11 @@ namespace Office_File_Explorer
             toolStripButtonViewContents = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixCorruptDoc = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixDoc = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonValidateXml = new System.Windows.Forms.ToolStripButton();
             toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             toolStripButtonModify = new System.Windows.Forms.ToolStripButton();
             toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             toolStripButtonInsertIcon = new System.Windows.Forms.ToolStripButton();
-            toolStripButtonValidateXml = new System.Windows.Forms.ToolStripButton();
             toolStripButtonGenerateCallback = new System.Windows.Forms.ToolStripButton();
             toolStripDropDownButtonInsert = new System.Windows.Forms.ToolStripDropDownButton();
             office2010CustomUIPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -416,6 +416,16 @@ namespace Office_File_Explorer
             toolStripButtonFixDoc.Text = "Fix Document";
             toolStripButtonFixDoc.Click += toolStripButtonFixDoc_Click;
             // 
+            // toolStripButtonValidateXml
+            // 
+            toolStripButtonValidateXml.Enabled = false;
+            toolStripButtonValidateXml.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateXml.Image");
+            toolStripButtonValidateXml.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
+            toolStripButtonValidateXml.Size = new System.Drawing.Size(92, 22);
+            toolStripButtonValidateXml.Text = "Validate Xml";
+            toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
+            // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
@@ -454,16 +464,6 @@ namespace Office_File_Explorer
             toolStripButtonInsertIcon.Size = new System.Drawing.Size(23, 22);
             toolStripButtonInsertIcon.Text = "Insert Icon";
             toolStripButtonInsertIcon.Click += toolStripButtonInsertIcon_Click;
-            // 
-            // toolStripButtonValidateXml
-            // 
-            toolStripButtonValidateXml.Enabled = false;
-            toolStripButtonValidateXml.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateXml.Image");
-            toolStripButtonValidateXml.ImageTransparentColor = System.Drawing.Color.Magenta;
-            toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
-            toolStripButtonValidateXml.Size = new System.Drawing.Size(92, 22);
-            toolStripButtonValidateXml.Text = "Validate Xml";
-            toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
             // 
             // toolStripButtonGenerateCallback
             // 

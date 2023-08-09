@@ -23,10 +23,10 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Drawing;
 using System.Xml.Schema;
+using System.Xml.Linq;
 
 using File = System.IO.File;
 using Color = System.Drawing.Color;
-using System.Xml.Linq;
 
 namespace Office_File_Explorer
 {
@@ -352,153 +352,97 @@ namespace Office_File_Explorer
             }
         }
 
-        public void OpenOfficeDocFromMRU()
-        {
-            if (!File.Exists(toolStripStatusLabelFilePath.Text))
-            {
-                LogInformation(LogInfoType.InvalidFile, Strings.fileDoesNotExist, string.Empty);
-            }
-            else
-            {
-                rtbDisplay.Clear();
-
-                // if the file doesn't start with PK, we can stop trying to process it
-                if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
-                {
-                    DisplayInvalidFileFormatError();
-                    DisableUI();
-                    structuredStorageViewerToolStripMenuItem.Enabled = true;
-                }
-                else
-                {
-                    // if the file does start with PK, check if it fails in the SDK
-                    if (OpenWithSdk(toolStripStatusLabelFilePath.Text))
-                    {
-                        // set the file type
-                        toolStripStatusLabelDocType.Text = StrOfficeApp;
-
-                        // populate the parts
-                        PopulatePackageParts();
-
-                        // check if any zip items are corrupt
-                        if (Properties.Settings.Default.CheckZipItemCorrupt == true && toolStripStatusLabelDocType.Text == Strings.oAppWord)
-                        {
-                            if (Office.IsZippedFileCorrupt(toolStripStatusLabelFilePath.Text))
-                            {
-                                rtbDisplay.AppendText("Warning - One of the zipped items is corrupt.");
-                            }
-                        }
-
-                        // setup temp files
-                        TempFileSetup();
-
-                        // clear the previous doc if there was one
-                        tvFiles.Nodes.Clear();
-                        rtbDisplay.Clear();
-                        package?.Close();
-                        pkgParts?.Clear();
-
-                        LoadPartsIntoViewer();
-                    }
-                    else
-                    {
-                        // if it failed the SDK, disable all buttons except the fix corrupt doc button
-                        DisableUI();
-                        if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.docxFileExt))
-                        {
-                            toolStripButtonFixCorruptDoc.Enabled = true;
-                        }
-                    }
-                }
-            }
-        }
-
         /// <summary>
         /// majority of open file logic is here
         /// </summary>
-        public void OpenOfficeDocument()
+        public void OpenOfficeDocument(bool isFromMRU)
         {
             try
             {
                 Cursor = Cursors.WaitCursor;
-                OpenFileDialog fDialog = new OpenFileDialog
-                {
-                    Title = "Select Office Open Xml File.",
-                    Filter = "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm|" +
-                             "Binary Office Documents | *.doc; *.dot; *.xls; *.xlt; *.ppt; *.pot",
-                    RestoreDirectory = true,
-                    InitialDirectory = @"%userprofile%"
-                };
 
-                if (fDialog.ShowDialog() == DialogResult.OK)
+                if (!isFromMRU)
                 {
-                    toolStripStatusLabelFilePath.Text = fDialog.FileName.ToString();
-                    if (!File.Exists(toolStripStatusLabelFilePath.Text))
+                    OpenFileDialog fDialog = new OpenFileDialog
                     {
-                        LogInformation(LogInfoType.InvalidFile, Strings.fileDoesNotExist, string.Empty);
+                        Title = "Select Office Open Xml File.",
+                        Filter = "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm|" +
+                                 "Binary Office Documents | *.doc; *.dot; *.xls; *.xlt; *.ppt; *.pot",
+                        RestoreDirectory = true,
+                        InitialDirectory = @"%userprofile%"
+                    };
+
+                    if (fDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        toolStripStatusLabelFilePath.Text = fDialog.FileName.ToString();
                     }
                     else
                     {
-                        rtbDisplay.Clear();
-
-                        // if the file doesn't start with PK, we can stop trying to process it
-                        if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
-                        {
-                            DisplayInvalidFileFormatError();
-                            DisableUI();
-                            structuredStorageViewerToolStripMenuItem.Enabled = true;
-                        }
-                        else
-                        {
-                            // if the file does start with PK, check if it fails in the SDK
-                            if (OpenWithSdk(toolStripStatusLabelFilePath.Text))
-                            {
-                                // set the file type
-                                toolStripStatusLabelDocType.Text = StrOfficeApp;
-
-                                // populate the parts
-                                PopulatePackageParts();
-
-                                // check if any zip items are corrupt
-                                if (Properties.Settings.Default.CheckZipItemCorrupt == true && toolStripStatusLabelDocType.Text == Strings.oAppWord)
-                                {
-                                    if (Office.IsZippedFileCorrupt(toolStripStatusLabelFilePath.Text))
-                                    {
-                                        rtbDisplay.AppendText("Warning - One of the zipped items is corrupt.");
-                                    }
-                                }
-
-                                // setup temp files
-                                TempFileSetup();
-
-                                // clear the previous doc if there was one
-                                tvFiles.Nodes.Clear();
-                                rtbDisplay.Clear();
-                                package?.Close();
-                                pkgParts?.Clear();
-
-                                LoadPartsIntoViewer();
-                            }
-                            else
-                            {
-                                // if it failed the SDK, disable all buttons except the fix corrupt doc button
-                                DisableUI();
-                                if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.docxFileExt))
-                                {
-                                    toolStripButtonFixCorruptDoc.Enabled = true;
-                                }
-                            }
-                        }
+                        // user cancelled dialog, disable the UI and go back to the form
+                        DisableUI();
+                        DisableModifyUI();
+                        toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
+                        toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
+                        return;
                     }
+                }
+
+                if (!File.Exists(toolStripStatusLabelFilePath.Text))
+                {
+                    LogInformation(LogInfoType.InvalidFile, Strings.fileDoesNotExist, string.Empty);
                 }
                 else
                 {
-                    // user cancelled dialog, disable the UI and go back to the form
-                    DisableUI();
-                    DisableModifyUI();
-                    toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
-                    toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
-                    return;
+                    rtbDisplay.Clear();
+
+                    // if the file doesn't start with PK, we can stop trying to process it
+                    if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
+                    {
+                        DisplayInvalidFileFormatError();
+                        DisableUI();
+                        structuredStorageViewerToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        // if the file does start with PK, check if it fails in the SDK
+                        if (OpenWithSdk(toolStripStatusLabelFilePath.Text))
+                        {
+                            // set the file type
+                            toolStripStatusLabelDocType.Text = StrOfficeApp;
+
+                            // populate the parts
+                            PopulatePackageParts();
+
+                            // check if any zip items are corrupt
+                            if (Properties.Settings.Default.CheckZipItemCorrupt == true && toolStripStatusLabelDocType.Text == Strings.oAppWord)
+                            {
+                                if (Office.IsZippedFileCorrupt(toolStripStatusLabelFilePath.Text))
+                                {
+                                    rtbDisplay.AppendText("Warning - One of the zipped items is corrupt.");
+                                }
+                            }
+
+                            // setup temp files
+                            TempFileSetup();
+
+                            // clear the previous doc if there was one
+                            tvFiles.Nodes.Clear();
+                            rtbDisplay.Clear();
+                            package?.Close();
+                            pkgParts?.Clear();
+
+                            LoadPartsIntoViewer();
+                        }
+                        else
+                        {
+                            // if it failed the SDK, disable all buttons except the fix corrupt doc button
+                            DisableUI();
+                            if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.docxFileExt))
+                            {
+                                toolStripButtonFixCorruptDoc.Enabled = true;
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -944,7 +888,7 @@ namespace Office_File_Explorer
             structuredStorageViewerToolStripMenuItem.Enabled = false;
             EnableUI();
             EnableModifyUI();
-            OpenOfficeDocument();
+            OpenOfficeDocument(false);
 
             if (toolStripStatusLabelFilePath.Text != Strings.wHeadingBegin)
             {
@@ -1246,7 +1190,7 @@ namespace Office_File_Explorer
             switch (e.Severity)
             {
                 case XmlSeverityType.Error:
-                    MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message, 
+                    MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
                         "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     hasXmlError = true;
                     break;
@@ -1289,11 +1233,11 @@ namespace Office_File_Explorer
 
             foreach (PackagePart pp in pkgParts)
             {
-                if (pp.Uri.ToString() == Strings.CustomUI14PartRelType)
+                if (pp.Uri.ToString().EndsWith("customUI/customUI14.xml"))
                 {
                     return oPart = new OfficePart(pp, XMLParts.RibbonX14, Strings.CustomUI14PartRelType);
                 }
-                else if (pp.Uri.ToString() == Strings.CustomUIPartRelType)
+                else if (pp.Uri.ToString().EndsWith("customUI/customUI.xml"))
                 {
                     return oPart = new OfficePart(pp, XMLParts.RibbonX14, Strings.CustomUIPartRelType);
                 }
@@ -1353,7 +1297,7 @@ namespace Office_File_Explorer
                 structuredStorageViewerToolStripMenuItem.Enabled = false;
                 EnableUI();
                 EnableModifyUI();
-                OpenOfficeDocFromMRU();
+                OpenOfficeDocument(true);
             }
         }
 
@@ -1518,6 +1462,11 @@ namespace Office_File_Explorer
 
         private void toolStripButtonValidateXml_Click(object sender, EventArgs e)
         {
+            if (tvFiles.SelectedNode is null)
+            {
+                return;
+            }
+
             if (tvFiles.SelectedNode.Text.EndsWith("docMetadata/LabelInfo.xml"))
             {
                 ValidatePartXml();
@@ -1618,9 +1567,20 @@ namespace Office_File_Explorer
             {
                 XMLParts partType = XMLParts.RibbonX14;
                 OfficePart part = RetrieveCustomPart(partType);
+
+                TreeNode partNode = null;
+                foreach (TreeNode node in tvFiles.Nodes[0].Nodes)
+                {
+                    if (node.Text == part.Name)
+                    {
+                        partNode = node;
+                        break;
+                    }
+                }
+
                 tvFiles.SuspendLayout();
 
-                foreach (string fileName in (sender as OpenFileDialog).FileNames)
+                foreach (string fileName in fDialog.FileNames)
                 {
                     try
                     {
@@ -1640,7 +1600,7 @@ namespace Office_File_Explorer
                         imageNode.Tag = partType;
 
                         tvFiles.ImageList.Images.Add(imageNode.ImageKey, image);
-                        tvFiles.Nodes.Add(imageNode);
+                        tvFiles.Nodes[1].Nodes.Add(imageNode);
                     }
                     catch (Exception ex)
                     {
