@@ -46,10 +46,10 @@ namespace Office_File_Explorer.WinForms
             rdoDOM = new System.Windows.Forms.RadioButton();
             BtnOk = new System.Windows.Forms.Button();
             BtnCancel = new System.Windows.Forms.Button();
-            groupBox6 = new System.Windows.Forms.GroupBox();
-            rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
-            rdoUseSPGuid = new System.Windows.Forms.RadioButton();
             rdoUseCCGuid = new System.Windows.Forms.RadioButton();
+            rdoUseSPGuid = new System.Windows.Forms.RadioButton();
+            rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
+            groupBox6 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -65,7 +65,7 @@ namespace Office_File_Explorer.WinForms
             groupBox1.Controls.Add(ckbRemoveFallbackTags);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(287, 169);
+            groupBox1.Size = new System.Drawing.Size(235, 119);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Word Corrupt Document";
@@ -73,7 +73,7 @@ namespace Office_File_Explorer.WinForms
             // ckbDeleteOnlyCommentBookmarks
             // 
             ckbDeleteOnlyCommentBookmarks.AutoSize = true;
-            ckbDeleteOnlyCommentBookmarks.Location = new System.Drawing.Point(19, 91);
+            ckbDeleteOnlyCommentBookmarks.Location = new System.Drawing.Point(6, 91);
             ckbDeleteOnlyCommentBookmarks.Name = "ckbDeleteOnlyCommentBookmarks";
             ckbDeleteOnlyCommentBookmarks.Size = new System.Drawing.Size(224, 19);
             ckbDeleteOnlyCommentBookmarks.TabIndex = 4;
@@ -83,7 +83,7 @@ namespace Office_File_Explorer.WinForms
             // ckbFixGroupedShapes
             // 
             ckbFixGroupedShapes.AutoSize = true;
-            ckbFixGroupedShapes.Location = new System.Drawing.Point(19, 66);
+            ckbFixGroupedShapes.Location = new System.Drawing.Point(6, 66);
             ckbFixGroupedShapes.Name = "ckbFixGroupedShapes";
             ckbFixGroupedShapes.Size = new System.Drawing.Size(130, 19);
             ckbFixGroupedShapes.TabIndex = 2;
@@ -93,7 +93,7 @@ namespace Office_File_Explorer.WinForms
             // ckbListRsids
             // 
             ckbListRsids.AutoSize = true;
-            ckbListRsids.Location = new System.Drawing.Point(19, 44);
+            ckbListRsids.Location = new System.Drawing.Point(6, 41);
             ckbListRsids.Name = "ckbListRsids";
             ckbListRsids.Size = new System.Drawing.Size(159, 19);
             ckbListRsids.TabIndex = 1;
@@ -103,7 +103,7 @@ namespace Office_File_Explorer.WinForms
             // ckbRemoveFallbackTags
             // 
             ckbRemoveFallbackTags.AutoSize = true;
-            ckbRemoveFallbackTags.Location = new System.Drawing.Point(19, 19);
+            ckbRemoveFallbackTags.Location = new System.Drawing.Point(6, 19);
             ckbRemoveFallbackTags.Name = "ckbRemoveFallbackTags";
             ckbRemoveFallbackTags.Size = new System.Drawing.Size(158, 19);
             ckbRemoveFallbackTags.TabIndex = 0;
@@ -114,9 +114,9 @@ namespace Office_File_Explorer.WinForms
             // 
             groupBox2.Controls.Add(ckbRemoveCustDataTags);
             groupBox2.Controls.Add(ckbResetNotes);
-            groupBox2.Location = new System.Drawing.Point(305, 12);
+            groupBox2.Location = new System.Drawing.Point(253, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new System.Drawing.Size(238, 85);
+            groupBox2.Size = new System.Drawing.Size(238, 70);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "PowerPoint Options";
@@ -145,9 +145,9 @@ namespace Office_File_Explorer.WinForms
             // 
             groupBox3.Controls.Add(ckbZipItemCorrupt);
             groupBox3.Controls.Add(ckbDeleteOnExit);
-            groupBox3.Location = new System.Drawing.Point(305, 187);
+            groupBox3.Location = new System.Drawing.Point(253, 169);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new System.Drawing.Size(238, 100);
+            groupBox3.Size = new System.Drawing.Size(238, 75);
             groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "App Settings";
@@ -155,7 +155,7 @@ namespace Office_File_Explorer.WinForms
             // ckbZipItemCorrupt
             // 
             ckbZipItemCorrupt.AutoSize = true;
-            ckbZipItemCorrupt.Location = new System.Drawing.Point(19, 48);
+            ckbZipItemCorrupt.Location = new System.Drawing.Point(6, 50);
             ckbZipItemCorrupt.Name = "ckbZipItemCorrupt";
             ckbZipItemCorrupt.Size = new System.Drawing.Size(191, 19);
             ckbZipItemCorrupt.TabIndex = 3;
@@ -165,7 +165,7 @@ namespace Office_File_Explorer.WinForms
             // ckbDeleteOnExit
             // 
             ckbDeleteOnExit.AutoSize = true;
-            ckbDeleteOnExit.Location = new System.Drawing.Point(19, 22);
+            ckbDeleteOnExit.Location = new System.Drawing.Point(6, 22);
             ckbDeleteOnExit.Name = "ckbDeleteOnExit";
             ckbDeleteOnExit.Size = new System.Drawing.Size(167, 19);
             ckbDeleteOnExit.TabIndex = 0;
@@ -176,9 +176,9 @@ namespace Office_File_Explorer.WinForms
             // 
             groupBox4.Controls.Add(rdoSAX);
             groupBox4.Controls.Add(rdoDOM);
-            groupBox4.Location = new System.Drawing.Point(305, 103);
+            groupBox4.Location = new System.Drawing.Point(253, 88);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new System.Drawing.Size(238, 78);
+            groupBox4.Size = new System.Drawing.Size(238, 75);
             groupBox4.TabIndex = 0;
             groupBox4.TabStop = false;
             groupBox4.Text = "Excel Cell Value Option";
@@ -207,7 +207,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            BtnOk.Location = new System.Drawing.Point(387, 293);
+            BtnOk.Location = new System.Drawing.Point(336, 250);
             BtnOk.Name = "BtnOk";
             BtnOk.Size = new System.Drawing.Size(75, 23);
             BtnOk.TabIndex = 1;
@@ -217,47 +217,13 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            BtnCancel.Location = new System.Drawing.Point(468, 293);
+            BtnCancel.Location = new System.Drawing.Point(417, 250);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new System.Drawing.Size(75, 23);
             BtnCancel.TabIndex = 2;
             BtnCancel.Text = "Cancel";
             BtnCancel.UseVisualStyleBackColor = true;
             BtnCancel.Click += BtnCancel_Click;
-            // 
-            // groupBox6
-            // 
-            groupBox6.Controls.Add(rdoUserSelectedCC);
-            groupBox6.Controls.Add(rdoUseSPGuid);
-            groupBox6.Controls.Add(rdoUseCCGuid);
-            groupBox6.Location = new System.Drawing.Point(12, 187);
-            groupBox6.Name = "groupBox6";
-            groupBox6.Size = new System.Drawing.Size(287, 100);
-            groupBox6.TabIndex = 5;
-            groupBox6.TabStop = false;
-            groupBox6.Text = "Fix Content Control Prefix Mappings";
-            // 
-            // rdoUserSelectedCC
-            // 
-            rdoUserSelectedCC.AutoSize = true;
-            rdoUserSelectedCC.Location = new System.Drawing.Point(6, 72);
-            rdoUserSelectedCC.Name = "rdoUserSelectedCC";
-            rdoUserSelectedCC.Size = new System.Drawing.Size(214, 19);
-            rdoUserSelectedCC.TabIndex = 5;
-            rdoUserSelectedCC.TabStop = true;
-            rdoUserSelectedCC.Text = "Use User Selected Custom Xml Guid";
-            rdoUserSelectedCC.UseVisualStyleBackColor = true;
-            // 
-            // rdoUseSPGuid
-            // 
-            rdoUseSPGuid.AutoSize = true;
-            rdoUseSPGuid.Location = new System.Drawing.Point(6, 22);
-            rdoUseSPGuid.Name = "rdoUseSPGuid";
-            rdoUseSPGuid.Size = new System.Drawing.Size(201, 19);
-            rdoUseSPGuid.TabIndex = 3;
-            rdoUseSPGuid.TabStop = true;
-            rdoUseSPGuid.Text = "Use SharePoint Custom Xml Guid";
-            rdoUseSPGuid.UseVisualStyleBackColor = true;
             // 
             // rdoUseCCGuid
             // 
@@ -270,11 +236,45 @@ namespace Office_File_Explorer.WinForms
             rdoUseCCGuid.Text = "Use Content Control Guid";
             rdoUseCCGuid.UseVisualStyleBackColor = true;
             // 
+            // rdoUseSPGuid
+            // 
+            rdoUseSPGuid.AutoSize = true;
+            rdoUseSPGuid.Location = new System.Drawing.Point(6, 22);
+            rdoUseSPGuid.Name = "rdoUseSPGuid";
+            rdoUseSPGuid.Size = new System.Drawing.Size(201, 19);
+            rdoUseSPGuid.TabIndex = 3;
+            rdoUseSPGuid.TabStop = true;
+            rdoUseSPGuid.Text = "Use SharePoint Custom Xml Guid";
+            rdoUseSPGuid.UseVisualStyleBackColor = true;
+            // 
+            // rdoUserSelectedCC
+            // 
+            rdoUserSelectedCC.AutoSize = true;
+            rdoUserSelectedCC.Location = new System.Drawing.Point(6, 72);
+            rdoUserSelectedCC.Name = "rdoUserSelectedCC";
+            rdoUserSelectedCC.Size = new System.Drawing.Size(214, 19);
+            rdoUserSelectedCC.TabIndex = 5;
+            rdoUserSelectedCC.TabStop = true;
+            rdoUserSelectedCC.Text = "Use User Selected Custom Xml Guid";
+            rdoUserSelectedCC.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            groupBox6.Controls.Add(rdoUserSelectedCC);
+            groupBox6.Controls.Add(rdoUseSPGuid);
+            groupBox6.Controls.Add(rdoUseCCGuid);
+            groupBox6.Location = new System.Drawing.Point(12, 137);
+            groupBox6.Name = "groupBox6";
+            groupBox6.Size = new System.Drawing.Size(235, 107);
+            groupBox6.TabIndex = 5;
+            groupBox6.TabStop = false;
+            groupBox6.Text = "Fix Content Control Prefix Mappings";
+            // 
             // FrmSettings
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(546, 326);
+            ClientSize = new System.Drawing.Size(503, 291);
             Controls.Add(groupBox6);
             Controls.Add(BtnCancel);
             Controls.Add(BtnOk);
@@ -321,10 +321,10 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoDOM;
         private System.Windows.Forms.CheckBox ckbZipItemCorrupt;
         private System.Windows.Forms.CheckBox ckbDeleteOnlyCommentBookmarks;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.RadioButton rdoUseCCGuid;
-        private System.Windows.Forms.RadioButton rdoUserSelectedCC;
-        private System.Windows.Forms.RadioButton rdoUseSPGuid;
         private System.Windows.Forms.CheckBox ckbRemoveCustDataTags;
+        private System.Windows.Forms.RadioButton rdoUseCCGuid;
+        private System.Windows.Forms.RadioButton rdoUseSPGuid;
+        private System.Windows.Forms.RadioButton rdoUserSelectedCC;
+        private System.Windows.Forms.GroupBox groupBox6;
     }
 }

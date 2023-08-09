@@ -18,7 +18,7 @@
     <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
     <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
     <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing"">Blue</data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
     <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
         <value>[base64 mime encoded serialized .NET Framework object]</value>
     </data>
@@ -121,6 +121,18 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="toolStripMenuItemMRU.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA69AAAOvQFH+5CtAAABIUlE
+        QVQ4T2MYBCBm5wqG2J37UXDMzq0MUTsNoCoIALCmdcIoOGqnHUPM7q0YBsMwyFI4AAuiGUAQA/XAAT4D
+        3FskGVS9NBlUPLRQcODCo0CdkkAsCDEgdK4og5qPBoZCr6kxDDG7PjHE7vqPFUdvOwIxwG+aOkPsjtcY
+        CkCao/eGMcQelkPBMTuCGcLWFDPEbNsCdcHqPIaorXswFOLCIAOiNq9hiNycDzEgassehsitRVgVY8Mg
+        A2K2PWWI3KTBwBC9cxcwWj4xROzVxqoYGwbZHLPzGTgSgE4HJpote7EqxIWjts5liNi8FGJA9PaLDGHr
+        y7AqxIWjtp9iCF6ZBDPgDkboE8LRQC+7dMhBDGBgEAZiUKIgBUsAMTMQUwoYGACZcvyE5QwP5gAAAABJ
+        RU5ErkJggg==
+</value>
+  </data>
   <data name="editToolStripMenuItemRemoveCustomDocProps.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
@@ -264,6 +276,27 @@
         AAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="toolStripButtonFind.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADrSURBVDhPYxh8QFFR8QEQ/0fDD7DIgcUwAEhSTk5OEhmD
+        xNDlYGIYgBoG4PMCYQPAIHcbO0Pobn4oDw4IGxByjJMhescihtBdf8E4Ztc2hvj9ElBZdNdhCcSYHVMZ
+        YnftYojdbcgQvd2IIWb3HjCfaBCz6y1YY/R2STCO32nMELvpH9BAYagKAiB210usBkRv44OqIABid0wB
+        OxtkCFjzrr0MsTvXQGUJgLgdZgyx214AvbEA7JXYXV+A9FyGpA28UBV4QMwOK4boXa+A2A8qQgKI3W0D
+        sXmHK1SERBC7s5QhZqcTlEciYGAAAH0xfkggow3+AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="toolStripButtonReplace.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAESSURBVDhPrZBdaoNAFIWn61DwbwftmzagCygN+PPShCI4
+        e+sK2sQ+dANdQqEPUp3RRdzeO5kMU4Qkhh44XOd4z4cjW6ogCEA/XqdFAM/z1o7jCCz9HIs06azzB7Wo
+        tGlf0J/GKNd1ZRRFcRiG9zbAygbKDtq2wJ73d8aM3RBAL65sgJX1VOTs6e1WAQ6T0yLJ9/1HWsL5ZQPQ
+        35Sj8Qqb3ZptX4UC0KTzYilIK2kidYU/7x3nxynr5nWaATCge11kvT8HcM5hmiYQQgCJsrquYRgG5SzL
+        TgOonOc5lGVpAFQsigLiOD7/BeM4qnJVVX8AlCVJch7QNA1IKaHrOgM4XqHve0jT1ABmoheXWlf+S4z9
+        AvxC4Wqqr9YRAAAAAElFTkSuQmCC
+</value>
+  </data>
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>412, 17</value>
   </metadata>
@@ -275,7 +308,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAEZTeXN0ZW0uV2luZG93cy5Gb3JtcywgQ3VsdHVyZT1uZXV0cmFs
         LCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAAmU3lzdGVtLldpbmRvd3MuRm9ybXMu
         SW1hZ2VMaXN0U3RyZWFtZXIBAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAlg8AAAJNU0Z0AUkBTAIBAQgB
-        AAHQAQAB0AEAARABAAEQAQAE/wEJAQAI/wFCAU0BNgEEBgABNgEEAgABKAMAAUADAAEwAwABAQEAAQgG
+        AAEIAQEBCAEBARABAAEQAQAE/wEJAQAI/wFCAU0BNgEEBgABNgEEAgABKAMAAUADAAEwAwABAQEAAQgG
         AAEMGAABgAIAAYADAAKAAQABgAMAAYABAAGAAQACgAIAA8ABAAHAAdwBwAEAAfABygGmAQABMwUAATMB
         AAEzAQABMwEAAjMCAAMWAQADHAEAAyIBAAMpAQADVQEAA00BAANCAQADOQEAAYABfAH/AQACUAH/AQAB
         kwEAAdYBAAH/AewBzAEAAcYB1gHvAQAB1gLnAQABkAGpAa0CAAH/ATMDAAFmAwABmQMAAcwCAAEzAwAC

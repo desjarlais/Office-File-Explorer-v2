@@ -95,6 +95,8 @@ namespace Office_File_Explorer
             {
                 File.Create(Strings.fLogFilePath);
             }
+
+            UpdateMRU();
         }
 
         #region Class Properties
@@ -116,6 +118,57 @@ namespace Office_File_Explorer
         #endregion
 
         #region Functions
+
+        public void UpdateMRU()
+        {
+            try
+            {
+                int index = 1;
+                foreach (var f in Properties.Settings.Default.FileMRU)
+                {
+                    switch (index)
+                    {
+                        case 1: mruToolStripMenuItem1.Text = f.ToString(); break;
+                        case 2: mruToolStripMenuItem2.Text = f.ToString(); break;
+                        case 3: mruToolStripMenuItem3.Text = f.ToString(); break;
+                        case 4: mruToolStripMenuItem4.Text = f.ToString(); break;
+                        case 5: mruToolStripMenuItem5.Text = f.ToString(); break;
+                        case 6: mruToolStripMenuItem6.Text = f.ToString(); break;
+                        case 7: mruToolStripMenuItem7.Text = f.ToString(); break;
+                        case 8: mruToolStripMenuItem8.Text = f.ToString(); break;
+                        case 9: mruToolStripMenuItem9.Text = f.ToString(); break;
+                    }
+                    index++;
+                }
+            }
+            catch (Exception ex)
+            {
+                // log the error and do not update mru
+                LogInformation(LogInfoType.LogException, "UpdateMRU Error: ", ex.Message);
+            }
+        }
+
+        public void AddFileToMRU()
+        {
+            bool isFileInMru = false;
+            foreach (var f in Properties.Settings.Default.FileMRU)
+            {
+                if (f.ToString() == toolStripStatusLabelFilePath.Text)
+                {
+                    isFileInMru = true;
+                }
+            }
+
+            if (!isFileInMru)
+            {
+                Properties.Settings.Default.FileMRU.Add(toolStripStatusLabelFilePath.Text);
+                if (Properties.Settings.Default.FileMRU.Count > 9)
+                {
+                    Properties.Settings.Default.FileMRU.RemoveAt(0);
+                }
+                UpdateMRU();
+            }
+        }
 
         /// <summary>
         /// tempFileReadOnly is used for the View Contents feature
@@ -245,6 +298,116 @@ namespace Office_File_Explorer
             rtbDisplay.AppendText(" - file encrypted");
             rtbDisplay.AppendText(" - file password protected");
             rtbDisplay.AppendText(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)");
+        }
+
+        public void MoveCursorToLocation(int startLocation, int length)
+        {
+            rtbDisplay.SelectionStart = startLocation;
+            rtbDisplay.SelectionLength = length;
+        }
+
+        public void FindText()
+        {
+            if (toolStripTextBoxFind.Text == string.Empty)
+            {
+                return;
+            }
+            else
+            {
+                rtbDisplay.Focus();
+
+                // if the cursor is at the end of the textbox, change start position to 0
+                if (rtbDisplay.SelectionStart == rtbDisplay.Text.Length)
+                {
+                    MoveCursorToLocation(0, 0);
+                }
+
+                try
+                {
+                    int indexToText;
+                    indexToText = rtbDisplay.Find(toolStripTextBoxFind.Text, rtbDisplay.SelectionStart + 1, RichTextBoxFinds.None);
+                    if (indexToText >= 0)
+                    {
+                        MoveCursorToLocation(indexToText, toolStripTextBoxFind.Text.Length);
+                    }
+
+                    // end of the document, restart at the beginning
+                    if (indexToText == -1)
+                    {
+                        // only move if something was found
+                        if (rtbDisplay.SelectionStart != 0)
+                        {
+                            MoveCursorToLocation(0, 0);
+                            FindText();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogInformation(LogInfoType.LogException, "FindText Error", ex.Message);
+                }
+            }
+        }
+
+        public void OpenOfficeDocFromMRU()
+        {
+            if (!File.Exists(toolStripStatusLabelFilePath.Text))
+            {
+                LogInformation(LogInfoType.InvalidFile, Strings.fileDoesNotExist, string.Empty);
+            }
+            else
+            {
+                rtbDisplay.Clear();
+
+                // if the file doesn't start with PK, we can stop trying to process it
+                if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
+                {
+                    DisplayInvalidFileFormatError();
+                    DisableUI();
+                    structuredStorageViewerToolStripMenuItem.Enabled = true;
+                }
+                else
+                {
+                    // if the file does start with PK, check if it fails in the SDK
+                    if (OpenWithSdk(toolStripStatusLabelFilePath.Text))
+                    {
+                        // set the file type
+                        toolStripStatusLabelDocType.Text = StrOfficeApp;
+
+                        // populate the parts
+                        PopulatePackageParts();
+
+                        // check if any zip items are corrupt
+                        if (Properties.Settings.Default.CheckZipItemCorrupt == true && toolStripStatusLabelDocType.Text == Strings.oAppWord)
+                        {
+                            if (Office.IsZippedFileCorrupt(toolStripStatusLabelFilePath.Text))
+                            {
+                                rtbDisplay.AppendText("Warning - One of the zipped items is corrupt.");
+                            }
+                        }
+
+                        // setup temp files
+                        TempFileSetup();
+
+                        // clear the previous doc if there was one
+                        tvFiles.Nodes.Clear();
+                        rtbDisplay.Clear();
+                        package?.Close();
+                        pkgParts?.Clear();
+
+                        LoadPartsIntoViewer();
+                    }
+                    else
+                    {
+                        // if it failed the SDK, disable all buttons except the fix corrupt doc button
+                        DisableUI();
+                        if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.docxFileExt))
+                        {
+                            toolStripButtonFixCorruptDoc.Enabled = true;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -780,6 +943,11 @@ namespace Office_File_Explorer
             EnableModifyUI();
             OpenOfficeDocument();
 
+            if (toolStripStatusLabelFilePath.Text != Strings.wHeadingBegin)
+            {
+                AddFileToMRU();
+            }
+
             if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
             {
                 excelSheetViewerToolStripMenuItem.Enabled = true;
@@ -1109,6 +1277,51 @@ namespace Office_File_Explorer
             return part;
         }
 
+        public void OpenRecentFile(string path)
+        {
+            if (path == string.Empty || path == "empty")
+            {
+                return;
+            }
+            else
+            {
+                toolStripStatusLabelFilePath.Text = path;
+                structuredStorageViewerToolStripMenuItem.Enabled = false;
+                EnableUI();
+                EnableModifyUI();
+                OpenOfficeDocFromMRU();
+            }
+        }
+
+        public void ReplaceText()
+        {
+            FrmSearchReplace srForm = new FrmSearchReplace()
+            {
+                Owner = this
+            };
+            srForm.ShowDialog();
+
+            if (string.IsNullOrEmpty(findText) && string.IsNullOrEmpty(replaceText))
+            {
+                return;
+            }
+
+            rtbDisplay.SelectedText = rtbDisplay.SelectedText.Replace(findText, replaceText);
+        }
+
+        public void ClearRecentMenuItems()
+        {
+            mruToolStripMenuItem1.Text = Strings.wEmpty;
+            mruToolStripMenuItem2.Text = Strings.wEmpty;
+            mruToolStripMenuItem3.Text = Strings.wEmpty;
+            mruToolStripMenuItem4.Text = Strings.wEmpty;
+            mruToolStripMenuItem5.Text = Strings.wEmpty;
+            mruToolStripMenuItem6.Text = Strings.wEmpty;
+            mruToolStripMenuItem7.Text = Strings.wEmpty;
+            mruToolStripMenuItem8.Text = Strings.wEmpty;
+            mruToolStripMenuItem9.Text = Strings.wEmpty;
+        }
+
         private void tvFiles_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
@@ -1403,7 +1616,7 @@ namespace Office_File_Explorer
             DisableModifyUI();
 
             // if the part is modified, save changes and refresh the treeview
-            if (isModified) 
+            if (isModified)
             {
                 package.Flush();
                 package.Close();
@@ -2516,6 +2729,70 @@ namespace Office_File_Explorer
         private void fileToolStripMenuItemClose_Click(object sender, EventArgs e)
         {
             FileClose();
+        }
+
+        private void toolStripButtonFind_Click(object sender, EventArgs e)
+        {
+            if (rtbDisplay.Text.Length > 0)
+            {
+                FindText();
+            }
+        }
+
+        private void mruToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void toolStripButtonReplace_Click(object sender, EventArgs e)
+        {
+            ReplaceText();
+            LogInformation(LogInfoType.ClearAndAdd, "** Search and Replace Finished **", string.Empty);
+        }
+
+        private void mruToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void mruToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void mruToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void mruToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void mruToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void mruToolStripMenuItem7_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void mruToolStripMenuItem8_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void mruToolStripMenuItem9_Click(object sender, EventArgs e)
+        {
+            if (sender is not null) { OpenRecentFile(sender.ToString()!); }
+        }
+
+        private void openErrorLogToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            AppUtilities.PlatformSpecificProcessStart(Strings.fLogFilePath);
         }
 
         #endregion
