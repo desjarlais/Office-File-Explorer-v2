@@ -26,6 +26,7 @@ using System.Xml.Schema;
 
 using File = System.IO.File;
 using Color = System.Drawing.Color;
+using System.Xml.Linq;
 
 namespace Office_File_Explorer
 {
@@ -223,6 +224,7 @@ namespace Office_File_Explorer
             editToolStripMenuItemRemoveCustomXml.Enabled = false;
             excelSheetViewerToolStripMenuItem.Enabled = false;
             toolStripButtonModify.Enabled = false;
+            toolStripButtonValidateXml.Enabled = false;
 
             if (package is null)
             {
@@ -244,6 +246,7 @@ namespace Office_File_Explorer
             toolStripButtonModify.Enabled = true;
             fileToolStripMenuItemClose.Enabled = true;
             toolStripButtonModify.Enabled = true;
+            toolStripButtonValidateXml.Enabled = true;
         }
 
         public void CopyAllItems()
@@ -1092,7 +1095,6 @@ namespace Office_File_Explorer
         public void EnableCustomUIIcons()
         {
             toolStripButtonGenerateCallback.Enabled = true;
-            toolStripButtonValidateXml.Enabled = true;
             toolStripDropDownButtonInsert.Enabled = true;
             //toolStripButtonInsertIcon.Enabled = true;
         }
@@ -1102,7 +1104,6 @@ namespace Office_File_Explorer
             toolStripDropDownButtonInsert.Enabled = false;
             toolStripButtonSave.Enabled = false;
             toolStripButtonGenerateCallback.Enabled = false;
-            toolStripButtonValidateXml.Enabled = false;
             //toolStripButtonInsertIcon.Enabled = false;
         }
 
@@ -1120,6 +1121,47 @@ namespace Office_File_Explorer
             else if (args.Severity == XmlSeverityType.Error)
             {
                 Console.Write("ERROR: ");
+            }
+        }
+
+        public void ValidatePartXml()
+        {
+            hasXmlError = false;
+
+            if (rtbDisplay.Text == null || rtbDisplay.Text.Length == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
+                XmlSchemaSet schema = new XmlSchemaSet();
+                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdMarkup)));
+
+                var settings = new XmlReaderSettings();
+                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdMarkup)));
+                settings.ValidationType = ValidationType.Schema;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
+
+                using (TextReader textReader = new StringReader(rtbDisplay.Text))
+                {
+                    XmlReader rd = XmlReader.Create(textReader, settings);
+                    XDocument doc = XDocument.Load(rd);
+                    doc.Validate(schema, eventHandler);
+                }
+            }
+            catch (Exception ex)
+            {
+                // if there were xml validation errors, display a message with those details
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+            }
+
+            if (!hasXmlError)
+            {
+                MessageBox.Show("Xml Valid", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1192,6 +1234,28 @@ namespace Office_File_Explorer
             }
             MessageBox.Show(this, e.Message, e.Severity.ToString(), MessageBoxButtons.OK,
                 (e.Severity == XmlSeverityType.Error ? MessageBoxIcon.Error : MessageBoxIcon.Warning));
+        }
+
+        /// <summary>
+        /// display schema validation errors
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            switch (e.Severity)
+            {
+                case XmlSeverityType.Error:
+                    MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message, 
+                        "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    hasXmlError = true;
+                    break;
+                case XmlSeverityType.Warning:
+                    MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
+                        "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    hasXmlError = true;
+                    break;
+            }
         }
 
         private void AddPart(XMLParts partType)
@@ -1454,7 +1518,14 @@ namespace Office_File_Explorer
 
         private void toolStripButtonValidateXml_Click(object sender, EventArgs e)
         {
-            ValidateXml(true);
+            if (tvFiles.SelectedNode.Text.EndsWith("docMetadata/LabelInfo.xml"))
+            {
+                ValidatePartXml();
+            }
+            else if (tvFiles.SelectedNode.Text.EndsWith("customUI/customUI14.xml") || tvFiles.SelectedNode.Text.EndsWith("customUI/customUI.xml"))
+            {
+                ValidateXml(true);
+            }
         }
 
         private void toolStripButtonGenerateCallback_Click(object sender, EventArgs e)

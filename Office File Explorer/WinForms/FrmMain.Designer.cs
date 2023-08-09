@@ -379,7 +379,7 @@ namespace Office_File_Explorer
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonValidateXml, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripSeparator3, toolStripLabel1, toolStripTextBoxFind, toolStripButtonFind, toolStripButtonReplace, toolStripSeparator4 });
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripButtonValidateXml, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripSeparator3, toolStripLabel1, toolStripTextBoxFind, toolStripButtonFind, toolStripButtonReplace, toolStripSeparator4 });
             toolStrip1.Location = new System.Drawing.Point(0, 24);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new System.Drawing.Size(924, 25);
@@ -388,34 +388,31 @@ namespace Office_File_Explorer
             // 
             // toolStripButtonViewContents
             // 
-            toolStripButtonViewContents.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             toolStripButtonViewContents.Enabled = false;
             toolStripButtonViewContents.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonViewContents.Image");
             toolStripButtonViewContents.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonViewContents.Name = "toolStripButtonViewContents";
-            toolStripButtonViewContents.Size = new System.Drawing.Size(87, 22);
+            toolStripButtonViewContents.Size = new System.Drawing.Size(103, 22);
             toolStripButtonViewContents.Text = "View Contents";
             toolStripButtonViewContents.Click += toolStripButtonViewContents_Click;
             // 
             // toolStripButtonFixCorruptDoc
             // 
-            toolStripButtonFixCorruptDoc.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             toolStripButtonFixCorruptDoc.Enabled = false;
             toolStripButtonFixCorruptDoc.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonFixCorruptDoc.Image");
             toolStripButtonFixCorruptDoc.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonFixCorruptDoc.Name = "toolStripButtonFixCorruptDoc";
-            toolStripButtonFixCorruptDoc.Size = new System.Drawing.Size(129, 22);
+            toolStripButtonFixCorruptDoc.Size = new System.Drawing.Size(145, 22);
             toolStripButtonFixCorruptDoc.Text = "Fix Corrupt Document";
             toolStripButtonFixCorruptDoc.Click += toolStripButtonFixCorruptDoc_Click;
             // 
             // toolStripButtonFixDoc
             // 
-            toolStripButtonFixDoc.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             toolStripButtonFixDoc.Enabled = false;
             toolStripButtonFixDoc.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonFixDoc.Image");
             toolStripButtonFixDoc.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonFixDoc.Name = "toolStripButtonFixDoc";
-            toolStripButtonFixDoc.Size = new System.Drawing.Size(85, 22);
+            toolStripButtonFixDoc.Size = new System.Drawing.Size(101, 22);
             toolStripButtonFixDoc.Text = "Fix Document";
             toolStripButtonFixDoc.Click += toolStripButtonFixDoc_Click;
             // 
@@ -460,12 +457,11 @@ namespace Office_File_Explorer
             // 
             // toolStripButtonValidateXml
             // 
-            toolStripButtonValidateXml.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             toolStripButtonValidateXml.Enabled = false;
             toolStripButtonValidateXml.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateXml.Image");
             toolStripButtonValidateXml.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
-            toolStripButtonValidateXml.Size = new System.Drawing.Size(23, 22);
+            toolStripButtonValidateXml.Size = new System.Drawing.Size(92, 22);
             toolStripButtonValidateXml.Text = "Validate Xml";
             toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
             // 
