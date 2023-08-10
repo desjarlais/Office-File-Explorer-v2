@@ -1027,6 +1027,7 @@ namespace Office_File_Explorer
             rtbDisplay.ReadOnly = false;
             rtbDisplay.BackColor = SystemColors.Window;
             toolStripButtonSave.Enabled = true;
+            toolStripDropDownButtonInsert.Enabled = true;
         }
 
         public void DisableModifyUI()
@@ -1034,13 +1035,14 @@ namespace Office_File_Explorer
             rtbDisplay.ReadOnly = true;
             rtbDisplay.BackColor = SystemColors.Control;
             toolStripButtonSave.Enabled = false;
+            toolStripDropDownButtonInsert.Enabled = false;
         }
 
         public void EnableCustomUIIcons()
         {
             toolStripButtonGenerateCallback.Enabled = true;
             toolStripDropDownButtonInsert.Enabled = true;
-            //toolStripButtonInsertIcon.Enabled = true;
+            toolStripButtonInsertIcon.Enabled = true;
         }
 
         public void DisableCustomUIIcons()
@@ -1048,7 +1050,7 @@ namespace Office_File_Explorer
             toolStripDropDownButtonInsert.Enabled = false;
             toolStripButtonSave.Enabled = false;
             toolStripButtonGenerateCallback.Enabled = false;
-            //toolStripButtonInsertIcon.Enabled = false;
+            toolStripButtonInsertIcon.Enabled = false;
         }
 
         private void ShowError(string errorText)
@@ -1285,6 +1287,10 @@ namespace Office_File_Explorer
             return part;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
         public void OpenRecentFile(string path)
         {
             if (path == string.Empty || path == "empty")
@@ -1301,6 +1307,9 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ReplaceText()
         {
             FrmSearchReplace srForm = new FrmSearchReplace()
@@ -1361,13 +1370,30 @@ namespace Office_File_Explorer
                                 XmlDocument doc = new XmlDocument();
                                 doc.LoadXml(contents);
                                 StringBuilder sb = new StringBuilder();
-                                XmlWriterSettings settings = new XmlWriterSettings
+                                XmlWriterSettings settings;
+
+                                if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
                                 {
-                                    Indent = true,
-                                    IndentChars = "  ",
-                                    NewLineChars = "\r\n",
-                                    NewLineHandling = NewLineHandling.Replace
-                                };
+                                    settings = new XmlWriterSettings
+                                    {
+                                        OmitXmlDeclaration = true,
+                                        Indent = true,
+                                        IndentChars = "  ",
+                                        NewLineChars = "\r\n",
+                                        NewLineHandling = NewLineHandling.Replace
+                                    };
+                                }
+                                else
+                                {
+                                    settings = new XmlWriterSettings
+                                    {
+                                        Indent = true,
+                                        IndentChars = "  ",
+                                        NewLineChars = "\r\n",
+                                        NewLineHandling = NewLineHandling.Replace
+                                    };
+                                }
+
                                 using (XmlWriter writer = XmlWriter.Create(sb, settings))
                                 {
                                     doc.Save(writer);
@@ -1600,7 +1626,7 @@ namespace Office_File_Explorer
                         imageNode.Tag = partType;
 
                         tvFiles.ImageList.Images.Add(imageNode.ImageKey, image);
-                        tvFiles.Nodes[1].Nodes.Add(imageNode);
+                        tvFiles.SelectedNode.Nodes.Add(imageNode);
                     }
                     catch (Exception ex)
                     {
