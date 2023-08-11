@@ -1216,6 +1216,14 @@ namespace Office_File_Explorer
             rtbDisplay.Text = string.Empty;
             tvFiles.SelectedNode = partNode;
             tvFiles.ResumeLayout();
+
+            // refresh the treeview
+            string prevPath = toolStripStatusLabelFilePath.Text;
+            FileClose();
+            toolStripStatusLabelFilePath.Text = prevPath;
+            LoadPartsIntoViewer();
+            toolStripButtonModify.Enabled = true;
+            fileToolStripMenuItemClose.Enabled = true;
         }
 
         private TreeNode ConstructPartNode(OfficePart part)
@@ -1288,7 +1296,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// 
+        /// open the selected file from the MRU
         /// </summary>
         /// <param name="path"></param>
         public void OpenRecentFile(string path)
@@ -1308,7 +1316,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// 
+        /// used for the richtextbox to find/replace
         /// </summary>
         public void ReplaceText()
         {
@@ -1401,30 +1409,7 @@ namespace Office_File_Explorer
 
                                 tvFiles.SuspendLayout();
                                 rtbDisplay.Text = sb.ToString();
-
-                                // format the xml colors
-                                string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)" + @"(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
-                                foreach (Match m in Regex.Matches(rtbDisplay.Text, pattern))
-                                {
-                                    rtbDisplay.Select(m.Index, m.Length);
-                                    rtbDisplay.SelectionColor = Color.Blue;
-
-                                    var tagName = m.Groups["tagName"].Value;
-                                    rtbDisplay.Select(m.Groups["tagName"].Index, m.Groups["tagName"].Length);
-                                    rtbDisplay.SelectionColor = Color.DarkRed;
-
-                                    var attGroup = m.Groups["attName"];
-                                    if (attGroup is not null)
-                                    {
-                                        var atts = attGroup.Captures;
-                                        for (int i = 0; i < atts.Count; i++)
-                                        {
-                                            rtbDisplay.Select(atts[i].Index, atts[i].Length);
-                                            rtbDisplay.SelectionColor = Color.Red;
-                                        }
-                                    }
-                                }
-
+                                FormatXmlColors();
                                 tvFiles.ResumeLayout();
                                 return;
                             }
@@ -1483,6 +1468,32 @@ namespace Office_File_Explorer
             finally
             {
                 Cursor = Cursors.Default;
+            }
+        }
+
+        public void FormatXmlColors()
+        {
+            // format the xml colors
+            string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)" + @"(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
+            foreach (Match m in Regex.Matches(rtbDisplay.Text, pattern))
+            {
+                rtbDisplay.Select(m.Index, m.Length);
+                rtbDisplay.SelectionColor = Color.Blue;
+
+                var tagName = m.Groups["tagName"].Value;
+                rtbDisplay.Select(m.Groups["tagName"].Index, m.Groups["tagName"].Length);
+                rtbDisplay.SelectionColor = Color.DarkRed;
+
+                var attGroup = m.Groups["attName"];
+                if (attGroup is not null)
+                {
+                    var atts = attGroup.Captures;
+                    for (int i = 0; i < atts.Count; i++)
+                    {
+                        rtbDisplay.Select(atts[i].Index, atts[i].Length);
+                        rtbDisplay.SelectionColor = Color.Red;
+                    }
+                }
             }
         }
 
@@ -1547,36 +1558,44 @@ namespace Office_File_Explorer
         private void office2010CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddPart(XMLParts.RibbonX14);
+            rtbDisplay.Text = string.Empty;
+
         }
 
         private void office2007CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddPart(XMLParts.RibbonX12);
+            rtbDisplay.Text = string.Empty;
         }
 
         private void customOutspaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlCustomOutspace;
+            FormatXmlColors();
         }
 
         private void customTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlCustomTab;
+            FormatXmlColors();
         }
 
         private void excelCustomTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlExcelCustomTab;
+            FormatXmlColors();
         }
 
         private void repurposeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlRepurpose;
+            FormatXmlColors();
         }
 
         private void wordGroupOnInsertTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlWordGroupInsertTab;
+            FormatXmlColors();
         }
 
         private void toolStripButtonInsertIcon_Click(object sender, EventArgs e)
