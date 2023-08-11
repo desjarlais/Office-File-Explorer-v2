@@ -455,6 +455,9 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// load the doc parts into the treeview
+        /// </summary>
         public void LoadPartsIntoViewer()
         {
             // populate the treeview
@@ -610,7 +613,8 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// add each package part to a global list
+        /// add package part details to a global list
+        /// basically this is only used for the View Contents button
         /// </summary>
         public void PopulatePackageParts()
         {
@@ -629,7 +633,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// open a file in the SDK, any failure means it is not a valid docx
+        /// open a file in the SDK, any failure means it is not a valid open xml file
         /// </summary>
         /// <param name="file">the path to the initial fix attempt</param>
         public bool OpenWithSdk(string file)
@@ -703,7 +707,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// output content to the listbox
+        /// output content to the textbox
         /// </summary>
         /// <param name="output">the list of content to display</param>
         /// <param name="type">the type of content to display</param>
@@ -1070,6 +1074,9 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// validate the labelinfo.xml file
+        /// </summary>
         public void ValidatePartXml()
         {
             hasXmlError = false;
@@ -1112,7 +1119,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// use the schema to validate the xml
+        /// validate customui.xml
         /// </summary>
         /// <param name="showValidMessage"></param>
         /// <returns></returns>
@@ -1411,6 +1418,7 @@ namespace Office_File_Explorer
                                 rtbDisplay.Text = sb.ToString();
                                 FormatXmlColors();
                                 tvFiles.ResumeLayout();
+                                ScrollToTopOfRtb();
                                 return;
                             }
                         }
@@ -1471,9 +1479,17 @@ namespace Office_File_Explorer
             }
         }
 
+        public void ScrollToTopOfRtb()
+        {
+            rtbDisplay.SelectionStart = 0;
+            rtbDisplay.ScrollToCaret();
+        }
+
+        /// <summary>
+        /// format the xml tags with different colors to make it easier to read
+        /// </summary>
         public void FormatXmlColors()
         {
-            // format the xml colors
             string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)" + @"(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
             foreach (Match m in Regex.Matches(rtbDisplay.Text, pattern))
             {

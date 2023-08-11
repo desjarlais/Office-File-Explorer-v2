@@ -2148,12 +2148,18 @@ namespace Office_File_Explorer.Helpers
                 foreach (var cc in doc.ContentControls())
                 {
                     string ccType = string.Empty;
+                    string dataBinding = string.Empty;
                     bool PropFound = false;
                     SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
 
                     // loop the properties and get the type
                     foreach (OpenXmlElement oxe in props.ChildElements)
                     {
+                        if (oxe.LocalName == "dataBinding")
+                        {
+                            dataBinding = oxe.OuterXml;
+                        }
+
                         if (oxe.GetType().Name == "SdtContentText")
                         {
                             ccType = "Plain Text";
@@ -2207,11 +2213,11 @@ namespace Office_File_Explorer.Helpers
                     count++;
                     if (PropFound == true)
                     {
-                        ccList.Add(count + Strings.wPeriod + ccType);
+                        ccList.Add(count + Strings.wPeriod + ccType + " " + dataBinding);
                     }
                     else
                     {
-                        ccList.Add(count + Strings.wPeriod + "Rich Text");
+                        ccList.Add(count + Strings.wPeriod + "Rich Text " + dataBinding);
                     }
                 }
             }

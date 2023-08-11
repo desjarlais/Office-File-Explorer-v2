@@ -115,7 +115,7 @@ namespace Office_File_Explorer
             mnuMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
             mnuMainMenu.Location = new System.Drawing.Point(0, 0);
             mnuMainMenu.Name = "mnuMainMenu";
-            mnuMainMenu.Size = new System.Drawing.Size(924, 24);
+            mnuMainMenu.Size = new System.Drawing.Size(955, 24);
             mnuMainMenu.TabIndex = 0;
             mnuMainMenu.Text = "menuStrip1";
             // 
@@ -382,7 +382,7 @@ namespace Office_File_Explorer
             toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripButtonValidateXml, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripSeparator3, toolStripLabel1, toolStripTextBoxFind, toolStripButtonFind, toolStripButtonReplace, toolStripSeparator4 });
             toolStrip1.Location = new System.Drawing.Point(0, 24);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new System.Drawing.Size(924, 25);
+            toolStrip1.Size = new System.Drawing.Size(955, 25);
             toolStrip1.TabIndex = 3;
             toolStrip1.Text = "toolStrip1";
             // 
@@ -593,9 +593,9 @@ namespace Office_File_Explorer
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusLabel3, toolStripStatusLabelDocType, toolStripStatusLabel1, toolStripStatusLabelFilePath });
-            statusStrip1.Location = new System.Drawing.Point(0, 541);
+            statusStrip1.Location = new System.Drawing.Point(0, 555);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new System.Drawing.Size(924, 22);
+            statusStrip1.Size = new System.Drawing.Size(955, 22);
             statusStrip1.TabIndex = 4;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -636,8 +636,8 @@ namespace Office_File_Explorer
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(rtbDisplay);
-            splitContainer1.Size = new System.Drawing.Size(924, 492);
-            splitContainer1.SplitterDistance = 308;
+            splitContainer1.Size = new System.Drawing.Size(955, 506);
+            splitContainer1.SplitterDistance = 318;
             splitContainer1.TabIndex = 5;
             // 
             // tvFiles
@@ -648,7 +648,7 @@ namespace Office_File_Explorer
             tvFiles.Location = new System.Drawing.Point(0, 0);
             tvFiles.Name = "tvFiles";
             tvFiles.SelectedImageIndex = 0;
-            tvFiles.Size = new System.Drawing.Size(308, 492);
+            tvFiles.Size = new System.Drawing.Size(318, 506);
             tvFiles.TabIndex = 0;
             tvFiles.AfterSelect += tvFiles_AfterSelect;
             // 
@@ -674,7 +674,7 @@ namespace Office_File_Explorer
             rtbDisplay.Location = new System.Drawing.Point(0, 0);
             rtbDisplay.Name = "rtbDisplay";
             rtbDisplay.ReadOnly = true;
-            rtbDisplay.Size = new System.Drawing.Size(612, 492);
+            rtbDisplay.Size = new System.Drawing.Size(633, 506);
             rtbDisplay.TabIndex = 0;
             rtbDisplay.Text = "";
             // 
@@ -682,7 +682,7 @@ namespace Office_File_Explorer
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(924, 563);
+            ClientSize = new System.Drawing.Size(955, 577);
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
             Controls.Add(toolStrip1);
