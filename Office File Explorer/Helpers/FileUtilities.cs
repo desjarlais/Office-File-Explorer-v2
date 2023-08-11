@@ -98,17 +98,6 @@ namespace Office_File_Explorer.Helpers
             return convertedUri;
         }
 
-        /// <summary>
-        /// given a broken uri this function will return a generic non-broken uri
-        /// </summary>
-        /// <param name="brokenUri">the uri that is failing in the sdk</param>
-        /// <returns></returns>
-        public static Uri FixUri(string brokenUri)
-        {
-            brokenUri = "http://broken-link/";
-            return new Uri(brokenUri);
-        }
-
         public static void WriteToLog(string fPath, string sOutput)
         {
             if (!File.Exists(fPath))

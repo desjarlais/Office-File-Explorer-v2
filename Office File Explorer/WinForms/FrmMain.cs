@@ -120,6 +120,20 @@ namespace Office_File_Explorer
 
         #region Functions
 
+        /// <summary>
+        /// append strings like "Fixed" or "Copy" to the file name
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="TextToAdd"></param>
+        /// <returns></returns>
+        public static string AddModifiedTextToFileName(string fileName)
+        {
+            string dir = Path.GetDirectoryName(fileName) + "\\";
+            StrExtension = Path.GetExtension(fileName);
+            string newFileName = dir + Path.GetFileNameWithoutExtension(fileName) + Strings.wModified + StrExtension;
+            return newFileName;
+        }
+
         public void UpdateMRU()
         {
             try
@@ -814,16 +828,6 @@ namespace Office_File_Explorer
             FixedFallback = originalText;
         }
 
-        public static List<string> CfpList(CustomFilePropertiesPart part)
-        {
-            List<string> val = new List<string>();
-            foreach (CustomDocumentProperty cdp in part.RootElement.Cast<CustomDocumentProperty>())
-            {
-                val.Add(cdp.Name + Strings.wColonBuffer + cdp.InnerText);
-            }
-            return val;
-        }
-
         /// <summary>
         /// append strings like "Fixed" or "Copy" to the file name
         /// </summary>
@@ -961,7 +965,7 @@ namespace Office_File_Explorer
 
             int count = 0;
 
-            foreach (string v in CfpList(cfp))
+            foreach (string v in Office.CfpList(cfp))
             {
                 count++;
                 tempCfp.Add(count + Strings.wPeriod + v);
@@ -1066,11 +1070,11 @@ namespace Office_File_Explorer
         {
             if (args.Severity == XmlSeverityType.Warning)
             {
-                Console.Write("WARNING: ");
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "CustomUI Validation Warning:" + args.Message);
             }
             else if (args.Severity == XmlSeverityType.Error)
             {
-                Console.Write("ERROR: ");
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "CustomUI Validation Error:" + args.Message);
             }
         }
 
@@ -1202,10 +1206,14 @@ namespace Office_File_Explorer
                     MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
                         "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     hasXmlError = true;
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, "LabelInfo Xml Validation Error at Line #" + e.Exception.LineNumber + " Position #"
+                        + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
                     break;
                 case XmlSeverityType.Warning:
                     MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
                         "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, "LabelInfo Xml Validation Error at Line #" + e.Exception.LineNumber + " Position #"
+                        + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
                     hasXmlError = true;
                     break;
             }
@@ -1443,7 +1451,6 @@ namespace Office_File_Explorer
                             {
                                 var result = f.ShowDialog();
                             }
-
                             return;
                         }
                     }
@@ -2179,20 +2186,6 @@ namespace Office_File_Explorer
 
             Office.SearchAndReplace(toolStripStatusLabelFilePath.Text, findText, replaceText);
             LogInformation(LogInfoType.ClearAndAdd, "** Search and Replace Finished **", string.Empty);
-        }
-
-        /// <summary>
-        /// append strings like "Fixed" or "Copy" to the file name
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="TextToAdd"></param>
-        /// <returns></returns>
-        public static string AddModifiedTextToFileName(string fileName)
-        {
-            string dir = Path.GetDirectoryName(fileName) + "\\";
-            StrExtension = Path.GetExtension(fileName);
-            string newFileName = dir + Path.GetFileNameWithoutExtension(fileName) + Strings.wModified + StrExtension;
-            return newFileName;
         }
 
         private void editToolStripMenuItemModifyContents_Click(object sender, EventArgs e)

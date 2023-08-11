@@ -102,6 +102,16 @@ namespace Office_File_Explorer.Helpers
             return output;
         }
 
+        public static List<string> CfpList(CustomFilePropertiesPart part)
+        {
+            List<string> val = new List<string>();
+            foreach (CustomDocumentProperty cdp in part.RootElement.Cast<CustomDocumentProperty>())
+            {
+                val.Add(cdp.Name + Strings.wColonBuffer + cdp.InnerText);
+            }
+            return val;
+        }
+
         /// <summary>
         /// Given a document name, a property name/value, and the property type add a custom property to a document. 
         /// </summary>
