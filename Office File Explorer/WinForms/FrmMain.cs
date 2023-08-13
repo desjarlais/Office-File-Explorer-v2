@@ -912,7 +912,7 @@ namespace Office_File_Explorer
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmSettings form = new FrmSettings();
-            form.Show();
+            form.ShowDialog();
         }
 
         private void BatchFileProcessingToolStripMenuItem_Click(object sender, EventArgs e)
