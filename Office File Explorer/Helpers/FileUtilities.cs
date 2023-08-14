@@ -30,6 +30,13 @@ namespace Office_File_Explorer.Helpers
             return string.Format("{0:n1} {1}", adjustedSize, sizeSuffixes[mag]);
         }
 
+        /// <summary>
+        /// this function is used to load binary files into the part viewer
+        /// pp.GetStream().CopyTo(MemoryStream) will throw errors when trying to open multiple times
+        /// this function will get around that problem
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public static byte[] ReadToEnd(Stream stream)
         {
             long originalPosition = 0;

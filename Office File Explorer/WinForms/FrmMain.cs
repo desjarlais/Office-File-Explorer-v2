@@ -1397,6 +1397,7 @@ namespace Office_File_Explorer
 
                                 if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
                                 {
+                                    // customui files need to have xml declaration removed or it throws off parsing in the viewer
                                     settings = new XmlWriterSettings
                                     {
                                         OmitXmlDeclaration = true,
@@ -1473,6 +1474,7 @@ namespace Office_File_Explorer
                 else
                 {
                     rtbDisplay.Text = "No Viewer For File Type";
+                    
                 }
             }
             catch (Exception ex)
@@ -1482,6 +1484,7 @@ namespace Office_File_Explorer
             finally
             {
                 Cursor = Cursors.Default;
+                DisableModifyUI();
             }
         }
 
@@ -1594,30 +1597,35 @@ namespace Office_File_Explorer
         {
             rtbDisplay.Text = Strings.xmlCustomOutspace;
             FormatXmlColors();
+            EnableModifyUI();
         }
 
         private void customTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlCustomTab;
             FormatXmlColors();
+            EnableModifyUI();
         }
 
         private void excelCustomTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlExcelCustomTab;
             FormatXmlColors();
+            EnableModifyUI();
         }
 
         private void repurposeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlRepurpose;
             FormatXmlColors();
+            EnableModifyUI();
         }
 
         private void wordGroupOnInsertTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlWordGroupInsertTab;
             FormatXmlColors();
+            EnableModifyUI();
         }
 
         private void toolStripButtonInsertIcon_Click(object sender, EventArgs e)
