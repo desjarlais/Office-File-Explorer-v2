@@ -1,6 +1,5 @@
 ﻿// Open XML SDK refs
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.CustomProperties;
 using DocumentFormat.OpenXml.Office2013.Word;
 using DocumentFormat.OpenXml.Packaging;
 
@@ -301,6 +300,7 @@ namespace Office_File_Explorer
                 {
                     cForm.ShowDialog();
                 }
+                fs.Close();
             }
             catch (Exception ex)
             {
@@ -310,11 +310,11 @@ namespace Office_File_Explorer
 
         public void DisplayInvalidFileFormatError()
         {
-            rtbDisplay.AppendText("Unable to open file, possible causes are:");
-            rtbDisplay.AppendText(" - file corruption");
-            rtbDisplay.AppendText(" - file encrypted");
-            rtbDisplay.AppendText(" - file password protected");
-            rtbDisplay.AppendText(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)");
+            rtbDisplay.AppendText("Unable to open file, possible causes are:\r\n");
+            rtbDisplay.AppendText(" - file corruption\r\n");
+            rtbDisplay.AppendText(" - file encrypted\r\n");
+            rtbDisplay.AppendText(" - file password protected\r\n");
+            rtbDisplay.AppendText(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)\r\n");
         }
 
         public void MoveCursorToLocation(int startLocation, int length)
@@ -1474,7 +1474,7 @@ namespace Office_File_Explorer
                 else
                 {
                     rtbDisplay.Text = "No Viewer For File Type";
-                    
+
                 }
             }
             catch (Exception ex)
