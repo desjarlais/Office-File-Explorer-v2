@@ -1451,6 +1451,7 @@ namespace Office_File_Explorer
                             {
                                 var result = f.ShowDialog();
                             }
+                            imageSource.Close();
                             return;
                         }
                     }
@@ -1461,12 +1462,10 @@ namespace Office_File_Explorer
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
-                            using (var memStream = new MemoryStream())
-                            {
-                                pp.GetStream().CopyTo(memStream);
-                                byte[] binData = memStream.ToArray();
-                                rtbDisplay.Text = Convert.ToHexString(binData);
-                            }
+                            Stream stream = pp.GetStream();
+                            byte[] binData = FileUtilities.ReadToEnd(stream);
+                            rtbDisplay.Text = Convert.ToHexString(binData);
+                            stream.Close();
                             return;
                         }
                     }
