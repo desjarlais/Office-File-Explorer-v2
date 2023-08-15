@@ -12,7 +12,6 @@ namespace Office_File_Explorer.WinForms
     public partial class FrmRevisions : Form
     {
         string filePath;
-        public DialogResult dr;
 
         public FrmRevisions(string fPath)
         {
@@ -33,13 +32,11 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnOk_Click(object sender, EventArgs e)
         {
-            dr = DialogResult.OK;
             Close();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            dr = DialogResult.Cancel;
             Close();
         }
 

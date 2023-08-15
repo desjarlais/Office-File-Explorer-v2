@@ -2500,7 +2500,7 @@ namespace Office_File_Explorer
                                 }
                             }
 
-                            using (var fDupe = new FrmDuplicateAuthors(authors))
+                            using (var fDupe = new FrmDuplicateAuthors(authors, tempFilePackageViewer))
                             {
                                 var dupeResult = fDupe.ShowDialog();
                             }
