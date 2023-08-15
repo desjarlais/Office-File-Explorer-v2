@@ -53,6 +53,7 @@ namespace Office_File_Explorer
             editToolStripMenuItemModifyContents = new System.Windows.Forms.ToolStripMenuItem();
             editToolStripMenuItemRemoveCustomDocProps = new System.Windows.Forms.ToolStripMenuItem();
             editToolStripMenuItemRemoveCustomXml = new System.Windows.Forms.ToolStripMenuItem();
+            wordDocumentRevisionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             batchFileProcessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             clipboardViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,7 +71,6 @@ namespace Office_File_Explorer
             toolStripButtonViewContents = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixCorruptDoc = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixDoc = new System.Windows.Forms.ToolStripButton();
-            toolStripButtonValidateXml = new System.Windows.Forms.ToolStripButton();
             toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             toolStripButtonModify = new System.Windows.Forms.ToolStripButton();
             toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
@@ -85,6 +85,7 @@ namespace Office_File_Explorer
             excelCustomTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             repurposeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             wordGroupOnInsertTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripButtonValidateXml = new System.Windows.Forms.ToolStripButton();
             toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             toolStripTextBoxFind = new System.Windows.Forms.ToolStripTextBox();
@@ -236,7 +237,7 @@ namespace Office_File_Explorer
             // 
             // editToolStripMenuItem
             // 
-            editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { editToolStripMenuFindReplace, editToolStripMenuItemModifyContents, editToolStripMenuItemRemoveCustomDocProps, editToolStripMenuItemRemoveCustomXml });
+            editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { editToolStripMenuFindReplace, editToolStripMenuItemModifyContents, editToolStripMenuItemRemoveCustomDocProps, editToolStripMenuItemRemoveCustomXml, wordDocumentRevisionsToolStripMenuItem });
             editToolStripMenuItem.Name = "editToolStripMenuItem";
             editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             editToolStripMenuItem.Text = "&Edit";
@@ -276,6 +277,15 @@ namespace Office_File_Explorer
             editToolStripMenuItemRemoveCustomXml.Size = new System.Drawing.Size(277, 22);
             editToolStripMenuItemRemoveCustomXml.Text = "Remove Custom Xml";
             editToolStripMenuItemRemoveCustomXml.Click += editToolStripMenuItemRemoveCustomXml_Click;
+            // 
+            // wordDocumentRevisionsToolStripMenuItem
+            // 
+            wordDocumentRevisionsToolStripMenuItem.Enabled = false;
+            wordDocumentRevisionsToolStripMenuItem.Image = Properties.Resources.word;
+            wordDocumentRevisionsToolStripMenuItem.Name = "wordDocumentRevisionsToolStripMenuItem";
+            wordDocumentRevisionsToolStripMenuItem.Size = new System.Drawing.Size(277, 22);
+            wordDocumentRevisionsToolStripMenuItem.Text = "Word Document Revisions";
+            wordDocumentRevisionsToolStripMenuItem.Click += wordDocumentRevisionsToolStripMenuItem_Click;
             // 
             // toolsToolStripMenuItem
             // 
@@ -416,16 +426,6 @@ namespace Office_File_Explorer
             toolStripButtonFixDoc.Text = "Fix Document";
             toolStripButtonFixDoc.Click += toolStripButtonFixDoc_Click;
             // 
-            // toolStripButtonValidateXml
-            // 
-            toolStripButtonValidateXml.Enabled = false;
-            toolStripButtonValidateXml.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateXml.Image");
-            toolStripButtonValidateXml.ImageTransparentColor = System.Drawing.Color.Magenta;
-            toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
-            toolStripButtonValidateXml.Size = new System.Drawing.Size(92, 22);
-            toolStripButtonValidateXml.Text = "Validate Xml";
-            toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
-            // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
@@ -545,6 +545,16 @@ namespace Office_File_Explorer
             wordGroupOnInsertTabToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             wordGroupOnInsertTabToolStripMenuItem.Text = "Word - Group on Insert Tab";
             wordGroupOnInsertTabToolStripMenuItem.Click += wordGroupOnInsertTabToolStripMenuItem_Click;
+            // 
+            // toolStripButtonValidateXml
+            // 
+            toolStripButtonValidateXml.Enabled = false;
+            toolStripButtonValidateXml.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonValidateXml.Image");
+            toolStripButtonValidateXml.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonValidateXml.Name = "toolStripButtonValidateXml";
+            toolStripButtonValidateXml.Size = new System.Drawing.Size(92, 22);
+            toolStripButtonValidateXml.Text = "Validate Xml";
+            toolStripButtonValidateXml.Click += toolStripButtonValidateXml_Click;
             // 
             // toolStripSeparator3
             // 
@@ -780,6 +790,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem mruToolStripMenuItem8;
         private System.Windows.Forms.ToolStripMenuItem mruToolStripMenuItem9;
         private System.Windows.Forms.ToolStripMenuItem openErrorLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wordDocumentRevisionsToolStripMenuItem;
     }
 }
 

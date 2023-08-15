@@ -18,6 +18,17 @@ namespace Office_File_Explorer.WinForms
         {
             InitializeComponent();
             filePath = fPath;
+            LoadRevisions();
+
+            if (cbAuthors.SelectedIndex == -1)
+            {
+                MessageBox.Show("Document does not contain revisions.", "Document Revisions", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                cbAuthors.SelectedIndex = 0;
+                LoadAuthorChanges();
+            }
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -32,83 +43,67 @@ namespace Office_File_Explorer.WinForms
             Close();
         }
 
-        private void CkbRevisions_CheckedChanged(object sender, EventArgs e)
+        public void LoadRevisions()
         {
             try
             {
                 Cursor = Cursors.WaitCursor;
-                lbRevisions.Items.Clear();
 
-                if (cbAuthors.Enabled == true)
+                using (WordprocessingDocument doc = WordprocessingDocument.Open(filePath, true))
                 {
-                    cbAuthors.Enabled = false;
-                    lbRevisions.Enabled = false;
-                    BtnAcceptChanges.Enabled = false;
-                    lbRevisions.Items.Clear();
-                }
-                else
-                {
-                    cbAuthors.Enabled = true;
-                    cbAuthors.Items.Clear();
-                    lbRevisions.Enabled = true;
-                    BtnAcceptChanges.Enabled = true;
+                    int count = 0;
 
-                    using (WordprocessingDocument doc = WordprocessingDocument.Open(filePath, false))
+                    // check the peoplepart and list those authors
+                    WordprocessingPeoplePart peoplePart = doc.MainDocumentPart.WordprocessingPeoplePart;
+                    if (peoplePart != null)
                     {
-                        int count = 0;
-
-                        // check the peoplepart and list those authors
-                        WordprocessingPeoplePart peoplePart = doc.MainDocumentPart.WordprocessingPeoplePart;
-                        if (peoplePart != null)
+                        foreach (Person person in peoplePart.People)
                         {
-                            foreach (Person person in peoplePart.People)
+                            count++;
+                            PresenceInfo pi = person.PresenceInfo;
+                            cbAuthors.Items.Add(person.Author.Value);
+                        }
+                    }
+
+                    List<string> tempAuthors = Word.GetAllAuthors(doc.MainDocumentPart.Document);
+
+                    // sometimes there are authors in a file but they don't exist in people.xml
+                    if (tempAuthors.Count > 0)
+                    {
+                        // if the people part count is the same as GetAllAuthors, they must be the same authors
+                        if (count != tempAuthors.Count)
+                        {
+                            foreach (string s in tempAuthors)
                             {
                                 count++;
-                                PresenceInfo pi = person.PresenceInfo;
-                                cbAuthors.Items.Add(person.Author.Value);
-                            }
-                        }
+                                bool authorFound = false;
 
-                        List<string> tempAuthors = Word.GetAllAuthors(doc.MainDocumentPart.Document);
-
-                        // sometimes there are authors in a file but they don't exist in people.xml
-                        if (tempAuthors.Count > 0)
-                        {
-                            // if the people part count is the same as GetAllAuthors, they must be the same authors
-                            if (count != tempAuthors.Count)
-                            {
-                                foreach (string s in tempAuthors)
+                                foreach (string a in cbAuthors.Items)
                                 {
-                                    count++;
-                                    bool authorFound = false;
-
-                                    foreach (string a in cbAuthors.Items)
+                                    if (a == s)
                                     {
-                                        if (a == s)
-                                        {
-                                            authorFound = true;
-                                        }
+                                        authorFound = true;
                                     }
+                                }
 
-                                    if (authorFound == false)
-                                    {
-                                        cbAuthors.Items.Add(s);
-                                    }
+                                if (authorFound == false)
+                                {
+                                    cbAuthors.Items.Add(s);
                                 }
                             }
                         }
+                    }
 
-                        // if the count is 0 at this point, no authors exist
-                        if (count == 0)
-                        {
-                            cbAuthors.Enabled = false;
-                            lbRevisions.Enabled = false;
-                        }
-                        else
-                        {
-                            cbAuthors.SelectedIndex = 0;
-                            cbAuthors.Items.Add(Strings.wAllAuthors);
-                        }
+                    // if the count is 0 at this point, no authors exist
+                    if (count == 0)
+                    {
+                        cbAuthors.Enabled = false;
+                        lbRevisions.Enabled = false;
+                    }
+                    else
+                    {
+                        cbAuthors.SelectedIndex = 0;
+                        cbAuthors.Items.Add(Strings.wAllAuthors);
                     }
                 }
             }
@@ -122,7 +117,7 @@ namespace Office_File_Explorer.WinForms
             }
         }
 
-        private void CbAuthors_SelectedIndexChanged(object sender, EventArgs e)
+        public void LoadAuthorChanges()
         {
             try
             {
@@ -536,6 +531,11 @@ namespace Office_File_Explorer.WinForms
             }
         }
 
+        private void CbAuthors_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadAuthorChanges();
+        }
+
         private void FrmWordCommands_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) { Close(); }
@@ -552,7 +552,6 @@ namespace Office_File_Explorer.WinForms
                     if (Word.AcceptTrackedChanges(document.MainDocumentPart.Document, cbAuthors.Text))
                     {
                         MessageBox.Show(cbAuthors.Text + " changes accepted.");
-                        ckbRevisions.Checked = false;
                         cbAuthors.Items.Clear();
                     }
                     else

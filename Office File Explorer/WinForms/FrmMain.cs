@@ -238,6 +238,7 @@ namespace Office_File_Explorer
             excelSheetViewerToolStripMenuItem.Enabled = false;
             toolStripButtonModify.Enabled = false;
             toolStripButtonValidateXml.Enabled = false;
+            wordDocumentRevisionsToolStripMenuItem.Enabled = false;
 
             if (package is null)
             {
@@ -907,6 +908,11 @@ namespace Office_File_Explorer
             {
                 excelSheetViewerToolStripMenuItem.Enabled = true;
             }
+
+            if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
+            {
+                wordDocumentRevisionsToolStripMenuItem.Enabled = true;
+            }
         }
 
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1327,6 +1333,11 @@ namespace Office_File_Explorer
                 EnableUI();
                 EnableModifyUI();
                 OpenOfficeDocument(true);
+
+                if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
+                {
+                    wordDocumentRevisionsToolStripMenuItem.Enabled = true;
+                }
             }
         }
 
@@ -2839,7 +2850,6 @@ namespace Office_File_Explorer
         private void toolStripButtonReplace_Click(object sender, EventArgs e)
         {
             ReplaceText();
-            LogInformation(LogInfoType.ClearAndAdd, "** Search and Replace Finished **", string.Empty);
         }
 
         private void mruToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -2885,6 +2895,15 @@ namespace Office_File_Explorer
         private void openErrorLogToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             AppUtilities.PlatformSpecificProcessStart(Strings.fLogFilePath);
+        }
+
+        private void wordDocumentRevisionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmRevisions frmRev = new FrmRevisions(tempFilePackageViewer)
+            {
+                Owner = this
+            };
+            frmRev.ShowDialog();
         }
 
         #endregion
