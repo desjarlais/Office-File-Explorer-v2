@@ -9,9 +9,6 @@ This tool is built for .NET Core 6 and you should be prompted to download from t
 ## Note
 Keep in mind if you use this on a production document and choose to use something that changes or removes data, you should be working on a copy of the file, not the original.  
 
-## Help
-If you need assistance (find a bug, have a question or any suggestions or feedback), please report them using the [Issues tab](https://github.com/desjarlais/Office-File-Explorer-v2/issues)
-
 ## Main Window
 ![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe-mainform.jpg?raw=true)
 
@@ -86,3 +83,6 @@ More info in the wiki here -> [Batch Processing Wiki](https://github.com/desjarl
 *	Fix Corrupt Table Cells (Word)
 *	Remove Custom Xml (Word, Excel, PowerPoint)
 *	Fix Duplicate Custom Xml (Word)
+
+## Help
+If you need assistance (find a bug, have a question or any suggestions or feedback), please report them using the [Issues tab](https://github.com/desjarlais/Office-File-Explorer-v2/issues)
