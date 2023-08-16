@@ -163,6 +163,23 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// loop the filemru and remove the entry
+        /// </summary>
+        /// <param name="fPath"></param>
+        public void RemoveFileFromMRU(string fPath)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (fPath == Properties.Settings.Default.FileMRU[i])
+                {
+                    Properties.Settings.Default.FileMRU.RemoveAt(i);
+                    UpdateMRU();
+                    break;
+                }
+            }
+        }
+
         public void AddFileToMRU()
         {
             bool isFileInMru = false;
@@ -406,6 +423,7 @@ namespace Office_File_Explorer
                 if (!File.Exists(toolStripStatusLabelFilePath.Text))
                 {
                     LogInformation(LogInfoType.InvalidFile, Strings.fileDoesNotExist, string.Empty);
+                    RemoveFileFromMRU(toolStripStatusLabelFilePath.Text);
                 }
                 else
                 {
