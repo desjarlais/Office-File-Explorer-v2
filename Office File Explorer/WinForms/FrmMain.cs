@@ -26,6 +26,7 @@ using System.Xml.Linq;
 
 using File = System.IO.File;
 using Color = System.Drawing.Color;
+using System.Threading.Tasks;
 
 namespace Office_File_Explorer
 {
@@ -437,15 +438,12 @@ namespace Office_File_Explorer
                                 }
                             }
 
-                            // setup temp files
+                            // clear the previous doc if there was one and setup temp files
                             TempFileSetup();
-
-                            // clear the previous doc if there was one
                             tvFiles.Nodes.Clear();
                             rtbDisplay.Clear();
                             package?.Close();
                             pkgParts?.Clear();
-
                             LoadPartsIntoViewer();
                         }
                         else
@@ -1510,8 +1508,19 @@ namespace Office_File_Explorer
         /// </summary>
         public void FormatXmlColors()
         {
-            string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)" + @"(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
-            foreach (Match m in Regex.Matches(rtbDisplay.Text, pattern))
+            string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
+            Regex regExXmlColors = new Regex(pattern, RegexOptions.Compiled);
+            int matchCount = regExXmlColors.Matches(rtbDisplay.Text).Count;
+
+            // perf check, bail if we are over 15k matches
+            if (matchCount > 15000)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "FormatXmlColor Match Count = " + matchCount.ToString());
+                return;
+            }
+
+            //foreach (Match m in Regex.Matches(rtbDisplay.Text, pattern))
+            foreach (Match m in regExXmlColors.Matches(rtbDisplay.Text))
             {
                 rtbDisplay.Select(m.Index, m.Length);
                 rtbDisplay.SelectionColor = Color.Blue;
@@ -1724,7 +1733,6 @@ namespace Office_File_Explorer
                         ms.WriteTo(partStream);
                         isModified = true;
                     }
-
                     break;
                 }
             }
@@ -2133,7 +2141,7 @@ namespace Office_File_Explorer
                     // check if we can open in the sdk and confirm it was indeed fixed
                     if (OpenWithSdk(StrDestFileName))
                     {
-                        rtbDisplay.AppendText("-------------------------------------------------------------" + Environment.NewLine + "Fixed Document Location: " + StrDestFileName);
+                        rtbDisplay.AppendText(Strings.wHeaderLine + Environment.NewLine + "Fixed Document Location: " + StrDestFileName);
                     }
                     else
                     {
@@ -2502,7 +2510,15 @@ namespace Office_File_Explorer
 
                             using (var fDupe = new FrmDuplicateAuthors(authors, tempFilePackageViewer))
                             {
-                                var dupeResult = fDupe.ShowDialog();
+                                fDupe.ShowDialog();
+                                if (fDupe.dr == DialogResult.OK)
+                                {
+                                    result = DialogResult.OK;
+                                }
+                                else
+                                {
+                                    result = DialogResult.Cancel;
+                                }
                             }
                         }
 

@@ -3,11 +3,13 @@ using DocumentFormat.OpenXml.Office2013.Word;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Office_File_Explorer.Helpers;
 
 namespace Office_File_Explorer.WinForms
 {
     public partial class FrmDuplicateAuthors : Form
     {
+        public DialogResult dr;
         string fPath;
 
         public FrmDuplicateAuthors(Dictionary<string, string> authors, string path)
@@ -16,7 +18,7 @@ namespace Office_File_Explorer.WinForms
             fPath = path;
             foreach (var auth in authors)
             {
-                LstAuthors.Items.Add("Author: " + auth.Key + " User Id: " + auth.Value);
+                LstAuthors.Items.Add("Author: " + auth.Key + Strings.chPipe + " User Id: " + auth.Value);
             }
         }
 
@@ -32,6 +34,7 @@ namespace Office_File_Explorer.WinForms
                     {
                         person.Remove();
                         document.Save();
+                        dr = DialogResult.OK;
                         Close();
                     }
                 }

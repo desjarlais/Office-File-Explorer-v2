@@ -11,6 +11,7 @@ namespace Office_File_Explorer.Helpers
         public const char chLessThan = '<';
         public const char chGreaterThan = '>';
         public const char chBackslash = '/';
+        public const char chPipe = '|';
 
         // byte values
         public const string bZero = "0";
