@@ -265,7 +265,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// disable app feature related buttons
+        /// enable app feature related buttons
         /// </summary>
         public void EnableUI()
         {
@@ -443,6 +443,7 @@ namespace Office_File_Explorer
                         {
                             // set the file type
                             toolStripStatusLabelDocType.Text = StrOfficeApp;
+                            DisableUI();
 
                             // populate the parts
                             PopulatePackageParts();
@@ -463,6 +464,7 @@ namespace Office_File_Explorer
                             package?.Close();
                             pkgParts?.Clear();
                             LoadPartsIntoViewer();
+                            EnableUI();
                         }
                         else
                         {
@@ -675,11 +677,13 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
+                UriRelationshipErrorHandler uriHandler = new UriRelationshipErrorHandler();
 
                 // add opensettings to get around the fix malformed uri issue
                 var openSettings = new OpenSettings()
                 {
-                    RelationshipErrorHandlerFactory = package => { return new UriRelationshipErrorHandler(); }
+                    //RelationshipErrorHandlerFactory = package => { return new UriRelationshipErrorHandler(); }
+                    RelationshipErrorHandlerFactory = package => { return uriHandler; }
                 };
 
                 if (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppWord)

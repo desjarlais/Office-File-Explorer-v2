@@ -54,7 +54,7 @@ namespace Office_File_Explorer.WinForms
             groupBox1.Controls.Add(rdoDelLinks);
             groupBox1.Location = new System.Drawing.Point(12, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(270, 236);
+            groupBox1.Size = new System.Drawing.Size(270, 202);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Select Content To Modify";
@@ -138,7 +138,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            BtnOk.Location = new System.Drawing.Point(126, 245);
+            BtnOk.Location = new System.Drawing.Point(126, 211);
             BtnOk.Name = "BtnOk";
             BtnOk.Size = new System.Drawing.Size(75, 23);
             BtnOk.TabIndex = 5;
@@ -148,7 +148,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            BtnCancel.Location = new System.Drawing.Point(207, 245);
+            BtnCancel.Location = new System.Drawing.Point(207, 211);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new System.Drawing.Size(75, 23);
             BtnCancel.TabIndex = 6;
@@ -160,7 +160,7 @@ namespace Office_File_Explorer.WinForms
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(294, 286);
+            ClientSize = new System.Drawing.Size(294, 245);
             Controls.Add(BtnOk);
             Controls.Add(BtnCancel);
             Controls.Add(groupBox1);

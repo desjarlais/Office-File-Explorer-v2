@@ -47,6 +47,7 @@ namespace Office_File_Explorer.WinForms
                 rdoFixDataDescriptorW.Enabled = true;
                 rdoFixMathAccentsW.Enabled = true;
                 rdoFixListStyles.Enabled = true;
+                rdoFixTextboxes.Enabled = true;
             }
             else if (type == Strings.oAppExcel)
             {

@@ -84,6 +84,7 @@ namespace Office_File_Explorer.WinForms
             // rdoFixTextboxes
             // 
             rdoFixTextboxes.AutoSize = true;
+            rdoFixTextboxes.Enabled = false;
             rdoFixTextboxes.Location = new System.Drawing.Point(6, 171);
             rdoFixTextboxes.Name = "rdoFixTextboxes";
             rdoFixTextboxes.Size = new System.Drawing.Size(95, 19);
