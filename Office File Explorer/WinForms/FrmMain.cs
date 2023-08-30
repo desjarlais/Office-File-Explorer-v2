@@ -1783,6 +1783,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
+                rtbDisplay.Clear();
                 StringBuilder sb = new StringBuilder();
 
                 // display file contents based on user selection
@@ -2348,6 +2349,7 @@ namespace Office_File_Explorer
             }
 
             // if any corruptions were found, copy the file to a new location and display the fixes and new file path
+            rtbDisplay.Clear();
             if (corruptionFound)
             {
                 string modifiedPath = AddTextToFileName(toolStripStatusLabelFilePath.Text, " (Fixed)");
