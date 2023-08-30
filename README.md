@@ -26,7 +26,6 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Fix content control namespaces
 * Fix document corruptions (see [Wiki](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature) for more information)
 * Remove PII
-* View Sensitivity Labeled files (credit to [OpenMcdf](https://github.com/ironfede/openmcdf) for the heavy lifting parsing the compound file format)
 
 ### Excel
 * List function to display (links, comments, worksheets, hidden rows & columns, shared strings, connections, defined names, hyperlinks)
@@ -42,6 +41,7 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Reset note page size to custom value based on another presentation file
 
 ### Shared
+* View Sensitivity Labeled files (credit to [OpenMcdf](https://github.com/ironfede/openmcdf) for the heavy lifting parsing the compound file format)
 * List function to display (Ole Objects, shapes, package parts)
 * View Custom Document Properties
 * View embedded images in file
