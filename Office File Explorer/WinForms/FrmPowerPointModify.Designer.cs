@@ -30,114 +30,139 @@ namespace Office_File_Explorer.WinForms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPowerPointModify));
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rdoDeleteComments = new System.Windows.Forms.RadioButton();
-            this.rdoRemovePII = new System.Windows.Forms.RadioButton();
-            this.rdoConvertPptmToPptx = new System.Windows.Forms.RadioButton();
-            this.rdoMoveSlide = new System.Windows.Forms.RadioButton();
-            this.BtnOk = new System.Windows.Forms.Button();
-            this.BtnCancel = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
-            this.SuspendLayout();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            rdoCustomNotesPageReset = new System.Windows.Forms.RadioButton();
+            rdoResetNotesPageSize = new System.Windows.Forms.RadioButton();
+            rdoDeleteComments = new System.Windows.Forms.RadioButton();
+            rdoRemovePII = new System.Windows.Forms.RadioButton();
+            rdoConvertPptmToPptx = new System.Windows.Forms.RadioButton();
+            rdoMoveSlide = new System.Windows.Forms.RadioButton();
+            BtnOk = new System.Windows.Forms.Button();
+            BtnCancel = new System.Windows.Forms.Button();
+            groupBox1.SuspendLayout();
+            SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.rdoDeleteComments);
-            this.groupBox1.Controls.Add(this.rdoRemovePII);
-            this.groupBox1.Controls.Add(this.rdoConvertPptmToPptx);
-            this.groupBox1.Controls.Add(this.rdoMoveSlide);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(315, 133);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Select Content To Modify";
+            groupBox1.Controls.Add(rdoCustomNotesPageReset);
+            groupBox1.Controls.Add(rdoResetNotesPageSize);
+            groupBox1.Controls.Add(rdoDeleteComments);
+            groupBox1.Controls.Add(rdoRemovePII);
+            groupBox1.Controls.Add(rdoConvertPptmToPptx);
+            groupBox1.Controls.Add(rdoMoveSlide);
+            groupBox1.Location = new System.Drawing.Point(12, 12);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new System.Drawing.Size(315, 181);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Select Content To Modify";
+            // 
+            // rdoCustomNotesPageReset
+            // 
+            rdoCustomNotesPageReset.AutoSize = true;
+            rdoCustomNotesPageReset.Location = new System.Drawing.Point(11, 148);
+            rdoCustomNotesPageReset.Name = "rdoCustomNotesPageReset";
+            rdoCustomNotesPageReset.Size = new System.Drawing.Size(184, 19);
+            rdoCustomNotesPageReset.TabIndex = 7;
+            rdoCustomNotesPageReset.TabStop = true;
+            rdoCustomNotesPageReset.Text = "Custom Notes Page Size Reset";
+            rdoCustomNotesPageReset.UseVisualStyleBackColor = true;
+            // 
+            // rdoResetNotesPageSize
+            // 
+            rdoResetNotesPageSize.AutoSize = true;
+            rdoResetNotesPageSize.Location = new System.Drawing.Point(11, 123);
+            rdoResetNotesPageSize.Name = "rdoResetNotesPageSize";
+            rdoResetNotesPageSize.Size = new System.Drawing.Size(139, 19);
+            rdoResetNotesPageSize.TabIndex = 6;
+            rdoResetNotesPageSize.TabStop = true;
+            rdoResetNotesPageSize.Text = "Reset Notes Page Size";
+            rdoResetNotesPageSize.UseVisualStyleBackColor = true;
             // 
             // rdoDeleteComments
             // 
-            this.rdoDeleteComments.AutoSize = true;
-            this.rdoDeleteComments.Location = new System.Drawing.Point(11, 98);
-            this.rdoDeleteComments.Name = "rdoDeleteComments";
-            this.rdoDeleteComments.Size = new System.Drawing.Size(120, 19);
-            this.rdoDeleteComments.TabIndex = 5;
-            this.rdoDeleteComments.TabStop = true;
-            this.rdoDeleteComments.Text = "Delete Comments";
-            this.rdoDeleteComments.UseVisualStyleBackColor = true;
+            rdoDeleteComments.AutoSize = true;
+            rdoDeleteComments.Location = new System.Drawing.Point(11, 98);
+            rdoDeleteComments.Name = "rdoDeleteComments";
+            rdoDeleteComments.Size = new System.Drawing.Size(120, 19);
+            rdoDeleteComments.TabIndex = 5;
+            rdoDeleteComments.TabStop = true;
+            rdoDeleteComments.Text = "Delete Comments";
+            rdoDeleteComments.UseVisualStyleBackColor = true;
             // 
             // rdoRemovePII
             // 
-            this.rdoRemovePII.AutoSize = true;
-            this.rdoRemovePII.Location = new System.Drawing.Point(11, 72);
-            this.rdoRemovePII.Name = "rdoRemovePII";
-            this.rdoRemovePII.Size = new System.Drawing.Size(130, 19);
-            this.rdoRemovePII.TabIndex = 2;
-            this.rdoRemovePII.TabStop = true;
-            this.rdoRemovePII.Text = "Remove PII On Save";
-            this.rdoRemovePII.UseVisualStyleBackColor = true;
+            rdoRemovePII.AutoSize = true;
+            rdoRemovePII.Location = new System.Drawing.Point(11, 72);
+            rdoRemovePII.Name = "rdoRemovePII";
+            rdoRemovePII.Size = new System.Drawing.Size(130, 19);
+            rdoRemovePII.TabIndex = 2;
+            rdoRemovePII.TabStop = true;
+            rdoRemovePII.Text = "Remove PII On Save";
+            rdoRemovePII.UseVisualStyleBackColor = true;
             // 
             // rdoConvertPptmToPptx
             // 
-            this.rdoConvertPptmToPptx.AutoSize = true;
-            this.rdoConvertPptmToPptx.Location = new System.Drawing.Point(11, 47);
-            this.rdoConvertPptmToPptx.Name = "rdoConvertPptmToPptx";
-            this.rdoConvertPptmToPptx.Size = new System.Drawing.Size(141, 19);
-            this.rdoConvertPptmToPptx.TabIndex = 1;
-            this.rdoConvertPptmToPptx.TabStop = true;
-            this.rdoConvertPptmToPptx.Text = "Convert Pptm To Pptx";
-            this.rdoConvertPptmToPptx.UseVisualStyleBackColor = true;
+            rdoConvertPptmToPptx.AutoSize = true;
+            rdoConvertPptmToPptx.Location = new System.Drawing.Point(11, 47);
+            rdoConvertPptmToPptx.Name = "rdoConvertPptmToPptx";
+            rdoConvertPptmToPptx.Size = new System.Drawing.Size(141, 19);
+            rdoConvertPptmToPptx.TabIndex = 1;
+            rdoConvertPptmToPptx.TabStop = true;
+            rdoConvertPptmToPptx.Text = "Convert Pptm To Pptx";
+            rdoConvertPptmToPptx.UseVisualStyleBackColor = true;
             // 
             // rdoMoveSlide
             // 
-            this.rdoMoveSlide.AutoSize = true;
-            this.rdoMoveSlide.Location = new System.Drawing.Point(11, 22);
-            this.rdoMoveSlide.Name = "rdoMoveSlide";
-            this.rdoMoveSlide.Size = new System.Drawing.Size(83, 19);
-            this.rdoMoveSlide.TabIndex = 0;
-            this.rdoMoveSlide.TabStop = true;
-            this.rdoMoveSlide.Text = "Move Slide";
-            this.rdoMoveSlide.UseVisualStyleBackColor = true;
+            rdoMoveSlide.AutoSize = true;
+            rdoMoveSlide.Location = new System.Drawing.Point(11, 22);
+            rdoMoveSlide.Name = "rdoMoveSlide";
+            rdoMoveSlide.Size = new System.Drawing.Size(83, 19);
+            rdoMoveSlide.TabIndex = 0;
+            rdoMoveSlide.TabStop = true;
+            rdoMoveSlide.Text = "Move Slide";
+            rdoMoveSlide.UseVisualStyleBackColor = true;
             // 
             // BtnOk
             // 
-            this.BtnOk.Location = new System.Drawing.Point(171, 151);
-            this.BtnOk.Name = "BtnOk";
-            this.BtnOk.Size = new System.Drawing.Size(75, 23);
-            this.BtnOk.TabIndex = 3;
-            this.BtnOk.Text = "OK";
-            this.BtnOk.UseVisualStyleBackColor = true;
-            this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
+            BtnOk.Location = new System.Drawing.Point(171, 199);
+            BtnOk.Name = "BtnOk";
+            BtnOk.Size = new System.Drawing.Size(75, 23);
+            BtnOk.TabIndex = 3;
+            BtnOk.Text = "OK";
+            BtnOk.UseVisualStyleBackColor = true;
+            BtnOk.Click += BtnOk_Click;
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(252, 151);
-            this.BtnCancel.Name = "BtnCancel";
-            this.BtnCancel.Size = new System.Drawing.Size(75, 23);
-            this.BtnCancel.TabIndex = 4;
-            this.BtnCancel.Text = "Cancel";
-            this.BtnCancel.UseVisualStyleBackColor = true;
-            this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
+            BtnCancel.Location = new System.Drawing.Point(252, 199);
+            BtnCancel.Name = "BtnCancel";
+            BtnCancel.Size = new System.Drawing.Size(75, 23);
+            BtnCancel.TabIndex = 4;
+            BtnCancel.Text = "Cancel";
+            BtnCancel.UseVisualStyleBackColor = true;
+            BtnCancel.Click += BtnCancel_Click;
             // 
             // FrmPowerPointModify
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(339, 186);
-            this.Controls.Add(this.BtnOk);
-            this.Controls.Add(this.BtnCancel);
-            this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.KeyPreview = true;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FrmPowerPointModify";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Modify PowerPoint Content";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmPowerPointModify_KeyDown);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(339, 232);
+            Controls.Add(BtnOk);
+            Controls.Add(BtnCancel);
+            Controls.Add(groupBox1);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "FrmPowerPointModify";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "Modify PowerPoint Content";
+            KeyDown += FrmPowerPointModify_KeyDown;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -149,5 +174,7 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnOk;
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.RadioButton rdoDeleteComments;
+        private System.Windows.Forms.RadioButton rdoCustomNotesPageReset;
+        private System.Windows.Forms.RadioButton rdoResetNotesPageSize;
     }
 }

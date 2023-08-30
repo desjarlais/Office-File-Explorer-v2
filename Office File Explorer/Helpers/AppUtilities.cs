@@ -45,7 +45,9 @@ namespace Office_File_Explorer.Helpers
             MoveSlide,
             DelComments,
             ConvertPptmToPptx,
-            RemovePIIOnSave
+            RemovePIIOnSave,
+            ResetNotesPageSize,
+            CustomNotesPageReset
         }
 
         public static string GetFontCharacterSet(string input)

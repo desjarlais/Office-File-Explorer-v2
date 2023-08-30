@@ -336,6 +336,11 @@ namespace Office_File_Explorer
             rtbDisplay.AppendText(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)\r\n");
         }
 
+        /// <summary>
+        /// move cursor to a given location of the richtextbox
+        /// </summary>
+        /// <param name="startLocation"></param>
+        /// <param name="length"></param>
         public void MoveCursorToLocation(int startLocation, int length)
         {
             rtbDisplay.SelectionStart = startLocation;
@@ -2184,38 +2189,170 @@ namespace Office_File_Explorer
 
         private void toolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
-            using (FrmFixDocument f = new FrmFixDocument(tempFilePackageViewer, toolStripStatusLabelFilePath.Text, toolStripStatusLabelDocType.Text))
+            bool corruptionFound = false;
+
+            // run through each fix and flag if it was successful
+            StringBuilder sbFixes = new StringBuilder();
+
+            if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
             {
-                f.ShowDialog();
-
-                if (f.isFileFixed == true)
+                if (WordFixes.FixListStyles(tempFilePackageViewer))
                 {
-                    if (f.corruptionChecked == "All")
-                    {
-                        int count = 0;
-                        foreach (var s in f.featureFixed)
-                        {
-                            count++;
-                            rtbDisplay.Text = count + Strings.wPeriod + s;
-                        }
-                    }
-                    else
-                    {
-                        rtbDisplay.Text = "Corrupt " + f.corruptionChecked + " Found - Document Fixed" + "\r\n\r\n";
-                        rtbDisplay.AppendText("Modified File Location = " + f.modPath);
-                    }
+                    sbFixes.AppendLine("List Styles Fixed");
+                    corruptionFound = true;
+                }
 
-                    return;
-                }
-                else
+                if (WordFixes.FixTextboxes(tempFilePackageViewer))
                 {
-                    // if it wasn't cancelled, no corruption was found
-                    // if it was cancelled, do nothing
-                    if (f.corruptionChecked != Strings.wCancel)
+                    sbFixes.AppendLine("Corrupt Textboxes Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.RemoveMissingBookmarkTags(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Missing Bookmark Tags Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.RemovePlainTextCcFromBookmark(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Removed Corrupt Content Controls");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixBookmarkTagInSdtContent(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Fixed Bookmark Tags");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixRevisions(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Revisions Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixDeleteRevision(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Delete Revisions Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixEndnotes(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Endnotes Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixListTemplates(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Fixed Orphaned List Templates");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixTableGridProps(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Table Grid Properties Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixTableRowCorruption(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Table Rows Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixCorruptTableCellTags(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Table Cells Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixGridSpan(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Table Grid Span Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixMissingCommentRefs(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Fixed Missing Comment References");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixShapeInComment(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Shapes Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixCommentFieldCodes(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Field Codes Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixHyperlinks(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Hyperlinks Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixContentControls(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Content Controls Fixed");
+                    corruptionFound = true;
+                }
+
+                if (WordFixes.FixMathAccents(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Math Accents Fixed");
+                    corruptionFound = true;
+                }
+
+                if (Properties.Settings.Default.CheckZipItemCorrupt)
+                {
+                    if (WordFixes.FixDataDescriptor(tempFilePackageViewer))
                     {
-                        LogInformation(LogInfoType.ClearAndAdd, "No Corruption Found", string.Empty);
+                        sbFixes.AppendLine("Corrupt Data Descriptor Fixed");
+                        corruptionFound = true;
                     }
                 }
+            }
+            else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
+            {
+                using (PresentationDocument document = PresentationDocument.Open(tempFilePackageViewer, true))
+                {
+                    PowerPointFixes.ResetBulletMargins(document);
+                    sbFixes.AppendLine("Bullet Margins Reset");
+                    corruptionFound = true;
+                }
+
+                if (PowerPointFixes.FixMissingRelIds(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Fixed Missing Relationship Ids");
+                    corruptionFound = true;
+                }
+            }
+            else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
+            {
+                if (Excel.RemoveCorruptClientDataObjects(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Client Data Objects Fixed");
+                    corruptionFound = true;
+                }
+            }
+
+            if (corruptionFound)
+            {
+                string modifiedPath = AddTextToFileName(toolStripStatusLabelFilePath.Text, " (Fixed)");
+                File.Copy(toolStripStatusLabelFilePath.Text, modifiedPath, true);
+                rtbDisplay.Text = sbFixes.ToString();
+                rtbDisplay.AppendText("\r\n\r\nModified File Location = " + modifiedPath);
+            }
+            else
+            {
+                rtbDisplay.AppendText("No Corruption Found.");
             }
         }
 
@@ -2799,6 +2936,18 @@ namespace Office_File_Explorer
                                 Owner = this
                             };
                             mvFrm.ShowDialog();
+                        }
+
+                        if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.ResetNotesPageSize)
+                        {
+                            PowerPointFixes.ResetNotesPageSize(tempFilePackageViewer);
+                            rtbDisplay.AppendText("Notes Page Size Reset");
+                        }
+
+                        if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.CustomNotesPageReset)
+                        {
+                            PowerPointFixes.CustomResetNotesPageSize(tempFilePackageViewer);
+                            rtbDisplay.AppendText("Notes Page Size Reset");
                         }
 
                         if (result == DialogResult.OK)

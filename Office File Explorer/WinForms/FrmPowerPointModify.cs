@@ -36,6 +36,16 @@ namespace Office_File_Explorer.WinForms
                 pptModCmd = AppUtilities.PowerPointModifyCmds.DelComments;
             }
 
+            if (rdoCustomNotesPageReset.Checked)
+            {
+                pptModCmd = AppUtilities.PowerPointModifyCmds.CustomNotesPageReset;
+            }
+
+            if (rdoResetNotesPageSize.Checked)
+            {
+                pptModCmd = AppUtilities.PowerPointModifyCmds.ResetNotesPageSize;
+            }
+
             this.DialogResult = DialogResult.OK;
             Close();
         }

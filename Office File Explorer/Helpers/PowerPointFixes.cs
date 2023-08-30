@@ -14,17 +14,15 @@ namespace Office_File_Explorer.Helpers
 {
     class PowerPointFixes
     {
-        public static bool CustomResetNotesPageSize(string filePath)
+        public static void CustomResetNotesPageSize(string filePath)
         {
-            bool isFixed = false;
-
             using (PresentationDocument document = PresentationDocument.Open(filePath, true))
             {
                 NotesSlides nsh = GetNotesPageSizesFromFile();
 
                 if (nsh.pNotesSz.Cx == 0)
                 {
-                    return isFixed;
+                    return;
                 }
 
                 // Get the presentation part of document
@@ -222,8 +220,6 @@ namespace Office_File_Explorer.Helpers
                     p.Save();
                 }
             }
-
-            return isFixed;
         }
 
         public static NotesSlides GetNotesPageSizesFromFile()
@@ -368,10 +364,8 @@ namespace Office_File_Explorer.Helpers
             return isFixed;
         }
 
-        public static bool ResetNotesPageSize(string filePath)
+        public static void ResetNotesPageSize(string filePath)
         {
-            bool isFixed = false;
-
             using (PresentationDocument document = PresentationDocument.Open(filePath, true))
             {
                 // Get the presentation part of document
@@ -532,8 +526,6 @@ namespace Office_File_Explorer.Helpers
                     }
                 }
             }
-
-            return isFixed;
         }
 
         /// <summary>
