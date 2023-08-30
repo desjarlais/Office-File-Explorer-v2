@@ -203,5 +203,17 @@ namespace Office_File_Explorer.Properties {
                 this["FileMRU"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisableXmlColorFormatting {
+            get {
+                return ((bool)(this["DisableXmlColorFormatting"]));
+            }
+            set {
+                this["DisableXmlColorFormatting"] = value;
+            }
+        }
     }
 }

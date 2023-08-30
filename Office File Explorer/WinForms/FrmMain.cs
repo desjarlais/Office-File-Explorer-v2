@@ -2187,11 +2187,15 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// run through each known set of document corruptions and fix any that are found
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
             bool corruptionFound = false;
 
-            // run through each fix and flag if it was successful
             StringBuilder sbFixes = new StringBuilder();
 
             if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
@@ -2343,6 +2347,7 @@ namespace Office_File_Explorer
                 }
             }
 
+            // if any corruptions were found, copy the file to a new location and display the fixes and new file path
             if (corruptionFound)
             {
                 string modifiedPath = AddTextToFileName(toolStripStatusLabelFilePath.Text, " (Fixed)");

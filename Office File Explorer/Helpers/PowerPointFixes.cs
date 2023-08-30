@@ -710,15 +710,26 @@ namespace Office_File_Explorer.Helpers
             if (presentationPart != null)
             {
                 Presentation p = presentationPart.Presentation;
-                p.DefaultTextStyle.Level1ParagraphProperties.LeftMargin = 0;
-                p.DefaultTextStyle.Level2ParagraphProperties.LeftMargin = 457200;
-                p.DefaultTextStyle.Level3ParagraphProperties.LeftMargin = 914400;
-                p.DefaultTextStyle.Level4ParagraphProperties.LeftMargin = 1371600;
-                p.DefaultTextStyle.Level5ParagraphProperties.LeftMargin = 1828800;
-                p.DefaultTextStyle.Level6ParagraphProperties.LeftMargin = 2286000;
-                p.DefaultTextStyle.Level7ParagraphProperties.LeftMargin = 2743200;
-                p.DefaultTextStyle.Level8ParagraphProperties.LeftMargin = 3200400;
-                p.DefaultTextStyle.Level9ParagraphProperties.LeftMargin = 3657600;
+                // if all paragraph level left margins are set to 0, reset them to defaults
+                if (p.DefaultTextStyle.Level2ParagraphProperties.LeftMargin == 0 &&
+                    p.DefaultTextStyle.Level3ParagraphProperties.LeftMargin == 0 &&
+                    p.DefaultTextStyle.Level4ParagraphProperties.LeftMargin == 0 &&
+                    p.DefaultTextStyle.Level5ParagraphProperties.LeftMargin == 0 &&
+                    p.DefaultTextStyle.Level6ParagraphProperties.LeftMargin == 0 &&
+                    p.DefaultTextStyle.Level7ParagraphProperties.LeftMargin == 0 &&
+                    p.DefaultTextStyle.Level8ParagraphProperties.LeftMargin == 0 &&
+                    p.DefaultTextStyle.Level9ParagraphProperties.LeftMargin == 0)
+                {
+                    p.DefaultTextStyle.Level1ParagraphProperties.LeftMargin = 0;
+                    p.DefaultTextStyle.Level2ParagraphProperties.LeftMargin = 457200;
+                    p.DefaultTextStyle.Level3ParagraphProperties.LeftMargin = 914400;
+                    p.DefaultTextStyle.Level4ParagraphProperties.LeftMargin = 1371600;
+                    p.DefaultTextStyle.Level5ParagraphProperties.LeftMargin = 1828800;
+                    p.DefaultTextStyle.Level6ParagraphProperties.LeftMargin = 2286000;
+                    p.DefaultTextStyle.Level7ParagraphProperties.LeftMargin = 2743200;
+                    p.DefaultTextStyle.Level8ParagraphProperties.LeftMargin = 3200400;
+                    p.DefaultTextStyle.Level9ParagraphProperties.LeftMargin = 3657600;
+                }
             }
             pDoc.Save();
         }
