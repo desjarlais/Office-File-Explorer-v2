@@ -1461,7 +1461,13 @@ namespace Office_File_Explorer
 
                                 tvFiles.SuspendLayout();
                                 rtbDisplay.Text = sb.ToString();
-                                FormatXmlColors();
+
+                                // check for xml color setting
+                                if (Properties.Settings.Default.DisableXmlColorFormatting == false)
+                                {
+                                    FormatXmlColors();
+                                }
+
                                 tvFiles.ResumeLayout();
                                 ScrollToTopOfRtb();
                                 return;
