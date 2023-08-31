@@ -42,7 +42,7 @@ namespace Office_File_Explorer.Helpers
         public const string oAppExcel = "Excel";
         public const string oAppPowerPoint = "PowerPoint";
         public const string oAppUnknown = "Unknown";
-        public const string oAppTitle = "Office File Explorer";
+        public const string oAppTitle = "Office File Explorer v2";
         public const string wCopyFileParentheses = "(Copy)";
         public const string wModified = "(Modifed)";
         public const string wCancel = "Cancel";

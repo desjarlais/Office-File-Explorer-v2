@@ -26,7 +26,6 @@ using System.Xml.Linq;
 
 using File = System.IO.File;
 using Color = System.Drawing.Color;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer
 {
@@ -88,7 +87,6 @@ namespace Office_File_Explorer
         {
             InitializeComponent();
 
-            // update title with version
             this.Text = Strings.oAppTitle + Strings.wMinusSign + Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
             // make sure the log file is created
@@ -1421,6 +1419,9 @@ namespace Office_File_Explorer
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
+                            toolStripStatusLabelCompression.Text = pp.CompressionOption.ToString();
+                            toolStripStatusLabelContentType.Text = pp.ContentType;
+
                             using (StreamReader sr = new StreamReader(pp.GetStream()))
                             {
                                 string contents = sr.ReadToEnd();

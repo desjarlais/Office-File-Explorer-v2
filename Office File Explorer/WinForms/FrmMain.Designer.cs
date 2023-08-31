@@ -97,10 +97,14 @@ namespace Office_File_Explorer
             toolStripStatusLabelDocType = new System.Windows.Forms.ToolStripStatusLabel();
             toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             toolStripStatusLabelFilePath = new System.Windows.Forms.ToolStripStatusLabel();
+            toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            toolStripStatusLabelCompression = new System.Windows.Forms.ToolStripStatusLabel();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             tvFiles = new System.Windows.Forms.TreeView();
             tvImageList = new System.Windows.Forms.ImageList(components);
             rtbDisplay = new System.Windows.Forms.RichTextBox();
+            toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            toolStripStatusLabelContentType = new System.Windows.Forms.ToolStripStatusLabel();
             mnuMainMenu.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -131,7 +135,7 @@ namespace Office_File_Explorer
             // 
             fileToolStripMenuItemOpen.Image = Properties.Resources.OpenFile;
             fileToolStripMenuItemOpen.Name = "fileToolStripMenuItemOpen";
-            fileToolStripMenuItemOpen.Size = new System.Drawing.Size(136, 22);
+            fileToolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemOpen.Text = "O&pen";
             fileToolStripMenuItemOpen.Click += OpenToolStripMenuItem_Click;
             // 
@@ -140,7 +144,7 @@ namespace Office_File_Explorer
             toolStripMenuItemMRU.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mruToolStripMenuItem1, mruToolStripMenuItem2, mruToolStripMenuItem3, mruToolStripMenuItem4, mruToolStripMenuItem5, mruToolStripMenuItem6, mruToolStripMenuItem7, mruToolStripMenuItem8, mruToolStripMenuItem9 });
             toolStripMenuItemMRU.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItemMRU.Image");
             toolStripMenuItemMRU.Name = "toolStripMenuItemMRU";
-            toolStripMenuItemMRU.Size = new System.Drawing.Size(136, 22);
+            toolStripMenuItemMRU.Size = new System.Drawing.Size(180, 22);
             toolStripMenuItemMRU.Text = "Recent Files";
             // 
             // mruToolStripMenuItem1
@@ -211,27 +215,27 @@ namespace Office_File_Explorer
             fileToolStripMenuItemClose.Enabled = false;
             fileToolStripMenuItemClose.Image = Properties.Resources.CloseDocument;
             fileToolStripMenuItemClose.Name = "fileToolStripMenuItemClose";
-            fileToolStripMenuItemClose.Size = new System.Drawing.Size(136, 22);
+            fileToolStripMenuItemClose.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemClose.Text = "&Close";
             fileToolStripMenuItemClose.Click += fileToolStripMenuItemClose_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
+            toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // fileToolStripMenuItemSettings
             // 
             fileToolStripMenuItemSettings.Image = Properties.Resources.Settings;
             fileToolStripMenuItemSettings.Name = "fileToolStripMenuItemSettings";
-            fileToolStripMenuItemSettings.Size = new System.Drawing.Size(136, 22);
+            fileToolStripMenuItemSettings.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemSettings.Text = "&Settings";
             fileToolStripMenuItemSettings.Click += SettingsToolStripMenuItem_Click;
             // 
             // fileToolStripMenuItemExit
             // 
             fileToolStripMenuItemExit.Name = "fileToolStripMenuItemExit";
-            fileToolStripMenuItemExit.Size = new System.Drawing.Size(136, 22);
+            fileToolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
             fileToolStripMenuItemExit.Text = "E&xit";
             fileToolStripMenuItemExit.Click += ExitToolStripMenuItem_Click;
             // 
@@ -248,7 +252,7 @@ namespace Office_File_Explorer
             editToolStripMenuFindReplace.Image = Properties.Resources.FindInFile;
             editToolStripMenuFindReplace.Name = "editToolStripMenuFindReplace";
             editToolStripMenuFindReplace.Size = new System.Drawing.Size(277, 22);
-            editToolStripMenuFindReplace.Text = "Find and Replace";
+            editToolStripMenuFindReplace.Text = "Search and Replace";
             editToolStripMenuFindReplace.Click += editToolStripMenuFindReplace_Click;
             // 
             // editToolStripMenuItemModifyContents
@@ -602,7 +606,7 @@ namespace Office_File_Explorer
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusLabel3, toolStripStatusLabelDocType, toolStripStatusLabel1, toolStripStatusLabelFilePath });
+            statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusLabel3, toolStripStatusLabelDocType, toolStripStatusLabel1, toolStripStatusLabelFilePath, toolStripStatusLabel2, toolStripStatusLabelCompression, toolStripStatusLabel4, toolStripStatusLabelContentType });
             statusStrip1.Location = new System.Drawing.Point(0, 555);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new System.Drawing.Size(955, 22);
@@ -632,6 +636,18 @@ namespace Office_File_Explorer
             toolStripStatusLabelFilePath.Name = "toolStripStatusLabelFilePath";
             toolStripStatusLabelFilePath.Size = new System.Drawing.Size(22, 17);
             toolStripStatusLabelFilePath.Text = "---";
+            // 
+            // toolStripStatusLabel2
+            // 
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new System.Drawing.Size(80, 17);
+            toolStripStatusLabel2.Text = "Compression:";
+            // 
+            // toolStripStatusLabelCompression
+            // 
+            toolStripStatusLabelCompression.Name = "toolStripStatusLabelCompression";
+            toolStripStatusLabelCompression.Size = new System.Drawing.Size(22, 17);
+            toolStripStatusLabelCompression.Text = "---";
             // 
             // splitContainer1
             // 
@@ -688,6 +704,18 @@ namespace Office_File_Explorer
             rtbDisplay.TabIndex = 0;
             rtbDisplay.Text = "";
             // 
+            // toolStripStatusLabel4
+            // 
+            toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            toolStripStatusLabel4.Size = new System.Drawing.Size(80, 17);
+            toolStripStatusLabel4.Text = "Content Type:";
+            // 
+            // toolStripStatusLabelContentType
+            // 
+            toolStripStatusLabelContentType.Name = "toolStripStatusLabelContentType";
+            toolStripStatusLabelContentType.Size = new System.Drawing.Size(22, 17);
+            toolStripStatusLabelContentType.Text = "---";
+            // 
             // FrmMain
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -702,7 +730,7 @@ namespace Office_File_Explorer
             MinimumSize = new System.Drawing.Size(920, 588);
             Name = "FrmMain";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Office File Explorer";
+            Text = "Office File Explorer v2";
             FormClosing += FrmMain_FormClosing;
             mnuMainMenu.ResumeLayout(false);
             mnuMainMenu.PerformLayout();
@@ -791,6 +819,10 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem mruToolStripMenuItem9;
         private System.Windows.Forms.ToolStripMenuItem openErrorLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wordDocumentRevisionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCompression;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelContentType;
     }
 }
 
