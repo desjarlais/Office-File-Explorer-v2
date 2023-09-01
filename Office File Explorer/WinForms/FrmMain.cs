@@ -35,6 +35,8 @@ namespace Office_File_Explorer
         private string findText;
         private string replaceText;
         private string fromChangeTemplate;
+        private string partPropContentType;
+        private string partPropCompression;
 
         // openmcdf
         private FileStream fs;
@@ -132,6 +134,9 @@ namespace Office_File_Explorer
             return newFileName;
         }
 
+        /// <summary>
+        /// refresh the MRU UI
+        /// </summary>
         public void UpdateMRU()
         {
             try
@@ -172,12 +177,16 @@ namespace Office_File_Explorer
                 if (fPath == Properties.Settings.Default.FileMRU[i])
                 {
                     Properties.Settings.Default.FileMRU.RemoveAt(i);
+                    Properties.Settings.Default.Save();
                     UpdateMRU();
                     break;
                 }
             }
         }
 
+        /// <summary>
+        /// check if the file is already in the MRU list and add it if not
+        /// </summary>
         public void AddFileToMRU()
         {
             bool isFileInMru = false;
@@ -1419,8 +1428,8 @@ namespace Office_File_Explorer
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
-                            toolStripStatusLabelCompression.Text = pp.CompressionOption.ToString();
-                            toolStripStatusLabelContentType.Text = pp.ContentType;
+                            partPropCompression = pp.CompressionOption.ToString();
+                            partPropContentType = pp.ContentType;
 
                             using (StreamReader sr = new StreamReader(pp.GetStream()))
                             {
@@ -1482,6 +1491,9 @@ namespace Office_File_Explorer
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
+                            partPropCompression = pp.CompressionOption.ToString();
+                            partPropContentType = pp.ContentType;
+
                             // need to implement non-bitmap images
                             if (pp.Uri.ToString().EndsWith(".emf") || (pp.Uri.ToString().EndsWith(".svg")))
                             {
@@ -1506,6 +1518,8 @@ namespace Office_File_Explorer
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
                         {
+                            partPropCompression = pp.CompressionOption.ToString();
+                            partPropContentType = pp.ContentType;
                             Stream stream = pp.GetStream();
                             byte[] binData = FileUtilities.ReadToEnd(stream);
                             rtbDisplay.Text = Convert.ToHexString(binData);
@@ -1517,7 +1531,6 @@ namespace Office_File_Explorer
                 else
                 {
                     rtbDisplay.Text = "No Viewer For File Type";
-
                 }
             }
             catch (Exception ex)
@@ -3105,6 +3118,14 @@ namespace Office_File_Explorer
                 Owner = this
             };
             frmRev.ShowDialog();
+        }
+
+        private void viewPartPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Compression Settings: " + partPropCompression);
+            sb.AppendLine("Content Type: " + partPropContentType);
+            MessageBox.Show(sb.ToString(), "Part Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion

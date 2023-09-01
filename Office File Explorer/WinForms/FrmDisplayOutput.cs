@@ -1,8 +1,6 @@
-﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Office_File_Explorer.Helpers;
+﻿using Office_File_Explorer.Helpers;
 using System;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -23,16 +21,6 @@ namespace Office_File_Explorer.WinForms
             {
                 rtbRTFContent.Text = rtfContent.ToString();
             }
-
-            // format the headings
-            //for (int i = 0; i < rtbRTFContent.Lines.Count(); i++)
-            //{
-            //    if (rtbRTFContent.Lines[i].StartsWith("---") && rtbRTFContent.Lines[i].EndsWith("---"))
-            //    {
-            //        rtbRTFContent.Select(rtbRTFContent.GetFirstCharIndexFromLine(i), rtbRTFContent.Lines[i].Length);
-            //        rtbRTFContent.SelectionFont = new Font("Arial", 12, FontStyle.Bold);
-            //    }
-            //}
         }
 
         public FrmDisplayOutput(Image img)

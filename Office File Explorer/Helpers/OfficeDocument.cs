@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Packaging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
@@ -103,7 +104,31 @@ namespace Office_File_Explorer.Helpers
 				return false;
 			}
 		}
-		#endregion
+        #endregion
+
+        // remove a document part from a package.
+        public static void RemovePart(string document)
+        {
+            using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(document, true))
+            {
+                MainDocumentPart mainPart = wordDoc.MainDocumentPart;
+                if (mainPart.DocumentSettingsPart != null)
+                {
+                    mainPart.DeletePart(mainPart.DocumentSettingsPart);
+                }
+            }
+        }
+
+        public void AddNewPart(WordprocessingDocument wordDoc, string fileName)
+		{
+            MainDocumentPart mainPart = wordDoc.MainDocumentPart;
+            CustomXmlPart myXmlPart = mainPart.AddCustomXmlPart(CustomXmlPartType.CustomXml);
+
+            using (FileStream stream = new FileStream(fileName, FileMode.Open))
+            {
+                myXmlPart.FeedData(stream);
+            }
+        }
 
 		public OfficePart CreateCustomPart(XMLParts partType)
 		{
