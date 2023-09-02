@@ -1074,6 +1074,7 @@ namespace Office_File_Explorer
             rtbDisplay.BackColor = SystemColors.Window;
             toolStripButtonSave.Enabled = true;
             toolStripDropDownButtonInsert.Enabled = true;
+            toolStripButtonReplace.Enabled = true;
         }
 
         public void DisableModifyUI()
@@ -1082,6 +1083,7 @@ namespace Office_File_Explorer
             rtbDisplay.BackColor = SystemColors.Control;
             toolStripButtonSave.Enabled = false;
             toolStripDropDownButtonInsert.Enabled = false;
+            toolStripButtonReplace.Enabled = false;
         }
 
         public void EnableCustomUIIcons()
@@ -1389,7 +1391,16 @@ namespace Office_File_Explorer
                 return;
             }
 
+            rtbDisplay.SelectionStart = 0;
+            rtbDisplay.SelectionLength = rtbDisplay.TextLength;
             rtbDisplay.SelectedText = rtbDisplay.SelectedText.Replace(findText, replaceText);
+            rtbDisplay.SelectionStart = 0;
+            rtbDisplay.SelectionLength = 0;
+
+            if (Properties.Settings.Default.DisableXmlColorFormatting == false)
+            {
+                FormatXmlColors();
+            }
         }
 
         public void ClearRecentMenuItems()
