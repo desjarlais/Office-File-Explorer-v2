@@ -99,10 +99,12 @@ namespace Office_File_Explorer
             toolStripStatusLabelFilePath = new System.Windows.Forms.ToolStripStatusLabel();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             tvFiles = new System.Windows.Forms.TreeView();
-            tvImageList = new System.Windows.Forms.ImageList(components);
-            rtbDisplay = new System.Windows.Forms.RichTextBox();
             contextMenuTreeView = new System.Windows.Forms.ContextMenuStrip(components);
             viewPartPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            tvImageList = new System.Windows.Forms.ImageList(components);
+            rtbDisplay = new System.Windows.Forms.RichTextBox();
+            deletePartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            extractPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             mnuMainMenu.SuspendLayout();
             contextMenuRichTextBox.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -666,6 +668,19 @@ namespace Office_File_Explorer
             tvFiles.TabIndex = 0;
             tvFiles.AfterSelect += tvFiles_AfterSelect;
             // 
+            // contextMenuTreeView
+            // 
+            contextMenuTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { viewPartPropertiesToolStripMenuItem, deletePartToolStripMenuItem, extractPartToolStripMenuItem });
+            contextMenuTreeView.Name = "contextMenuTreeView";
+            contextMenuTreeView.Size = new System.Drawing.Size(180, 70);
+            // 
+            // viewPartPropertiesToolStripMenuItem
+            // 
+            viewPartPropertiesToolStripMenuItem.Name = "viewPartPropertiesToolStripMenuItem";
+            viewPartPropertiesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            viewPartPropertiesToolStripMenuItem.Text = "View Part Properties";
+            viewPartPropertiesToolStripMenuItem.Click += viewPartPropertiesToolStripMenuItem_Click;
+            // 
             // tvImageList
             // 
             tvImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
@@ -692,18 +707,19 @@ namespace Office_File_Explorer
             rtbDisplay.TabIndex = 0;
             rtbDisplay.Text = "";
             // 
-            // contextMenuTreeView
+            // deletePartToolStripMenuItem
             // 
-            contextMenuTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { viewPartPropertiesToolStripMenuItem });
-            contextMenuTreeView.Name = "contextMenuTreeView";
-            contextMenuTreeView.Size = new System.Drawing.Size(180, 26);
+            deletePartToolStripMenuItem.Enabled = false;
+            deletePartToolStripMenuItem.Name = "deletePartToolStripMenuItem";
+            deletePartToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            deletePartToolStripMenuItem.Text = "Delete Part";
             // 
-            // viewPartPropertiesToolStripMenuItem
+            // extractPartToolStripMenuItem
             // 
-            viewPartPropertiesToolStripMenuItem.Name = "viewPartPropertiesToolStripMenuItem";
-            viewPartPropertiesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            viewPartPropertiesToolStripMenuItem.Text = "View Part Properties";
-            viewPartPropertiesToolStripMenuItem.Click += viewPartPropertiesToolStripMenuItem_Click;
+            extractPartToolStripMenuItem.Enabled = false;
+            extractPartToolStripMenuItem.Name = "extractPartToolStripMenuItem";
+            extractPartToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            extractPartToolStripMenuItem.Text = "Extract Part";
             // 
             // FrmMain
             // 
@@ -811,6 +827,8 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem wordDocumentRevisionsToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuTreeView;
         private System.Windows.Forms.ToolStripMenuItem viewPartPropertiesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deletePartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem extractPartToolStripMenuItem;
     }
 }
 

@@ -1030,10 +1030,9 @@ namespace Office_File_Explorer
         {
             try
             {
-                if (rtbDisplay.Text.Length == 0)
-                {
-                    Clipboard.SetText(rtbDisplay.SelectedText);
-                }
+                int cp = rtbDisplay.SelectionStart;
+                int lineIndex = rtbDisplay.GetLineFromCharIndex(cp);
+                Clipboard.SetText(rtbDisplay.Lines[lineIndex]);
             }
             catch (Exception ex)
             {
