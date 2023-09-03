@@ -330,6 +330,11 @@ namespace Office_File_Explorer.Helpers
                 IEnumerable<IdPartPair> ipp = document.PresentationPart.Parts.OfType<IdPartPair>().ToList();
                 bool idFound = false;
 
+                if (document.PresentationPart.Presentation.CustomerDataList == null)
+                {
+                    return isFixed;
+                }
+
                 try
                 {
                 CdlStart:

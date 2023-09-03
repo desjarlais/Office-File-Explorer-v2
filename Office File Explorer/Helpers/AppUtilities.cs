@@ -47,6 +47,7 @@ namespace Office_File_Explorer.Helpers
             ConvertPptmToPptx,
             RemovePIIOnSave,
             ResetNotesPageSize,
+            ResetBulletMargins,
             CustomNotesPageReset
         }
 

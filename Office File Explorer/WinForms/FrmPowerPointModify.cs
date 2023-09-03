@@ -16,6 +16,11 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnOk_Click(object sender, EventArgs e)
         {
+            if (rdoResetBulletMargins.Checked)
+            {
+                pptModCmd = AppUtilities.PowerPointModifyCmds.ResetBulletMargins;
+            }
+
             if (rdoMoveSlide.Checked)
             {
                 pptModCmd = AppUtilities.PowerPointModifyCmds.MoveSlide;

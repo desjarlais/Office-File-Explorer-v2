@@ -1030,9 +1030,7 @@ namespace Office_File_Explorer
         {
             try
             {
-                int cp = rtbDisplay.SelectionStart;
-                int lineIndex = rtbDisplay.GetLineFromCharIndex(cp);
-                Clipboard.SetText(rtbDisplay.Lines[lineIndex]);
+                Clipboard.SetText(rtbDisplay.Lines[rtbDisplay.GetLineFromCharIndex(rtbDisplay.SelectionStart)]);
             }
             catch (Exception ex)
             {
@@ -2356,13 +2354,6 @@ namespace Office_File_Explorer
             }
             else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
             {
-                using (PresentationDocument document = PresentationDocument.Open(tempFilePackageViewer, true))
-                {
-                    PowerPointFixes.ResetBulletMargins(document);
-                    sbFixes.AppendLine("Bullet Margins Reset");
-                    corruptionFound = true;
-                }
-
                 if (PowerPointFixes.FixMissingRelIds(tempFilePackageViewer))
                 {
                     sbFixes.AppendLine("Fixed Missing Relationship Ids");
@@ -2933,6 +2924,15 @@ namespace Office_File_Explorer
                         }
 
                         Cursor = Cursors.WaitCursor;
+
+                        if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.ResetBulletMargins)
+                        {
+                            using (PresentationDocument pDoc = PresentationDocument.Open(tempFilePackageViewer, true))
+                            {
+                                PowerPointFixes.ResetBulletMargins(pDoc);
+                                rtbDisplay.AppendText("Bullet Margins Reset");
+                            }
+                        }
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.ConvertPptmToPptx)
                         {
