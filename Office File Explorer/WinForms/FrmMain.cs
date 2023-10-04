@@ -694,7 +694,6 @@ namespace Office_File_Explorer
                 // add opensettings to get around the fix malformed uri issue
                 var openSettings = new OpenSettings()
                 {
-                    //RelationshipErrorHandlerFactory = package => { return new UriRelationshipErrorHandler(); }
                     RelationshipErrorHandlerFactory = package => { return uriHandler; }
                 };
 
@@ -758,7 +757,7 @@ namespace Office_File_Explorer
         /// </summary>
         /// <param name="output">the list of content to display</param>
         /// <param name="type">the type of content to display</param>
-        public StringBuilder DisplayListContents(List<string> output, string type)
+        public static StringBuilder DisplayListContents(List<string> output, string type)
         {
             StringBuilder sb = new StringBuilder();
             // add title text for the contents
@@ -1220,14 +1219,22 @@ namespace Office_File_Explorer
             return false;
         }
 
-        private void XmlValidationEventHandler(object sender, ValidationEventArgs e)
+        public void LogXmlValidationError(ValidationEventArgs e)
         {
             lock (this)
             {
                 hasXmlError = true;
             }
-            MessageBox.Show(this, e.Message, e.Severity.ToString(), MessageBoxButtons.OK,
-                (e.Severity == XmlSeverityType.Error ? MessageBoxIcon.Error : MessageBoxIcon.Warning));
+
+            MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
+                        "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            FileUtilities.WriteToLog(Strings.fLogFilePath, "Xml Validation Error at Line #" + e.Exception.LineNumber + " Position #"
+                + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
+        }
+
+        private void XmlValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            LogXmlValidationError(e);
         }
 
         /// <summary>
@@ -1240,18 +1247,10 @@ namespace Office_File_Explorer
             switch (e.Severity)
             {
                 case XmlSeverityType.Error:
-                    MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
-                        "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    hasXmlError = true;
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, "LabelInfo Xml Validation Error at Line #" + e.Exception.LineNumber + " Position #"
-                        + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
+                    LogXmlValidationError(e);
                     break;
                 case XmlSeverityType.Warning:
-                    MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
-                        "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, "LabelInfo Xml Validation Error at Line #" + e.Exception.LineNumber + " Position #"
-                        + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
-                    hasXmlError = true;
+                    LogXmlValidationError(e);
                     break;
             }
         }
@@ -1831,7 +1830,6 @@ namespace Office_File_Explorer
                     sb.Append(DisplayListContents(Word.LstFieldCodes(tempFileReadOnly), Strings.wFldCodes));
                     sb.Append(DisplayListContents(Word.LstFieldCodesInHeader(tempFileReadOnly), " ** Header Field Codes **"));
                     sb.Append(DisplayListContents(Word.LstFieldCodesInFooter(tempFileReadOnly), " ** Footer Field Codes **"));
-                    sb.Append(DisplayListContents(Word.LstTables(tempFileReadOnly), Strings.wTables));
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)
                 {
