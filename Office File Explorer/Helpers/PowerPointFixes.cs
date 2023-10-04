@@ -699,6 +699,25 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
+        /// presentations can get bloated with master slide layouts which can cause perf issues in ppt online
+        /// this can delete the unused slide layouts to help with perf problems
+        /// </summary>
+        /// <param name="pDoc"></param>
+        public static void DeleteUnusedMasterLayouts(PresentationDocument pDoc)
+        {
+            // Get the presentation part of document
+            PresentationPart presentationPart = pDoc.PresentationPart;
+
+            if (presentationPart != null)
+            {
+                List<string> usedSlideLayoutIds = PowerPoint.GetSlideLayoutId(pDoc);
+
+                // loop the existing slidelayouts and delete any that are not in the used list
+                PowerPoint.DeleteUnusedSlideLayoutParts(pDoc, usedSlideLayoutIds);
+            }
+        }
+
+        /// <summary>
         /// Reset the left margin for the paragraph properties
         /// Seen some files where all margins are set to 0
         /// this means tabs will not work for bullets/numbering

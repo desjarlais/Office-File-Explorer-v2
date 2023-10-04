@@ -31,6 +31,7 @@ namespace Office_File_Explorer.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPowerPointModify));
             groupBox1 = new System.Windows.Forms.GroupBox();
+            rdoResetBulletMargins = new System.Windows.Forms.RadioButton();
             rdoCustomNotesPageReset = new System.Windows.Forms.RadioButton();
             rdoResetNotesPageSize = new System.Windows.Forms.RadioButton();
             rdoDeleteComments = new System.Windows.Forms.RadioButton();
@@ -39,12 +40,13 @@ namespace Office_File_Explorer.WinForms
             rdoMoveSlide = new System.Windows.Forms.RadioButton();
             BtnOk = new System.Windows.Forms.Button();
             BtnCancel = new System.Windows.Forms.Button();
-            rdoResetBulletMargins = new System.Windows.Forms.RadioButton();
+            rdoDeleteUnusedMasterLayouts = new System.Windows.Forms.RadioButton();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(rdoDeleteUnusedMasterLayouts);
             groupBox1.Controls.Add(rdoResetBulletMargins);
             groupBox1.Controls.Add(rdoCustomNotesPageReset);
             groupBox1.Controls.Add(rdoResetNotesPageSize);
@@ -54,10 +56,21 @@ namespace Office_File_Explorer.WinForms
             groupBox1.Controls.Add(rdoMoveSlide);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(315, 214);
+            groupBox1.Size = new System.Drawing.Size(315, 239);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Select Content To Modify";
+            // 
+            // rdoResetBulletMargins
+            // 
+            rdoResetBulletMargins.AutoSize = true;
+            rdoResetBulletMargins.Location = new System.Drawing.Point(11, 123);
+            rdoResetBulletMargins.Name = "rdoResetBulletMargins";
+            rdoResetBulletMargins.Size = new System.Drawing.Size(132, 19);
+            rdoResetBulletMargins.TabIndex = 8;
+            rdoResetBulletMargins.TabStop = true;
+            rdoResetBulletMargins.Text = "Reset Bullet Margins";
+            rdoResetBulletMargins.UseVisualStyleBackColor = true;
             // 
             // rdoCustomNotesPageReset
             // 
@@ -127,7 +140,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            BtnOk.Location = new System.Drawing.Point(174, 232);
+            BtnOk.Location = new System.Drawing.Point(171, 257);
             BtnOk.Name = "BtnOk";
             BtnOk.Size = new System.Drawing.Size(75, 23);
             BtnOk.TabIndex = 3;
@@ -137,7 +150,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            BtnCancel.Location = new System.Drawing.Point(255, 232);
+            BtnCancel.Location = new System.Drawing.Point(252, 257);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new System.Drawing.Size(75, 23);
             BtnCancel.TabIndex = 4;
@@ -145,22 +158,22 @@ namespace Office_File_Explorer.WinForms
             BtnCancel.UseVisualStyleBackColor = true;
             BtnCancel.Click += BtnCancel_Click;
             // 
-            // rdoResetBulletMargins
+            // rdoDeleteUnusedMasterLayouts
             // 
-            rdoResetBulletMargins.AutoSize = true;
-            rdoResetBulletMargins.Location = new System.Drawing.Point(11, 123);
-            rdoResetBulletMargins.Name = "rdoResetBulletMargins";
-            rdoResetBulletMargins.Size = new System.Drawing.Size(132, 19);
-            rdoResetBulletMargins.TabIndex = 8;
-            rdoResetBulletMargins.TabStop = true;
-            rdoResetBulletMargins.Text = "Reset Bullet Margins";
-            rdoResetBulletMargins.UseVisualStyleBackColor = true;
+            rdoDeleteUnusedMasterLayouts.AutoSize = true;
+            rdoDeleteUnusedMasterLayouts.Location = new System.Drawing.Point(11, 198);
+            rdoDeleteUnusedMasterLayouts.Name = "rdoDeleteUnusedMasterLayouts";
+            rdoDeleteUnusedMasterLayouts.Size = new System.Drawing.Size(184, 19);
+            rdoDeleteUnusedMasterLayouts.TabIndex = 9;
+            rdoDeleteUnusedMasterLayouts.TabStop = true;
+            rdoDeleteUnusedMasterLayouts.Text = "Delete Unused Master Layouts";
+            rdoDeleteUnusedMasterLayouts.UseVisualStyleBackColor = true;
             // 
             // FrmPowerPointModify
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(339, 265);
+            ClientSize = new System.Drawing.Size(339, 292);
             Controls.Add(BtnOk);
             Controls.Add(BtnCancel);
             Controls.Add(groupBox1);
@@ -190,5 +203,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoCustomNotesPageReset;
         private System.Windows.Forms.RadioButton rdoResetNotesPageSize;
         private System.Windows.Forms.RadioButton rdoResetBulletMargins;
+        private System.Windows.Forms.RadioButton rdoDeleteUnusedMasterLayouts;
     }
 }

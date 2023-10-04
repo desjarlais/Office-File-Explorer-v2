@@ -16,6 +16,11 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnOk_Click(object sender, EventArgs e)
         {
+            if (rdoDeleteUnusedMasterLayouts.Checked) 
+            {
+                pptModCmd = AppUtilities.PowerPointModifyCmds.DeleteUnusedMasterLayouts;
+            }
+
             if (rdoResetBulletMargins.Checked)
             {
                 pptModCmd = AppUtilities.PowerPointModifyCmds.ResetBulletMargins;

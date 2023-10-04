@@ -48,7 +48,8 @@ namespace Office_File_Explorer.Helpers
             RemovePIIOnSave,
             ResetNotesPageSize,
             ResetBulletMargins,
-            CustomNotesPageReset
+            CustomNotesPageReset,
+            DeleteUnusedMasterLayouts
         }
 
         public static string GetFontCharacterSet(string input)

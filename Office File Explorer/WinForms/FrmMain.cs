@@ -2404,6 +2404,8 @@ namespace Office_File_Explorer
             try
             {
                 StringBuilder sb = new StringBuilder();
+                rtbDisplay.Clear();
+
                 if (StrOfficeApp == Strings.oAppWord)
                 {
                     using (var f = new FrmWordModify())
@@ -2618,7 +2620,6 @@ namespace Office_File_Explorer
                         if (f.wdModCmd == AppUtilities.WordModifyCmds.ConvertDocmToDocx)
                         {
                             string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(tempFilePackageViewer, Strings.oAppWord);
-                            rtbDisplay.Clear();
                             if (fNewName != string.Empty)
                             {
                                 sb.AppendLine(tempFilePackageViewer + Strings.convertedTo + fNewName);
@@ -2794,7 +2795,6 @@ namespace Office_File_Explorer
                         if (f.xlModCmd == AppUtilities.ExcelModifyCmds.ConvertXlsmToXlsx)
                         {
                             string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(tempFilePackageViewer, Strings.oAppExcel);
-                            rtbDisplay.Clear();
                             if (fNewName != string.Empty)
                             {
                                 rtbDisplay.AppendText(tempFilePackageViewer + Strings.convertedTo + fNewName);
@@ -2923,6 +2923,15 @@ namespace Office_File_Explorer
 
                         Cursor = Cursors.WaitCursor;
 
+                        if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.DeleteUnusedMasterLayouts)
+                        {
+                            using (PresentationDocument pDoc = PresentationDocument.Open(tempFilePackageViewer, true))
+                            {
+                                PowerPointFixes.DeleteUnusedMasterLayouts(pDoc);
+                                rtbDisplay.AppendText("Unused Slide Layouts Deleted");
+                            }
+                        }
+
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.ResetBulletMargins)
                         {
                             using (PresentationDocument pDoc = PresentationDocument.Open(tempFilePackageViewer, true))
@@ -2935,7 +2944,6 @@ namespace Office_File_Explorer
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.ConvertPptmToPptx)
                         {
                             string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(tempFilePackageViewer, Strings.oAppPowerPoint);
-                            rtbDisplay.Clear();
                             if (fNewName != string.Empty)
                             {
                                 rtbDisplay.AppendText(tempFilePackageViewer + Strings.convertedTo + fNewName);

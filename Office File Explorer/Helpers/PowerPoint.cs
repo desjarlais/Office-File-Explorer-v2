@@ -401,6 +401,61 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
+        public static void DeleteUnusedSlideLayoutParts(PresentationDocument ppt, List<string> usedSlideLayoutIds)
+        {
+            foreach (SlideMasterPart smp in ppt.PresentationPart.SlideMasterParts)
+            {
+                //parts.Clear();
+                foreach (SlideLayoutPart slp in smp.SlideLayoutParts)
+                {
+                    bool sIdNotFound = true;
+
+                    foreach (string sId in usedSlideLayoutIds)
+                    {
+                        if (sId == slp.Uri.ToString())
+                        {
+                            sIdNotFound = false;
+                        }
+                    }
+
+                    if (sIdNotFound)
+                    {
+                        smp.DeletePart(slp);
+                        ppt.Save();
+                    }
+                }
+            }
+        }
+
+        public static List<string> GetSlideLayoutId(PresentationDocument ppt)
+        {
+            List<string> slideLayoutIds = new List<string>();
+
+            // Get a PresentationPart object from the PresentationDocument object.
+            PresentationPart presentationPart = ppt.PresentationPart;
+
+            if (presentationPart != null && presentationPart.Presentation != null)
+            {
+                // Get a Presentation object from the PresentationPart object.
+                Presentation presentation = presentationPart.Presentation;
+
+                if (presentation.SlideIdList != null)
+                {
+                    // Get the title of each slide in the slide order.
+                    foreach (var slideId in presentation.SlideIdList.Elements<SlideId>())
+                    {
+                        SlidePart slidePart = presentationPart.GetPartById(slideId.RelationshipId) as SlidePart;
+                        SlideLayoutPart slideLayoutPart = slidePart.SlideLayoutPart;
+                        slideLayoutIds.Add(slideLayoutPart.Uri.ToString());
+                    }
+                }
+            }
+
+            slideLayoutIds = slideLayoutIds.Distinct().ToList();
+
+            return slideLayoutIds;
+        }
+
         public static IList<string> GetSlideTitles(PresentationDocument presentationDocument)
         {
             if (presentationDocument is null)
