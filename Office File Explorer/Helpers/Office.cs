@@ -472,7 +472,15 @@ namespace Office_File_Explorer.Helpers
                             }
                         }
 
-                        // step 3. delete the cd for presentation.xml
+                        // step 3. delete the cd for notesmasters
+                        IEnumerable<CustomerData> cdNmSpList = presDoc.PresentationPart.NotesMasterPart.NotesMaster.CommonSlideData.ShapeTree.NonVisualGroupShapeProperties.Descendants<CustomerData>();
+                        foreach (CustomerData cd in cdNmSpList)
+                        {
+                            cd.Remove();
+                            isFixed = true;
+                        }
+
+                        // step 4. delete the cd for presentation.xml
                         IEnumerable<CustomerData> cdListPresPart = presDoc.PresentationPart.Presentation.Descendants<CustomerData>().ToList();
                         foreach (CustomerData cd in cdListPresPart)
                         {
@@ -480,7 +488,7 @@ namespace Office_File_Explorer.Helpers
                             isFixed = true;
                         }
 
-                        // step 4. remove the custom xml parts
+                        // step 5. remove the custom xml parts
                         if (presDoc.PresentationPart.CustomXmlParts is not null)
                         {
                             foreach (CustomXmlPart cxp in presDoc.PresentationPart.CustomXmlParts)
@@ -492,7 +500,7 @@ namespace Office_File_Explorer.Helpers
                         }
                     }
 
-                    // step 5. make sure the customxml files were deleted
+                    // step 6. make sure the customxml files were deleted
                     bool containsCustomXml = false;
 
                     // todo / workaround: still looking into some files where the above customxmlpart deletepart does not work

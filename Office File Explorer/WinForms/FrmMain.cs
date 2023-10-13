@@ -2368,11 +2368,10 @@ namespace Office_File_Explorer
             }
 
             // if any corruptions were found, copy the file to a new location and display the fixes and new file path
-            rtbDisplay.Clear();
             if (corruptionFound)
             {
                 string modifiedPath = AddTextToFileName(toolStripStatusLabelFilePath.Text, " (Fixed)");
-                File.Copy(toolStripStatusLabelFilePath.Text, modifiedPath, true);
+                File.Copy(tempFilePackageViewer, modifiedPath, true);
                 rtbDisplay.Text = sbFixes.ToString();
                 rtbDisplay.AppendText("\r\n\r\nModified File Location = " + modifiedPath);
             }

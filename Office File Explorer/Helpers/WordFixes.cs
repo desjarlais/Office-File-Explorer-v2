@@ -1579,6 +1579,11 @@ namespace Office_File_Explorer.Helpers
 
                     foreach (Drawing d in drwList)
                     {
+                        if (d.Anchor is null)
+                        {
+                            continue;
+                        }
+
                         // first get the list of id's
                         foreach (OpenXmlElement oxe in d.Anchor.ChildElements)
                         {
@@ -1594,6 +1599,11 @@ namespace Office_File_Explorer.Helpers
                     restartDrawingLoop:
                     foreach (Drawing d in drwList)
                     {
+                        if (d.Anchor is null)
+                        {
+                            continue;
+                        }
+
                         foreach (OpenXmlElement oxe in d.Anchor.ChildElements)
                         {
                             if (oxe.LocalName == "docPr")
