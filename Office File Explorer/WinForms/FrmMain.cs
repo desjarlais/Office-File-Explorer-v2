@@ -26,6 +26,8 @@ using System.Xml.Linq;
 
 using File = System.IO.File;
 using Color = System.Drawing.Color;
+using DocumentFormat.OpenXml.Bibliography;
+using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
 
 namespace Office_File_Explorer
 {
@@ -1445,40 +1447,44 @@ namespace Office_File_Explorer
                                 // convert the contents to indented xml
                                 XmlDocument doc = new XmlDocument();
                                 doc.LoadXml(contents);
-                                StringBuilder sb = new StringBuilder();
-                                XmlWriterSettings settings;
 
-                                if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
+                                using (MemoryStream ms = new MemoryStream())
                                 {
-                                    // customui files need to have xml declaration removed or it throws off parsing in the viewer
-                                    settings = new XmlWriterSettings
-                                    {
-                                        OmitXmlDeclaration = true,
-                                        Indent = true,
-                                        IndentChars = "  ",
-                                        NewLineChars = "\r\n",
-                                        NewLineHandling = NewLineHandling.Replace
-                                    };
-                                }
-                                else
-                                {
-                                    settings = new XmlWriterSettings
-                                    {
-                                        Indent = true,
-                                        IndentChars = "  ",
-                                        NewLineChars = "\r\n",
-                                        NewLineHandling = NewLineHandling.Replace
-                                    };
-                                }
+                                    XmlWriterSettings settings;
 
-                                using (XmlWriter writer = XmlWriter.Create(sb, settings))
-                                {
-                                    doc.Save(writer);
+                                    if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
+                                    {
+                                        settings = new XmlWriterSettings
+                                        {
+                                            OmitXmlDeclaration = true,
+                                            Indent = true,
+                                            IndentChars = "  ",
+                                            NewLineChars = "\r\n",
+                                            NewLineHandling = NewLineHandling.Replace
+                                        };
+                                    }
+                                    else
+                                    {
+                                        settings = new XmlWriterSettings
+                                        {
+                                            Encoding = new UTF8Encoding(false),
+                                            Indent = true,
+                                            IndentChars = "  ",
+                                            NewLineChars = "\r\n",
+                                            NewLineHandling = NewLineHandling.Replace
+                                        };
+                                    }
+                                    
+                                    using (XmlWriter writer = XmlWriter.Create(ms, settings))
+                                    {
+                                        doc.Save(writer);
+                                    }
+                                    contents = Encoding.UTF8.GetString(ms.ToArray());
                                 }
 
                                 tvFiles.SuspendLayout();
-                                rtbDisplay.Text = sb.ToString();
-
+                                rtbDisplay.Text = contents;
+                                
                                 // check for xml color setting
                                 if (Properties.Settings.Default.DisableXmlColorFormatting == false)
                                 {
