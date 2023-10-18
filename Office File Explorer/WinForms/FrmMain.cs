@@ -180,6 +180,7 @@ namespace Office_File_Explorer
                 {
                     Properties.Settings.Default.FileMRU.RemoveAt(i);
                     Properties.Settings.Default.Save();
+                    ClearRecentMenuItems();
                     UpdateMRU();
                     break;
                 }
@@ -1451,7 +1452,6 @@ namespace Office_File_Explorer
                                 using (MemoryStream ms = new MemoryStream())
                                 {
                                     XmlWriterSettings settings;
-
                                     if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
                                     {
                                         settings = new XmlWriterSettings
@@ -1579,7 +1579,6 @@ namespace Office_File_Explorer
                 return;
             }
 
-            //foreach (Match m in Regex.Matches(rtbDisplay.Text, pattern))
             foreach (Match m in regExXmlColors.Matches(rtbDisplay.Text))
             {
                 rtbDisplay.Select(m.Index, m.Length);
