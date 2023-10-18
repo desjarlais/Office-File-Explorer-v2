@@ -180,6 +180,10 @@ namespace Office_File_Explorer.Helpers
         public const string resetNotesMasterRegKey = "If you need to also resize the notes slides enable via: \r\n\r\nFile | Settings | Reset Notes Master";
         public const string convertedTo = " converted to -> ";
         public const string wdDocumentXml = "/word/document.xml";
+        public const string xlWorkbookXml = "/xl/workbook.xml";
+        public const string offCustomUIXml = "customUI/customUI.xml";
+        public const string offCustomUI14Xml = "customUI/customUI14.xml";
+        public const string offLabelInfo = "docMetadata/LabelInfo.xml";
         public const string allAuthors = "* All Authors *";
 
         // file locations

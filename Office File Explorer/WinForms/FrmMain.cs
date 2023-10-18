@@ -1,6 +1,5 @@
 ﻿// Open XML SDK refs
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Office2013.Word;
 using DocumentFormat.OpenXml.Packaging;
 
 // App refs
@@ -26,7 +25,6 @@ using System.Xml.Linq;
 
 using File = System.IO.File;
 using Color = System.Drawing.Color;
-using DocumentFormat.OpenXml.Bibliography;
 using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
 
 namespace Office_File_Explorer
@@ -1297,11 +1295,11 @@ namespace Office_File_Explorer
 
             foreach (PackagePart pp in pkgParts)
             {
-                if (pp.Uri.ToString().EndsWith("customUI/customUI14.xml"))
+                if (pp.Uri.ToString().EndsWith(Strings.offCustomUI14Xml))
                 {
                     return oPart = new OfficePart(pp, XMLParts.RibbonX14, Strings.CustomUI14PartRelType);
                 }
-                else if (pp.Uri.ToString().EndsWith("customUI/customUI.xml"))
+                else if (pp.Uri.ToString().EndsWith(Strings.offCustomUIXml))
                 {
                     return oPart = new OfficePart(pp, XMLParts.RibbonX14, Strings.CustomUIPartRelType);
                 }
@@ -1355,7 +1353,7 @@ namespace Office_File_Explorer
         /// <param name="path"></param>
         public void OpenRecentFile(string path)
         {
-            if (path == string.Empty || path == "empty")
+            if (path == string.Empty || path == Strings.wEmpty)
             {
                 return;
             }
@@ -1608,11 +1606,11 @@ namespace Office_File_Explorer
                 return;
             }
 
-            if (tvFiles.SelectedNode.Text.EndsWith("docMetadata/LabelInfo.xml"))
+            if (tvFiles.SelectedNode.Text.EndsWith(Strings.offLabelInfo))
             {
                 ValidatePartXml();
             }
-            else if (tvFiles.SelectedNode.Text.EndsWith("customUI/customUI14.xml") || tvFiles.SelectedNode.Text.EndsWith("customUI/customUI.xml"))
+            else if (tvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUI14Xml) || tvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUIXml))
             {
                 ValidateXml(true);
             }
@@ -2853,7 +2851,7 @@ namespace Office_File_Explorer
                                 {
                                     foreach (PackagePart part in package.GetParts())
                                     {
-                                        if (part.Uri.ToString() == "/xl/workbook.xml")
+                                        if (part.Uri.ToString() == Strings.xlWorkbookXml)
                                         {
                                             try
                                             {
