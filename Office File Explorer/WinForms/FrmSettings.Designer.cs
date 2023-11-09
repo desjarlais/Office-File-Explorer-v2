@@ -36,9 +36,11 @@ namespace Office_File_Explorer.WinForms
             ckbListRsids = new System.Windows.Forms.CheckBox();
             ckbRemoveFallbackTags = new System.Windows.Forms.CheckBox();
             groupBox2 = new System.Windows.Forms.GroupBox();
+            ckbResetIndentLevels = new System.Windows.Forms.CheckBox();
             ckbRemoveCustDataTags = new System.Windows.Forms.CheckBox();
             ckbResetNotes = new System.Windows.Forms.CheckBox();
             groupBox3 = new System.Windows.Forms.GroupBox();
+            ckbDisableAutoXmlColorFormatting = new System.Windows.Forms.CheckBox();
             ckbZipItemCorrupt = new System.Windows.Forms.CheckBox();
             ckbDeleteOnExit = new System.Windows.Forms.CheckBox();
             groupBox4 = new System.Windows.Forms.GroupBox();
@@ -50,7 +52,6 @@ namespace Office_File_Explorer.WinForms
             rdoUseSPGuid = new System.Windows.Forms.RadioButton();
             rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
             groupBox6 = new System.Windows.Forms.GroupBox();
-            ckbDisableAutoXmlColorFormatting = new System.Windows.Forms.CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -66,7 +67,7 @@ namespace Office_File_Explorer.WinForms
             groupBox1.Controls.Add(ckbRemoveFallbackTags);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(235, 151);
+            groupBox1.Size = new System.Drawing.Size(235, 173);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Word Corrupt Document";
@@ -113,14 +114,25 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(ckbResetIndentLevels);
             groupBox2.Controls.Add(ckbRemoveCustDataTags);
             groupBox2.Controls.Add(ckbResetNotes);
             groupBox2.Location = new System.Drawing.Point(253, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new System.Drawing.Size(238, 70);
+            groupBox2.Size = new System.Drawing.Size(238, 92);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "PowerPoint Options";
+            // 
+            // ckbResetIndentLevels
+            // 
+            ckbResetIndentLevels.AutoSize = true;
+            ckbResetIndentLevels.Location = new System.Drawing.Point(8, 67);
+            ckbResetIndentLevels.Name = "ckbResetIndentLevels";
+            ckbResetIndentLevels.Size = new System.Drawing.Size(126, 19);
+            ckbResetIndentLevels.TabIndex = 7;
+            ckbResetIndentLevels.Text = "Reset Indent Levels";
+            ckbResetIndentLevels.UseVisualStyleBackColor = true;
             // 
             // ckbRemoveCustDataTags
             // 
@@ -147,12 +159,22 @@ namespace Office_File_Explorer.WinForms
             groupBox3.Controls.Add(ckbDisableAutoXmlColorFormatting);
             groupBox3.Controls.Add(ckbZipItemCorrupt);
             groupBox3.Controls.Add(ckbDeleteOnExit);
-            groupBox3.Location = new System.Drawing.Point(253, 169);
+            groupBox3.Location = new System.Drawing.Point(253, 191);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new System.Drawing.Size(238, 103);
             groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "App Settings";
+            // 
+            // ckbDisableAutoXmlColorFormatting
+            // 
+            ckbDisableAutoXmlColorFormatting.AutoSize = true;
+            ckbDisableAutoXmlColorFormatting.Location = new System.Drawing.Point(6, 78);
+            ckbDisableAutoXmlColorFormatting.Name = "ckbDisableAutoXmlColorFormatting";
+            ckbDisableAutoXmlColorFormatting.Size = new System.Drawing.Size(182, 19);
+            ckbDisableAutoXmlColorFormatting.TabIndex = 4;
+            ckbDisableAutoXmlColorFormatting.Text = "Disable Xml Color Formatting";
+            ckbDisableAutoXmlColorFormatting.UseVisualStyleBackColor = true;
             // 
             // ckbZipItemCorrupt
             // 
@@ -178,7 +200,7 @@ namespace Office_File_Explorer.WinForms
             // 
             groupBox4.Controls.Add(rdoSAX);
             groupBox4.Controls.Add(rdoDOM);
-            groupBox4.Location = new System.Drawing.Point(253, 88);
+            groupBox4.Location = new System.Drawing.Point(253, 110);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new System.Drawing.Size(238, 75);
             groupBox4.TabIndex = 0;
@@ -209,7 +231,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnOk
             // 
-            BtnOk.Location = new System.Drawing.Point(338, 287);
+            BtnOk.Location = new System.Drawing.Point(337, 305);
             BtnOk.Name = "BtnOk";
             BtnOk.Size = new System.Drawing.Size(75, 23);
             BtnOk.TabIndex = 1;
@@ -219,7 +241,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // BtnCancel
             // 
-            BtnCancel.Location = new System.Drawing.Point(419, 287);
+            BtnCancel.Location = new System.Drawing.Point(418, 305);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new System.Drawing.Size(75, 23);
             BtnCancel.TabIndex = 2;
@@ -265,22 +287,12 @@ namespace Office_File_Explorer.WinForms
             groupBox6.Controls.Add(rdoUserSelectedCC);
             groupBox6.Controls.Add(rdoUseSPGuid);
             groupBox6.Controls.Add(rdoUseCCGuid);
-            groupBox6.Location = new System.Drawing.Point(12, 169);
+            groupBox6.Location = new System.Drawing.Point(12, 191);
             groupBox6.Name = "groupBox6";
             groupBox6.Size = new System.Drawing.Size(235, 103);
             groupBox6.TabIndex = 5;
             groupBox6.TabStop = false;
             groupBox6.Text = "Fix Content Control Prefix Mappings";
-            // 
-            // ckbDisableAutoXmlColorFormatting
-            // 
-            ckbDisableAutoXmlColorFormatting.AutoSize = true;
-            ckbDisableAutoXmlColorFormatting.Location = new System.Drawing.Point(6, 78);
-            ckbDisableAutoXmlColorFormatting.Name = "ckbDisableAutoXmlColorFormatting";
-            ckbDisableAutoXmlColorFormatting.Size = new System.Drawing.Size(182, 19);
-            ckbDisableAutoXmlColorFormatting.TabIndex = 4;
-            ckbDisableAutoXmlColorFormatting.Text = "Disable Xml Color Formatting";
-            ckbDisableAutoXmlColorFormatting.UseVisualStyleBackColor = true;
             // 
             // FrmSettings
             // 
@@ -339,5 +351,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoUserSelectedCC;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox ckbDisableAutoXmlColorFormatting;
+        private System.Windows.Forms.CheckBox ckbResetIndentLevels;
     }
 }

@@ -409,12 +409,7 @@ namespace Office_File_Explorer.Helpers
                             // remove the cd / <p:custData ...> from slides
                             if (sp.Slide.CommonSlideData.CustomerDataList is not null)
                             {
-                                IEnumerable<CustomerData> cdList = sp.Slide.CommonSlideData.CustomerDataList.Descendants<CustomerData>().ToList();
-                                foreach (CustomerData cd in cdList)
-                                {
-                                    cd.Remove();
-                                    isFixed = true;
-                                }
+                                RemoveAllCustomerDataTags(sp.Slide.CommonSlideData);
                             }
 
                             // delete the cd for slidelayout
@@ -462,23 +457,13 @@ namespace Office_File_Explorer.Helpers
                                     }
 
                                     // check the shapetree for cd tags
-                                    IEnumerable<CustomerData> cdSpList = slp.SlideLayout.CommonSlideData.ShapeTree.Descendants<CustomerData>();
-                                    foreach (CustomerData cd in cdSpList)
-                                    {
-                                        cd.Remove();
-                                        isFixed = true;
-                                    }
+                                    isFixed = RemoveAllCustomerDataTags(slp.SlideLayout.CommonSlideData);
                                 }
                             }
                         }
 
                         // step 3. delete the cd for notesmasters
-                        IEnumerable<CustomerData> cdNmSpList = presDoc.PresentationPart.NotesMasterPart.NotesMaster.CommonSlideData.ShapeTree.NonVisualGroupShapeProperties.Descendants<CustomerData>();
-                        foreach (CustomerData cd in cdNmSpList)
-                        {
-                            cd.Remove();
-                            isFixed = true;
-                        }
+                        isFixed = RemoveAllCustomerDataTags(presDoc.PresentationPart.NotesMasterPart.NotesMaster.CommonSlideData);
 
                         // step 4. delete the cd for presentation.xml
                         IEnumerable<CustomerData> cdListPresPart = presDoc.PresentationPart.Presentation.Descendants<CustomerData>().ToList();
@@ -563,6 +548,30 @@ namespace Office_File_Explorer.Helpers
                         excelDoc.WorkbookPart.DeletePart(cxp);
                         excelDoc.Save();
                         isFixed = true;
+                    }
+                }
+            }
+
+            return isFixed;
+        }
+
+        public static bool RemoveAllCustomerDataTags(CommonSlideData csd)
+        {
+            bool isFixed = false;
+
+            foreach (OpenXmlElement oxe in csd.ShapeTree)
+            {
+                if (oxe.LocalName == "sp")
+                {
+                    Shape shp = (Shape)oxe;
+                    foreach (OpenXmlElement oxeShape in shp.NonVisualShapeProperties.ApplicationNonVisualDrawingProperties)
+                    {
+                        if (oxeShape.LocalName == "custDataLst")
+                        {
+                            CustomerDataList cdl = (CustomerDataList)oxeShape;
+                            cdl.Remove();
+                            isFixed = true;
+                        }
                     }
                 }
             }

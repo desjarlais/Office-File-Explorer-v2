@@ -737,8 +737,7 @@ namespace Office_File_Explorer
             }
             catch (InvalidOperationException ioe)
             {
-                LogInformation(LogInfoType.LogException, Strings.errorOpenWithSDK, ioe.Message);
-                LogInformation(LogInfoType.LogException, Strings.errorOpenWithSDK, ioe.StackTrace);
+                LogInformation(LogInfoType.LogException, Strings.errorOpenWithSDK, ioe.Message + Strings.wMinusSign + ioe.StackTrace);
             }
             catch (Exception ex)
             {
@@ -1413,6 +1412,11 @@ namespace Office_File_Explorer
             mruToolStripMenuItem9.Text = Strings.wEmpty;
         }
 
+        /// <summary>
+        /// displaying xml happens in this selection event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tvFiles_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
@@ -1443,7 +1447,7 @@ namespace Office_File_Explorer
                             {
                                 string contents = sr.ReadToEnd();
 
-                                // convert the contents to indented xml
+                                // load the xml and indented/format xml
                                 XmlDocument doc = new XmlDocument();
                                 doc.LoadXml(contents);
 
@@ -1452,6 +1456,7 @@ namespace Office_File_Explorer
                                     XmlWriterSettings settings;
                                     if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
                                     {
+                                        // custom ui files need to be saved without the xml declaration
                                         settings = new XmlWriterSettings
                                         {
                                             OmitXmlDeclaration = true,
@@ -1463,6 +1468,7 @@ namespace Office_File_Explorer
                                     }
                                     else
                                     {
+                                        // all other xml files need to be saved with the utf8 xml declaration
                                         settings = new XmlWriterSettings
                                         {
                                             Encoding = new UTF8Encoding(false),
@@ -1473,6 +1479,7 @@ namespace Office_File_Explorer
                                         };
                                     }
                                     
+                                    // write out the xml to a memory stream
                                     using (XmlWriter writer = XmlWriter.Create(ms, settings))
                                     {
                                         doc.Save(writer);
@@ -1498,6 +1505,8 @@ namespace Office_File_Explorer
                 }
                 else if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Image)
                 {
+                    // currently showing images with a form
+                    // TODO find a way to keep the image in the main form
                     foreach (PackagePart pp in pkgParts)
                     {
                         if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
@@ -1531,6 +1540,7 @@ namespace Office_File_Explorer
                         {
                             partPropCompression = pp.CompressionOption.ToString();
                             partPropContentType = pp.ContentType;
+
                             Stream stream = pp.GetStream();
                             byte[] binData = FileUtilities.ReadToEnd(stream);
                             rtbDisplay.Text = Convert.ToHexString(binData);
@@ -1936,10 +1946,9 @@ namespace Office_File_Explorer
                     {
                         if (part.Uri.ToString() == Strings.wdDocumentXml)
                         {
-                            XmlDocument xdoc = new XmlDocument();
-
                             try
                             {
+                                XmlDocument xdoc = new XmlDocument();
                                 xdoc.Load(part.GetStream(FileMode.Open, FileAccess.Read));
                             }
                             catch (XmlException) // invalid xml found, try to fix the contents
@@ -2065,7 +2074,7 @@ namespace Office_File_Explorer
                                                     }
                                                     else
                                                     {
-                                                        // leaving this open for future checks
+                                                        FileUtilities.WriteToLog(Strings.fLogFilePath, "Corrupt Doc Exception = Unknown scenario");
                                                         break;
                                                     }
                                             }
@@ -2147,7 +2156,6 @@ namespace Office_File_Explorer
                 using (Package package = Package.Open(StrDestFileName, FileMode.Open, FileAccess.ReadWrite))
                 {
                     MemoryStream ms = new MemoryStream();
-
                     using (TextWriter tw = new StreamWriter(ms))
                     {
                         foreach (PackagePart part in package.GetParts())
@@ -2358,6 +2366,12 @@ namespace Office_File_Explorer
                 if (PowerPointFixes.FixMissingRelIds(tempFilePackageViewer))
                 {
                     sbFixes.AppendLine("Fixed Missing Relationship Ids");
+                    corruptionFound = true;
+                }
+
+                if (PowerPointFixes.FixMissingPlaceholder(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Fixed Missing Placeholders");
                     corruptionFound = true;
                 }
             }

@@ -59,6 +59,11 @@ namespace Office_File_Explorer.WinForms
                 ckbRemoveCustDataTags.Checked = true;
             }
 
+            if (Properties.Settings.Default.ResetIndentLevels == true)
+            {
+                ckbResetIndentLevels.Checked = true;
+            }
+
             if (Properties.Settings.Default.UseContentControlGuid == true)
             {
                 rdoUseCCGuid.Checked = true;
@@ -89,6 +94,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.DeleteOnlyCommentBookmarks = ckbDeleteOnlyCommentBookmarks.Checked;
             Properties.Settings.Default.RemoveCustDataTags = ckbRemoveCustDataTags.Checked;
             Properties.Settings.Default.DisableXmlColorFormatting = ckbDisableAutoXmlColorFormatting.Checked;
+            Properties.Settings.Default.ResetIndentLevels = ckbResetIndentLevels.Checked;
 
             if (rdoUseCCGuid.Checked)
             {
@@ -133,6 +139,15 @@ namespace Office_File_Explorer.WinForms
             else
             {
                 Properties.Settings.Default.DisableXmlColorFormatting = false;
+            }
+
+            if (ckbResetIndentLevels.Checked)
+            {
+                Properties.Settings.Default.ResetIndentLevels = true;
+            }
+            else
+            {
+                Properties.Settings.Default.ResetIndentLevels = false;
             }
 
             Properties.Settings.Default.Save();

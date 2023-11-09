@@ -215,5 +215,17 @@ namespace Office_File_Explorer.Properties {
                 this["DisableXmlColorFormatting"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ResetIndentLevels {
+            get {
+                return ((bool)(this["ResetIndentLevels"]));
+            }
+            set {
+                this["ResetIndentLevels"] = value;
+            }
+        }
     }
 }

@@ -9,6 +9,8 @@ using TextBody = DocumentFormat.OpenXml.Presentation.TextBody;
 using System.Linq;
 using System.Windows.Forms;
 using System;
+using DocumentFormat.OpenXml;
+using NonVisualGroupShapeProperties = DocumentFormat.OpenXml.Presentation.NonVisualGroupShapeProperties;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -312,6 +314,131 @@ namespace Office_File_Explorer.Helpers
             }
 
             return nsh;
+        }
+
+        /// <summary>
+        /// when using Bittitan to convert google docs to PowerPoint presentations, the files will have missing placeholder tags
+        /// they also will have incorrect indent levels
+        /// this fix will check for these scenarios and reset the levels and add the missing tags
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixMissingPlaceholder(string filePath)
+        {
+            bool isFixed = false;
+
+            using (PresentationDocument document = PresentationDocument.Open(filePath, true))
+            {
+                foreach (SlidePart sp in document.PresentationPart.SlideParts)
+                {
+                    Slide sld = sp.Slide;
+                    foreach (OpenXmlElement oxe in sld.CommonSlideData.ShapeTree)
+                    {
+                        if (oxe.LocalName == "sp")
+                        {
+                            bool isTxBox = false;
+                            // first loop through the shapes and see if cNvSpPr has a txBox
+                            // if it does not, no checks needed
+                            foreach (OpenXmlElement oxeShp in oxe.ChildElements)
+                            {
+                                // if the shape is not a textbox, skip it
+                                if (oxeShp.LocalName == "nvSpPr")
+                                {
+                                    foreach (OpenXmlElement oxeNvSpPr in oxeShp.ChildElements)
+                                    {
+                                        if (oxeNvSpPr.LocalName == "cNvSpPr")
+                                        {
+                                            if (oxeNvSpPr.OuterXml.Contains("txBox=\"1\""))
+                                            {
+                                                isTxBox = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // if a txbody was found, continue looking for missing tags
+                            if (isTxBox)
+                            {
+                                foreach (OpenXmlElement oxeShape in oxe.ChildElements)
+                                {
+                                    bool hasPlaceholder = false;
+
+                                    // if nvpr has no child elements or attributes, add new nvpr with placeholder
+                                    // nonvisualshapeproperties contains placeholder
+                                    if (oxeShape.LocalName == "nvSpPr")
+                                    {
+                                        foreach (OpenXmlElement oxeNvpr in oxeShape.ChildElements)
+                                        {
+                                            if (oxeNvpr.LocalName == "nvPr")
+                                            {
+                                                foreach (OpenXmlElement oxeNvPrChild in oxeNvpr.ChildElements)
+                                                {
+                                                    if (oxeNvPrChild.LocalName == "ph")
+                                                    {
+                                                        hasPlaceholder = true;
+                                                    }
+                                                }
+
+                                                if (!hasPlaceholder)
+                                                {
+                                                    // add placeholder to oxenvpr
+                                                    PlaceholderShape placeholderShape1 = new PlaceholderShape() { Type = PlaceholderValues.Body };
+                                                    placeholderShape1.Index = 1;
+                                                    oxeNvpr.Append(placeholderShape1);
+                                                    isFixed = true;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // textbody contains level
+                                    if (oxeShape.LocalName == "txBody")
+                                    {
+                                        if (Properties.Settings.Default.ResetIndentLevels == true)
+                                        {
+                                            // if nvpr was empty, loop paragraphs and check for levels > 0 and reset to 0
+                                            foreach (OpenXmlElement oxeTxBody in oxeShape.ChildElements)
+                                            {
+                                                if (oxeTxBody.LocalName == "p")
+                                                {
+                                                    foreach (OpenXmlElement oxeTxBodyPara in oxeTxBody.ChildElements)
+                                                    {
+                                                        if (oxeTxBodyPara.LocalName == "pPr")
+                                                        {
+                                                            try
+                                                            {
+                                                                TextParagraphPropertiesType textParagraphProperties = (TextParagraphPropertiesType)oxeTxBodyPara;
+                                                                if (textParagraphProperties.Level == 8)
+                                                                {
+                                                                    textParagraphProperties.Level = 0;
+                                                                    isFixed = true;
+                                                                }
+                                                            }
+                                                            catch (Exception)
+                                                            {
+                                                                // skip null props
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // save out the file
+                if (isFixed)
+                {
+                    document.Save();
+                }
+            }
+
+            return isFixed;
         }
 
         /// <summary>
