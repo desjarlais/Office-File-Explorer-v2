@@ -317,7 +317,7 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
-        /// when using Bittitan to convert google docs to PowerPoint presentations, the files will have missing placeholder tags
+        /// when using Bittitan to convert google docs to PowerPoint presentations, the files might have missing placeholder tags
         /// they also will have incorrect indent levels
         /// this fix will check for these scenarios and reset the levels and add the missing tags
         /// </summary>
@@ -382,7 +382,7 @@ namespace Office_File_Explorer.Helpers
 
                                                 if (!hasPlaceholder)
                                                 {
-                                                    // add placeholder to oxenvpr
+                                                    // add placeholder to oxenvpr, make sure to include a type and index number
                                                     PlaceholderShape placeholderShape1 = new PlaceholderShape() { Type = PlaceholderValues.Body };
                                                     placeholderShape1.Index = 1;
                                                     oxeNvpr.Append(placeholderShape1);

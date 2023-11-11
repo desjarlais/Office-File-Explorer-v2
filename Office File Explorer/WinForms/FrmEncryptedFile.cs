@@ -32,7 +32,6 @@ namespace Office_File_Explorer.WinForms
 
             try
             {
-                //Load file
                 if (enableCommit)
                 {
                     cf = new CompoundFile(fs, CFSUpdateMode.Update, CFSConfiguration.SectorRecycle | CFSConfiguration.NoValidationException | CFSConfiguration.EraseFreeSectors);

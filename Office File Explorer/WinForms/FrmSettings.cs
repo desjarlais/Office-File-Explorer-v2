@@ -64,6 +64,11 @@ namespace Office_File_Explorer.WinForms
                 ckbResetIndentLevels.Checked = true;
             }
 
+            if (Properties.Settings.Default.MsgAsRtf == true)
+            {
+                ckbOutlookMsgAsRtf.Checked = true;
+            }
+
             if (Properties.Settings.Default.UseContentControlGuid == true)
             {
                 rdoUseCCGuid.Checked = true;
@@ -95,6 +100,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.RemoveCustDataTags = ckbRemoveCustDataTags.Checked;
             Properties.Settings.Default.DisableXmlColorFormatting = ckbDisableAutoXmlColorFormatting.Checked;
             Properties.Settings.Default.ResetIndentLevels = ckbResetIndentLevels.Checked;
+            Properties.Settings.Default.MsgAsRtf = ckbOutlookMsgAsRtf.Checked;
 
             if (rdoUseCCGuid.Checked)
             {
@@ -148,6 +154,15 @@ namespace Office_File_Explorer.WinForms
             else
             {
                 Properties.Settings.Default.ResetIndentLevels = false;
+            }
+
+            if (ckbOutlookMsgAsRtf.Checked)
+            {
+                Properties.Settings.Default.MsgAsRtf = true;
+            }
+            else
+            {
+                Properties.Settings.Default.MsgAsRtf = false;
             }
 
             Properties.Settings.Default.Save();

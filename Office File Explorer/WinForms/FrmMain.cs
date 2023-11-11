@@ -327,7 +327,11 @@ namespace Office_File_Explorer
                 {
                     cForm.ShowDialog();
                 }
-                fs.Close();
+                
+                if (fs is not null)
+                {
+                    fs.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -413,7 +417,8 @@ namespace Office_File_Explorer
                     {
                         Title = "Select Office Open Xml File.",
                         Filter = "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm|" +
-                                 "Binary Office Documents | *.doc; *.dot; *.xls; *.xlt; *.ppt; *.pot",
+                                 "Binary Office Documents | *.doc; *.dot; *.xls; *.xlt; *.ppt; *.pot|" +
+                                 "Outlook Message Format | *.msg",
                         RestoreDirectory = true,
                         InitialDirectory = @"%userprofile%"
                     };
@@ -442,11 +447,28 @@ namespace Office_File_Explorer
                 {
                     rtbDisplay.Clear();
 
-                    // if the file doesn't start with PK, we can stop trying to process it
+                    // handle msg files
+                    if (toolStripStatusLabelFilePath.Text.EndsWith(".msg"))
+                    {
+                        Stream messageStream = File.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.Read);
+                        OutlookStorage.Message message = new OutlookStorage.Message(messageStream);
+                        messageStream.Close();
+
+                        LoadMsgToTree(message, tvFiles.Nodes.Add("MSG"));
+                        tvFiles.ImageIndex = 6;
+                        tvFiles.SelectedImageIndex = 6;
+                        message.Dispose();
+                        return;
+                    }
+
+                    // handle office files
                     if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
                     {
+                        // if the file doesn't start with PK, we can stop trying to process it
                         DisplayInvalidFileFormatError();
                         DisableUI();
+                        
+                        // handle encrypted files
                         structuredStorageViewerToolStripMenuItem.Enabled = true;
                     }
                     else
@@ -498,6 +520,32 @@ namespace Office_File_Explorer
             finally
             {
                 Cursor = Cursors.Default;
+            }
+        }
+
+        private void LoadMsgToTree(OutlookStorage.Message message, TreeNode messageNode)
+        {
+            messageNode.Text = message.Subject;
+            messageNode.Nodes.Add("Subject: " + message.Subject);
+            TreeNode bodyNode = messageNode.Nodes.Add("Body: (click to view)");
+            bodyNode.Tag = new string[] { message.BodyText, message.BodyRTF };
+
+            TreeNode recipientNode = messageNode.Nodes.Add("Recipients: " + message.Recipients.Count);
+            foreach (OutlookStorage.Recipient recipient in message.Recipients)
+            {
+                recipientNode.Nodes.Add(recipient.Type + ": " + recipient.Email);
+            }
+
+            TreeNode attachmentNode = messageNode.Nodes.Add("Attachments: " + message.Attachments.Count);
+            foreach (OutlookStorage.Attachment attachment in message.Attachments)
+            {
+                attachmentNode.Nodes.Add(attachment.Filename + ": " + attachment.Data.Length + "b");
+            }
+
+            TreeNode subMessageNode = messageNode.Nodes.Add("Sub Messages: " + message.Messages.Count);
+            foreach (OutlookStorage.Message subMessage in message.Messages)
+            {
+                LoadMsgToTree(subMessage, subMessageNode.Nodes.Add("MSG"));
             }
         }
 
@@ -1422,6 +1470,28 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
+
+                // render msg content
+                if (toolStripStatusLabelFilePath.Text.EndsWith(".msg"))
+                {
+                    string[] body = e.Node.Tag as string[];
+
+                    if (body != null)
+                    {
+                        if (Properties.Settings.Default.MsgAsRtf)
+                        {
+                            rtbDisplay.Rtf = body[1];
+                        }
+                        else
+                        {
+                            rtbDisplay.Text = body[0];
+                        }
+                    }
+
+                    ScrollToTopOfRtb();
+                    tvFiles.ExpandAll();
+                    return;
+                }
 
                 if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
                 {

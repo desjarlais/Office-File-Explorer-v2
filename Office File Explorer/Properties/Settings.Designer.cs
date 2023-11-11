@@ -227,5 +227,17 @@ namespace Office_File_Explorer.Properties {
                 this["ResetIndentLevels"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MsgAsRtf {
+            get {
+                return ((bool)(this["MsgAsRtf"]));
+            }
+            set {
+                this["MsgAsRtf"] = value;
+            }
+        }
     }
 }
