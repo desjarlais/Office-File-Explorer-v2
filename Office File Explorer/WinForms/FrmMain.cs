@@ -461,6 +461,8 @@ namespace Office_File_Explorer
                         tvFiles.SelectedImageIndex = 6;
                         message.Dispose();
                         toolStripStatusLabelDocType.Text = Strings.oAppOutlook;
+                        tvFiles.ExpandAll();
+                        ScrollToTopOfRtb();
                         return;
                     }
 
@@ -540,6 +542,7 @@ namespace Office_File_Explorer
                 recipientNode.Tag = new string[] { "Display Name: " + recipient.DisplayName, "Email: " + recipient.Email };
             }
 
+            attachmentList.Clear();
             TreeNode attachmentNode = messageNode.Nodes.Add("Attachments: " + message.Attachments.Count);
             foreach (OutlookStorage.Attachment attachment in message.Attachments)
             {
