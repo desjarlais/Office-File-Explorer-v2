@@ -59,6 +59,7 @@ namespace Office_File_Explorer
         private static List<string> corruptNodes = new List<string>();
         private static List<string> pParts = new List<string>();
         private List<string> oNumIdList = new List<string>();
+        private Dictionary<string, Image> attachmentList = new Dictionary<string, Image>();
 
         // part viewer globals
         public List<PackagePart> pkgParts = new List<PackagePart>();
@@ -73,6 +74,7 @@ namespace Office_File_Explorer
             Word,
             Excel,
             PowerPoint,
+            Outlook,
             XML,
             Image,
             Binary,
@@ -448,7 +450,7 @@ namespace Office_File_Explorer
                     rtbDisplay.Clear();
 
                     // handle msg files
-                    if (toolStripStatusLabelFilePath.Text.EndsWith(".msg"))
+                    if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.msgFileExt))
                     {
                         Stream messageStream = File.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.Read);
                         OutlookStorage.Message message = new OutlookStorage.Message(messageStream);
@@ -458,6 +460,7 @@ namespace Office_File_Explorer
                         tvFiles.ImageIndex = 6;
                         tvFiles.SelectedImageIndex = 6;
                         message.Dispose();
+                        toolStripStatusLabelDocType.Text = Strings.oAppOutlook;
                         return;
                     }
 
@@ -534,12 +537,16 @@ namespace Office_File_Explorer
             foreach (OutlookStorage.Recipient recipient in message.Recipients)
             {
                 recipientNode.Nodes.Add(recipient.Type + ": " + recipient.Email);
+                recipientNode.Tag = new string[] { "Display Name: " + recipient.DisplayName, "Email: " + recipient.Email };
             }
 
             TreeNode attachmentNode = messageNode.Nodes.Add("Attachments: " + message.Attachments.Count);
             foreach (OutlookStorage.Attachment attachment in message.Attachments)
             {
                 attachmentNode.Nodes.Add(attachment.Filename + ": " + attachment.Data.Length + "b");
+                Stream imageSource = new MemoryStream(attachment.Data);
+                Image image = Image.FromStream(imageSource);
+                attachmentList.Add(attachment.Filename, image);
             }
 
             TreeNode subMessageNode = messageNode.Nodes.Add("Sub Messages: " + message.Messages.Count);
@@ -648,6 +655,8 @@ namespace Office_File_Explorer
                 case ".potx":
                 case ".potm":
                     return OpenXmlInnerFileTypes.PowerPoint;
+                case ".msg":
+                    return OpenXmlInnerFileTypes.Outlook;
                 case ".jpeg":
                 case ".jpg":
                 case ".bmp":
@@ -1485,6 +1494,20 @@ namespace Office_File_Explorer
                         else
                         {
                             rtbDisplay.Text = body[0];
+                        }
+                    }
+
+                    if (e.Node.Parent is not null && e.Node.Parent.Text.Contains("Attachments:"))
+                    {
+                        foreach (var att in attachmentList)
+                        {
+                            if (e.Node.Text.Contains(att.Key))
+                            {
+                                using (var f = new FrmDisplayOutput(att.Value))
+                                {
+                                    var result = f.ShowDialog();
+                                }
+                            }
                         }
                     }
 

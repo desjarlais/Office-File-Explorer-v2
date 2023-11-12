@@ -37,10 +37,13 @@ namespace Office_File_Explorer.Helpers
         public const string potxFileExt = ".potx";
         public const string potmFileExt = ".potm";
 
+        public const string msgFileExt = ".msg";
+
         // global app words
         public const string oAppWord = "Word";
         public const string oAppExcel = "Excel";
         public const string oAppPowerPoint = "PowerPoint";
+        public const string oAppOutlook = "Outlook";
         public const string oAppUnknown = "Unknown";
         public const string oAppTitle = "Office File Explorer v2";
         public const string wCopyFileParentheses = "(Copy)";
