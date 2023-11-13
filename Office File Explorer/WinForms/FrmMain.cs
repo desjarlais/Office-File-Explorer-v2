@@ -26,6 +26,7 @@ using System.Xml.Linq;
 using File = System.IO.File;
 using Color = System.Drawing.Color;
 using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
+using Office_File_Explorer.OpenMcdf;
 
 namespace Office_File_Explorer
 {
@@ -37,9 +38,14 @@ namespace Office_File_Explorer
         private string fromChangeTemplate;
         private string partPropContentType;
         private string partPropCompression;
+        private bool isEncrypted;
 
         // openmcdf
         private FileStream fs;
+        private CompoundFile cf;
+        private CFStream cfStream;
+        private bool isValid;
+        private List<string> validationErrors = new List<string>();
 
         // corrupt doc legacy
         private static string StrCopiedFileName = string.Empty;
@@ -222,7 +228,7 @@ namespace Office_File_Explorer
             try
             {
                 string fExtension = Path.GetExtension(toolStripStatusLabelFilePath.Text);
-                
+
                 tempFileReadOnly = Path.GetTempFileName().Replace(".tmp", fExtension);
                 File.Copy(toolStripStatusLabelFilePath.Text, tempFileReadOnly, true);
 
@@ -252,6 +258,12 @@ namespace Office_File_Explorer
             toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
             rtbDisplay.Clear();
             fileToolStripMenuItemClose.Enabled = false;
+
+            // check for encrypted file
+            if (fs is not null)
+            {
+                fs.Close();
+            }
         }
 
         /// <summary>
@@ -318,23 +330,30 @@ namespace Office_File_Explorer
             try
             {
                 fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);
-                FrmEncryptedFile cForm = new FrmEncryptedFile(fs, true)
-                {
-                    Owner = this
-                };
 
-                if (cForm.IsDisposed)
+                // Load images
+                tvFiles.ImageList = new ImageList();
+                tvFiles.ImageList.Images.Add(Properties.Resources.folder);
+                tvFiles.ImageList.Images.Add(Properties.Resources.BinaryFile);
+
+                try
                 {
-                    return;
+                    cf = new CompoundFile(fs, CFSUpdateMode.Update, CFSConfiguration.SectorRecycle | CFSConfiguration.NoValidationException | CFSConfiguration.EraseFreeSectors);
+
+                    // populate treeview
+                    tvFiles.Nodes.Clear();
+                    TreeNode root = null;
+                    root = tvFiles.Nodes.Add("Root Entry", "Root");
+                    root.Tag = cf.RootStorage;
+                    AddNodes(root, cf.RootStorage);
+                    tvFiles.ExpandAll();
+                    isEncrypted = true;
                 }
-                else
+                catch (Exception ex)
                 {
-                    cForm.ShowDialog();
-                }
-                
-                if (fs is not null)
-                {
-                    fs.Close();
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+                    MessageBox.Show(ex.Message, "File Load Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    FileClose();
                 }
             }
             catch (Exception ex)
@@ -407,6 +426,38 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
+        /// Recursive addition of tree nodes foreach child of current item in the storage
+        /// </summary>
+        /// <param name="node">Current TreeNode</param>
+        /// <param name="cfs">Current storage associated with node</param>
+        private void AddNodes(TreeNode node, CFStorage cfs)
+        {
+            Action<CFItem> va = delegate (CFItem target)
+            {
+                TreeNode temp = node.Nodes.Add(target.Name, target.Name + (target.IsStream ? " (" + target.Size + " bytes )" : string.Empty));
+                temp.Tag = target;
+
+                // set images for treeview
+                if (target.IsStream)
+                {
+                    temp.ImageIndex = 1;
+                    temp.SelectedImageIndex = 1;
+                }
+                else
+                {
+                    temp.ImageIndex = 0;
+                    temp.SelectedImageIndex = 0;
+
+                    // Recursion into the storage
+                    AddNodes(temp, (CFStorage)target);
+                }
+            };
+
+            //Visit NON-recursively (first level only)
+            cfs.VisitEntries(va, false);
+        }
+
+        /// <summary>
         /// majority of open file logic is here
         /// </summary>
         public void OpenOfficeDocument(bool isFromMRU)
@@ -414,6 +465,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
+                isEncrypted = false;
 
                 if (!isFromMRU)
                 {
@@ -469,15 +521,26 @@ namespace Office_File_Explorer
                         return;
                     }
 
+                    if (fs is not null)
+                    {
+                        fs.Close();
+                    }
+
                     // handle office files
                     if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
                     {
-                        // if the file doesn't start with PK, we can stop trying to process it
-                        DisplayInvalidFileFormatError();
-                        DisableUI();
-                        
-                        // handle encrypted files
-                        structuredStorageViewerToolStripMenuItem.Enabled = true;
+                        // check for encrypted files
+                        if (FileUtilities.IsFileEncrypted(toolStripStatusLabelFilePath.Text))
+                        {
+                            OpenEncryptedOfficeDocument(toolStripStatusLabelFilePath.Text, true);
+                            EnableModifyUI();
+                        }
+                        else
+                        {
+                            // if the file is not a zip or encrypted, it is not a valid office file
+                            DisplayInvalidFileFormatError();
+                            DisableUI();
+                        }
                     }
                     else
                     {
@@ -988,7 +1051,6 @@ namespace Office_File_Explorer
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            structuredStorageViewerToolStripMenuItem.Enabled = false;
             EnableUI();
             EnableModifyUI();
             OpenOfficeDocument(false);
@@ -1132,8 +1194,12 @@ namespace Office_File_Explorer
             rtbDisplay.ReadOnly = false;
             rtbDisplay.BackColor = SystemColors.Window;
             toolStripButtonSave.Enabled = true;
-            toolStripDropDownButtonInsert.Enabled = true;
-            toolStripButtonReplace.Enabled = true;
+            toolStripButtonFixDoc.Enabled = true;
+
+            if (!isEncrypted)
+            {
+                toolStripButtonReplace.Enabled = true;
+            }
         }
 
         public void DisableModifyUI()
@@ -1141,8 +1207,12 @@ namespace Office_File_Explorer
             rtbDisplay.ReadOnly = true;
             rtbDisplay.BackColor = SystemColors.Control;
             toolStripButtonSave.Enabled = false;
-            toolStripDropDownButtonInsert.Enabled = false;
-            toolStripButtonReplace.Enabled = false;
+            toolStripButtonFixDoc.Enabled = false;
+
+            if (!isEncrypted)
+            {
+                toolStripButtonReplace.Enabled = false;
+            }
         }
 
         public void EnableCustomUIIcons()
@@ -1163,6 +1233,45 @@ namespace Office_File_Explorer
         private void ShowError(string errorText)
         {
             MessageBox.Show(this, errorText, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public void UpdateStreamDisplay(TreeNode tn)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                if (tn != null)
+                {
+                    tvFiles.SelectedNode = tn;
+                    // The tag property contains the underlying CFItem.
+                    // CFItem target = (CFItem)n.Tag;
+                    cfStream = tn.Tag as CFStream;
+                    if (cfStream != null)
+                    {
+                        byte[] buffer = new byte[cfStream.Size];
+                        cfStream.Read(buffer, 0, buffer.Length);
+
+                        StringBuilder sb = new StringBuilder();
+                        foreach (byte b in buffer)
+                        {
+                            if (b != 0)
+                            {
+                                sb.Append(AppUtilities.ConvertByteToText(b.ToString()));
+                            }
+                        }
+
+                        rtbDisplay.Text = sb.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "NodeMouseClick Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         static void ValidationCallback(object sender, ValidationEventArgs args)
@@ -1307,14 +1416,32 @@ namespace Office_File_Explorer
         /// <param name="e"></param>
         private void ValidationEventHandler(object sender, ValidationEventArgs e)
         {
-            switch (e.Severity)
+            if (isEncrypted)
             {
-                case XmlSeverityType.Error:
-                    LogXmlValidationError(e);
-                    break;
-                case XmlSeverityType.Warning:
-                    LogXmlValidationError(e);
-                    break;
+                isValid = false;
+                switch (e.Severity)
+                {
+                    case XmlSeverityType.Error:
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
+                        validationErrors.Add("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
+                        break;
+                    case XmlSeverityType.Warning:
+                        FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
+                        validationErrors.Add("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
+                        break;
+                }
+            }
+            else
+            {
+                switch (e.Severity)
+                {
+                    case XmlSeverityType.Error:
+                        LogXmlValidationError(e);
+                        break;
+                    case XmlSeverityType.Warning:
+                        LogXmlValidationError(e);
+                        break;
+                }
             }
         }
 
@@ -1422,7 +1549,6 @@ namespace Office_File_Explorer
             else
             {
                 toolStripStatusLabelFilePath.Text = path;
-                structuredStorageViewerToolStripMenuItem.Enabled = false;
                 EnableUI();
                 EnableModifyUI();
                 OpenOfficeDocument(true);
@@ -1582,7 +1708,7 @@ namespace Office_File_Explorer
                                             NewLineHandling = NewLineHandling.Replace
                                         };
                                     }
-                                    
+
                                     // write out the xml to a memory stream
                                     using (XmlWriter writer = XmlWriter.Create(ms, settings))
                                     {
@@ -1593,7 +1719,7 @@ namespace Office_File_Explorer
 
                                 tvFiles.SuspendLayout();
                                 rtbDisplay.Text = contents;
-                                
+
                                 // check for xml color setting
                                 if (Properties.Settings.Default.DisableXmlColorFormatting == false)
                                 {
@@ -1727,6 +1853,10 @@ namespace Office_File_Explorer
             else if (tvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUI14Xml) || tvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUIXml))
             {
                 ValidateXml(true);
+            }
+            else if(isEncrypted)
+            {
+                ValidateEncryptedXml(true);
             }
         }
 
@@ -1886,6 +2016,18 @@ namespace Office_File_Explorer
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
+            if (isEncrypted)
+            {
+                // write the stream changes and save
+                cfStream.Write(Encoding.Default.GetBytes(rtbDisplay.Text), 0, 0, Encoding.Default.GetByteCount(rtbDisplay.Text));
+                cf.Commit();
+
+                // let the user know it worked, then close the stream and form
+                MessageBox.Show("Stream changes saved.", "File Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                cf.Close();
+                return;
+            }
+
             bool isModified = false;
 
             foreach (PackagePart pp in pkgParts)
@@ -2336,6 +2478,48 @@ namespace Office_File_Explorer
         /// <param name="e"></param>
         private void toolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
+            if (isEncrypted)
+            {
+                // populate validation errors
+                ValidateXml(false);
+
+                // check existing validation errors against known corrupt labelinfo xml scenarios
+                if (validationErrors.Count > 0)
+                {
+                    string valToReplace = string.Empty;
+
+                    foreach (string s in validationErrors)
+                    {
+                        // known issue fix - missing method attribute
+                        // sometimes the method is not written out use a simple find/replace to get it back in
+                        if (s.Contains("The required attribute 'method' is missing"))
+                        {
+                            rtbDisplay.Text = rtbDisplay.Text.Replace("enabled=\"1\"", "enabled=\"1\" method=\"Standard\"");
+                        }
+
+                        // known issue fix - siteid missing brackets
+                        // example siteId="11111111-1111-1111-1111-111111111111"
+                        // should be siteId="{11111111-1111-1111-1111-111111111111}"
+                        if (s.Contains("The 'siteId' attribute is invalid"))
+                        {
+                            // first we need to pull the full text of the siteId attribute
+                            string[] split = Regex.Split(rtbDisplay.Text, @" +");
+                            foreach (string sp in split)
+                            {
+                                if (sp.StartsWith("siteId=") && sp.Contains('{') == false && sp.Contains('}') == false)
+                                {
+                                    string[] replace = sp.Split('"');
+                                    valToReplace = replace[0] + "\"{" + replace[1] + "}\"";
+                                    rtbDisplay.Text = rtbDisplay.Text.Replace(sp, valToReplace);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return;
+            }
+
             bool corruptionFound = false;
 
             StringBuilder sbFixes = new StringBuilder();
@@ -3262,6 +3446,111 @@ namespace Office_File_Explorer
             sb.AppendLine("Compression Settings: " + partPropCompression);
             sb.AppendLine("Content Type: " + partPropContentType);
             MessageBox.Show(sb.ToString(), "Part Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        private void tvFiles_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeNode tNode = tvFiles.GetNodeAt(e.X, e.Y);
+            UpdateStreamDisplay(tNode);
+        }
+
+        /// <summary>
+        /// validate the labelinfo stream
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnValidateXml_Click(object sender, EventArgs e)
+        {
+            ValidateEncryptedXml(true);
+        }
+
+        /// <summary>
+        /// populate the validation errors
+        /// </summary>
+        /// <param name="displayOnly">only display ui for validate xml button</param>
+        private void ValidateEncryptedXml(bool displayOnly)
+        {
+            isValid = true;
+            validationErrors.Clear();
+
+            // currently only validating labelinfo streams
+            if (tvFiles.SelectedNode.Name != "LabelInfo")
+            {
+                return;
+            }
+
+            // start validating the xml
+            try
+            {
+                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
+                XmlSchemaSet schema = new XmlSchemaSet();
+                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdMarkup)));
+
+                var settings = new XmlReaderSettings();
+                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdMarkup)));
+                settings.ValidationType = ValidationType.Schema;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
+
+                using (TextReader textReader = new StringReader(rtbDisplay.Text))
+                {
+                    XmlReader rd = XmlReader.Create(textReader, settings);
+                    XDocument doc = XDocument.Load(rd);
+                    doc.Validate(schema, eventHandler);
+                }
+            }
+            catch (Exception ex)
+            {
+                // if there were xml validation errors, display a message with those details
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+
+                if (displayOnly)
+                {
+                    MessageBox.Show(ex.Message, "Xml Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                isValid = false;
+            }
+            finally
+            {
+                if (isValid && displayOnly)
+                {
+                    MessageBox.Show("Xml Is Valid.", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    // display schema errors
+                    if (validationErrors.Count > 0)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        int errorCount = 0;
+                        foreach (string s in validationErrors)
+                        {
+                            errorCount++;
+                            sb.Append(errorCount + Strings.wPeriod + s + "\r\n");
+                        }
+
+                        if (displayOnly)
+                        {
+                            MessageBox.Show(sb.ToString(), "Schema Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void tvFiles_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (isEncrypted)
+            {
+                if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Up)
+                {
+                    TreeNode tNode = tvFiles.SelectedNode;
+                    UpdateStreamDisplay(tNode);
+                }
+            }
         }
 
         #endregion

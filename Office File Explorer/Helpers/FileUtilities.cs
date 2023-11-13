@@ -89,6 +89,34 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
+        public static bool IsFileEncrypted(string filePath)
+        {
+            byte[] buffer = new byte[2];
+            try
+            {
+                // open the file and populate the first 2 bytes into the buffer
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    fs.Read(buffer, 0, buffer.Length);
+                }
+
+                // if the buffer starts with PK the file is a zip archive
+                if (buffer[0].ToString() == "208" && buffer[1].ToString() == "207")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteToLog(Strings.fLogFilePath, ex.Message);
+                return false;
+            }
+        }
+
         public static bool IsZipArchiveFile(string filePath)
         {
             byte[] buffer = new byte[2];
