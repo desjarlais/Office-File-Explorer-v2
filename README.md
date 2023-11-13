@@ -1,6 +1,6 @@
 # Office-File-Explorer-v2
 
-The purpose of this tool is to provide potential file specific troubleshooting of Office Open Xml formatted documents for Word, Excel and PowerPoint (.docx, .dotx, .docm, .xlsx, .xlst, .xlsm, .pptx, .pptm).  It also includes the ability to view the underlying xml files and modify them directly.
+The purpose of this tool is to provide potential file specific troubleshooting of Office Open Xml formatted documents for Word, Excel, PowerPoint and Outlook (.docx, .dotx, .docm, .doc, .xlsx, .xlst, .xlsm, .xls, .pptx, .pptm, .ppt, .msg).  It also includes the ability to view the underlying xml files and modify them directly.  
 
 The tool can also perform a series of checks for known document corruptions in the underlying xml tags to possibly fix and make the file open in Office.  
 
