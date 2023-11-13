@@ -293,7 +293,11 @@ namespace Office_File_Explorer
         /// </summary>
         public void EnableUI()
         {
-            toolStripButtonViewContents.Enabled = true;
+            if (!isEncrypted || toolStripStatusLabelFilePath.Text == ".msg")
+            {
+                toolStripButtonViewContents.Enabled = true;
+            }
+            
             toolStripButtonFixDoc.Enabled = true;
             editToolStripMenuFindReplace.Enabled = true;
             editToolStripMenuItemModifyContents.Enabled = true;
@@ -332,9 +336,9 @@ namespace Office_File_Explorer
                 fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);
 
                 // Load images
-                tvFiles.ImageList = new ImageList();
-                tvFiles.ImageList.Images.Add(Properties.Resources.folder);
-                tvFiles.ImageList.Images.Add(Properties.Resources.BinaryFile);
+                //tvFiles.ImageList = new ImageList();
+                //tvFiles.ImageList.Images.Add(Properties.Resources.folder);
+                //tvFiles.ImageList.Images.Add(Properties.Resources.BinaryFile);
 
                 try
                 {
@@ -345,6 +349,8 @@ namespace Office_File_Explorer
                     TreeNode root = null;
                     root = tvFiles.Nodes.Add("Root Entry", "Root");
                     root.Tag = cf.RootStorage;
+                    root.ImageIndex = 5;
+                    root.SelectedImageIndex = 5;
                     AddNodes(root, cf.RootStorage);
                     tvFiles.ExpandAll();
                     isEncrypted = true;
@@ -440,13 +446,13 @@ namespace Office_File_Explorer
                 // set images for treeview
                 if (target.IsStream)
                 {
-                    temp.ImageIndex = 1;
-                    temp.SelectedImageIndex = 1;
+                    temp.ImageIndex = 5;
+                    temp.SelectedImageIndex = 5;
                 }
                 else
                 {
-                    temp.ImageIndex = 0;
-                    temp.SelectedImageIndex = 0;
+                    temp.ImageIndex = 6;
+                    temp.SelectedImageIndex = 6;
 
                     // Recursion into the storage
                     AddNodes(temp, (CFStorage)target);

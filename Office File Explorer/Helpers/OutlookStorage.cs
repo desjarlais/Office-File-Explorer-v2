@@ -184,7 +184,7 @@ namespace Office_File_Explorer.Helpers
               *
               * @param   src the compressed-RTF data bytes
               * @return  an array containing the decompressed bytes.
-              * @throws  IllegalArgumentException if src does not contain valid                                                                                                                                            *          compressed-RTF bytes.
+              * @throws  IllegalArgumentException if src does not contain valid compressed-RTF bytes.
             */
             public static byte[] decompressRTF(byte[] src)
             {
@@ -309,7 +309,7 @@ namespace Office_File_Explorer.Helpers
                 void SetSize([In, MarshalAs(UnmanagedType.U8)] long cb);
                 void LockRegion([In, MarshalAs(UnmanagedType.U8)] long libOffset, [In, MarshalAs(UnmanagedType.U8)] long cb, [In, MarshalAs(UnmanagedType.U4)] int dwLockType);
                 void UnlockRegion([In, MarshalAs(UnmanagedType.U8)] long libOffset, [In, MarshalAs(UnmanagedType.U8)] long cb, [In, MarshalAs(UnmanagedType.U4)] int dwLockType);
-                void Stat([Out] out System.Runtime.InteropServices.ComTypes.STATSTG pstatstg, [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag);
+                void Stat([Out] out ComTypes.STATSTG pstatstg, [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag);
             }
 
             [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("0000000B-0000-0000-C000-000000000046")]
@@ -330,16 +330,16 @@ namespace Office_File_Explorer.Helpers
                 void EnumElements([In, MarshalAs(UnmanagedType.U4)] int reserved1, IntPtr reserved2, [In, MarshalAs(UnmanagedType.U4)] int reserved3, [MarshalAs(UnmanagedType.Interface)] out IEnumSTATSTG ppVal);
                 void DestroyElement([In, MarshalAs(UnmanagedType.BStr)] string pwcsName);
                 void RenameElement([In, MarshalAs(UnmanagedType.BStr)] string pwcsOldName, [In, MarshalAs(UnmanagedType.BStr)] string pwcsNewName);
-                void SetElementTimes([In, MarshalAs(UnmanagedType.BStr)] string pwcsName, [In] System.Runtime.InteropServices.ComTypes.FILETIME pctime, [In] System.Runtime.InteropServices.ComTypes.FILETIME patime, [In] System.Runtime.InteropServices.ComTypes.FILETIME pmtime);
+                void SetElementTimes([In, MarshalAs(UnmanagedType.BStr)] string pwcsName, [In] ComTypes.FILETIME pctime, [In] ComTypes.FILETIME patime, [In] ComTypes.FILETIME pmtime);
                 void SetClass([In] ref Guid clsid);
                 void SetStateBits(int grfStateBits, int grfMask);
-                void Stat([Out] out System.Runtime.InteropServices.ComTypes.STATSTG pStatStg, int grfStatFlag);
+                void Stat([Out] out ComTypes.STATSTG pStatStg, int grfStatFlag);
             }
 
             [ComImport, Guid("0000000D-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
             public interface IEnumSTATSTG
             {
-                void Next(uint celt, [MarshalAs(UnmanagedType.LPArray), Out] System.Runtime.InteropServices.ComTypes.STATSTG[] rgelt, out uint pceltFetched);
+                void Next(uint celt, [MarshalAs(UnmanagedType.LPArray), Out] ComTypes.STATSTG[] rgelt, out uint pceltFetched);
                 void Skip(uint celt);
                 void Reset();
                 [return: MarshalAs(UnmanagedType.Interface)]
@@ -388,13 +388,13 @@ namespace Office_File_Explorer.Helpers
 
             public static IStorage CloneStorage(IStorage source, bool closeSource)
             {
-                NativeMethods.IStorage memoryStorage = null;
-                NativeMethods.ILockBytes memoryStorageBytes = null;
+                IStorage memoryStorage = null;
+                ILockBytes memoryStorageBytes = null;
                 try
                 {
                     //create a ILockBytes (unmanaged byte array) and then create a IStorage using the byte array as a backing store
-                    NativeMethods.CreateILockBytesOnHGlobal(IntPtr.Zero, true, out memoryStorageBytes);
-                    NativeMethods.StgCreateDocfileOnILockBytes(memoryStorageBytes, NativeMethods.STGM.CREATE | NativeMethods.STGM.READWRITE | NativeMethods.STGM.SHARE_EXCLUSIVE, 0, out memoryStorage);
+                    CreateILockBytesOnHGlobal(IntPtr.Zero, true, out memoryStorageBytes);
+                    StgCreateDocfileOnILockBytes(memoryStorageBytes, STGM.CREATE | STGM.READWRITE | STGM.SHARE_EXCLUSIVE, 0, out memoryStorage);
 
                     //copy the source storage into the new storage
                     source.CopyTo(0, null, IntPtr.Zero, memoryStorage);
@@ -492,7 +492,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The display name.</value>
             public string DisplayName
             {
-                get { return this.GetMapiPropertyString(OutlookStorage.PR_DISPLAY_NAME); }
+                get { return GetMapiPropertyString(PR_DISPLAY_NAME); }
             }
 
             /// <summary>
@@ -503,10 +503,10 @@ namespace Office_File_Explorer.Helpers
             {
                 get
                 {
-                    string email = this.GetMapiPropertyString(OutlookStorage.PR_EMAIL);
-                    if (String.IsNullOrEmpty(email))
+                    string email = GetMapiPropertyString(PR_EMAIL);
+                    if (string.IsNullOrEmpty(email))
                     {
-                        email = this.GetMapiPropertyString(OutlookStorage.PR_EMAIL_2);
+                        email = GetMapiPropertyString(PR_EMAIL_2);
                     }
                     return email;
                 }
@@ -520,13 +520,13 @@ namespace Office_File_Explorer.Helpers
             {
                 get
                 {
-                    int recipientType = this.GetMapiPropertyInt32(OutlookStorage.PR_RECIPIENT_TYPE);
+                    int recipientType = GetMapiPropertyInt32(PR_RECIPIENT_TYPE);
                     switch (recipientType)
                     {
-                        case OutlookStorage.MAPI_TO:
+                        case MAPI_TO:
                             return RecipientType.To;
 
-                        case OutlookStorage.MAPI_CC:
+                        case MAPI_CC:
                             return RecipientType.CC;
                     }
                     return RecipientType.Unknown;
@@ -541,11 +541,10 @@ namespace Office_File_Explorer.Helpers
             /// Initializes a new instance of the <see cref="Recipient"/> class.
             /// </summary>
             /// <param name="message">The message.</param>
-            public Recipient(OutlookStorage message)
-                : base(message.storage)
+            public Recipient(OutlookStorage message) : base(message.storage)
             {
                 GC.SuppressFinalize(message);
-                this.propHeaderSize = OutlookStorage.PROPERTIES_STREAM_HEADER_ATTACH_OR_RECIP;
+                propHeaderSize = PROPERTIES_STREAM_HEADER_ATTACH_OR_RECIP;
             }
 
             #endregion
@@ -563,14 +562,14 @@ namespace Office_File_Explorer.Helpers
             {
                 get
                 {
-                    string filename = this.GetMapiPropertyString(OutlookStorage.PR_ATTACH_LONG_FILENAME);
-                    if (String.IsNullOrEmpty(filename))
+                    string filename = this.GetMapiPropertyString(PR_ATTACH_LONG_FILENAME);
+                    if (string.IsNullOrEmpty(filename))
                     {
-                        filename = this.GetMapiPropertyString(OutlookStorage.PR_ATTACH_FILENAME);
+                        filename = this.GetMapiPropertyString(PR_ATTACH_FILENAME);
                     }
-                    if (String.IsNullOrEmpty(filename))
+                    if (string.IsNullOrEmpty(filename))
                     {
-                        filename = this.GetMapiPropertyString(OutlookStorage.PR_DISPLAY_NAME);
+                        filename = this.GetMapiPropertyString(PR_DISPLAY_NAME);
                     }
                     return filename;
                 }
@@ -582,7 +581,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The data.</value>
             public byte[] Data
             {
-                get { return this.GetMapiPropertyBytes(OutlookStorage.PR_ATTACH_DATA); }
+                get { return GetMapiPropertyBytes(PR_ATTACH_DATA); }
             }
 
             /// <summary>
@@ -591,7 +590,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The content id.</value>
             public string ContentId
             {
-                get { return this.GetMapiPropertyString(OutlookStorage.PR_ATTACH_CONTENT_ID); }
+                get { return GetMapiPropertyString(PR_ATTACH_CONTENT_ID); }
             }
 
             /// <summary>
@@ -600,7 +599,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The rendering posisiton.</value>
             public int RenderingPosisiton
             {
-                get { return this.GetMapiPropertyInt32(OutlookStorage.PR_RENDERING_POSITION); }
+                get { return GetMapiPropertyInt32(PR_RENDERING_POSITION); }
             }
 
             #endregion
@@ -611,11 +610,10 @@ namespace Office_File_Explorer.Helpers
             /// Initializes a new instance of the <see cref="Attachment"/> class.
             /// </summary>
             /// <param name="message">The message.</param>
-            public Attachment(OutlookStorage message)
-                : base(message.storage)
+            public Attachment(OutlookStorage message) : base(message.storage)
             {
                 GC.SuppressFinalize(message);
-                this.propHeaderSize = OutlookStorage.PROPERTIES_STREAM_HEADER_ATTACH_OR_RECIP;
+                propHeaderSize = PROPERTIES_STREAM_HEADER_ATTACH_OR_RECIP;
             }
 
             #endregion
@@ -631,7 +629,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The list of recipients in the outlook message.</value>
             public List<Recipient> Recipients
             {
-                get { return this.recipients; }
+                get { return recipients; }
             }
             private List<Recipient> recipients = new List<Recipient>();
 
@@ -641,7 +639,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The list of attachments in the outlook message.</value>
             public List<Attachment> Attachments
             {
-                get { return this.attachments; }
+                get { return attachments; }
             }
             private List<Attachment> attachments = new List<Attachment>();
 
@@ -651,7 +649,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The list of sub messages in the outlook message.</value>
             public List<Message> Messages
             {
-                get { return this.messages; }
+                get { return messages; }
             }
             private List<Message> messages = new List<Message>();
 
@@ -661,7 +659,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The display value of the contact that sent the email.</value>
             public String From
             {
-                get { return this.GetMapiPropertyString(OutlookStorage.PR_SENDER_NAME); }
+                get { return GetMapiPropertyString(PR_SENDER_NAME); }
             }
 
             /// <summary>
@@ -670,7 +668,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The subject of the outlook message.</value>
             public String Subject
             {
-                get { return this.GetMapiPropertyString(OutlookStorage.PR_SUBJECT); }
+                get { return GetMapiPropertyString(PR_SUBJECT); }
             }
 
             /// <summary>
@@ -679,7 +677,7 @@ namespace Office_File_Explorer.Helpers
             /// <value>The body of the outlook message in plain text format.</value>
             public String BodyText
             {
-                get { return this.GetMapiPropertyString(OutlookStorage.PR_BODY); }
+                get { return GetMapiPropertyString(PR_BODY); }
             }
 
             /// <summary>
@@ -691,7 +689,7 @@ namespace Office_File_Explorer.Helpers
                 get
                 {
                     //get value for the RTF compressed MAPI property
-                    byte[] rtfBytes = this.GetMapiPropertyBytes(OutlookStorage.PR_RTF_COMPRESSED);
+                    byte[] rtfBytes = GetMapiPropertyBytes(PR_RTF_COMPRESSED);
 
                     //return null if no property value exists
                     if (rtfBytes == null || rtfBytes.Length == 0)
@@ -727,10 +725,9 @@ namespace Office_File_Explorer.Helpers
             /// Initializes a new instance of the <see cref="Message"/> class on the specified <see cref="NativeMethods.IStorage"/>.
             /// </summary>
             /// <param name="storage">The storage to create the <see cref="Message"/> on.</param>
-            private Message(NativeMethods.IStorage storage)
-                : base(storage)
+            private Message(NativeMethods.IStorage storage) : base(storage)
             {
-                this.propHeaderSize = OutlookStorage.PROPERTIES_STREAM_HEADER_TOP;
+                propHeaderSize = PROPERTIES_STREAM_HEADER_TOP;
             }
 
             #endregion
@@ -745,20 +742,20 @@ namespace Office_File_Explorer.Helpers
             {
                 base.LoadStorage(storage);
 
-                foreach (ComTypes.STATSTG storageStat in this.subStorageStatistics.Values)
+                foreach (ComTypes.STATSTG storageStat in subStorageStatistics.Values)
                 {
                     //element is a storage. get it and add its statistics object to the sub storage dictionary
-                    NativeMethods.IStorage subStorage = this.storage.OpenStorage(storageStat.pwcsName, IntPtr.Zero, NativeMethods.STGM.READ | NativeMethods.STGM.SHARE_EXCLUSIVE, IntPtr.Zero, 0);
+                    NativeMethods.IStorage subStorage = storage.OpenStorage(storageStat.pwcsName, IntPtr.Zero, NativeMethods.STGM.READ | NativeMethods.STGM.SHARE_EXCLUSIVE, IntPtr.Zero, 0);
 
                     //run specific load method depending on sub storage name prefix
-                    if (storageStat.pwcsName.StartsWith(OutlookStorage.RECIP_STORAGE_PREFIX))
+                    if (storageStat.pwcsName.StartsWith(RECIP_STORAGE_PREFIX))
                     {
                         Recipient recipient = new Recipient(new OutlookStorage(subStorage));
-                        this.recipients.Add(recipient);
+                        recipients.Add(recipient);
                     }
-                    else if (storageStat.pwcsName.StartsWith(OutlookStorage.ATTACH_STORAGE_PREFIX))
+                    else if (storageStat.pwcsName.StartsWith(ATTACH_STORAGE_PREFIX))
                     {
-                        this.LoadAttachmentStorage(subStorage);
+                        LoadAttachmentStorage(subStorage);
                     }
                     else
                     {
@@ -778,13 +775,13 @@ namespace Office_File_Explorer.Helpers
                 Attachment attachment = new Attachment(new OutlookStorage(storage));
 
                 //if attachment is a embeded msg handle differently than an normal attachment
-                int attachMethod = attachment.GetMapiPropertyInt32(OutlookStorage.PR_ATTACH_METHOD);
-                if (attachMethod == OutlookStorage.ATTACH_EMBEDDED_MSG)
+                int attachMethod = attachment.GetMapiPropertyInt32(PR_ATTACH_METHOD);
+                if (attachMethod == ATTACH_EMBEDDED_MSG)
                 {
                     //create new Message and set parent and header size
-                    Message subMsg = new Message(attachment.GetMapiProperty(OutlookStorage.PR_ATTACH_DATA) as NativeMethods.IStorage);
+                    Message subMsg = new Message(attachment.GetMapiProperty(PR_ATTACH_DATA) as NativeMethods.IStorage);
                     subMsg.parentMessage = this;
-                    subMsg.propHeaderSize = OutlookStorage.PROPERTIES_STREAM_HEADER_EMBEDED;
+                    subMsg.propHeaderSize = PROPERTIES_STREAM_HEADER_EMBEDED;
 
                     //add to messages list
                     this.messages.Add(subMsg);
