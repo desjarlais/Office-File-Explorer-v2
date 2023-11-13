@@ -221,10 +221,12 @@ namespace Office_File_Explorer
         {
             try
             {
-                tempFileReadOnly = Path.GetTempFileName().Replace(".tmp", ".docx");
+                string fExtension = Path.GetExtension(toolStripStatusLabelFilePath.Text);
+                
+                tempFileReadOnly = Path.GetTempFileName().Replace(".tmp", fExtension);
                 File.Copy(toolStripStatusLabelFilePath.Text, tempFileReadOnly, true);
 
-                tempFilePackageViewer = Path.GetTempFileName().Replace(".tmp", ".docx");
+                tempFilePackageViewer = Path.GetTempFileName().Replace(".tmp", fExtension);
                 File.Copy(toolStripStatusLabelFilePath.Text, tempFilePackageViewer, true);
 
             }
@@ -456,6 +458,7 @@ namespace Office_File_Explorer
                         OutlookStorage.Message message = new OutlookStorage.Message(messageStream);
                         messageStream.Close();
 
+                        tvFiles.Nodes.Clear();
                         LoadMsgToTree(message, tvFiles.Nodes.Add("MSG"));
                         tvFiles.ImageIndex = 6;
                         tvFiles.SelectedImageIndex = 6;
@@ -1490,16 +1493,21 @@ namespace Office_File_Explorer
 
                     if (body != null)
                     {
-                        if (Properties.Settings.Default.MsgAsRtf)
+                        // handle body click
+                        if (e.Node.Text.Contains("Body:"))
                         {
-                            rtbDisplay.Rtf = body[1];
-                        }
-                        else
-                        {
-                            rtbDisplay.Text = body[0];
+                            if (Properties.Settings.Default.MsgAsRtf)
+                            {
+                                rtbDisplay.Rtf = body[1];
+                            }
+                            else
+                            {
+                                rtbDisplay.Text = body[0];
+                            }
                         }
                     }
 
+                    // handle attachments
                     if (e.Node.Parent is not null && e.Node.Parent.Text.Contains("Attachments:"))
                     {
                         foreach (var att in attachmentList)
