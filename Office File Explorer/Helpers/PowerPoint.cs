@@ -547,15 +547,12 @@ namespace Office_File_Explorer.Helpers
             var placeholderShape = shape.NonVisualShapeProperties.ApplicationNonVisualDrawingProperties.GetFirstChild<PlaceholderShape>();
             if (placeholderShape != null && placeholderShape.Type != null && placeholderShape.Type.HasValue)
             {
-                switch ((PlaceholderValues)placeholderShape.Type)
+                switch (placeholderShape.Type.ToString())
                 {
-                    // Any title shape.
-                    case PlaceholderValues.Title:
-
-                    // A centered title.
-                    case PlaceholderValues.CenteredTitle:
+                    case "title":
+                    case "ctrTitle":
+                    case "subtitle":
                         return true;
-
                     default:
                         return false;
                 }

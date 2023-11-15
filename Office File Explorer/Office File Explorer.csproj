@@ -5,8 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>Office_File_Explorer</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.0.1.55</AssemblyVersion>
-    <FileVersion>2.0.1.55</FileVersion>
+    <AssemblyVersion>2.0.1.56</AssemblyVersion>
+    <FileVersion>2.0.1.56</FileVersion>
     <Version>2.0.1</Version>
     <PackageIcon>Office2013.ico</PackageIcon>
     <PackageIconUrl />
@@ -22,6 +22,7 @@
   <ItemGroup>
     <None Remove="Schemas\customUI.xsd" />
     <None Remove="Schemas\customui14.xsd" />
+    <None Remove="Schemas\LabelInfo.xsd" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,10 +32,13 @@
     <Content Include="Schemas\customui14.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Schemas\LabelInfo.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

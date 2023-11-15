@@ -730,17 +730,10 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-                UriRelationshipErrorHandler uriHandler = new UriRelationshipErrorHandler();
-
-                // add opensettings to get around the fix malformed uri issue
-                var openSettings = new OpenSettings()
-                {
-                    RelationshipErrorHandlerFactory = package => { return uriHandler; }
-                };
 
                 if (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppWord)
                 {
-                    using (WordprocessingDocument document = WordprocessingDocument.Open(file, true, openSettings))
+                    using (WordprocessingDocument document = WordprocessingDocument.Open(file, true))
                     {
                         // try to get the localname of the document.xml file, if it fails, it is not a Word file
                         StrOfficeApp = Strings.oAppWord;
@@ -750,7 +743,7 @@ namespace Office_File_Explorer
                 }
                 else if (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppExcel)
                 {
-                    using (SpreadsheetDocument document = SpreadsheetDocument.Open(file, true, openSettings))
+                    using (SpreadsheetDocument document = SpreadsheetDocument.Open(file, true))
                     {
                         // try to get the localname of the workbook.xml and file if it fails, its not an Excel file
                         StrOfficeApp = Strings.oAppExcel;
@@ -760,7 +753,7 @@ namespace Office_File_Explorer
                 }
                 else if (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppPowerPoint)
                 {
-                    using (PresentationDocument document = PresentationDocument.Open(file, true, openSettings))
+                    using (PresentationDocument document = PresentationDocument.Open(file, true))
                     {
                         // try to get the presentation.xml local name, if it fails it is not a PPT file
                         StrOfficeApp = Strings.oAppPowerPoint;
@@ -1204,6 +1197,7 @@ namespace Office_File_Explorer
                 case UIType.ViewXml:
                     DisableCustomUI();
                     toolStripButtonModify.Enabled = true;
+                    toolStripButtonValidateXml.Enabled = true;
                     break;
                 case UIType.ViewBinary:
                 case UIType.ViewImage:
@@ -1336,10 +1330,12 @@ namespace Office_File_Explorer
             {
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
                 XmlSchemaSet schema = new XmlSchemaSet();
-                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdLabelInfo)));
+                XmlTextReader xtr = new XmlTextReader(@".\Schemas\LabelInfo.xsd");
+                XmlSchema sch = XmlSchema.Read(xtr, ValidationEventHandler);
+                schema.Add(sch);
 
                 var settings = new XmlReaderSettings();
-                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdLabelInfo)));
+                settings.Schemas.Add(sch);
                 settings.ValidationType = ValidationType.Schema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
@@ -1647,6 +1643,7 @@ namespace Office_File_Explorer
                     FormatXmlColors();
                     toolStripButtonFixXml.Enabled = true;
                     toolStripButtonModify.Enabled = true;
+                    toolStripButtonValidateXml.Enabled = true;
                 }
 
                 if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
@@ -3404,7 +3401,6 @@ namespace Office_File_Explorer
             MessageBox.Show(sb.ToString(), "Part Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
         private void tvFiles_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeNode tNode = tvFiles.GetNodeAt(e.X, e.Y);
@@ -3419,19 +3415,16 @@ namespace Office_File_Explorer
         {
             validationErrors.Clear();
 
-            if (!tvFiles.SelectedNode.Text.Contains("docMetadata/LabelInfo.xml"))
-            {
-                return;
-            }
-
             try
             {
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
                 XmlSchemaSet schema = new XmlSchemaSet();
-                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdLabelInfo)));
+                XmlTextReader xtr = new XmlTextReader(@".\Schemas\LabelInfo.xsd");
+                XmlSchema sch = XmlSchema.Read(xtr, ValidationEventHandler);
+                schema.Add(sch);
 
                 var settings = new XmlReaderSettings();
-                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdLabelInfo)));
+                settings.Schemas.Add(sch);
                 settings.ValidationType = ValidationType.Schema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
