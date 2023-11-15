@@ -1209,7 +1209,6 @@ namespace Office_File_Explorer
                 case UIType.ViewXml:
                     DisableCustomUI();
                     toolStripButtonModify.Enabled = true;
-                    toolStripButtonSave.Enabled = true;
                     break;
                 case UIType.ViewBinary:
                 case UIType.ViewImage:
@@ -1222,7 +1221,6 @@ namespace Office_File_Explorer
                     break;
                 case UIType.ViewCustomUI:
                     toolStripButtonModify.Enabled = true;
-                    toolStripButtonSave.Enabled = true;
                     toolStripButtonGenerateCallback.Enabled = true;
                     toolStripDropDownButtonInsert.Enabled = true;
                     toolStripButtonInsertIcon.Enabled = true;
@@ -1262,12 +1260,14 @@ namespace Office_File_Explorer
         {
             rtbDisplay.ReadOnly = false;
             rtbDisplay.BackColor = SystemColors.Window;
+            toolStripButtonSave.Enabled = true;
         }
 
         public void DisableModifyUI()
         {
             rtbDisplay.ReadOnly = true;
             rtbDisplay.BackColor = SystemColors.Control;
+            toolStripButtonSave.Enabled = false;
         }
 
         private void ShowError(string errorText)
@@ -2055,6 +2055,8 @@ namespace Office_File_Explorer
                 tvFiles.Nodes.Clear();
                 LoadPartsIntoViewer();
             }
+
+            toolStripButtonSave.Enabled = false;
         }
 
         private void toolStripButtonViewContents_Click(object sender, EventArgs e)
