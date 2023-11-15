@@ -399,7 +399,7 @@ namespace Office_File_Explorer.Helpers
 			cf16 = white */
 
         // LabelInfo schema
-        public const string xsdMarkup = @"<xsd:schema elementFormDefault=""qualified"" 
+        public const string xsdLabelInfo = @"<xsd:schema elementFormDefault=""qualified"" 
                                             xmlns:clbl=""http://schemas.microsoft.com/office/2020/mipLabelMetadata""
                                             xmlns:r=""http://schemas.microsoft.com/office/2020/02/relationships""
                                             xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
@@ -442,6 +442,7 @@ namespace Office_File_Explorer.Helpers
                                             <xsd:element name=""labelList"" type=""CT_ClassificationLabelList"" />
                                         </xsd:schema>";
 
+        // custom ui callbacks
         public const string xmlCustomOutspace = @"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
 	            <backstage>
 		        <tab id=""customTab"" label=""Custom"">

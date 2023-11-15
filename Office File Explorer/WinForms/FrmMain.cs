@@ -27,8 +27,6 @@ using File = System.IO.File;
 using Color = System.Drawing.Color;
 using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
 using Office_File_Explorer.OpenMcdf;
-using DocumentFormat.OpenXml.Presentation;
-using DocumentFormat.OpenXml.ExtendedProperties;
 using Application = System.Windows.Forms.Application;
 
 namespace Office_File_Explorer
@@ -239,8 +237,6 @@ namespace Office_File_Explorer
         public void FileClose()
         {
             DisableAllUI();
-            DisableModifyUI();
-            DisableUI();
             package?.Close();
             pkgParts?.Clear();
             tvFiles.Nodes.Clear();
@@ -456,8 +452,7 @@ namespace Office_File_Explorer
                     else
                     {
                         // user cancelled dialog, disable the UI and go back to the form
-                        DisableUI();
-                        DisableModifyUI();
+                        DisableAllUI();
                         toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
                         toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
                         return;
@@ -514,7 +509,7 @@ namespace Office_File_Explorer
                         {
                             // if the file is not a zip or encrypted, it is not a valid office file
                             DisplayInvalidFileFormatError();
-                            DisableUI();
+                            DisableAllUI();
                         }
                     }
                     else
@@ -524,7 +519,7 @@ namespace Office_File_Explorer
                         {
                             // set the file type
                             toolStripStatusLabelDocType.Text = StrOfficeApp;
-                            DisableUI();
+                            DisableAllUI();
 
                             // populate the parts
                             PopulatePackageParts();
@@ -545,12 +540,11 @@ namespace Office_File_Explorer
                             package?.Close();
                             pkgParts?.Clear();
                             LoadPartsIntoViewer();
-                            //EnableUI();
                         }
                         else
                         {
                             // if it failed the SDK, disable all buttons except the fix corrupt doc button
-                            DisableUI();
+                            DisableAllUI();
                             if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.docxFileExt))
                             {
                                 toolStripButtonFixCorruptDoc.Enabled = true;
@@ -1164,6 +1158,7 @@ namespace Office_File_Explorer
         /// <param name="s"></param>
         public void UpdateUI(UIType type)
         {
+            toolStripButtonFind.Enabled = true;
             switch (type)
             {
                 case UIType.OpenWord:
@@ -1243,6 +1238,7 @@ namespace Office_File_Explorer
             toolStripButtonViewContents.Enabled = false;
             toolStripButtonFixCorruptDoc.Enabled = false;
             toolStripButtonFixDoc.Enabled = false;
+            editToolStripMenuFindReplace.Enabled = false;
             editToolStripMenuItemModifyContents.Enabled = false;
             editToolStripMenuItemRemoveCustomDocProps.Enabled = false;
             editToolStripMenuItemRemoveCustomXml.Enabled = false;
@@ -1253,7 +1249,17 @@ namespace Office_File_Explorer
             toolStripDropDownButtonInsert.Enabled = false;
             toolStripButtonInsertIcon.Enabled = false;
             toolStripButtonFixXml.Enabled = false;
+            toolStripButtonValidateXml.Enabled = false;
             excelSheetViewerToolStripMenuItem.Enabled = false;
+            rtbDisplay.ReadOnly = true;
+            rtbDisplay.BackColor = SystemColors.Control;
+            toolStripButtonFind.Enabled = false;
+
+
+            if (package is null)
+            {
+                fileToolStripMenuItemClose.Enabled = false;
+            }
         }
 
         public void EnableModifyUI()
@@ -1330,10 +1336,10 @@ namespace Office_File_Explorer
             {
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
                 XmlSchemaSet schema = new XmlSchemaSet();
-                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdMarkup)));
+                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdLabelInfo)));
 
                 var settings = new XmlReaderSettings();
-                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdMarkup)));
+                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdLabelInfo)));
                 settings.ValidationType = ValidationType.Schema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
@@ -1374,35 +1380,32 @@ namespace Office_File_Explorer
 
             try
             {
+                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
                 XmlTextReader xtr = new XmlTextReader(@".\Schemas\customui14.xsd");
-                XmlSchema schema = XmlSchema.Read(xtr, ValidationEventHandler);
+                XmlSchema sch = XmlSchema.Read(xtr, ValidationEventHandler);
+                XmlSchemaSet schema = new XmlSchemaSet();
+                schema.Add(sch);
 
-                XmlDocument xmlDoc = new XmlDocument();
+                var settings = new XmlReaderSettings();
+                settings.Schemas.Add(sch);
+                settings.ValidationType = ValidationType.Schema;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
 
-                if (schema == null)
+                using (TextReader textReader = new StringReader(rtbDisplay.Text))
                 {
-                    return false;
-                }
-
-                xmlDoc.Schemas.Add(schema);
-                xmlDoc.LoadXml(rtbDisplay.Text);
-
-                if (xmlDoc.DocumentElement.NamespaceURI.ToString() != schema.TargetNamespace)
-                {
-                    StringBuilder errorText = new StringBuilder();
-                    errorText.Append("Unknown Namespace".Replace("|1", xmlDoc.DocumentElement.NamespaceURI.ToString()));
-                    errorText.Append("\n" + "CustomUI Namespace".Replace("|1", schema.TargetNamespace));
-
-                    ShowError(errorText.ToString());
-                    return false;
+                    XmlReader rd = XmlReader.Create(textReader, settings);
+                    XDocument doc = XDocument.Load(rd);
+                    doc.Validate(schema, eventHandler);
                 }
 
                 isValidXml = false;
-                xmlDoc.Validate(ValidationEventHandler);
             }
             catch (XmlException ex)
             {
                 ShowError("Invalid Xml" + "\n" + ex.Message);
+                isValidXml = false;
                 return false;
             }
 
@@ -3416,21 +3419,19 @@ namespace Office_File_Explorer
         {
             validationErrors.Clear();
 
-            // currently only validating labelinfo streams
             if (!tvFiles.SelectedNode.Text.Contains("docMetadata/LabelInfo.xml"))
             {
                 return;
             }
 
-            // start validating the xml
             try
             {
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
                 XmlSchemaSet schema = new XmlSchemaSet();
-                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdMarkup)));
+                schema.Add(string.Empty, XmlReader.Create(new StringReader(Strings.xsdLabelInfo)));
 
                 var settings = new XmlReaderSettings();
-                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdMarkup)));
+                settings.Schemas.Add("http://schemas.microsoft.com/office/2020/mipLabelMetadata", XmlReader.Create(new StringReader(Strings.xsdLabelInfo)));
                 settings.ValidationType = ValidationType.Schema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
@@ -3445,7 +3446,6 @@ namespace Office_File_Explorer
             }
             catch (Exception ex)
             {
-                // if there were xml validation errors, display a message with those details
                 FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
 
                 if (displayOnly)
