@@ -1,11 +1,72 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using static Office_File_Explorer.FrmMain;
 
 namespace Office_File_Explorer.Helpers
 {
     class FileUtilities
     {
+        /// <summary>
+        /// use the file extension to get the file type
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static OpenXmlInnerFileTypes GetFileType(string path)
+        {
+            switch (Path.GetExtension(path))
+            {
+                case ".docx":
+                case ".dotx":
+                case ".dotm":
+                case ".docm":
+                    return OpenXmlInnerFileTypes.Word;
+                case ".xlsx":
+                case ".xlsm":
+                case ".xltm":
+                case ".xltx":
+                case ".xlsb":
+                    return OpenXmlInnerFileTypes.Excel;
+                case ".pptx":
+                case ".pptm":
+                case ".ppsx":
+                case ".ppsm":
+                case ".potx":
+                case ".potm":
+                    return OpenXmlInnerFileTypes.PowerPoint;
+                case ".msg":
+                    return OpenXmlInnerFileTypes.Outlook;
+                case ".jpeg":
+                case ".jpg":
+                case ".bmp":
+                case ".png":
+                case ".gif":
+                case ".emf":
+                case ".wmf":
+                    return OpenXmlInnerFileTypes.Image;
+                case ".xml":
+                case ".rels":
+                    return OpenXmlInnerFileTypes.XML;
+                case ".mp4":
+                case ".avi":
+                case ".wmv":
+                case ".mov":
+                    return OpenXmlInnerFileTypes.Video;
+                case ".mp3":
+                case ".wav":
+                case ".wma":
+                    return OpenXmlInnerFileTypes.Audio;
+                case ".txt":
+                    return OpenXmlInnerFileTypes.Text;
+                case ".bin":
+                case ".sigs":
+                case ".odttf":
+                    return OpenXmlInnerFileTypes.Binary;
+                default:
+                    return OpenXmlInnerFileTypes.Other;
+            }
+        }
+
         static readonly string[] sizeSuffixes = { "bytes", "KB", "MB", "GB" };
 
         /// <summary>

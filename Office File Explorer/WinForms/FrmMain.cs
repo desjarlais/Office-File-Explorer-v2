@@ -612,17 +612,17 @@ namespace Office_File_Explorer
             tRoot.Text = toolStripStatusLabelFilePath.Text;
 
             // update file icon
-            if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Word)
+            if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Word)
             {
                 tvFiles.SelectedImageIndex = 0;
                 tvFiles.ImageIndex = 0;
             }
-            else if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Excel)
+            else if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Excel)
             {
                 tvFiles.SelectedImageIndex = 2;
                 tvFiles.ImageIndex = 2;
             }
-            else if (GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.PowerPoint)
+            else if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.PowerPoint)
             {
                 tvFiles.SelectedImageIndex = 1;
                 tvFiles.ImageIndex = 1;
@@ -633,32 +633,32 @@ namespace Office_File_Explorer
             {
                 tRoot.Nodes.Add(part.Uri.ToString());
 
-                if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.XML)
+                if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.XML)
                 {
                     tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 3;
                     tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 3;
                 }
-                else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Image)
+                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Image)
                 {
                     tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 4;
                     tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 4;
                 }
-                else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Word)
+                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Word)
                 {
                     tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 0;
                     tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 0;
                 }
-                else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Excel)
+                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Excel)
                 {
                     tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 2;
                     tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 2;
                 }
-                else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.PowerPoint)
+                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.PowerPoint)
                 {
                     tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 1;
                     tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 1;
                 }
-                else if (GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Binary)
+                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Binary)
                 {
                     tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 5;
                     tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 5;
@@ -675,61 +675,6 @@ namespace Office_File_Explorer
             tvFiles.Nodes.Add(tRoot);
             tvFiles.ExpandAll();
             DisableModifyUI();
-        }
-
-        public OpenXmlInnerFileTypes GetFileType(string path)
-        {
-            switch (Path.GetExtension(path))
-            {
-                case ".docx":
-                case ".dotx":
-                case ".dotm":
-                case ".docm":
-                    return OpenXmlInnerFileTypes.Word;
-                case ".xlsx":
-                case ".xlsm":
-                case ".xltm":
-                case ".xltx":
-                case ".xlsb":
-                    return OpenXmlInnerFileTypes.Excel;
-                case ".pptx":
-                case ".pptm":
-                case ".ppsx":
-                case ".ppsm":
-                case ".potx":
-                case ".potm":
-                    return OpenXmlInnerFileTypes.PowerPoint;
-                case ".msg":
-                    return OpenXmlInnerFileTypes.Outlook;
-                case ".jpeg":
-                case ".jpg":
-                case ".bmp":
-                case ".png":
-                case ".gif":
-                case ".emf":
-                case ".wmf":
-                    return OpenXmlInnerFileTypes.Image;
-                case ".xml":
-                case ".rels":
-                    return OpenXmlInnerFileTypes.XML;
-                case ".mp4":
-                case ".avi":
-                case ".wmv":
-                case ".mov":
-                    return OpenXmlInnerFileTypes.Video;
-                case ".mp3":
-                case ".wav":
-                case ".wma":
-                    return OpenXmlInnerFileTypes.Audio;
-                case ".txt":
-                    return OpenXmlInnerFileTypes.Text;
-                case ".bin":
-                case ".sigs":
-                case ".odttf":
-                    return OpenXmlInnerFileTypes.Binary;
-                default:
-                    return OpenXmlInnerFileTypes.Other;
-            }
         }
 
         public void LogInformation(LogInfoType type, string output, string ex)
@@ -1062,6 +1007,9 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// different scenarios call for different icons / UI to light up
+        /// </summary>
         public void UpdateAppUI()
         {
             if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
@@ -1141,11 +1089,6 @@ namespace Office_File_Explorer
             frm.Dispose();
         }
 
-        private void OpenErrorLogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AppUtilities.PlatformSpecificProcessStart(Strings.fLogFilePath);
-        }
-
         public List<string> CustomDocPropsList(CustomFilePropertiesPart cfp)
         {
             List<string> tempCfp = new List<string>();
@@ -1207,11 +1150,6 @@ namespace Office_File_Explorer
             b64Frm.ShowDialog();
         }
 
-        private void structuredStorageViewerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenEncryptedOfficeDocument(toolStripStatusLabelFilePath.Text, true);
-        }
-
         private void excelSheetViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var f = new FrmSheetViewer(tempFileReadOnly))
@@ -1269,14 +1207,16 @@ namespace Office_File_Explorer
                     fileToolStripMenuItemClose.Enabled = true;
                     break;
                 case UIType.ViewXml:
+                    DisableCustomUI();
                     toolStripButtonModify.Enabled = true;
                     toolStripButtonSave.Enabled = true;
                     break;
                 case UIType.ViewBinary:
-                    break;
                 case UIType.ViewImage:
+                    DisableCustomUI();
                     break;
                 case UIType.ViewLabelInfo:
+                    DisableCustomUI();
                     toolStripButtonFixXml.Enabled = true;
                     toolStripButtonValidateXml.Enabled = true;
                     break;
@@ -1291,6 +1231,13 @@ namespace Office_File_Explorer
                 default:
                     break;
             }
+        }
+
+        public void DisableCustomUI()
+        {
+            toolStripButtonGenerateCallback.Enabled = false;
+            toolStripDropDownButtonInsert.Enabled = false;
+            toolStripButtonInsertIcon.Enabled = false;
         }
 
         public void DisableAllUI()
@@ -1699,7 +1646,7 @@ namespace Office_File_Explorer
                     toolStripButtonModify.Enabled = true;
                 }
 
-                if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
+                if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
                 {
                     // customui files have additional editing options
                     if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
@@ -1779,7 +1726,7 @@ namespace Office_File_Explorer
                         }
                     }
                 }
-                else if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Image)
+                else if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Image)
                 {
                     // currently showing images with a form
                     // TODO find a way to keep the image in the main form
@@ -1808,7 +1755,7 @@ namespace Office_File_Explorer
                         }
                     }
                 }
-                else if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Binary)
+                else if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Binary)
                 {
                     foreach (PackagePart pp in pkgParts)
                     {
