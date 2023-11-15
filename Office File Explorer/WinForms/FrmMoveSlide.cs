@@ -1,7 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using Office_File_Explorer.Helpers;
 using System;
-using System.IO.Packaging;
 using System.Windows.Forms;
 
 namespace Office_File_Explorer.WinForms

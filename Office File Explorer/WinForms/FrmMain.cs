@@ -27,6 +27,9 @@ using File = System.IO.File;
 using Color = System.Drawing.Color;
 using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
 using Office_File_Explorer.OpenMcdf;
+using DocumentFormat.OpenXml.Presentation;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using Application = System.Windows.Forms.Application;
 
 namespace Office_File_Explorer
 {
@@ -44,7 +47,7 @@ namespace Office_File_Explorer
         private FileStream fs;
         private CompoundFile cf;
         private CFStream cfStream;
-        private bool isValid;
+        private bool isValidXml;
         private List<string> validationErrors = new List<string>();
 
         // corrupt doc legacy
@@ -73,25 +76,12 @@ namespace Office_File_Explorer
         // package is for viewing of contents only
         public Package package;
 
-        public bool hasXmlError;
-
-        public enum OpenXmlInnerFileTypes
-        {
-            Word,
-            Excel,
-            PowerPoint,
-            Outlook,
-            XML,
-            Image,
-            Binary,
-            Video,
-            Audio,
-            Text,
-            Other
-        }
-
         // enums
-        public enum LogInfoType { ClearAndAdd, TextOnly, InvalidFile, LogException, EmptyCount };
+        public enum OpenXmlInnerFileTypes { Word, Excel, PowerPoint, Outlook, XML, Image, Binary, Video, Audio, Text, Other }
+
+        public enum LogInfoType { ClearAndAdd, TextOnly, InvalidFile, LogException, EmptyCount }
+
+        public enum UIType { OpenWord, OpenExcel, OpenPowerPoint, OpenMsg, OpenCF, FileClose, ViewLabelInfo, ViewXml, ViewBinary, ViewImage, ViewCustomUI }
 
         public FrmMain()
         {
@@ -248,7 +238,7 @@ namespace Office_File_Explorer
         /// </summary>
         public void FileClose()
         {
-            DisableCustomUIIcons();
+            DisableAllUI();
             DisableModifyUI();
             DisableUI();
             package?.Close();
@@ -288,27 +278,6 @@ namespace Office_File_Explorer
             }
         }
 
-        /// <summary>
-        /// enable app feature related buttons
-        /// </summary>
-        public void EnableUI()
-        {
-            if (!isEncrypted || toolStripStatusLabelFilePath.Text == ".msg")
-            {
-                toolStripButtonViewContents.Enabled = true;
-            }
-            
-            toolStripButtonFixDoc.Enabled = true;
-            editToolStripMenuFindReplace.Enabled = true;
-            editToolStripMenuItemModifyContents.Enabled = true;
-            editToolStripMenuItemRemoveCustomDocProps.Enabled = true;
-            editToolStripMenuItemRemoveCustomXml.Enabled = true;
-            toolStripButtonModify.Enabled = true;
-            fileToolStripMenuItemClose.Enabled = true;
-            toolStripButtonModify.Enabled = true;
-            toolStripButtonValidateXml.Enabled = true;
-        }
-
         public void CopyAllItems()
         {
             try
@@ -334,11 +303,6 @@ namespace Office_File_Explorer
             try
             {
                 fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);
-
-                // Load images
-                //tvFiles.ImageList = new ImageList();
-                //tvFiles.ImageList.Images.Add(Properties.Resources.folder);
-                //tvFiles.ImageList.Images.Add(Properties.Resources.BinaryFile);
 
                 try
                 {
@@ -512,12 +476,16 @@ namespace Office_File_Explorer
                     // handle msg files
                     if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.msgFileExt))
                     {
+                        // setup message file
                         Stream messageStream = File.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.Read);
                         OutlookStorage.Message message = new OutlookStorage.Message(messageStream);
                         messageStream.Close();
 
+                        // load tree
                         tvFiles.Nodes.Clear();
                         LoadMsgToTree(message, tvFiles.Nodes.Add("MSG"));
+
+                        // update ui
                         tvFiles.ImageIndex = 6;
                         tvFiles.SelectedImageIndex = 6;
                         message.Dispose();
@@ -527,6 +495,7 @@ namespace Office_File_Explorer
                         return;
                     }
 
+                    // quick cleanup in case this is an open and no close of previous file
                     if (fs is not null)
                     {
                         fs.Close();
@@ -576,7 +545,7 @@ namespace Office_File_Explorer
                             package?.Close();
                             pkgParts?.Clear();
                             LoadPartsIntoViewer();
-                            EnableUI();
+                            //EnableUI();
                         }
                         else
                         {
@@ -921,6 +890,48 @@ namespace Office_File_Explorer
             sbNodeBuffer.Append(input);
         }
 
+        public void FixLabelInfo()
+        {
+            // populate validation errors
+            ValidateLabelInfoXml(false);
+
+            // check existing validation errors against known corrupt labelinfo xml scenarios
+            if (validationErrors.Count > 0)
+            {
+                string valToReplace = string.Empty;
+
+                foreach (string s in validationErrors)
+                {
+                    // known issue fix - missing method attribute
+                    // sometimes the method is not written out use a simple find/replace to get it back in
+                    if (s.Contains("The required attribute 'method' is missing"))
+                    {
+                        rtbDisplay.Text = rtbDisplay.Text.Replace("enabled=\"1\"", "enabled=\"1\" method=\"Standard\"");
+                    }
+
+                    // known issue fix - siteid missing brackets
+                    // example siteId="11111111-1111-1111-1111-111111111111"
+                    // should be siteId="{11111111-1111-1111-1111-111111111111}"
+                    if (s.Contains("The 'siteId' attribute is invalid"))
+                    {
+                        // first we need to pull the full text of the siteId attribute
+                        string[] split = Regex.Split(rtbDisplay.Text, @" +");
+                        foreach (string sp in split)
+                        {
+                            if (sp.StartsWith("siteId=") && sp.Contains('{') == false && sp.Contains('}') == false)
+                            {
+                                string[] replace = sp.Split('"');
+                                valToReplace = replace[0] + "\"{" + replace[1] + "}\"";
+                                rtbDisplay.Text = rtbDisplay.Text.Replace(sp, valToReplace);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return;
+        }
+
         /// <summary>
         /// this function loops through all nodes parsed out from Step 1 in BtnFixCorruptDoc_Click
         /// check each node and add fallback tags only to the list
@@ -1051,14 +1062,36 @@ namespace Office_File_Explorer
             }
         }
 
+        public void UpdateAppUI()
+        {
+            if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
+            {
+                UpdateUI(UIType.OpenWord);
+            }
+            else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
+            {
+                UpdateUI(UIType.OpenExcel);
+            }
+            else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
+            {
+                UpdateUI(UIType.OpenPowerPoint);
+            }
+            else if (toolStripStatusLabelDocType.Text == Strings.oAppOutlook)
+            {
+                UpdateUI(UIType.OpenMsg);
+            }
+            else if (isEncrypted)
+            {
+                UpdateUI(UIType.OpenCF);
+            }
+        }
+
         #endregion
 
         #region Button Events
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EnableUI();
-            EnableModifyUI();
             OpenOfficeDocument(false);
 
             if (toolStripStatusLabelFilePath.Text != Strings.wHeadingBegin)
@@ -1066,15 +1099,7 @@ namespace Office_File_Explorer
                 AddFileToMRU();
             }
 
-            if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
-            {
-                excelSheetViewerToolStripMenuItem.Enabled = true;
-            }
-
-            if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
-            {
-                wordDocumentRevisionsToolStripMenuItem.Enabled = true;
-            }
+            UpdateAppUI();
         }
 
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1195,45 +1220,107 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// update toolbar and icons
+        /// </summary>
+        /// <param name="s"></param>
+        public void UpdateUI(UIType type)
+        {
+            switch (type)
+            {
+                case UIType.OpenWord:
+                    DisableAllUI();
+                    toolStripButtonViewContents.Enabled = true;
+                    toolStripButtonFixDoc.Enabled = true;
+                    editToolStripMenuItemModifyContents.Enabled = true;
+                    editToolStripMenuItemRemoveCustomDocProps.Enabled = true;
+                    editToolStripMenuItemRemoveCustomXml.Enabled = true;
+                    wordDocumentRevisionsToolStripMenuItem.Enabled = true;
+                    toolStripDropDownButtonInsert.Enabled = true;
+                    fileToolStripMenuItemClose.Enabled = true;
+                    break;
+                case UIType.OpenExcel:
+                    DisableAllUI();
+                    toolStripButtonViewContents.Enabled = true;
+                    toolStripButtonFixDoc.Enabled = true;
+                    excelSheetViewerToolStripMenuItem.Enabled = true;
+                    editToolStripMenuItemModifyContents.Enabled = true;
+                    editToolStripMenuItemRemoveCustomDocProps.Enabled = true;
+                    editToolStripMenuItemRemoveCustomXml.Enabled = true;
+                    toolStripDropDownButtonInsert.Enabled = true;
+                    fileToolStripMenuItemClose.Enabled = true;
+                    break;
+                case UIType.OpenPowerPoint:
+                    DisableAllUI();
+                    toolStripButtonViewContents.Enabled = true;
+                    toolStripButtonFixDoc.Enabled = true;
+                    editToolStripMenuItemModifyContents.Enabled = true;
+                    editToolStripMenuItemRemoveCustomDocProps.Enabled = true;
+                    editToolStripMenuItemRemoveCustomXml.Enabled = true;
+                    toolStripDropDownButtonInsert.Enabled = true;
+                    fileToolStripMenuItemClose.Enabled = true;
+                    break;
+                case UIType.OpenMsg:
+                    DisableAllUI();
+                    fileToolStripMenuItemClose.Enabled = true;
+                    break;
+                case UIType.OpenCF:
+                    DisableAllUI();
+                    fileToolStripMenuItemClose.Enabled = true;
+                    break;
+                case UIType.ViewXml:
+                    toolStripButtonModify.Enabled = true;
+                    toolStripButtonSave.Enabled = true;
+                    break;
+                case UIType.ViewBinary:
+                    break;
+                case UIType.ViewImage:
+                    break;
+                case UIType.ViewLabelInfo:
+                    toolStripButtonFixXml.Enabled = true;
+                    toolStripButtonValidateXml.Enabled = true;
+                    break;
+                case UIType.ViewCustomUI:
+                    toolStripButtonModify.Enabled = true;
+                    toolStripButtonSave.Enabled = true;
+                    toolStripButtonGenerateCallback.Enabled = true;
+                    toolStripDropDownButtonInsert.Enabled = true;
+                    toolStripButtonInsertIcon.Enabled = true;
+                    toolStripButtonValidateXml.Enabled = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void DisableAllUI()
+        {
+            toolStripButtonViewContents.Enabled = false;
+            toolStripButtonFixCorruptDoc.Enabled = false;
+            toolStripButtonFixDoc.Enabled = false;
+            editToolStripMenuItemModifyContents.Enabled = false;
+            editToolStripMenuItemRemoveCustomDocProps.Enabled = false;
+            editToolStripMenuItemRemoveCustomXml.Enabled = false;
+            wordDocumentRevisionsToolStripMenuItem.Enabled = false;
+            toolStripButtonModify.Enabled = false;
+            toolStripButtonSave.Enabled = false;
+            toolStripButtonGenerateCallback.Enabled = false;
+            toolStripDropDownButtonInsert.Enabled = false;
+            toolStripButtonInsertIcon.Enabled = false;
+            toolStripButtonFixXml.Enabled = false;
+            excelSheetViewerToolStripMenuItem.Enabled = false;
+        }
+
         public void EnableModifyUI()
         {
             rtbDisplay.ReadOnly = false;
             rtbDisplay.BackColor = SystemColors.Window;
-            toolStripButtonSave.Enabled = true;
-            toolStripButtonFixDoc.Enabled = true;
-
-            if (!isEncrypted)
-            {
-                toolStripButtonReplace.Enabled = true;
-            }
         }
 
         public void DisableModifyUI()
         {
             rtbDisplay.ReadOnly = true;
             rtbDisplay.BackColor = SystemColors.Control;
-            toolStripButtonSave.Enabled = false;
-            toolStripButtonFixDoc.Enabled = false;
-
-            if (!isEncrypted)
-            {
-                toolStripButtonReplace.Enabled = false;
-            }
-        }
-
-        public void EnableCustomUIIcons()
-        {
-            toolStripButtonGenerateCallback.Enabled = true;
-            toolStripDropDownButtonInsert.Enabled = true;
-            toolStripButtonInsertIcon.Enabled = true;
-        }
-
-        public void DisableCustomUIIcons()
-        {
-            toolStripDropDownButtonInsert.Enabled = false;
-            toolStripButtonSave.Enabled = false;
-            toolStripButtonGenerateCallback.Enabled = false;
-            toolStripButtonInsertIcon.Enabled = false;
         }
 
         private void ShowError(string errorText)
@@ -1246,13 +1333,13 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-                if (tn != null)
+                if (tn is not null)
                 {
                     tvFiles.SelectedNode = tn;
                     // The tag property contains the underlying CFItem.
                     // CFItem target = (CFItem)n.Tag;
                     cfStream = tn.Tag as CFStream;
-                    if (cfStream != null)
+                    if (cfStream is not null)
                     {
                         byte[] buffer = new byte[cfStream.Size];
                         cfStream.Read(buffer, 0, buffer.Length);
@@ -1280,24 +1367,12 @@ namespace Office_File_Explorer
             }
         }
 
-        static void ValidationCallback(object sender, ValidationEventArgs args)
-        {
-            if (args.Severity == XmlSeverityType.Warning)
-            {
-                FileUtilities.WriteToLog(Strings.fLogFilePath, "CustomUI Validation Warning:" + args.Message);
-            }
-            else if (args.Severity == XmlSeverityType.Error)
-            {
-                FileUtilities.WriteToLog(Strings.fLogFilePath, "CustomUI Validation Error:" + args.Message);
-            }
-        }
-
         /// <summary>
         /// validate the labelinfo.xml file
         /// </summary>
         public void ValidatePartXml()
         {
-            hasXmlError = false;
+            isValidXml = true;
 
             if (rtbDisplay.Text == null || rtbDisplay.Text.Length == 0)
             {
@@ -1330,7 +1405,7 @@ namespace Office_File_Explorer
                 FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
             }
 
-            if (!hasXmlError)
+            if (isValidXml)
             {
                 MessageBox.Show("Xml Valid", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -1341,7 +1416,7 @@ namespace Office_File_Explorer
         /// </summary>
         /// <param name="showValidMessage"></param>
         /// <returns></returns>
-        public bool ValidateXml(bool showValidMessage)
+        public bool ValidateCustomUIXml(bool showValidMessage)
         {
             if (rtbDisplay.Text == null || rtbDisplay.Text.Length == 0)
             {
@@ -1353,7 +1428,7 @@ namespace Office_File_Explorer
             try
             {
                 XmlTextReader xtr = new XmlTextReader(@".\Schemas\customui14.xsd");
-                XmlSchema schema = XmlSchema.Read(xtr, ValidationCallback);
+                XmlSchema schema = XmlSchema.Read(xtr, ValidationEventHandler);
 
                 XmlDocument xmlDoc = new XmlDocument();
 
@@ -1375,8 +1450,8 @@ namespace Office_File_Explorer
                     return false;
                 }
 
-                hasXmlError = false;
-                xmlDoc.Validate(XmlValidationEventHandler);
+                isValidXml = false;
+                xmlDoc.Validate(ValidationEventHandler);
             }
             catch (XmlException ex)
             {
@@ -1386,7 +1461,7 @@ namespace Office_File_Explorer
 
             rtbDisplay.ResumeLayout();
 
-            if (!hasXmlError)
+            if (isValidXml)
             {
                 if (showValidMessage)
                 {
@@ -1397,24 +1472,6 @@ namespace Office_File_Explorer
             return false;
         }
 
-        public void LogXmlValidationError(ValidationEventArgs e)
-        {
-            lock (this)
-            {
-                hasXmlError = true;
-            }
-
-            MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
-                        "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            FileUtilities.WriteToLog(Strings.fLogFilePath, "Xml Validation Error at Line #" + e.Exception.LineNumber + " Position #"
-                + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
-        }
-
-        private void XmlValidationEventHandler(object sender, ValidationEventArgs e)
-        {
-            LogXmlValidationError(e);
-        }
-
         /// <summary>
         /// display schema validation errors
         /// </summary>
@@ -1422,33 +1479,15 @@ namespace Office_File_Explorer
         /// <param name="e"></param>
         private void ValidationEventHandler(object sender, ValidationEventArgs e)
         {
-            if (isEncrypted)
+            if (e.Severity == XmlSeverityType.Error)
             {
-                isValid = false;
-                switch (e.Severity)
-                {
-                    case XmlSeverityType.Error:
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
-                        validationErrors.Add("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
-                        break;
-                    case XmlSeverityType.Warning:
-                        FileUtilities.WriteToLog(Strings.fLogFilePath, e.Message);
-                        validationErrors.Add("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
-                        break;
-                }
+                isValidXml = false;
             }
-            else
-            {
-                switch (e.Severity)
-                {
-                    case XmlSeverityType.Error:
-                        LogXmlValidationError(e);
-                        break;
-                    case XmlSeverityType.Warning:
-                        LogXmlValidationError(e);
-                        break;
-                }
-            }
+
+            MessageBox.Show("Error at Line #" + e.Exception.LineNumber + " Position #" + e.Exception.LinePosition + Strings.wColonBuffer + e.Message,
+                        "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            FileUtilities.WriteToLog(Strings.fLogFilePath, "Xml Validation Error at Line #" + e.Exception.LineNumber + " Position #"
+                + e.Exception.LinePosition + Strings.wColonBuffer + e.Message);
         }
 
         private void AddPart(XMLParts partType)
@@ -1555,14 +1594,8 @@ namespace Office_File_Explorer
             else
             {
                 toolStripStatusLabelFilePath.Text = path;
-                EnableUI();
-                EnableModifyUI();
                 OpenOfficeDocument(true);
-
-                if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
-                {
-                    wordDocumentRevisionsToolStripMenuItem.Enabled = true;
-                }
+                UpdateAppUI();
             }
         }
 
@@ -1659,16 +1692,23 @@ namespace Office_File_Explorer
                     return;
                 }
 
+                if (isEncrypted && e.Node.Text.StartsWith("LabelInfo"))
+                {
+                    FormatXmlColors();
+                    toolStripButtonFixXml.Enabled = true;
+                    toolStripButtonModify.Enabled = true;
+                }
+
                 if (GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
                 {
                     // customui files have additional editing options
                     if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
                     {
-                        EnableCustomUIIcons();
+                        UpdateUI(UIType.ViewCustomUI);
                     }
                     else
                     {
-                        DisableCustomUIIcons();
+                        UpdateUI(UIType.ViewXml);
                     }
 
                     // load file contents
@@ -1797,7 +1837,6 @@ namespace Office_File_Explorer
             finally
             {
                 Cursor = Cursors.Default;
-                DisableModifyUI();
             }
         }
 
@@ -1858,11 +1897,11 @@ namespace Office_File_Explorer
             }
             else if (tvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUI14Xml) || tvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUIXml))
             {
-                ValidateXml(true);
+                ValidateCustomUIXml(true);
             }
-            else if(isEncrypted)
+            else if (isEncrypted || tvFiles.SelectedNode.Text.Contains("docMetadata/LabelInfo.xml"))
             {
-                ValidateEncryptedXml(true);
+                ValidateLabelInfoXml(true);
             }
         }
 
@@ -1875,7 +1914,7 @@ namespace Office_File_Explorer
             }
 
             // if the xml is not valid, then there is no point in generating the callback code
-            if (!ValidateXml(false))
+            if (!ValidateCustomUIXml(false))
             {
                 return;
             }
@@ -1911,13 +1950,14 @@ namespace Office_File_Explorer
         {
             AddPart(XMLParts.RibbonX14);
             rtbDisplay.Text = string.Empty;
-
+            tvFiles.SelectedNode = tvFiles.Nodes[0].Nodes[0];
         }
 
         private void office2007CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddPart(XMLParts.RibbonX12);
             rtbDisplay.Text = string.Empty;
+            tvFiles.SelectedNode = tvFiles.Nodes[0].Nodes[0];
         }
 
         private void customOutspaceToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2484,48 +2524,6 @@ namespace Office_File_Explorer
         /// <param name="e"></param>
         private void toolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
-            if (isEncrypted)
-            {
-                // populate validation errors
-                ValidateXml(false);
-
-                // check existing validation errors against known corrupt labelinfo xml scenarios
-                if (validationErrors.Count > 0)
-                {
-                    string valToReplace = string.Empty;
-
-                    foreach (string s in validationErrors)
-                    {
-                        // known issue fix - missing method attribute
-                        // sometimes the method is not written out use a simple find/replace to get it back in
-                        if (s.Contains("The required attribute 'method' is missing"))
-                        {
-                            rtbDisplay.Text = rtbDisplay.Text.Replace("enabled=\"1\"", "enabled=\"1\" method=\"Standard\"");
-                        }
-
-                        // known issue fix - siteid missing brackets
-                        // example siteId="11111111-1111-1111-1111-111111111111"
-                        // should be siteId="{11111111-1111-1111-1111-111111111111}"
-                        if (s.Contains("The 'siteId' attribute is invalid"))
-                        {
-                            // first we need to pull the full text of the siteId attribute
-                            string[] split = Regex.Split(rtbDisplay.Text, @" +");
-                            foreach (string sp in split)
-                            {
-                                if (sp.StartsWith("siteId=") && sp.Contains('{') == false && sp.Contains('}') == false)
-                                {
-                                    string[] replace = sp.Split('"');
-                                    valToReplace = replace[0] + "\"{" + replace[1] + "}\"";
-                                    rtbDisplay.Text = rtbDisplay.Text.Replace(sp, valToReplace);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return;
-            }
-
             bool corruptionFound = false;
 
             StringBuilder sbFixes = new StringBuilder();
@@ -3462,26 +3460,15 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// validate the labelinfo stream
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnValidateXml_Click(object sender, EventArgs e)
-        {
-            ValidateEncryptedXml(true);
-        }
-
-        /// <summary>
         /// populate the validation errors
         /// </summary>
         /// <param name="displayOnly">only display ui for validate xml button</param>
-        private void ValidateEncryptedXml(bool displayOnly)
+        private void ValidateLabelInfoXml(bool displayOnly)
         {
-            isValid = true;
             validationErrors.Clear();
 
             // currently only validating labelinfo streams
-            if (tvFiles.SelectedNode.Name != "LabelInfo")
+            if (!tvFiles.SelectedNode.Text.Contains("docMetadata/LabelInfo.xml"))
             {
                 return;
             }
@@ -3517,11 +3504,11 @@ namespace Office_File_Explorer
                     MessageBox.Show(ex.Message, "Xml Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                isValid = false;
+                isValidXml = false;
             }
             finally
             {
-                if (isValid && displayOnly)
+                if (isValidXml && displayOnly)
                 {
                     MessageBox.Show("Xml Is Valid.", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -3559,6 +3546,12 @@ namespace Office_File_Explorer
             }
         }
 
+        private void toolStripButtonFixXml_Click(object sender, EventArgs e)
+        {
+            FixLabelInfo();
+        }
+
         #endregion
+
     }
 }
