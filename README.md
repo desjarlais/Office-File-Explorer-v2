@@ -24,7 +24,7 @@ Use the Wiki for more information about the features listed here -> [Wiki](https
 * Change Default Template
 * Accept All Revisions
 * Fix content control namespaces
-* Fix document corruptions (see [Wiki](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature) for more information)
+* Fix document corruptions (see [Fix Document Feature](https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature) for more information)
 * Remove PII
 
 ### Excel
