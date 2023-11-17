@@ -8,19 +8,15 @@
 
 using Office_File_Explorer.Helpers;
 using System;
-using System.Runtime.Serialization;
 
 namespace Office_File_Explorer.OpenMcdf
 {
     /// <summary>
     /// OpenMCDF base exception.
     /// </summary>
-    [Serializable]
     public class CFException : Exception
     {
         public CFException() : base() { }
-
-        protected CFException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public CFException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
@@ -32,12 +28,9 @@ namespace Office_File_Explorer.OpenMcdf
     /// on a stream or storage object after the disposal of the owner
     /// compound file object.
     /// </summary>
-    [Serializable]
     public class CFDisposedException : CFException
     {
         public CFDisposedException() : base() { }
-
-        protected CFDisposedException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public CFDisposedException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
@@ -48,12 +41,9 @@ namespace Office_File_Explorer.OpenMcdf
     /// Raised when opening a file with invalid header
     /// or not supported COM/OLE Structured storage version.
     /// </summary>
-    [Serializable]
     public class CFFileFormatException : CFException
     {
         public CFFileFormatException() : base() { }
-
-        protected CFFileFormatException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public CFFileFormatException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
@@ -64,11 +54,8 @@ namespace Office_File_Explorer.OpenMcdf
     /// Raised when a named stream or a storage object
     /// are not found in a parent storage.
     /// </summary>
-    [Serializable]
     public class CFItemNotFound : CFException
     {
-        protected CFItemNotFound(SerializationInfo info, StreamingContext context) : base(info, context) { }
-
         public CFItemNotFound() : base("Entry not found") { }
 
         public CFItemNotFound(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
@@ -79,12 +66,9 @@ namespace Office_File_Explorer.OpenMcdf
     /// <summary>
     /// Raised when a method call is invalid for the current object state
     /// </summary>
-    [Serializable]
     public class CFInvalidOperation : CFException
     {
         public CFInvalidOperation() : base() { }
-
-        protected CFInvalidOperation(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public CFInvalidOperation(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
@@ -99,12 +83,9 @@ namespace Office_File_Explorer.OpenMcdf
     /// Two items with the same name CANNOT be added within 
     /// the same storage or sub-storage. 
     /// </remarks>
-    [Serializable]
     public class CFDuplicatedItemException : CFException
     {
         public CFDuplicatedItemException() : base() { }
-
-        protected CFDuplicatedItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public CFDuplicatedItemException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 
@@ -117,12 +98,9 @@ namespace Office_File_Explorer.OpenMcdf
     /// <remarks>
     /// This exception is NOT raised when Compound file has been opened with NO_VALIDATION_EXCEPTION option.
     /// </remarks>
-    [Serializable]
     public class CFCorruptedFileException : CFException
     {
         public CFCorruptedFileException() : base() { }
-
-        protected CFCorruptedFileException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public CFCorruptedFileException(string message) : base(message, null) { FileUtilities.WriteToLog(Strings.fLogFilePath, message); }
 

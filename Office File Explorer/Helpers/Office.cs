@@ -406,12 +406,9 @@ namespace Office_File_Explorer.Helpers
                         // todo: add check for non custom xml referenced customerdatatags
                         foreach (SlidePart sp in presDoc.PresentationPart.SlideParts)
                         {
-                            // remove the cd / <p:custData ...> from slides
-                            if (sp.Slide.CommonSlideData.CustomerDataList is not null)
-                            {
-                                RemoveAllCustomerDataTags(sp.Slide.CommonSlideData);
-                            }
-
+                            // check commonslidedata for shapes and graphicframes
+                            isFixed = RemoveAllCustomerDataTags(sp.Slide.CommonSlideData);
+                            
                             // delete the cd for slidelayout
                             IEnumerable<CustomerData> cdListSl = sp.SlideLayoutPart.SlideLayout.Descendants<CustomerData>().ToList();
                             foreach (CustomerData cd in cdListSl)
@@ -569,6 +566,20 @@ namespace Office_File_Explorer.Helpers
                         if (oxeShape.LocalName == "custDataLst")
                         {
                             CustomerDataList cdl = (CustomerDataList)oxeShape;
+                            cdl.Remove();
+                            isFixed = true;
+                        }
+                    }
+                }
+
+                if (oxe.LocalName == "graphicFrame")
+                {
+                    GraphicFrame gf = (GraphicFrame)oxe;
+                    foreach (OpenXmlElement gFrame in gf.NonVisualGraphicFrameProperties.ApplicationNonVisualDrawingProperties)
+                    {
+                        if (gFrame.LocalName == "custDataLst")
+                        {
+                            CustomerDataList cdl = (CustomerDataList)gFrame;
                             cdl.Remove();
                             isFixed = true;
                         }

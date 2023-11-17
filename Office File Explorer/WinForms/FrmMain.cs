@@ -41,7 +41,7 @@ namespace Office_File_Explorer
         private string partPropCompression;
         private bool isEncrypted;
 
-        // openmcdf
+        // openmcdf globals
         private FileStream fs;
         private CompoundFile cf;
         private CFStream cfStream;
@@ -239,17 +239,14 @@ namespace Office_File_Explorer
             DisableAllUI();
             package?.Close();
             pkgParts?.Clear();
-            tvFiles.Nodes.Clear();
+            TvFiles.Nodes.Clear();
             toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
             toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
             rtbDisplay.Clear();
             fileToolStripMenuItemClose.Enabled = false;
 
             // check for encrypted file
-            if (fs is not null)
-            {
-                fs.Close();
-            }
+            fs?.Close();
         }
 
         /// <summary>
@@ -305,14 +302,14 @@ namespace Office_File_Explorer
                     cf = new CompoundFile(fs, CFSUpdateMode.Update, CFSConfiguration.SectorRecycle | CFSConfiguration.NoValidationException | CFSConfiguration.EraseFreeSectors);
 
                     // populate treeview
-                    tvFiles.Nodes.Clear();
+                    TvFiles.Nodes.Clear();
                     TreeNode root = null;
-                    root = tvFiles.Nodes.Add("Root Entry", "Root");
+                    root = TvFiles.Nodes.Add("Root Entry", "Root");
                     root.Tag = cf.RootStorage;
                     root.ImageIndex = 5;
                     root.SelectedImageIndex = 5;
                     AddNodes(root, cf.RootStorage);
-                    tvFiles.ExpandAll();
+                    TvFiles.ExpandAll();
                     isEncrypted = true;
                 }
                 catch (Exception ex)
@@ -477,24 +474,20 @@ namespace Office_File_Explorer
                         messageStream.Close();
 
                         // load tree
-                        tvFiles.Nodes.Clear();
-                        LoadMsgToTree(message, tvFiles.Nodes.Add("MSG"));
-
-                        // update ui
-                        tvFiles.ImageIndex = 6;
-                        tvFiles.SelectedImageIndex = 6;
-                        message.Dispose();
+                        TvFiles.Nodes.Clear();
+                        LoadMsgToTree(message, TvFiles.Nodes.Add("MSG"));
+                        TvFiles.ImageIndex = 6;
+                        TvFiles.SelectedImageIndex = 6;
                         toolStripStatusLabelDocType.Text = Strings.oAppOutlook;
-                        tvFiles.ExpandAll();
+                        TvFiles.ExpandAll();
                         ScrollToTopOfRtb();
+
+                        message.Dispose();
                         return;
                     }
 
-                    // quick cleanup in case this is an open and no close of previous file
-                    if (fs is not null)
-                    {
-                        fs.Close();
-                    }
+                    // cleanup in case this is an open and no close of previous file
+                    fs?.Close();
 
                     // handle office files
                     if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
@@ -535,7 +528,7 @@ namespace Office_File_Explorer
 
                             // clear the previous doc if there was one and setup temp files
                             TempFileSetup();
-                            tvFiles.Nodes.Clear();
+                            TvFiles.Nodes.Clear();
                             rtbDisplay.Clear();
                             package?.Close();
                             pkgParts?.Clear();
@@ -606,20 +599,20 @@ namespace Office_File_Explorer
             tRoot.Text = toolStripStatusLabelFilePath.Text;
 
             // update file icon
-            if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Word)
+            if (StrOfficeApp == Strings.oAppWord)
             {
-                tvFiles.SelectedImageIndex = 0;
-                tvFiles.ImageIndex = 0;
+                TvFiles.SelectedImageIndex = 0;
+                TvFiles.ImageIndex = 0;
             }
-            else if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.Excel)
+            else if (StrOfficeApp == Strings.oAppExcel)
             {
-                tvFiles.SelectedImageIndex = 2;
-                tvFiles.ImageIndex = 2;
+                TvFiles.SelectedImageIndex = 2;
+                TvFiles.ImageIndex = 2;
             }
-            else if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.PowerPoint)
+            else if (StrOfficeApp == Strings.oAppPowerPoint)
             {
-                tvFiles.SelectedImageIndex = 1;
-                tvFiles.ImageIndex = 1;
+                TvFiles.SelectedImageIndex = 1;
+                TvFiles.ImageIndex = 1;
             }
 
             // update inner file icon, need to update both the selected and normal image index
@@ -666,8 +659,8 @@ namespace Office_File_Explorer
                 pkgParts.Add(part);
             }
 
-            tvFiles.Nodes.Add(tRoot);
-            tvFiles.ExpandAll();
+            TvFiles.Nodes.Add(tRoot);
+            TvFiles.ExpandAll();
             DisableModifyUI();
         }
 
@@ -724,13 +717,13 @@ namespace Office_File_Explorer
         /// <param name="file">the path to the initial fix attempt</param>
         public bool OpenWithSdk(string file)
         {
-            string body = string.Empty;
             bool fSuccess = false;
 
             try
             {
                 Cursor = Cursors.WaitCursor;
 
+                string body;
                 if (FileUtilities.GetAppFromFileExtension(file) == Strings.oAppWord)
                 {
                     using (WordprocessingDocument document = WordprocessingDocument.Open(file, true))
@@ -1282,7 +1275,7 @@ namespace Office_File_Explorer
                 Cursor = Cursors.WaitCursor;
                 if (tn is not null)
                 {
-                    tvFiles.SelectedNode = tn;
+                    TvFiles.SelectedNode = tn;
                     // The tag property contains the underlying CFItem.
                     // CFItem target = (CFItem)n.Tag;
                     cfStream = tn.Tag as CFStream;
@@ -1440,14 +1433,14 @@ namespace Office_File_Explorer
         {
             OfficePart newPart = CreateCustomUIPart(partType);
             TreeNode partNode = ConstructPartNode(newPart);
-            TreeNode currentNode = tvFiles.Nodes[0];
+            TreeNode currentNode = TvFiles.Nodes[0];
             if (currentNode == null) return;
 
-            tvFiles.SuspendLayout();
+            TvFiles.SuspendLayout();
             currentNode.Nodes.Add(partNode);
             rtbDisplay.Text = string.Empty;
-            tvFiles.SelectedNode = partNode;
-            tvFiles.ResumeLayout();
+            TvFiles.SelectedNode = partNode;
+            TvFiles.ResumeLayout();
 
             // refresh the treeview
             string prevPath = toolStripStatusLabelFilePath.Text;
@@ -1458,7 +1451,7 @@ namespace Office_File_Explorer
             fileToolStripMenuItemClose.Enabled = true;
         }
 
-        private TreeNode ConstructPartNode(OfficePart part)
+        private static TreeNode ConstructPartNode(OfficePart part)
         {
             TreeNode node = new TreeNode(part.Name);
             node.Tag = part.PartType;
@@ -1514,7 +1507,7 @@ namespace Office_File_Explorer
             Uri customUIUri = new Uri(relativePath, UriKind.Relative);
             PackageRelationship relationship = package.CreateRelationship(customUIUri, TargetMode.Internal, relType);
 
-            OfficePart part = null;
+            OfficePart part;
             if (!package.PartExists(customUIUri))
             {
                 part = new OfficePart(package.CreatePart(customUIUri, "application/xml"), partType, relationship.Id);
@@ -1591,7 +1584,7 @@ namespace Office_File_Explorer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void tvFiles_AfterSelect(object sender, TreeViewEventArgs e)
+        private void TvFiles_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
             {
@@ -1634,16 +1627,16 @@ namespace Office_File_Explorer
                     }
 
                     ScrollToTopOfRtb();
-                    tvFiles.ExpandAll();
+                    TvFiles.ExpandAll();
                     return;
                 }
 
-                if (isEncrypted && e.Node.Text.StartsWith("LabelInfo"))
+                if (isEncrypted || e.Node.Text.Contains("LabelInfo.xml"))
                 {
                     FormatXmlColors();
+                    toolStripButtonValidateXml.Enabled = true;
                     toolStripButtonFixXml.Enabled = true;
                     toolStripButtonModify.Enabled = true;
-                    toolStripButtonValidateXml.Enabled = true;
                 }
 
                 if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
@@ -1661,7 +1654,7 @@ namespace Office_File_Explorer
                     // load file contents
                     foreach (PackagePart pp in pkgParts)
                     {
-                        if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
+                        if (pp.Uri.ToString() == TvFiles.SelectedNode.Text)
                         {
                             partPropCompression = pp.CompressionOption.ToString();
                             partPropContentType = pp.ContentType;
@@ -1710,7 +1703,7 @@ namespace Office_File_Explorer
                                     contents = Encoding.UTF8.GetString(ms.ToArray());
                                 }
 
-                                tvFiles.SuspendLayout();
+                                TvFiles.SuspendLayout();
                                 rtbDisplay.Text = contents;
 
                                 // check for xml color setting
@@ -1719,7 +1712,7 @@ namespace Office_File_Explorer
                                     FormatXmlColors();
                                 }
 
-                                tvFiles.ResumeLayout();
+                                TvFiles.ResumeLayout();
                                 ScrollToTopOfRtb();
                                 return;
                             }
@@ -1732,7 +1725,7 @@ namespace Office_File_Explorer
                     // TODO find a way to keep the image in the main form
                     foreach (PackagePart pp in pkgParts)
                     {
-                        if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
+                        if (pp.Uri.ToString() == TvFiles.SelectedNode.Text)
                         {
                             partPropCompression = pp.CompressionOption.ToString();
                             partPropContentType = pp.ContentType;
@@ -1759,7 +1752,7 @@ namespace Office_File_Explorer
                 {
                     foreach (PackagePart pp in pkgParts)
                     {
-                        if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
+                        if (pp.Uri.ToString() == TvFiles.SelectedNode.Text)
                         {
                             partPropCompression = pp.CompressionOption.ToString();
                             partPropContentType = pp.ContentType;
@@ -1831,28 +1824,28 @@ namespace Office_File_Explorer
             }
         }
 
-        private void toolStripButtonValidateXml_Click(object sender, EventArgs e)
+        private void ToolStripButtonValidateXml_Click(object sender, EventArgs e)
         {
-            if (tvFiles.SelectedNode is null)
+            if (TvFiles.SelectedNode is null)
             {
                 return;
             }
 
-            if (tvFiles.SelectedNode.Text.EndsWith(Strings.offLabelInfo))
+            if (TvFiles.SelectedNode.Text.EndsWith(Strings.offLabelInfo))
             {
                 ValidatePartXml();
             }
-            else if (tvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUI14Xml) || tvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUIXml))
+            else if (TvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUI14Xml) || TvFiles.SelectedNode.Text.EndsWith(Strings.offCustomUIXml))
             {
                 ValidateCustomUIXml(true);
             }
-            else if (isEncrypted || tvFiles.SelectedNode.Text.Contains("docMetadata/LabelInfo.xml"))
+            else if (isEncrypted || TvFiles.SelectedNode.Text.Contains("docMetadata/LabelInfo.xml"))
             {
                 ValidateLabelInfoXml(true);
             }
         }
 
-        private void toolStripButtonGenerateCallback_Click(object sender, EventArgs e)
+        private void ToolStripButtonGenerateCallback_Click(object sender, EventArgs e)
         {
             // if there is no callback , then there is no point in generating the callback code
             if (rtbDisplay.Text == null || rtbDisplay.Text.Length == 0)
@@ -1893,56 +1886,56 @@ namespace Office_File_Explorer
             }
         }
 
-        private void office2010CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Office2010CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddPart(XMLParts.RibbonX14);
             rtbDisplay.Text = string.Empty;
-            tvFiles.SelectedNode = tvFiles.Nodes[0].Nodes[0];
+            TvFiles.SelectedNode = TvFiles.Nodes[0].Nodes[0];
         }
 
-        private void office2007CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Office2007CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddPart(XMLParts.RibbonX12);
             rtbDisplay.Text = string.Empty;
-            tvFiles.SelectedNode = tvFiles.Nodes[0].Nodes[0];
+            TvFiles.SelectedNode = TvFiles.Nodes[0].Nodes[0];
         }
 
-        private void customOutspaceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CustomOutspaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlCustomOutspace;
             FormatXmlColors();
             EnableModifyUI();
         }
 
-        private void customTabToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CustomTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlCustomTab;
             FormatXmlColors();
             EnableModifyUI();
         }
 
-        private void excelCustomTabToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExcelCustomTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlExcelCustomTab;
             FormatXmlColors();
             EnableModifyUI();
         }
 
-        private void repurposeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RepurposeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlRepurpose;
             FormatXmlColors();
             EnableModifyUI();
         }
 
-        private void wordGroupOnInsertTabToolStripMenuItem_Click(object sender, EventArgs e)
+        private void WordGroupOnInsertTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbDisplay.Text = Strings.xmlWordGroupInsertTab;
             FormatXmlColors();
             EnableModifyUI();
         }
 
-        private void toolStripButtonInsertIcon_Click(object sender, EventArgs e)
+        private void ToolStripButtonInsertIcon_Click(object sender, EventArgs e)
         {
             OpenFileDialog fDialog = new OpenFileDialog
             {
@@ -1958,7 +1951,7 @@ namespace Office_File_Explorer
                 OfficePart part = RetrieveCustomPart(partType);
 
                 TreeNode partNode = null;
-                foreach (TreeNode node in tvFiles.Nodes[0].Nodes)
+                foreach (TreeNode node in TvFiles.Nodes[0].Nodes)
                 {
                     if (node.Text == part.Name)
                     {
@@ -1967,7 +1960,7 @@ namespace Office_File_Explorer
                     }
                 }
 
-                tvFiles.SuspendLayout();
+                TvFiles.SuspendLayout();
 
                 foreach (string fileName in fDialog.FileNames)
                 {
@@ -1988,8 +1981,8 @@ namespace Office_File_Explorer
                         imageNode.SelectedImageKey = imageNode.ImageKey;
                         imageNode.Tag = partType;
 
-                        tvFiles.ImageList.Images.Add(imageNode.ImageKey, image);
-                        tvFiles.SelectedNode.Nodes.Add(imageNode);
+                        TvFiles.ImageList.Images.Add(imageNode.ImageKey, image);
+                        TvFiles.SelectedNode.Nodes.Add(imageNode);
                     }
                     catch (Exception ex)
                     {
@@ -1998,16 +1991,16 @@ namespace Office_File_Explorer
                     }
                 }
 
-                tvFiles.ResumeLayout();
+                TvFiles.ResumeLayout();
             }
         }
 
-        private void toolStripButtonModify_Click(object sender, EventArgs e)
+        private void ToolStripButtonModify_Click(object sender, EventArgs e)
         {
             EnableModifyUI();
         }
 
-        private void toolStripButtonSave_Click(object sender, EventArgs e)
+        private void ToolStripButtonSave_Click(object sender, EventArgs e)
         {
             if (isEncrypted)
             {
@@ -2025,7 +2018,7 @@ namespace Office_File_Explorer
 
             foreach (PackagePart pp in pkgParts)
             {
-                if (pp.Uri.ToString() == tvFiles.SelectedNode.Text)
+                if (pp.Uri.ToString() == TvFiles.SelectedNode.Text)
                 {
                     MemoryStream ms = new MemoryStream();
                     using (TextWriter tw = new StreamWriter(ms))
@@ -2052,14 +2045,14 @@ namespace Office_File_Explorer
                 package.Flush();
                 package.Close();
                 pkgParts.Clear();
-                tvFiles.Nodes.Clear();
+                TvFiles.Nodes.Clear();
                 LoadPartsIntoViewer();
             }
 
             toolStripButtonSave.Enabled = false;
         }
 
-        private void toolStripButtonViewContents_Click(object sender, EventArgs e)
+        private void ToolStripButtonViewContents_Click(object sender, EventArgs e)
         {
             try
             {
@@ -2155,7 +2148,7 @@ namespace Office_File_Explorer
             }
         }
 
-        private void toolStripButtonFixCorruptDoc_Click(object sender, EventArgs e)
+        private void ToolStripButtonFixCorruptDoc_Click(object sender, EventArgs e)
         {
             try
             {
@@ -2471,7 +2464,7 @@ namespace Office_File_Explorer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void toolStripButtonFixDoc_Click(object sender, EventArgs e)
+        private void ToolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
             bool corruptionFound = false;
 
@@ -2639,7 +2632,7 @@ namespace Office_File_Explorer
             }
         }
 
-        private void editToolStripMenuFindReplace_Click(object sender, EventArgs e)
+        private void EditToolStripMenuFindReplace_Click(object sender, EventArgs e)
         {
             FrmSearchReplace srForm = new FrmSearchReplace()
             {
@@ -2656,7 +2649,7 @@ namespace Office_File_Explorer
             LogInformation(LogInfoType.ClearAndAdd, "** Search and Replace Finished **", string.Empty);
         }
 
-        private void editToolStripMenuItemModifyContents_Click(object sender, EventArgs e)
+        private void EditToolStripMenuItemModifyContents_Click(object sender, EventArgs e)
         {
             try
             {
@@ -3268,7 +3261,7 @@ namespace Office_File_Explorer
             }
         }
 
-        private void editToolStripMenuItemRemoveCustomDocProps_Click(object sender, EventArgs e)
+        private void EditToolStripMenuItemRemoveCustomDocProps_Click(object sender, EventArgs e)
         {
             try
             {
@@ -3292,7 +3285,7 @@ namespace Office_File_Explorer
             }
         }
 
-        private void editToolStripMenuItemRemoveCustomXml_Click(object sender, EventArgs e)
+        private void EditToolStripMenuItemRemoveCustomXml_Click(object sender, EventArgs e)
         {
             try
             {
@@ -3316,12 +3309,12 @@ namespace Office_File_Explorer
             }
         }
 
-        private void fileToolStripMenuItemClose_Click(object sender, EventArgs e)
+        private void FileToolStripMenuItemClose_Click(object sender, EventArgs e)
         {
             FileClose();
         }
 
-        private void toolStripButtonFind_Click(object sender, EventArgs e)
+        private void ToolStripButtonFind_Click(object sender, EventArgs e)
         {
             if (rtbDisplay.Text.Length > 0)
             {
@@ -3329,62 +3322,62 @@ namespace Office_File_Explorer
             }
         }
 
-        private void mruToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void toolStripButtonReplace_Click(object sender, EventArgs e)
+        private void ToolStripButtonReplace_Click(object sender, EventArgs e)
         {
             ReplaceText();
         }
 
-        private void mruToolStripMenuItem2_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void mruToolStripMenuItem3_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void mruToolStripMenuItem4_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem4_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void mruToolStripMenuItem5_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem5_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void mruToolStripMenuItem6_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem6_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void mruToolStripMenuItem7_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem7_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void mruToolStripMenuItem8_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem8_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void mruToolStripMenuItem9_Click(object sender, EventArgs e)
+        private void MruToolStripMenuItem9_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
         }
 
-        private void openErrorLogToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void OpenErrorLogToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             AppUtilities.PlatformSpecificProcessStart(Strings.fLogFilePath);
         }
 
-        private void wordDocumentRevisionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void WordDocumentRevisionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmRevisions frmRev = new FrmRevisions(tempFilePackageViewer)
             {
@@ -3393,7 +3386,7 @@ namespace Office_File_Explorer
             frmRev.ShowDialog();
         }
 
-        private void viewPartPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ViewPartPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Compression Settings: " + partPropCompression);
@@ -3401,9 +3394,9 @@ namespace Office_File_Explorer
             MessageBox.Show(sb.ToString(), "Part Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void tvFiles_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TvFiles_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            TreeNode tNode = tvFiles.GetNodeAt(e.X, e.Y);
+            TreeNode tNode = TvFiles.GetNodeAt(e.X, e.Y);
             UpdateStreamDisplay(tNode);
         }
 
@@ -3476,19 +3469,19 @@ namespace Office_File_Explorer
             }
         }
 
-        private void tvFiles_KeyUp(object sender, KeyEventArgs e)
+        private void TvFiles_KeyUp(object sender, KeyEventArgs e)
         {
             if (isEncrypted)
             {
                 if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Up)
                 {
-                    TreeNode tNode = tvFiles.SelectedNode;
+                    TreeNode tNode = TvFiles.SelectedNode;
                     UpdateStreamDisplay(tNode);
                 }
             }
         }
 
-        private void toolStripButtonFixXml_Click(object sender, EventArgs e)
+        private void ToolStripButtonFixXml_Click(object sender, EventArgs e)
         {
             FixLabelInfo();
         }
