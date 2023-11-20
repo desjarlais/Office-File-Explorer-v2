@@ -588,11 +588,10 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// load the doc parts into the treeview
+        /// load the doc parts into the tree
         /// </summary>
         public void LoadPartsIntoViewer()
         {
-            // populate the treeview
             package = Package.Open(toolStripStatusLabelFilePath.Text, FileMode.Open, FileAccess.ReadWrite);
 
             TreeNode tRoot = new TreeNode();
@@ -1591,7 +1590,7 @@ namespace Office_File_Explorer
                 Cursor = Cursors.WaitCursor;
 
                 // render msg content
-                if (toolStripStatusLabelFilePath.Text.EndsWith(".msg"))
+                if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.msgFileExt))
                 {
                     string[] body = e.Node.Tag as string[];
 
@@ -1967,14 +1966,13 @@ namespace Office_File_Explorer
                     try
                     {
                         string id = XmlConvert.EncodeName(Path.GetFileNameWithoutExtension(fileName));
-                        Stream imageStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                        Image image = Image.FromStream(imageStream, true, true);
+                        Image image = Image.FromStream(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), true, true);
 
                         // The file is a valid image at this point.
                         id = part.AddImage(fileName, id);
                         if (id == null) continue;
 
-                        imageStream.Close();
+                        File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).Close();
 
                         TreeNode imageNode = new TreeNode(id);
                         imageNode.ImageKey = "_" + id;
