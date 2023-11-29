@@ -117,6 +117,7 @@ namespace Office_File_Explorer.WinForms
             BtnFixCorruptTcTags.Enabled = false;
             BtnRemoveCustomXml.Enabled = false;
             BtnFixDupeCustomXml.Enabled = false;
+            BtnFixTabBehavior.Enabled = false;
         }
 
         public void EnableUI()
@@ -165,6 +166,7 @@ namespace Office_File_Explorer.WinForms
                 BtnRemovePIIOnSave.Enabled = true;
                 BtnFixNotesPage.Enabled = true;
                 BtnResetBulletMargins.Enabled = true;
+                BtnFixTabBehavior.Enabled = true;
             }
 
             if (rdoExcel.Checked == true)
@@ -2161,6 +2163,43 @@ namespace Office_File_Explorer.WinForms
                     else
                     {
                         lstOutput.Items.Add(f + " : No Duplicate Custom Xml Found.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        /// <summary>
+        /// adding fix for known issue with converting google to pptx using bittitan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnFixTabBehavior_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    Cursor = Cursors.WaitCursor;
+                    bool isFMPFixed = PowerPointFixes.FixMissingPlaceholder(f);
+                    bool isRDPFixed = PowerPointFixes.ResetDefaultParagraphProps(f);
+
+                    if (isFMPFixed || isRDPFixed)
+                    {
+                        lstOutput.Items.Add(f + " : Tab Behavior Fixed.");
+                    }
+                    else
+                    {
+                        lstOutput.Items.Add(f + " : No Tab Behavior Problem Found.");
                     }
                 }
                 catch (Exception ex)

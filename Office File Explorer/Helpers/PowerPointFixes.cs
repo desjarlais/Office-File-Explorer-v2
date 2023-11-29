@@ -1008,7 +1008,8 @@ namespace Office_File_Explorer.Helpers
             {
                 Presentation p = presentationPart.Presentation;
                 // if all paragraph level left margins are set to 0, reset them to defaults
-                if (p.DefaultTextStyle.Level2ParagraphProperties.LeftMargin == 0 &&
+                if (p.DefaultTextStyle.Level1ParagraphProperties.LeftMargin == 0 &&
+                    p.DefaultTextStyle.Level2ParagraphProperties.LeftMargin == 0 &&
                     p.DefaultTextStyle.Level3ParagraphProperties.LeftMargin == 0 &&
                     p.DefaultTextStyle.Level4ParagraphProperties.LeftMargin == 0 &&
                     p.DefaultTextStyle.Level5ParagraphProperties.LeftMargin == 0 &&

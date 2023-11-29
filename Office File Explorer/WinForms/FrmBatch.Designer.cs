@@ -43,6 +43,7 @@ namespace Office_File_Explorer.WinForms
             ckbSubfolders = new System.Windows.Forms.CheckBox();
             lstOutput = new System.Windows.Forms.ListBox();
             groupBox4 = new System.Windows.Forms.GroupBox();
+            BtnFixDupeCustomXml = new System.Windows.Forms.Button();
             BtnRemoveCustomXml = new System.Windows.Forms.Button();
             BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
             BtnFixCorruptTcTags = new System.Windows.Forms.Button();
@@ -67,7 +68,7 @@ namespace Office_File_Explorer.WinForms
             BtnDeleteCustomProps = new System.Windows.Forms.Button();
             BtnAddCustomProps = new System.Windows.Forms.Button();
             folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            BtnFixDupeCustomXml = new System.Windows.Forms.Button();
+            BtnFixTabBehavior = new System.Windows.Forms.Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -204,6 +205,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(BtnFixTabBehavior);
             groupBox4.Controls.Add(BtnFixDupeCustomXml);
             groupBox4.Controls.Add(BtnRemoveCustomXml);
             groupBox4.Controls.Add(BtnRemoveCustomFileProps);
@@ -230,10 +232,20 @@ namespace Office_File_Explorer.WinForms
             groupBox4.Controls.Add(BtnAddCustomProps);
             groupBox4.Location = new System.Drawing.Point(12, 367);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new System.Drawing.Size(1004, 152);
+            groupBox4.Size = new System.Drawing.Size(1004, 171);
             groupBox4.TabIndex = 0;
             groupBox4.TabStop = false;
             groupBox4.Text = "Batch Commands";
+            // 
+            // BtnFixDupeCustomXml
+            // 
+            BtnFixDupeCustomXml.Location = new System.Drawing.Point(838, 109);
+            BtnFixDupeCustomXml.Name = "BtnFixDupeCustomXml";
+            BtnFixDupeCustomXml.Size = new System.Drawing.Size(160, 23);
+            BtnFixDupeCustomXml.TabIndex = 1;
+            BtnFixDupeCustomXml.Text = "Fix Duplicate Custom Xml";
+            BtnFixDupeCustomXml.UseVisualStyleBackColor = true;
+            BtnFixDupeCustomXml.Click += BtnFixDupeCustomXml_Click;
             // 
             // BtnRemoveCustomXml
             // 
@@ -465,21 +477,21 @@ namespace Office_File_Explorer.WinForms
             BtnAddCustomProps.UseVisualStyleBackColor = true;
             BtnAddCustomProps.Click += BtnAddCustomProps_Click;
             // 
-            // BtnFixDupeCustomXml
+            // BtnFixTabBehavior
             // 
-            BtnFixDupeCustomXml.Location = new System.Drawing.Point(838, 109);
-            BtnFixDupeCustomXml.Name = "BtnFixDupeCustomXml";
-            BtnFixDupeCustomXml.Size = new System.Drawing.Size(160, 23);
-            BtnFixDupeCustomXml.TabIndex = 1;
-            BtnFixDupeCustomXml.Text = "Fix Duplicate Custom Xml";
-            BtnFixDupeCustomXml.UseVisualStyleBackColor = true;
-            BtnFixDupeCustomXml.Click += BtnFixDupeCustomXml_Click;
+            BtnFixTabBehavior.Location = new System.Drawing.Point(6, 138);
+            BtnFixTabBehavior.Name = "BtnFixTabBehavior";
+            BtnFixTabBehavior.Size = new System.Drawing.Size(185, 23);
+            BtnFixTabBehavior.TabIndex = 18;
+            BtnFixTabBehavior.Text = "Fix Tabbing Behavior";
+            BtnFixTabBehavior.UseVisualStyleBackColor = true;
+            BtnFixTabBehavior.Click += BtnFixTabBehavior_Click;
             // 
             // FrmBatch
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1021, 531);
+            ClientSize = new System.Drawing.Size(1021, 550);
             Controls.Add(groupBox2);
             Controls.Add(groupBox3);
             Controls.Add(groupBox4);
@@ -543,5 +555,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnRemoveCustomFileProps;
         private System.Windows.Forms.Button BtnRemoveCustomXml;
         private System.Windows.Forms.Button BtnFixDupeCustomXml;
+        private System.Windows.Forms.Button BtnFixTabBehavior;
     }
 }
