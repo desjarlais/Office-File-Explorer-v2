@@ -2606,6 +2606,12 @@ namespace Office_File_Explorer
                     sbFixes.AppendLine("Fixed Missing Placeholders");
                     corruptionFound = true;
                 }
+
+                if (PowerPointFixes.ResetDefaultParagraphProps(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Fixed Default Paragraph Properties");
+                    corruptionFound = true;
+                }
             }
             else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
             {

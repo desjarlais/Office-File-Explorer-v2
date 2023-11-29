@@ -10,7 +10,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System;
 using DocumentFormat.OpenXml;
-using NonVisualGroupShapeProperties = DocumentFormat.OpenXml.Presentation.NonVisualGroupShapeProperties;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -317,9 +316,182 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
-        /// when using Bittitan to convert google docs to PowerPoint presentations, the files might have missing placeholder tags
-        /// they also will have incorrect indent levels
-        /// this fix will check for these scenarios and reset the levels and add the missing tags
+        /// when using Bittitan to convert google docs to PowerPoint presentations, the files might have invalid margins
+        /// usually, there will be a right margin set to 0 in the presentation, which causes the tab to not work since there is nowhere to go
+        /// this will check for this scenario and reset the margins to default values
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool ResetDefaultParagraphProps(string filePath)
+        {
+            bool isFixed = false;
+
+            using (PresentationDocument document = PresentationDocument.Open(filePath, true))
+            {
+                // setup the default paragraph properties and each level paragraph properties
+                DefaultParagraphProperties defaultParagraphProperties1 = new DefaultParagraphProperties() { LeftMargin = 0, Level = 0, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level1ParagraphProperties level1ParagraphProperties1 = new Level1ParagraphProperties() { LeftMargin = 0, Level = 0, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level2ParagraphProperties level2ParagraphProperties1 = new Level2ParagraphProperties() { LeftMargin = 457200, Level = 1, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level3ParagraphProperties level3ParagraphProperties1 = new Level3ParagraphProperties() { LeftMargin = 914400, Level = 2, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level4ParagraphProperties level4ParagraphProperties1 = new Level4ParagraphProperties() { LeftMargin = 1371600, Level = 3, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level5ParagraphProperties level5ParagraphProperties1 = new Level5ParagraphProperties() { LeftMargin = 1828800, Level = 4, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level6ParagraphProperties level6ParagraphProperties1 = new Level6ParagraphProperties() { LeftMargin = 2286000, Level = 5, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level7ParagraphProperties level7ParagraphProperties1 = new Level7ParagraphProperties() { LeftMargin = 2743200, Level = 6, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level8ParagraphProperties level8ParagraphProperties1 = new Level8ParagraphProperties() { LeftMargin = 3200400, Level = 7, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+                Level9ParagraphProperties level9ParagraphProperties1 = new Level9ParagraphProperties() { LeftMargin = 3657600, Level = 8, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
+
+                // check defaultparagraphproperties
+                if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"0\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties = defaultParagraphProperties1;
+                    }
+                    
+                    isFixed = true;
+                }
+
+                // check each level paragraphproperties
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"0\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties = level1ParagraphProperties1;
+                    }
+                    
+                    isFixed = true;
+                }
+
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"457200\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties = level2ParagraphProperties1;
+                    }
+                    isFixed = true;
+                }
+
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"914400\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties = level3ParagraphProperties1;
+                    }
+                    isFixed = true;
+                }
+
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"1371600\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties = level4ParagraphProperties1;
+                    }
+                    isFixed = true;
+                }
+
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"1828800\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties = level5ParagraphProperties1;
+                    }
+                    isFixed = true;
+                }
+
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"2286000\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties = level6ParagraphProperties1;
+                    }
+                    isFixed = true;
+                }
+
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"2743200\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties = level7ParagraphProperties1;
+                    }
+                    isFixed = true;
+                }
+
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"3200400\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties = level8ParagraphProperties1;
+                    }
+                    isFixed = true;
+                }
+
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.RightToLeft == false
+                    && document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.LeftMargin is null)
+                {
+                    if (document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.InnerXml.Contains("marR=\"0\""))
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.InnerXml.Replace("marR=\"0\"", "marL=\"3657600\"");
+                    }
+                    else
+                    {
+                        document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties = level9ParagraphProperties1;
+                    }
+                    isFixed = true;
+                }
+            }
+
+            return isFixed;
+        }
+
+        /// <summary>
+        /// when using Bittitan to convert google docs to PowerPoint presentations, some shapes will have incorrect indent levels
+        /// this fix will check for these scenarios and reset the levels
+        /// NOTE: this fix usually requires ResetDefaultParagraphProps, so call both of these fixes
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -329,8 +501,10 @@ namespace Office_File_Explorer.Helpers
 
             using (PresentationDocument document = PresentationDocument.Open(filePath, true))
             {
+                // check slides 
                 foreach (SlidePart sp in document.PresentationPart.SlideParts)
                 {
+                    // check the textbox placeholder and indent levels
                     Slide sld = sp.Slide;
                     foreach (OpenXmlElement oxe in sld.CommonSlideData.ShapeTree)
                     {
@@ -342,6 +516,7 @@ namespace Office_File_Explorer.Helpers
                             foreach (OpenXmlElement oxeShp in oxe.ChildElements)
                             {
                                 // if the shape is not a textbox, skip it
+                                // if it has a textbox and cnvpr has an id value, skip it
                                 if (oxeShp.LocalName == "nvSpPr")
                                 {
                                     foreach (OpenXmlElement oxeNvSpPr in oxeShp.ChildElements)
@@ -362,39 +537,10 @@ namespace Office_File_Explorer.Helpers
                             {
                                 foreach (OpenXmlElement oxeShape in oxe.ChildElements)
                                 {
-                                    bool hasPlaceholder = false;
-
-                                    // if nvpr has no child elements or attributes, add new nvpr with placeholder
-                                    // nonvisualshapeproperties contains placeholder
-                                    if (oxeShape.LocalName == "nvSpPr")
-                                    {
-                                        foreach (OpenXmlElement oxeNvpr in oxeShape.ChildElements)
-                                        {
-                                            if (oxeNvpr.LocalName == "nvPr")
-                                            {
-                                                foreach (OpenXmlElement oxeNvPrChild in oxeNvpr.ChildElements)
-                                                {
-                                                    if (oxeNvPrChild.LocalName == "ph")
-                                                    {
-                                                        hasPlaceholder = true;
-                                                    }
-                                                }
-
-                                                if (!hasPlaceholder)
-                                                {
-                                                    // add placeholder to oxenvpr, make sure to include a type and index number
-                                                    PlaceholderShape placeholderShape1 = new PlaceholderShape() { Type = PlaceholderValues.Body };
-                                                    placeholderShape1.Index = 1;
-                                                    oxeNvpr.Append(placeholderShape1);
-                                                    isFixed = true;
-                                                }
-                                            }
-                                        }
-                                    }
-
                                     // textbody contains level
                                     if (oxeShape.LocalName == "txBody")
                                     {
+                                        // check for bad indent levels
                                         if (Properties.Settings.Default.ResetIndentLevels == true)
                                         {
                                             // if nvpr was empty, loop paragraphs and check for levels > 0 and reset to 0
