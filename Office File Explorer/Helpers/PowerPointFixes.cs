@@ -319,6 +319,7 @@ namespace Office_File_Explorer.Helpers
         /// when using Bittitan to convert google docs to PowerPoint presentations, the files might have invalid margins
         /// usually, there will be a right margin set to 0 in the presentation, which causes the tab to not work since there is nowhere to go
         /// this will check for this scenario and reset the margins to default values
+        /// this will also loop the slide masters and reset the text styles
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -483,6 +484,16 @@ namespace Office_File_Explorer.Helpers
                     }
                     isFixed = true;
                 }
+
+                // reset the slide master text styles
+                if (Properties.Settings.Default.ResetIndentLevels)
+                {
+                    foreach (SlideMasterPart smp in document.PresentationPart.SlideMasterParts)
+                    {
+                        smp.SlideMaster.TextStyles = PowerPoint.GenerateDefaultTextStyles();
+                        isFixed = true;
+                    }
+                }
             }
 
             return isFixed;
@@ -504,10 +515,12 @@ namespace Office_File_Explorer.Helpers
                 // check slides 
                 foreach (SlidePart sp in document.PresentationPart.SlideParts)
                 {
-                    // check the textbox placeholder and indent levels
                     Slide sld = sp.Slide;
+                    
+                    // check the textbox placeholder and indent levels for shapes
                     foreach (OpenXmlElement oxe in sld.CommonSlideData.ShapeTree)
                     {
+                        // check shapes
                         if (oxe.LocalName == "sp")
                         {
                             bool isTxBox = false;

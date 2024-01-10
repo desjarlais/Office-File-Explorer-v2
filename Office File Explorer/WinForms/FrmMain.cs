@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Packaging;
 // App refs
 using Office_File_Explorer.Helpers;
 using Office_File_Explorer.WinForms;
+using Office_File_Explorer.OpenMcdf;
 
 // .NET refs
 using System;
@@ -23,10 +24,10 @@ using System.Drawing;
 using System.Xml.Schema;
 using System.Xml.Linq;
 
+// named refs
 using File = System.IO.File;
 using Color = System.Drawing.Color;
 using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
-using Office_File_Explorer.OpenMcdf;
 using Application = System.Windows.Forms.Application;
 
 namespace Office_File_Explorer
@@ -393,7 +394,7 @@ namespace Office_File_Explorer
         /// </summary>
         /// <param name="node">Current TreeNode</param>
         /// <param name="cfs">Current storage associated with node</param>
-        private void AddNodes(TreeNode node, CFStorage cfs)
+        private static void AddNodes(TreeNode node, CFStorage cfs)
         {
             Action<CFItem> va = delegate (CFItem target)
             {
@@ -566,7 +567,7 @@ namespace Office_File_Explorer
             TreeNode recipientNode = messageNode.Nodes.Add("Recipients: " + message.Recipients.Count);
             foreach (OutlookStorage.Recipient recipient in message.Recipients)
             {
-                recipientNode.Nodes.Add(recipient.Type + ": " + recipient.Email);
+                recipientNode.Nodes.Add(recipient.Type + Strings.wColon + recipient.Email);
                 recipientNode.Tag = new string[] { "Display Name: " + recipient.DisplayName, "Email: " + recipient.Email };
             }
 
@@ -574,7 +575,7 @@ namespace Office_File_Explorer
             TreeNode attachmentNode = messageNode.Nodes.Add("Attachments: " + message.Attachments.Count);
             foreach (OutlookStorage.Attachment attachment in message.Attachments)
             {
-                attachmentNode.Nodes.Add(attachment.Filename + ": " + attachment.Data.Length + "b");
+                attachmentNode.Nodes.Add(attachment.Filename + Strings.wColon + attachment.Data.Length + "b");
                 Stream imageSource = new MemoryStream(attachment.Data);
                 Image image = Image.FromStream(imageSource);
                 attachmentList.Add(attachment.Filename, image);
@@ -814,6 +815,12 @@ namespace Office_File_Explorer
             sbNodeBuffer.Append(input);
         }
 
+        /// <summary>
+        /// There are two known label xml corruptions
+        /// 1. missing method attribute
+        /// 2. siteid missing brackets
+        /// This function will fix both of these issues
+        /// </summary>
         public void FixLabelInfo()
         {
             // populate validation errors
@@ -822,18 +829,15 @@ namespace Office_File_Explorer
             // check existing validation errors against known corrupt labelinfo xml scenarios
             if (validationErrors.Count > 0)
             {
-                string valToReplace = string.Empty;
-
                 foreach (string s in validationErrors)
                 {
-                    // known issue fix - missing method attribute
-                    // sometimes the method is not written out use a simple find/replace to get it back in
+                    // fix missing method attribute
                     if (s.Contains("The required attribute 'method' is missing"))
                     {
                         rtbDisplay.Text = rtbDisplay.Text.Replace("enabled=\"1\"", "enabled=\"1\" method=\"Standard\"");
                     }
 
-                    // known issue fix - siteid missing brackets
+                    // fix siteid missing brackets
                     // example siteId="11111111-1111-1111-1111-111111111111"
                     // should be siteId="{11111111-1111-1111-1111-111111111111}"
                     if (s.Contains("The 'siteId' attribute is invalid"))
@@ -845,7 +849,7 @@ namespace Office_File_Explorer
                             if (sp.StartsWith("siteId=") && sp.Contains('{') == false && sp.Contains('}') == false)
                             {
                                 string[] replace = sp.Split('"');
-                                valToReplace = replace[0] + "\"{" + replace[1] + "}\"";
+                                string valToReplace = replace[0] + "\"{" + replace[1] + "}\"";
                                 rtbDisplay.Text = rtbDisplay.Text.Replace(sp, valToReplace);
                             }
                         }
@@ -1864,7 +1868,7 @@ namespace Office_File_Explorer
                 XmlDocument customUI = new XmlDocument();
                 customUI.LoadXml(rtbDisplay.Text);
                 StringBuilder callbacks = CallbackBuilder.GenerateCallback(customUI);
-                callbacks.Append("}");
+                callbacks.Append('}');
 
                 // display the callbacks
                 using (var f = new FrmDisplayOutput(callbacks, true))
@@ -1948,13 +1952,10 @@ namespace Office_File_Explorer
             {
                 XMLParts partType = XMLParts.RibbonX14;
                 OfficePart part = RetrieveCustomPart(partType);
-
-                TreeNode partNode = null;
                 foreach (TreeNode node in TvFiles.Nodes[0].Nodes)
                 {
                     if (node.Text == part.Name)
                     {
-                        partNode = node;
                         break;
                     }
                 }
@@ -2019,10 +2020,10 @@ namespace Office_File_Explorer
                 if (pp.Uri.ToString() == TvFiles.SelectedNode.Text)
                 {
                     MemoryStream ms = new MemoryStream();
-                    using (TextWriter tw = new StreamWriter(ms))
+                    using (StreamWriter sw = new StreamWriter(ms))
                     {
-                        tw.Write(rtbDisplay.Text);
-                        tw.Flush();
+                        sw.Write(rtbDisplay.Text);
+                        sw.Flush();
 
                         ms.Position = 0;
                         Stream partStream = pp.GetStream(FileMode.OpenOrCreate, FileAccess.Write);
@@ -2203,9 +2204,9 @@ namespace Office_File_Explorer
                                 InvalidXmlTags invalid = new InvalidXmlTags();
                                 string strDocTextBackup;
 
-                                using (TextReader tr = new StreamReader(part.GetStream(FileMode.Open, FileAccess.Read)))
+                                using (StreamReader sr = new StreamReader(part.GetStream(FileMode.Open, FileAccess.Read)))
                                 {
-                                    strDocText = tr.ReadToEnd();
+                                    strDocText = sr.ReadToEnd();
                                     strDocTextBackup = strDocText;
 
                                     foreach (string el in invalid.InvalidTags())
@@ -3491,6 +3492,5 @@ namespace Office_File_Explorer
         }
 
         #endregion
-
     }
 }

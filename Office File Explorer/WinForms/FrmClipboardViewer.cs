@@ -14,7 +14,7 @@ namespace Office_File_Explorer.WinForms
     {
         // global var
         private IDataObject data;
-        private IntPtr _chainedWnd = (IntPtr)0;
+        private IntPtr _chainedWnd = 0;
         private bool DisplayMemoryInHex;
         private bool DisplayRichText;
         private bool DisplayPictures;
