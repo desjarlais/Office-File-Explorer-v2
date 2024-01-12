@@ -104,7 +104,7 @@ namespace Office_File_Explorer
             deletePartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             extractPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tvImageList = new System.Windows.Forms.ImageList(components);
-            rtbDisplay = new System.Windows.Forms.RichTextBox();
+            scintilla1 = new ScintillaNET.Scintilla();
             mnuMainMenu.SuspendLayout();
             contextMenuRichTextBox.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -652,7 +652,7 @@ namespace Office_File_Explorer
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(rtbDisplay);
+            splitContainer1.Panel2.Controls.Add(scintilla1);
             splitContainer1.Size = new System.Drawing.Size(1051, 506);
             splitContainer1.SplitterDistance = 349;
             splitContainer1.TabIndex = 5;
@@ -713,17 +713,21 @@ namespace Office_File_Explorer
             tvImageList.Images.SetKeyName(6, "folder.png");
             tvImageList.Images.SetKeyName(7, "file.png");
             // 
-            // rtbDisplay
+            // scintilla1
             // 
-            rtbDisplay.ContextMenuStrip = contextMenuRichTextBox;
-            rtbDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
-            rtbDisplay.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            rtbDisplay.Location = new System.Drawing.Point(0, 0);
-            rtbDisplay.Name = "rtbDisplay";
-            rtbDisplay.ReadOnly = true;
-            rtbDisplay.Size = new System.Drawing.Size(698, 506);
-            rtbDisplay.TabIndex = 0;
-            rtbDisplay.Text = "";
+            scintilla1.AutoCMaxHeight = 9;
+            scintilla1.BiDirectionality = ScintillaNET.BiDirectionalDisplayType.Disabled;
+            scintilla1.CaretLineVisible = true;
+            scintilla1.Dock = System.Windows.Forms.DockStyle.Fill;
+            scintilla1.LexerName = null;
+            scintilla1.Location = new System.Drawing.Point(0, 0);
+            scintilla1.Name = "scintilla1";
+            scintilla1.ScrollWidth = 49;
+            scintilla1.Size = new System.Drawing.Size(698, 506);
+            scintilla1.TabIndents = true;
+            scintilla1.TabIndex = 0;
+            scintilla1.UseRightToLeftReadingLayout = false;
+            scintilla1.WrapMode = ScintillaNET.WrapMode.None;
             // 
             // FrmMain
             // 
@@ -796,7 +800,6 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButtonInsert;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TreeView TvFiles;
-        private System.Windows.Forms.RichTextBox rtbDisplay;
         private System.Windows.Forms.ToolStripButton toolStripButtonGenerateCallback;
         private System.Windows.Forms.ToolStripMenuItem office2010CustomUIPartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem office2007CustomUIPartToolStripMenuItem;
@@ -833,6 +836,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem deletePartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extractPartToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonFixXml;
+        private ScintillaNET.Scintilla scintilla1;
     }
 }
 

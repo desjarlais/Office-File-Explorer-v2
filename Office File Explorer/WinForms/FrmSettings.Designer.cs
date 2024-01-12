@@ -40,7 +40,7 @@ namespace Office_File_Explorer.WinForms
             ckbRemoveCustDataTags = new System.Windows.Forms.CheckBox();
             ckbResetNotes = new System.Windows.Forms.CheckBox();
             groupBox3 = new System.Windows.Forms.GroupBox();
-            ckbDisableAutoXmlColorFormatting = new System.Windows.Forms.CheckBox();
+            ckbOutlookMsgAsRtf = new System.Windows.Forms.CheckBox();
             ckbZipItemCorrupt = new System.Windows.Forms.CheckBox();
             ckbDeleteOnExit = new System.Windows.Forms.CheckBox();
             groupBox4 = new System.Windows.Forms.GroupBox();
@@ -52,7 +52,6 @@ namespace Office_File_Explorer.WinForms
             rdoUseSPGuid = new System.Windows.Forms.RadioButton();
             rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
             groupBox6 = new System.Windows.Forms.GroupBox();
-            ckbOutlookMsgAsRtf = new System.Windows.Forms.CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -158,25 +157,24 @@ namespace Office_File_Explorer.WinForms
             // groupBox3
             // 
             groupBox3.Controls.Add(ckbOutlookMsgAsRtf);
-            groupBox3.Controls.Add(ckbDisableAutoXmlColorFormatting);
             groupBox3.Controls.Add(ckbZipItemCorrupt);
             groupBox3.Controls.Add(ckbDeleteOnExit);
             groupBox3.Location = new System.Drawing.Point(253, 110);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new System.Drawing.Size(238, 132);
+            groupBox3.Size = new System.Drawing.Size(238, 102);
             groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "App Settings";
             // 
-            // ckbDisableAutoXmlColorFormatting
+            // ckbOutlookMsgAsRtf
             // 
-            ckbDisableAutoXmlColorFormatting.AutoSize = true;
-            ckbDisableAutoXmlColorFormatting.Location = new System.Drawing.Point(6, 78);
-            ckbDisableAutoXmlColorFormatting.Name = "ckbDisableAutoXmlColorFormatting";
-            ckbDisableAutoXmlColorFormatting.Size = new System.Drawing.Size(182, 19);
-            ckbDisableAutoXmlColorFormatting.TabIndex = 4;
-            ckbDisableAutoXmlColorFormatting.Text = "Disable Xml Color Formatting";
-            ckbDisableAutoXmlColorFormatting.UseVisualStyleBackColor = true;
+            ckbOutlookMsgAsRtf.AutoSize = true;
+            ckbOutlookMsgAsRtf.Location = new System.Drawing.Point(6, 77);
+            ckbOutlookMsgAsRtf.Name = "ckbOutlookMsgAsRtf";
+            ckbOutlookMsgAsRtf.Size = new System.Drawing.Size(196, 19);
+            ckbOutlookMsgAsRtf.TabIndex = 5;
+            ckbOutlookMsgAsRtf.Text = "Display Outlook Msg Files in RTF";
+            ckbOutlookMsgAsRtf.UseVisualStyleBackColor = true;
             // 
             // ckbZipItemCorrupt
             // 
@@ -296,16 +294,6 @@ namespace Office_File_Explorer.WinForms
             groupBox6.TabStop = false;
             groupBox6.Text = "Fix Content Control Prefix Mappings";
             // 
-            // ckbOutlookMsgAsRtf
-            // 
-            ckbOutlookMsgAsRtf.AutoSize = true;
-            ckbOutlookMsgAsRtf.Location = new System.Drawing.Point(6, 102);
-            ckbOutlookMsgAsRtf.Name = "ckbOutlookMsgAsRtf";
-            ckbOutlookMsgAsRtf.Size = new System.Drawing.Size(196, 19);
-            ckbOutlookMsgAsRtf.TabIndex = 5;
-            ckbOutlookMsgAsRtf.Text = "Display Outlook Msg Files in RTF";
-            ckbOutlookMsgAsRtf.UseVisualStyleBackColor = true;
-            // 
             // FrmSettings
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -362,7 +350,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.RadioButton rdoUseSPGuid;
         private System.Windows.Forms.RadioButton rdoUserSelectedCC;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.CheckBox ckbDisableAutoXmlColorFormatting;
         private System.Windows.Forms.CheckBox ckbResetIndentLevels;
         private System.Windows.Forms.CheckBox ckbOutlookMsgAsRtf;
     }

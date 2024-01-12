@@ -81,11 +81,6 @@ namespace Office_File_Explorer.WinForms
             {
                 rdoUserSelectedCC.Checked = true;
             }
-
-            if (Properties.Settings.Default.DisableXmlColorFormatting == true)
-            {
-                ckbDisableAutoXmlColorFormatting.Checked = true;
-            }
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -98,7 +93,6 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.CheckZipItemCorrupt = ckbZipItemCorrupt.Checked;
             Properties.Settings.Default.DeleteOnlyCommentBookmarks = ckbDeleteOnlyCommentBookmarks.Checked;
             Properties.Settings.Default.RemoveCustDataTags = ckbRemoveCustDataTags.Checked;
-            Properties.Settings.Default.DisableXmlColorFormatting = ckbDisableAutoXmlColorFormatting.Checked;
             Properties.Settings.Default.ResetIndentLevels = ckbResetIndentLevels.Checked;
             Properties.Settings.Default.MsgAsRtf = ckbOutlookMsgAsRtf.Checked;
 
@@ -136,15 +130,6 @@ namespace Office_File_Explorer.WinForms
             else
             {
                 Properties.Settings.Default.ListCellValuesSax = false;
-            }
-
-            if (ckbDisableAutoXmlColorFormatting.Checked)
-            {
-                Properties.Settings.Default.DisableXmlColorFormatting = true;
-            }
-            else
-            {
-                Properties.Settings.Default.DisableXmlColorFormatting = false;
             }
 
             if (ckbResetIndentLevels.Checked)

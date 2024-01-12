@@ -29,6 +29,7 @@ using File = System.IO.File;
 using Color = System.Drawing.Color;
 using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
 using Application = System.Windows.Forms.Application;
+using ScintillaNET;
 
 namespace Office_File_Explorer
 {
@@ -243,8 +244,9 @@ namespace Office_File_Explorer
             TvFiles.Nodes.Clear();
             toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
             toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
-            rtbDisplay.Clear();
             fileToolStripMenuItemClose.Enabled = false;
+            scintilla1.ReadOnly = false;
+            scintilla1.ClearAll();
 
             // check for encrypted file
             fs?.Close();
@@ -276,15 +278,8 @@ namespace Office_File_Explorer
         {
             try
             {
-                if (rtbDisplay.Text.Length == 0) { return; }
-                StringBuilder buffer = new StringBuilder();
-                foreach (string s in rtbDisplay.Lines)
-                {
-                    buffer.Append(s);
-                    buffer.Append('\n');
-                }
-
-                Clipboard.SetText(buffer.ToString());
+                if (scintilla1.Text.Length == 0) { return; }
+                scintilla1.Copy();
             }
             catch (Exception ex)
             {
@@ -328,11 +323,11 @@ namespace Office_File_Explorer
 
         public void DisplayInvalidFileFormatError()
         {
-            rtbDisplay.AppendText("Unable to open file, possible causes are:\r\n");
-            rtbDisplay.AppendText(" - file corruption\r\n");
-            rtbDisplay.AppendText(" - file encrypted\r\n");
-            rtbDisplay.AppendText(" - file password protected\r\n");
-            rtbDisplay.AppendText(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)\r\n");
+            scintilla1.AppendText("Unable to open file, possible causes are:\r\n");
+            scintilla1.AppendText(" - file corruption\r\n");
+            scintilla1.AppendText(" - file encrypted\r\n");
+            scintilla1.AppendText(" - file password protected\r\n");
+            scintilla1.AppendText(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)\r\n");
         }
 
         /// <summary>
@@ -342,51 +337,13 @@ namespace Office_File_Explorer
         /// <param name="length"></param>
         public void MoveCursorToLocation(int startLocation, int length)
         {
-            rtbDisplay.SelectionStart = startLocation;
-            rtbDisplay.SelectionLength = length;
+            scintilla1.SelectionStart = startLocation;
+            scintilla1.SelectionEnd = length;
         }
 
         public void FindText()
         {
-            if (toolStripTextBoxFind.Text == string.Empty)
-            {
-                return;
-            }
-            else
-            {
-                rtbDisplay.Focus();
-
-                // if the cursor is at the end of the textbox, change start position to 0
-                if (rtbDisplay.SelectionStart == rtbDisplay.Text.Length)
-                {
-                    MoveCursorToLocation(0, 0);
-                }
-
-                try
-                {
-                    int indexToText;
-                    indexToText = rtbDisplay.Find(toolStripTextBoxFind.Text, rtbDisplay.SelectionStart + 1, RichTextBoxFinds.None);
-                    if (indexToText >= 0)
-                    {
-                        MoveCursorToLocation(indexToText, toolStripTextBoxFind.Text.Length);
-                    }
-
-                    // end of the document, restart at the beginning
-                    if (indexToText == -1)
-                    {
-                        // only move if something was found
-                        if (rtbDisplay.SelectionStart != 0)
-                        {
-                            MoveCursorToLocation(0, 0);
-                            FindText();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogInformation(LogInfoType.LogException, "FindText Error", ex.Message);
-                }
-            }
+            
         }
 
         /// <summary>
@@ -464,7 +421,7 @@ namespace Office_File_Explorer
                 }
                 else
                 {
-                    rtbDisplay.Clear();
+                    scintilla1.Clear();
 
                     // handle msg files
                     if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.msgFileExt))
@@ -523,14 +480,14 @@ namespace Office_File_Explorer
                             {
                                 if (Office.IsZippedFileCorrupt(toolStripStatusLabelFilePath.Text))
                                 {
-                                    rtbDisplay.AppendText("Warning - One of the zipped items is corrupt.");
+                                    scintilla1.AppendText("Warning - One of the zipped items is corrupt.");
                                 }
                             }
 
                             // clear the previous doc if there was one and setup temp files
                             TempFileSetup();
                             TvFiles.Nodes.Clear();
-                            rtbDisplay.Clear();
+                            scintilla1.Clear();
                             package?.Close();
                             pkgParts?.Clear();
                             LoadPartsIntoViewer();
@@ -669,24 +626,24 @@ namespace Office_File_Explorer
             switch (type)
             {
                 case LogInfoType.ClearAndAdd:
-                    rtbDisplay.Clear();
-                    rtbDisplay.AppendText(output);
+                    scintilla1.Clear();
+                    scintilla1.AppendText(output);
                     break;
                 case LogInfoType.InvalidFile:
-                    rtbDisplay.Clear();
-                    rtbDisplay.AppendText(Strings.invalidFile);
+                    scintilla1.Clear();
+                    scintilla1.AppendText(Strings.invalidFile);
                     break;
                 case LogInfoType.LogException:
-                    rtbDisplay.Clear();
-                    rtbDisplay.AppendText(output + "\r\n" + ex);
+                    scintilla1.Clear();
+                    scintilla1.AppendText(output + "\r\n" + ex);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, output);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, ex);
                     break;
                 case LogInfoType.EmptyCount:
-                    rtbDisplay.AppendText(Strings.wNone);
+                    scintilla1.AppendText(Strings.wNone);
                     break;
                 default:
-                    rtbDisplay.AppendText(output);
+                    scintilla1.AppendText(output);
                     break;
             }
         }
@@ -834,7 +791,7 @@ namespace Office_File_Explorer
                     // fix missing method attribute
                     if (s.Contains("The required attribute 'method' is missing"))
                     {
-                        rtbDisplay.Text = rtbDisplay.Text.Replace("enabled=\"1\"", "enabled=\"1\" method=\"Standard\"");
+                        scintilla1.Text = scintilla1.Text.Replace("enabled=\"1\"", "enabled=\"1\" method=\"Standard\"");
                     }
 
                     // fix siteid missing brackets
@@ -843,14 +800,14 @@ namespace Office_File_Explorer
                     if (s.Contains("The 'siteId' attribute is invalid"))
                     {
                         // first we need to pull the full text of the siteId attribute
-                        string[] split = Regex.Split(rtbDisplay.Text, @" +");
+                        string[] split = Regex.Split(scintilla1.Text, @" +");
                         foreach (string sp in split)
                         {
                             if (sp.StartsWith("siteId=") && sp.Contains('{') == false && sp.Contains('}') == false)
                             {
                                 string[] replace = sp.Split('"');
                                 string valToReplace = replace[0] + "\"{" + replace[1] + "}\"";
-                                rtbDisplay.Text = rtbDisplay.Text.Replace(sp, valToReplace);
+                                scintilla1.Text = scintilla1.Text.Replace(sp, valToReplace);
                             }
                         }
                     }
@@ -1111,7 +1068,7 @@ namespace Office_File_Explorer
         {
             try
             {
-                Clipboard.SetText(rtbDisplay.Lines[rtbDisplay.GetLineFromCharIndex(rtbDisplay.SelectionStart)]);
+                scintilla1.Copy();
             }
             catch (Exception ex)
             {
@@ -1241,8 +1198,8 @@ namespace Office_File_Explorer
             toolStripButtonFixXml.Enabled = false;
             toolStripButtonValidateXml.Enabled = false;
             excelSheetViewerToolStripMenuItem.Enabled = false;
-            rtbDisplay.ReadOnly = true;
-            rtbDisplay.BackColor = SystemColors.Control;
+            scintilla1.ReadOnly = true;
+            scintilla1.BackColor = SystemColors.Control;
             toolStripButtonFind.Enabled = false;
 
 
@@ -1254,15 +1211,15 @@ namespace Office_File_Explorer
 
         public void EnableModifyUI()
         {
-            rtbDisplay.ReadOnly = false;
-            rtbDisplay.BackColor = SystemColors.Window;
+            scintilla1.ReadOnly = false;
+            scintilla1.BackColor = SystemColors.Window;
             toolStripButtonSave.Enabled = true;
         }
 
         public void DisableModifyUI()
         {
-            rtbDisplay.ReadOnly = true;
-            rtbDisplay.BackColor = SystemColors.Control;
+            scintilla1.ReadOnly = true;
+            scintilla1.BackColor = SystemColors.Control;
             toolStripButtonSave.Enabled = false;
         }
 
@@ -1296,7 +1253,7 @@ namespace Office_File_Explorer
                             }
                         }
 
-                        rtbDisplay.Text = sb.ToString();
+                        scintilla1.Text = sb.ToString();
                     }
                 }
             }
@@ -1317,7 +1274,7 @@ namespace Office_File_Explorer
         {
             isValidXml = true;
 
-            if (rtbDisplay.Text == null || rtbDisplay.Text.Length == 0)
+            if (scintilla1.Text == null || scintilla1.Text.Length == 0)
             {
                 return;
             }
@@ -1337,7 +1294,7 @@ namespace Office_File_Explorer
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
                 settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
 
-                using (TextReader textReader = new StringReader(rtbDisplay.Text))
+                using (TextReader textReader = new StringReader(scintilla1.Text))
                 {
                     XmlReader rd = XmlReader.Create(textReader, settings);
                     XDocument doc = XDocument.Load(rd);
@@ -1363,12 +1320,12 @@ namespace Office_File_Explorer
         /// <returns></returns>
         public bool ValidateCustomUIXml(bool showValidMessage)
         {
-            if (rtbDisplay.Text == null || rtbDisplay.Text.Length == 0)
+            if (scintilla1.Text == null || scintilla1.Text.Length == 0)
             {
                 return false;
             }
 
-            rtbDisplay.SuspendLayout();
+            scintilla1.SuspendLayout();
 
             try
             {
@@ -1385,7 +1342,7 @@ namespace Office_File_Explorer
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
                 settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
 
-                using (TextReader textReader = new StringReader(rtbDisplay.Text))
+                using (TextReader textReader = new StringReader(scintilla1.Text))
                 {
                     XmlReader rd = XmlReader.Create(textReader, settings);
                     XDocument doc = XDocument.Load(rd);
@@ -1401,7 +1358,7 @@ namespace Office_File_Explorer
                 return false;
             }
 
-            rtbDisplay.ResumeLayout();
+            scintilla1.ResumeLayout();
 
             if (isValidXml)
             {
@@ -1441,7 +1398,7 @@ namespace Office_File_Explorer
 
             TvFiles.SuspendLayout();
             currentNode.Nodes.Add(partNode);
-            rtbDisplay.Text = string.Empty;
+            scintilla1.Text = string.Empty;
             TvFiles.SelectedNode = partNode;
             TvFiles.ResumeLayout();
 
@@ -1546,27 +1503,7 @@ namespace Office_File_Explorer
         /// </summary>
         public void ReplaceText()
         {
-            FrmSearchReplace srForm = new FrmSearchReplace()
-            {
-                Owner = this
-            };
-            srForm.ShowDialog();
-
-            if (string.IsNullOrEmpty(findText) && string.IsNullOrEmpty(replaceText))
-            {
-                return;
-            }
-
-            rtbDisplay.SelectionStart = 0;
-            rtbDisplay.SelectionLength = rtbDisplay.TextLength;
-            rtbDisplay.SelectedText = rtbDisplay.SelectedText.Replace(findText, replaceText);
-            rtbDisplay.SelectionStart = 0;
-            rtbDisplay.SelectionLength = 0;
-
-            if (Properties.Settings.Default.DisableXmlColorFormatting == false)
-            {
-                FormatXmlColors();
-            }
+            
         }
 
         public void ClearRecentMenuItems()
@@ -1592,6 +1529,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
+                scintilla1.ReadOnly = false;
 
                 // render msg content
                 if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.msgFileExt))
@@ -1605,11 +1543,11 @@ namespace Office_File_Explorer
                         {
                             if (Properties.Settings.Default.MsgAsRtf)
                             {
-                                rtbDisplay.Rtf = body[1];
+                                scintilla1.Text = body[1];
                             }
                             else
                             {
-                                rtbDisplay.Text = body[0];
+                                scintilla1.Text = body[0];
                             }
                         }
                     }
@@ -1636,6 +1574,17 @@ namespace Office_File_Explorer
 
                 if (isEncrypted || e.Node.Text.Contains("LabelInfo.xml"))
                 {
+                    foreach (PackagePart pp in pkgParts)
+                    {
+                        if (pp.Uri.ToString() == TvFiles.SelectedNode.Text)
+                        {
+                            Stream stream = pp.GetStream();
+                            byte[] binData = FileUtilities.ReadToEnd(stream);
+                            scintilla1.Text = Convert.ToHexString(binData);
+                            stream.Close();
+                            return;
+                        }
+                    }
                     FormatXmlColors();
                     toolStripButtonValidateXml.Enabled = true;
                     toolStripButtonFixXml.Enabled = true;
@@ -1707,16 +1656,15 @@ namespace Office_File_Explorer
                                 }
 
                                 TvFiles.SuspendLayout();
-                                rtbDisplay.Text = contents;
-
-                                // check for xml color setting
-                                if (Properties.Settings.Default.DisableXmlColorFormatting == false)
-                                {
-                                    FormatXmlColors();
-                                }
-
+                                scintilla1.ReadOnly = false;
+                                scintilla1.Text = contents;
+                                FormatXmlColors();
                                 TvFiles.ResumeLayout();
                                 ScrollToTopOfRtb();
+                                toolStripButtonValidateXml.Enabled = true;
+                                toolStripButtonFixXml.Enabled = true;
+                                toolStripButtonModify.Enabled = true;
+                                toolStripButtonSave.Enabled = true;
                                 return;
                             }
                         }
@@ -1736,7 +1684,7 @@ namespace Office_File_Explorer
                             // need to implement non-bitmap images
                             if (pp.Uri.ToString().EndsWith(".emf") || (pp.Uri.ToString().EndsWith(".svg")))
                             {
-                                rtbDisplay.Text = "No Viewer For File Type";
+                                scintilla1.Text = "No Viewer For File Type";
                                 return;
                             }
 
@@ -1762,7 +1710,7 @@ namespace Office_File_Explorer
 
                             Stream stream = pp.GetStream();
                             byte[] binData = FileUtilities.ReadToEnd(stream);
-                            rtbDisplay.Text = Convert.ToHexString(binData);
+                            scintilla1.Text = Convert.ToHexString(binData);
                             stream.Close();
                             return;
                         }
@@ -1770,12 +1718,12 @@ namespace Office_File_Explorer
                 }
                 else
                 {
-                    rtbDisplay.Text = "No Viewer For File Type";
+                    scintilla1.Text = "No Viewer For File Type";
                 }
             }
             catch (Exception ex)
             {
-                rtbDisplay.Text = "Error: " + ex.Message;
+                scintilla1.Text = "Error: " + ex.Message;
             }
             finally
             {
@@ -1785,8 +1733,8 @@ namespace Office_File_Explorer
 
         public void ScrollToTopOfRtb()
         {
-            rtbDisplay.SelectionStart = 0;
-            rtbDisplay.ScrollToCaret();
+            scintilla1.SelectionStart = 0;
+            scintilla1.ScrollCaret();
         }
 
         /// <summary>
@@ -1794,37 +1742,83 @@ namespace Office_File_Explorer
         /// </summary>
         public void FormatXmlColors()
         {
-            string pattern = @"</?(?<tagName>[a-zA-Z0-9_:\-]+)(\s+(?<attName>[a-zA-Z0-9_:\-]+)(?<attValue>(=""[^""]+"")?))*\s*/?>";
-            Regex regExXmlColors = new Regex(pattern, RegexOptions.Compiled);
-            int matchCount = regExXmlColors.Matches(rtbDisplay.Text).Count;
+            // Reset the styles
+            scintilla1.StyleResetDefault();
+            scintilla1.Styles[Style.Default].Font = "Consolas";
+            scintilla1.Styles[Style.Default].Size = 12;
+            scintilla1.StyleClearAll();
 
-            // perf check, bail if we are over 15k matches
-            if (matchCount > 15000)
+            // custom settings
+            scintilla1.TabIndents = true;
+            scintilla1.IndentationGuides = IndentView.LookBoth;
+
+            // Set the XML Lexer
+            scintilla1.LexerName = "xml";
+
+            // Show line numbers
+            if (scintilla1.Lines.Count < 100)
             {
-                FileUtilities.WriteToLog(Strings.fLogFilePath, "FormatXmlColor Match Count = " + matchCount.ToString());
-                return;
+                scintilla1.Margins[0].Width = 20;
+            }
+            else if (scintilla1.Lines.Count < 1000)
+            {
+                scintilla1.Margins[0].Width = 30;
+            }
+            else if (scintilla1.Lines.Count < 10000)
+            {
+                scintilla1.Margins[0].Width = 35;
+            }
+            else
+            {
+                scintilla1.Margins[0].Width = 40;
             }
 
-            foreach (Match m in regExXmlColors.Matches(rtbDisplay.Text))
+            // Enable folding
+            scintilla1.SetProperty("fold", "1");
+            scintilla1.SetProperty("fold.compact", "1");
+            scintilla1.SetProperty("fold.html", "1");
+
+            // Use Margin 2 for fold markers
+            scintilla1.Margins[2].Type = MarginType.Symbol;
+            scintilla1.Margins[2].Mask = Marker.MaskFolders;
+            scintilla1.Margins[2].Sensitive = true;
+            scintilla1.Margins[2].Width = 20;
+
+            // Reset folder markers
+            for (int i = Marker.FolderEnd; i <= Marker.FolderOpen; i++)
             {
-                rtbDisplay.Select(m.Index, m.Length);
-                rtbDisplay.SelectionColor = Color.Blue;
-
-                var tagName = m.Groups["tagName"].Value;
-                rtbDisplay.Select(m.Groups["tagName"].Index, m.Groups["tagName"].Length);
-                rtbDisplay.SelectionColor = Color.DarkRed;
-
-                var attGroup = m.Groups["attName"];
-                if (attGroup is not null)
-                {
-                    var atts = attGroup.Captures;
-                    for (int i = 0; i < atts.Count; i++)
-                    {
-                        rtbDisplay.Select(atts[i].Index, atts[i].Length);
-                        rtbDisplay.SelectionColor = Color.Red;
-                    }
-                }
+                scintilla1.Markers[i].SetForeColor(SystemColors.ControlLightLight);
+                scintilla1.Markers[i].SetBackColor(SystemColors.ControlDark);
             }
+
+            // Style the folder markers
+            scintilla1.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
+            scintilla1.Markers[Marker.Folder].SetBackColor(SystemColors.ControlText);
+            scintilla1.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
+            scintilla1.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
+            scintilla1.Markers[Marker.FolderEnd].SetBackColor(SystemColors.ControlText);
+            scintilla1.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
+            scintilla1.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
+            scintilla1.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
+            scintilla1.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
+
+            // Enable automatic folding
+            scintilla1.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
+
+            // Set the Styles
+            scintilla1.StyleResetDefault();
+
+            // I like fixed font for XML
+            scintilla1.StyleClearAll();
+            scintilla1.Styles[Style.Xml.Attribute].ForeColor = Color.Red;
+            scintilla1.Styles[Style.Xml.Entity].ForeColor = Color.Red;
+            scintilla1.Styles[Style.Xml.Comment].ForeColor = Color.Green;
+            scintilla1.Styles[Style.Xml.Tag].ForeColor = Color.Blue;
+            scintilla1.Styles[Style.Xml.TagEnd].ForeColor = Color.Blue;
+            scintilla1.Styles[Style.Xml.DoubleString].ForeColor = Color.DeepPink;
+            scintilla1.Styles[Style.Xml.SingleString].ForeColor = Color.DeepPink;
+            scintilla1.Styles[Style.Xml.XmlStart].ForeColor = Color.Blue;
+            scintilla1.Styles[Style.Xml.TagEnd].ForeColor = Color.Blue;
         }
 
         private void ToolStripButtonValidateXml_Click(object sender, EventArgs e)
@@ -1851,7 +1845,7 @@ namespace Office_File_Explorer
         private void ToolStripButtonGenerateCallback_Click(object sender, EventArgs e)
         {
             // if there is no callback , then there is no point in generating the callback code
-            if (rtbDisplay.Text == null || rtbDisplay.Text.Length == 0)
+            if (scintilla1.Text == null || scintilla1.Text.Length == 0)
             {
                 return;
             }
@@ -1866,7 +1860,7 @@ namespace Office_File_Explorer
             try
             {
                 XmlDocument customUI = new XmlDocument();
-                customUI.LoadXml(rtbDisplay.Text);
+                customUI.LoadXml(scintilla1.Text);
                 StringBuilder callbacks = CallbackBuilder.GenerateCallback(customUI);
                 callbacks.Append('}');
 
@@ -1892,48 +1886,48 @@ namespace Office_File_Explorer
         private void Office2010CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddPart(XMLParts.RibbonX14);
-            rtbDisplay.Text = string.Empty;
+            scintilla1.Text = string.Empty;
             TvFiles.SelectedNode = TvFiles.Nodes[0].Nodes[0];
         }
 
         private void Office2007CustomUIPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddPart(XMLParts.RibbonX12);
-            rtbDisplay.Text = string.Empty;
+            scintilla1.Text = string.Empty;
             TvFiles.SelectedNode = TvFiles.Nodes[0].Nodes[0];
         }
 
         private void CustomOutspaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rtbDisplay.Text = Strings.xmlCustomOutspace;
+            scintilla1.Text = Strings.xmlCustomOutspace;
             FormatXmlColors();
             EnableModifyUI();
         }
 
         private void CustomTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rtbDisplay.Text = Strings.xmlCustomTab;
+            scintilla1.Text = Strings.xmlCustomTab;
             FormatXmlColors();
             EnableModifyUI();
         }
 
         private void ExcelCustomTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rtbDisplay.Text = Strings.xmlExcelCustomTab;
+            scintilla1.Text = Strings.xmlExcelCustomTab;
             FormatXmlColors();
             EnableModifyUI();
         }
 
         private void RepurposeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rtbDisplay.Text = Strings.xmlRepurpose;
+            scintilla1.Text = Strings.xmlRepurpose;
             FormatXmlColors();
             EnableModifyUI();
         }
 
         private void WordGroupOnInsertTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rtbDisplay.Text = Strings.xmlWordGroupInsertTab;
+            scintilla1.Text = Strings.xmlWordGroupInsertTab;
             FormatXmlColors();
             EnableModifyUI();
         }
@@ -2004,7 +1998,7 @@ namespace Office_File_Explorer
             if (isEncrypted)
             {
                 // write the stream changes and save
-                cfStream.Write(Encoding.Default.GetBytes(rtbDisplay.Text), 0, 0, Encoding.Default.GetByteCount(rtbDisplay.Text));
+                cfStream.Write(Encoding.Default.GetBytes(scintilla1.Text), 0, 0, Encoding.Default.GetByteCount(scintilla1.Text));
                 cf.Commit();
 
                 // let the user know it worked, then close the stream and form
@@ -2022,7 +2016,7 @@ namespace Office_File_Explorer
                     MemoryStream ms = new MemoryStream();
                     using (StreamWriter sw = new StreamWriter(ms))
                     {
-                        sw.Write(rtbDisplay.Text);
+                        sw.Write(scintilla1.Text);
                         sw.Flush();
 
                         ms.Position = 0;
@@ -2056,7 +2050,7 @@ namespace Office_File_Explorer
             try
             {
                 Cursor = Cursors.WaitCursor;
-                rtbDisplay.Clear();
+                scintilla1.Clear();
                 StringBuilder sb = new StringBuilder();
 
                 // display file contents based on user selection
@@ -2156,13 +2150,13 @@ namespace Office_File_Explorer
                 bool isXmlException = false;
                 string strDocText = string.Empty;
                 IsFixed = false;
-                rtbDisplay.Clear();
+                scintilla1.Clear();
 
                 if (StrExtension == Strings.docxFileExt)
                 {
                     if ((File.GetAttributes(toolStripStatusLabelFilePath.Text) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                     {
-                        rtbDisplay.AppendText("ERROR: File is Read-Only.");
+                        scintilla1.AppendText("ERROR: File is Read-Only.");
                         return;
                     }
                     else
@@ -2227,39 +2221,39 @@ namespace Office_File_Explorer
                                                     if (Properties.Settings.Default.FixGroupedShapes == true)
                                                     {
                                                         strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrValidVshapegroup);
-                                                        rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                        rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrValidVshapegroup);
+                                                        scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                        scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrValidVshapegroup);
                                                     }
                                                     else
                                                     {
                                                         strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrValidVshape);
-                                                        rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                        rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrValidVshape);
+                                                        scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                        scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrValidVshape);
                                                     }
                                                     break;
 
                                                 case InvalidXmlTags.StrInvalidOmathWps:
                                                     strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrValidomathwps);
-                                                    rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                    rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrValidomathwps);
+                                                    scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                    scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrValidomathwps);
                                                     break;
 
                                                 case InvalidXmlTags.StrInvalidOmathWpg:
                                                     strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrValidomathwpg);
-                                                    rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                    rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrValidomathwpg);
+                                                    scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                    scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrValidomathwpg);
                                                     break;
 
                                                 case InvalidXmlTags.StrInvalidOmathWpc:
                                                     strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrValidomathwpc);
-                                                    rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                    rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrValidomathwpc);
+                                                    scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                    scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrValidomathwpc);
                                                     break;
 
                                                 case InvalidXmlTags.StrInvalidOmathWpi:
                                                     strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrValidomathwpi);
-                                                    rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                    rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrValidomathwpi);
+                                                    scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                    scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrValidomathwpi);
                                                     break;
 
                                                 default:
@@ -2274,15 +2268,15 @@ namespace Office_File_Explorer
                                                             // secondary check for a fallback that has an attribute.
                                                             // we don't allow attributes in a fallback
                                                             strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrValidMcChoice4);
-                                                            rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                            rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrValidMcChoice4);
+                                                            scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                            scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrValidMcChoice4);
                                                             break;
                                                         }
 
                                                         // replace mc:choice and hold onto the tag that follows
                                                         strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrValidMcChoice3 + m.Groups[2].Value);
-                                                        rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                        rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrValidMcChoice3 + m.Groups[2].Value);
+                                                        scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                        scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrValidMcChoice3 + m.Groups[2].Value);
                                                         break;
                                                     }
                                                     // the second if <w:pict/> is to catch and replace the invalid mc:Fallback tags
@@ -2293,16 +2287,16 @@ namespace Office_File_Explorer
                                                             // if the match contains the closing fallback we just need to remove the entire fallback
                                                             // this will leave the closing AC and Run tags, which should be correct
                                                             strDocText = strDocText.Replace(m.Value, string.Empty);
-                                                            rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                            rtbDisplay.AppendText(Strings.replacedWith + "Fallback tag deleted.");
+                                                            scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                            scintilla1.AppendText(Strings.replacedWith + "Fallback tag deleted.");
                                                             break;
                                                         }
 
                                                         // if there is no closing fallback tag, we can replace the match with the omitFallback valid tags
                                                         // then we need to also add the trailing tag, since it's always different but needs to stay in the file
                                                         strDocText = strDocText.Replace(m.Value, ValidXmlTags.StrOmitFallback + m.Groups[2].Value);
-                                                        rtbDisplay.AppendText(Strings.invalidTag + m.Value);
-                                                        rtbDisplay.AppendText(Strings.replacedWith + ValidXmlTags.StrOmitFallback + m.Groups[2].Value);
+                                                        scintilla1.AppendText(Strings.invalidTag + m.Value);
+                                                        scintilla1.AppendText(Strings.replacedWith + ValidXmlTags.StrOmitFallback + m.Groups[2].Value);
                                                         break;
                                                     }
                                                     else
@@ -2376,7 +2370,7 @@ namespace Office_File_Explorer
                                     // if no changes were made, no corruptions were found and we can exit
                                     if (strDocText.Equals(strDocTextBackup))
                                     {
-                                        rtbDisplay.AppendText(" ## No Corruption Found  ## ");
+                                        scintilla1.AppendText(" ## No Corruption Found  ## ");
                                         return;
                                     }
                                 }
@@ -2416,7 +2410,7 @@ namespace Office_File_Explorer
             }
             catch (Exception ex)
             {
-                rtbDisplay.Text = Strings.errorUnableToFixDocument + ex.Message;
+                scintilla1.Text = Strings.errorUnableToFixDocument + ex.Message;
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "Corrupt Doc Exception = " + ex.Message);
             }
             finally
@@ -2439,11 +2433,11 @@ namespace Office_File_Explorer
                     // check if we can open in the sdk and confirm it was indeed fixed
                     if (OpenWithSdk(StrDestFileName))
                     {
-                        rtbDisplay.AppendText(Strings.wHeaderLine + Environment.NewLine + "Fixed Document Location: " + StrDestFileName);
+                        scintilla1.AppendText(Strings.wHeaderLine + Environment.NewLine + "Fixed Document Location: " + StrDestFileName);
                     }
                     else
                     {
-                        rtbDisplay.AppendText("Unable to fix document");
+                        scintilla1.AppendText("Unable to fix document");
                     }
                 }
 
@@ -2466,6 +2460,7 @@ namespace Office_File_Explorer
         private void ToolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
             bool corruptionFound = false;
+            scintilla1.ReadOnly = false;
 
             StringBuilder sbFixes = new StringBuilder();
 
@@ -2628,12 +2623,12 @@ namespace Office_File_Explorer
             {
                 string modifiedPath = AddTextToFileName(toolStripStatusLabelFilePath.Text, " (Fixed)");
                 File.Copy(tempFilePackageViewer, modifiedPath, true);
-                rtbDisplay.Text = sbFixes.ToString();
-                rtbDisplay.AppendText("\r\n\r\nModified File Location = " + modifiedPath);
+                scintilla1.Text = sbFixes.ToString();
+                scintilla1.AppendText("\r\n\r\nModified File Location = " + modifiedPath);
             }
             else
             {
-                rtbDisplay.AppendText("No Corruption Found.");
+                scintilla1.AppendText("No Corruption Found.");
             }
         }
 
@@ -2659,7 +2654,7 @@ namespace Office_File_Explorer
             try
             {
                 StringBuilder sb = new StringBuilder();
-                rtbDisplay.Clear();
+                scintilla1.Clear();
 
                 if (StrOfficeApp == Strings.oAppWord)
                 {
@@ -3030,7 +3025,7 @@ namespace Office_File_Explorer
 
                                 if (fds.sheetName != string.Empty)
                                 {
-                                    rtbDisplay.AppendText("Sheet: " + fds.sheetName + " Removed");
+                                    scintilla1.AppendText("Sheet: " + fds.sheetName + " Removed");
                                 }
                             }
                         }
@@ -3052,7 +3047,7 @@ namespace Office_File_Explorer
                             string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(tempFilePackageViewer, Strings.oAppExcel);
                             if (fNewName != string.Empty)
                             {
-                                rtbDisplay.AppendText(tempFilePackageViewer + Strings.convertedTo + fNewName);
+                                scintilla1.AppendText(tempFilePackageViewer + Strings.convertedTo + fNewName);
                             }
                         }
 
@@ -3093,7 +3088,7 @@ namespace Office_File_Explorer
                                 {
                                     // if no path is found, we will be unable to convert
                                     excelcnvPath = string.Empty;
-                                    rtbDisplay.AppendText("** Unable to convert file **");
+                                    scintilla1.AppendText("** Unable to convert file **");
                                     return;
                                 }
 
@@ -3140,12 +3135,12 @@ namespace Office_File_Explorer
                                     string cParams = " -nme -oice " + Strings.chDblQuote + tempFilePackageViewer + Strings.chDblQuote + Strings.wSpaceChar + Strings.chDblQuote + strOutputFileName + Strings.chDblQuote;
                                     var proc = Process.Start(excelcnvPath, cParams);
                                     proc.Close();
-                                    rtbDisplay.AppendText(Strings.fileConvertSuccessful);
-                                    rtbDisplay.AppendText("File Location: " + strOutputFileName);
+                                    scintilla1.AppendText(Strings.fileConvertSuccessful);
+                                    scintilla1.AppendText("File Location: " + strOutputFileName);
                                 }
                                 else
                                 {
-                                    rtbDisplay.AppendText("** File Is Not Open Xml Format (Strict) **");
+                                    scintilla1.AppendText("** File Is Not Open Xml Format (Strict) **");
                                 }
                             }
                             catch (Exception ex)
@@ -3183,7 +3178,7 @@ namespace Office_File_Explorer
                             using (PresentationDocument pDoc = PresentationDocument.Open(tempFilePackageViewer, true))
                             {
                                 PowerPointFixes.DeleteUnusedMasterLayouts(pDoc);
-                                rtbDisplay.AppendText("Unused Slide Layouts Deleted");
+                                scintilla1.AppendText("Unused Slide Layouts Deleted");
                             }
                         }
 
@@ -3192,7 +3187,7 @@ namespace Office_File_Explorer
                             using (PresentationDocument pDoc = PresentationDocument.Open(tempFilePackageViewer, true))
                             {
                                 PowerPointFixes.ResetBulletMargins(pDoc);
-                                rtbDisplay.AppendText("Bullet Margins Reset");
+                                scintilla1.AppendText("Bullet Margins Reset");
                             }
                         }
 
@@ -3201,7 +3196,7 @@ namespace Office_File_Explorer
                             string fNewName = Office.ConvertMacroEnabled2NonMacroEnabled(tempFilePackageViewer, Strings.oAppPowerPoint);
                             if (fNewName != string.Empty)
                             {
-                                rtbDisplay.AppendText(tempFilePackageViewer + Strings.convertedTo + fNewName);
+                                scintilla1.AppendText(tempFilePackageViewer + Strings.convertedTo + fNewName);
                             }
                         }
 
@@ -3209,11 +3204,11 @@ namespace Office_File_Explorer
                         {
                             if (PowerPoint.DeleteComments(tempFilePackageViewer, string.Empty))
                             {
-                                rtbDisplay.AppendText("Comments Removed");
+                                scintilla1.AppendText("Comments Removed");
                             }
                             else
                             {
-                                rtbDisplay.AppendText("No Comments Removed");
+                                scintilla1.AppendText("No Comments Removed");
                             }
                         }
 
@@ -3223,7 +3218,7 @@ namespace Office_File_Explorer
                             {
                                 document.PresentationPart.Presentation.RemovePersonalInfoOnSave = false;
                                 document.PresentationPart.Presentation.Save();
-                                rtbDisplay.AppendText("Remove PII On Save Disabled");
+                                scintilla1.AppendText("Remove PII On Save Disabled");
                             }
                         }
 
@@ -3239,13 +3234,13 @@ namespace Office_File_Explorer
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.ResetNotesPageSize)
                         {
                             PowerPointFixes.ResetNotesPageSize(tempFilePackageViewer);
-                            rtbDisplay.AppendText("Notes Page Size Reset");
+                            scintilla1.AppendText("Notes Page Size Reset");
                         }
 
                         if (f.pptModCmd == AppUtilities.PowerPointModifyCmds.CustomNotesPageReset)
                         {
                             PowerPointFixes.CustomResetNotesPageSize(tempFilePackageViewer);
-                            rtbDisplay.AppendText("Notes Page Size Reset");
+                            scintilla1.AppendText("Notes Page Size Reset");
                         }
 
                         if (result == DialogResult.OK)
@@ -3321,7 +3316,7 @@ namespace Office_File_Explorer
 
         private void ToolStripButtonFind_Click(object sender, EventArgs e)
         {
-            if (rtbDisplay.Text.Length > 0)
+            if (scintilla1.Text.Length > 0)
             {
                 FindText();
             }
@@ -3428,7 +3423,7 @@ namespace Office_File_Explorer
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
                 settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
 
-                using (TextReader textReader = new StringReader(rtbDisplay.Text))
+                using (TextReader textReader = new StringReader(scintilla1.Text))
                 {
                     XmlReader rd = XmlReader.Create(textReader, settings);
                     XDocument doc = XDocument.Load(rd);
