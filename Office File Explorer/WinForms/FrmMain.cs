@@ -30,6 +30,7 @@ using Color = System.Drawing.Color;
 using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
 using Application = System.Windows.Forms.Application;
 using ScintillaNET;
+using ScintillaNET_FindReplaceDialog;
 
 namespace Office_File_Explorer
 {
@@ -76,6 +77,8 @@ namespace Office_File_Explorer
         // package is for viewing of contents only
         public Package package;
 
+        public FindReplace myFindReplace;
+
         // enums
         public enum OpenXmlInnerFileTypes { Word, Excel, PowerPoint, Outlook, XML, Image, Binary, Video, Audio, Text, Other }
 
@@ -96,6 +99,52 @@ namespace Office_File_Explorer
             }
 
             UpdateMRU();
+            
+            // scintilla inits
+            scintilla1.ReadOnly = true;
+            myFindReplace = new FindReplace(scintilla1);
+            myFindReplace.KeyPressed += MyFindReplace_KeyPressed;
+            scintilla1.KeyDown += Scintilla1_KeyDown;
+        }
+
+        private void Scintilla1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                myFindReplace.ShowFind();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Shift && e.KeyCode == Keys.F3)
+            {
+                myFindReplace.Window.FindPrevious();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.F3)
+            {
+                myFindReplace.Window.FindNext();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.H)
+            {
+                myFindReplace.ShowReplace();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.I)
+            {
+                myFindReplace.ShowIncrementalSearch();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.G)
+            {
+                GoTo MyGoTo = new GoTo((Scintilla)sender);
+                MyGoTo.ShowGoToDialog();
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void MyFindReplace_KeyPressed(object sender, KeyEventArgs e)
+        {
+            Scintilla1_KeyDown(sender, e);
         }
 
         #region Class Properties
@@ -343,7 +392,7 @@ namespace Office_File_Explorer
 
         public void FindText()
         {
-            
+
         }
 
         /// <summary>
@@ -1098,13 +1147,58 @@ namespace Office_File_Explorer
             }
         }
 
+        public virtual void MoveFormAwayFromSelection()
+        {
+            if (!Visible || scintilla1 == null)
+                return;
+
+            int pos = scintilla1.CurrentPosition;
+            int x = scintilla1.PointXFromPosition(pos);
+            int y = scintilla1.PointYFromPosition(pos);
+
+            Point cursorPoint = new Point(x, y);
+
+            Rectangle r = new Rectangle(Location, Size);
+
+            if (scintilla1 != null)
+            {
+                r.Location = new Point(scintilla1.ClientRectangle.Right - Size.Width, 0);
+            }
+
+            if (r.Contains(cursorPoint))
+            {
+                Point newLocation;
+                if (cursorPoint.Y < (Screen.PrimaryScreen.Bounds.Height / 2))
+                {
+                    //TODO - replace lineheight with ScintillaNET command, when added
+                    int SCI_TEXTHEIGHT = 2279;
+                    int lineHeight = scintilla1.DirectMessage(SCI_TEXTHEIGHT, IntPtr.Zero, IntPtr.Zero).ToInt32();
+                    // Top half of the screen
+                    newLocation = new Point(r.X, cursorPoint.Y + lineHeight * 2);
+                }
+                else
+                {
+                    //TODO - replace lineheight with ScintillaNET command, when added
+                    int SCI_TEXTHEIGHT = 2279;
+                    int lineHeight = scintilla1.DirectMessage(SCI_TEXTHEIGHT, IntPtr.Zero, IntPtr.Zero).ToInt32();
+                    // Bottom half of the screen
+                    newLocation = new Point(r.X, cursorPoint.Y - Height - (lineHeight * 2));
+                }
+
+                Location = newLocation;
+            }
+            else
+            {
+                Location = r.Location;
+            }
+        }
+
         /// <summary>
         /// update toolbar and icons
         /// </summary>
         /// <param name="s"></param>
         public void UpdateUI(UIType type)
         {
-            toolStripButtonFind.Enabled = true;
             switch (type)
             {
                 case UIType.OpenWord:
@@ -1200,8 +1294,6 @@ namespace Office_File_Explorer
             excelSheetViewerToolStripMenuItem.Enabled = false;
             scintilla1.ReadOnly = true;
             scintilla1.BackColor = SystemColors.Control;
-            toolStripButtonFind.Enabled = false;
-
 
             if (package is null)
             {
@@ -1503,7 +1595,7 @@ namespace Office_File_Explorer
         /// </summary>
         public void ReplaceText()
         {
-            
+
         }
 
         public void ClearRecentMenuItems()
@@ -2461,6 +2553,7 @@ namespace Office_File_Explorer
         {
             bool corruptionFound = false;
             scintilla1.ReadOnly = false;
+            scintilla1.ClearAll();
 
             StringBuilder sbFixes = new StringBuilder();
 
@@ -2630,6 +2723,7 @@ namespace Office_File_Explorer
             {
                 scintilla1.AppendText("No Corruption Found.");
             }
+            scintilla1.ReadOnly = true;
         }
 
         private void EditToolStripMenuFindReplace_Click(object sender, EventArgs e)

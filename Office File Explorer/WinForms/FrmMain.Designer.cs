@@ -87,11 +87,6 @@ namespace Office_File_Explorer
             toolStripButtonFixXml = new System.Windows.Forms.ToolStripButton();
             toolStripButtonValidateXml = new System.Windows.Forms.ToolStripButton();
             toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            toolStripTextBoxFind = new System.Windows.Forms.ToolStripTextBox();
-            toolStripButtonFind = new System.Windows.Forms.ToolStripButton();
-            toolStripButtonReplace = new System.Windows.Forms.ToolStripButton();
-            toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             statusStrip1 = new System.Windows.Forms.StatusStrip();
             toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             toolStripStatusLabelDocType = new System.Windows.Forms.ToolStripStatusLabel();
@@ -385,7 +380,7 @@ namespace Office_File_Explorer
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripButtonFixXml, toolStripButtonValidateXml, toolStripSeparator3, toolStripLabel1, toolStripTextBoxFind, toolStripButtonFind, toolStripButtonReplace, toolStripSeparator4 });
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripButtonFixXml, toolStripButtonValidateXml, toolStripSeparator3 });
             toolStrip1.Location = new System.Drawing.Point(0, 24);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new System.Drawing.Size(1051, 25);
@@ -566,46 +561,6 @@ namespace Office_File_Explorer
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
             toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripLabel1
-            // 
-            toolStripLabel1.Name = "toolStripLabel1";
-            toolStripLabel1.Size = new System.Drawing.Size(33, 22);
-            toolStripLabel1.Text = "Find:";
-            // 
-            // toolStripTextBoxFind
-            // 
-            toolStripTextBoxFind.Name = "toolStripTextBoxFind";
-            toolStripTextBoxFind.Size = new System.Drawing.Size(200, 25);
-            // 
-            // toolStripButtonFind
-            // 
-            toolStripButtonFind.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            toolStripButtonFind.Enabled = false;
-            toolStripButtonFind.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonFind.Image");
-            toolStripButtonFind.ImageTransparentColor = System.Drawing.Color.Magenta;
-            toolStripButtonFind.Name = "toolStripButtonFind";
-            toolStripButtonFind.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonFind.Text = "Find";
-            toolStripButtonFind.ToolTipText = "Find Text";
-            toolStripButtonFind.Click += ToolStripButtonFind_Click;
-            // 
-            // toolStripButtonReplace
-            // 
-            toolStripButtonReplace.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            toolStripButtonReplace.Enabled = false;
-            toolStripButtonReplace.Image = (System.Drawing.Image)resources.GetObject("toolStripButtonReplace.Image");
-            toolStripButtonReplace.ImageTransparentColor = System.Drawing.Color.Magenta;
-            toolStripButtonReplace.Name = "toolStripButtonReplace";
-            toolStripButtonReplace.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonReplace.Text = "Replace";
-            toolStripButtonReplace.ToolTipText = "Replace Text";
-            toolStripButtonReplace.Click += ToolStripButtonReplace_Click;
-            // 
-            // toolStripSeparator4
-            // 
-            toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // statusStrip1
             // 
@@ -814,11 +769,6 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItemClose;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxFind;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFind;
-        private System.Windows.Forms.ToolStripButton toolStripButtonReplace;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMRU;
         private System.Windows.Forms.ToolStripMenuItem mruToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem mruToolStripMenuItem2;

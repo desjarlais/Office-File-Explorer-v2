@@ -21,6 +21,18 @@ namespace Office_File_Explorer.Helpers
         public const string b4 = "4";
         public const string bDataDescriptor = "8";
 
+        // scintilla strings
+        public const string sciErrorInRegex = "Error In Regex";
+        public const string sciMatchNotFound = "Match Not Found";
+        public const string sciMatchWrappedBeginningDocument = "Search continued at the beginning of the document";
+        public const string sciMatchWrappedBeginningSelection = "Search continued at the top of the selection";
+        public const string sciMatchWrappedEndDocument = "Search continued at the end of the document";
+        public const string sciMatchWrappedEndSelection = "Search continued at the end of the selection";
+        public const string sciTotalFound = "Total Found:";
+        public const string sciTotalReplaced = "Total Replaced:";
+        public const string sciMustBeInRange = "Must Be In Range";
+        public const string sciMustBeNumeric = "Must Be Numeric";
+
         // file extensions
         public const string docxFileExt = ".docx";
         public const string docmFileExt = ".docm";
