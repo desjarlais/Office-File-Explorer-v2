@@ -29,6 +29,8 @@ using File = System.IO.File;
 using Color = System.Drawing.Color;
 using Person = DocumentFormat.OpenXml.Office2013.Word.Person;
 using Application = System.Windows.Forms.Application;
+
+// scintilla refs
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 
@@ -77,6 +79,7 @@ namespace Office_File_Explorer
         // package is for viewing of contents only
         public Package package;
 
+        // scintilla globals
         public FindReplace myFindReplace;
 
         // enums
@@ -105,46 +108,6 @@ namespace Office_File_Explorer
             myFindReplace = new FindReplace(scintilla1);
             myFindReplace.KeyPressed += MyFindReplace_KeyPressed;
             scintilla1.KeyDown += Scintilla1_KeyDown;
-        }
-
-        private void Scintilla1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.F)
-            {
-                myFindReplace.ShowFind();
-                e.SuppressKeyPress = true;
-            }
-            else if (e.Shift && e.KeyCode == Keys.F3)
-            {
-                myFindReplace.Window.FindPrevious();
-                e.SuppressKeyPress = true;
-            }
-            else if (e.KeyCode == Keys.F3)
-            {
-                myFindReplace.Window.FindNext();
-                e.SuppressKeyPress = true;
-            }
-            else if (e.Control && e.KeyCode == Keys.H)
-            {
-                myFindReplace.ShowReplace();
-                e.SuppressKeyPress = true;
-            }
-            else if (e.Control && e.KeyCode == Keys.I)
-            {
-                myFindReplace.ShowIncrementalSearch();
-                e.SuppressKeyPress = true;
-            }
-            else if (e.Control && e.KeyCode == Keys.G)
-            {
-                GoTo MyGoTo = new GoTo((Scintilla)sender);
-                MyGoTo.ShowGoToDialog();
-                e.SuppressKeyPress = true;
-            }
-        }
-
-        private void MyFindReplace_KeyPressed(object sender, KeyEventArgs e)
-        {
-            Scintilla1_KeyDown(sender, e);
         }
 
         #region Class Properties
@@ -1025,7 +988,47 @@ namespace Office_File_Explorer
 
         #endregion
 
-        #region Button Events
+        #region Events
+
+        private void Scintilla1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                myFindReplace.ShowFind();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Shift && e.KeyCode == Keys.F3)
+            {
+                myFindReplace.Window.FindPrevious();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.F3)
+            {
+                myFindReplace.Window.FindNext();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.H)
+            {
+                myFindReplace.ShowReplace();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.I)
+            {
+                myFindReplace.ShowIncrementalSearch();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.G)
+            {
+                GoTo MyGoTo = new GoTo((Scintilla)sender);
+                MyGoTo.ShowGoToDialog();
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void MyFindReplace_KeyPressed(object sender, KeyEventArgs e)
+        {
+            Scintilla1_KeyDown(sender, e);
+        }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1145,6 +1148,12 @@ namespace Office_File_Explorer
             {
                 var result = f.ShowDialog();
             }
+        }
+
+        public void EnableScintillaAddText()
+        {
+            scintilla1.ClearAll();
+            scintilla1.ReadOnly = false;
         }
 
         public virtual void MoveFormAwayFromSelection()
@@ -2242,13 +2251,13 @@ namespace Office_File_Explorer
                 bool isXmlException = false;
                 string strDocText = string.Empty;
                 IsFixed = false;
-                scintilla1.Clear();
+                EnableScintillaAddText();
 
                 if (StrExtension == Strings.docxFileExt)
                 {
                     if ((File.GetAttributes(toolStripStatusLabelFilePath.Text) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                     {
-                        scintilla1.AppendText("ERROR: File is Read-Only.");
+                        scintilla1.Text = "ERROR: File is Read-Only.";
                         return;
                     }
                     else
@@ -2462,7 +2471,7 @@ namespace Office_File_Explorer
                                     // if no changes were made, no corruptions were found and we can exit
                                     if (strDocText.Equals(strDocTextBackup))
                                     {
-                                        scintilla1.AppendText(" ## No Corruption Found  ## ");
+                                        scintilla1.Text = " ## No Corruption Found  ## ";
                                         return;
                                     }
                                 }
@@ -2525,11 +2534,11 @@ namespace Office_File_Explorer
                     // check if we can open in the sdk and confirm it was indeed fixed
                     if (OpenWithSdk(StrDestFileName))
                     {
-                        scintilla1.AppendText(Strings.wHeaderLine + Environment.NewLine + "Fixed Document Location: " + StrDestFileName);
+                        scintilla1.Text = Strings.wHeaderLine + Environment.NewLine + "Fixed Document Location: " + StrDestFileName;
                     }
                     else
                     {
-                        scintilla1.AppendText("Unable to fix document");
+                        scintilla1.Text = "Unable to fix document";
                     }
                 }
 
@@ -2552,8 +2561,7 @@ namespace Office_File_Explorer
         private void ToolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
             bool corruptionFound = false;
-            scintilla1.ReadOnly = false;
-            scintilla1.ClearAll();
+            EnableScintillaAddText();
 
             StringBuilder sbFixes = new StringBuilder();
 
