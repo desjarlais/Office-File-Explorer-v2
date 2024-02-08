@@ -102,7 +102,7 @@ namespace Office_File_Explorer
             }
 
             UpdateMRU();
-            
+
             // scintilla inits
             scintilla1.ReadOnly = true;
             myFindReplace = new FindReplace(scintilla1);
@@ -1869,9 +1869,13 @@ namespace Office_File_Explorer
             {
                 scintilla1.Margins[0].Width = 35;
             }
-            else
+            else if (scintilla1.Lines.Count < 100000)
             {
                 scintilla1.Margins[0].Width = 40;
+            }
+            else
+            {
+                scintilla1.Margins[0].Width = 50;
             }
 
             // Enable folding

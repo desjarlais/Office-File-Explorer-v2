@@ -100,6 +100,7 @@ namespace Office_File_Explorer
             extractPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tvImageList = new System.Windows.Forms.ImageList(components);
             scintilla1 = new ScintillaNET.Scintilla();
+            toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             mnuMainMenu.SuspendLayout();
             contextMenuRichTextBox.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -380,7 +381,7 @@ namespace Office_File_Explorer
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripButtonFixXml, toolStripButtonValidateXml, toolStripSeparator3 });
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripButtonFixXml, toolStripButtonValidateXml, toolStripSeparator3, toolStripButton1 });
             toolStrip1.Location = new System.Drawing.Point(0, 24);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new System.Drawing.Size(1051, 25);
@@ -787,6 +788,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem extractPartToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonFixXml;
         private ScintillaNET.Scintilla scintilla1;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 
