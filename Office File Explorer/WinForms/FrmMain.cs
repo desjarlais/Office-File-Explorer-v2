@@ -190,6 +190,7 @@ namespace Office_File_Explorer
                     Properties.Settings.Default.Save();
                     ClearRecentMenuItems();
                     UpdateMRU();
+                    MessageBox.Show(fPath + " does not exist, removing from MRU", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 }
             }
@@ -264,28 +265,6 @@ namespace Office_File_Explorer
             fs?.Close();
         }
 
-        /// <summary>
-        /// disable app feature related buttons
-        /// </summary>
-        public void DisableUI()
-        {
-            toolStripButtonViewContents.Enabled = false;
-            toolStripButtonFixDoc.Enabled = false;
-            editToolStripMenuFindReplace.Enabled = false;
-            editToolStripMenuItemModifyContents.Enabled = false;
-            editToolStripMenuItemRemoveCustomDocProps.Enabled = false;
-            editToolStripMenuItemRemoveCustomXml.Enabled = false;
-            excelSheetViewerToolStripMenuItem.Enabled = false;
-            toolStripButtonModify.Enabled = false;
-            toolStripButtonValidateXml.Enabled = false;
-            wordDocumentRevisionsToolStripMenuItem.Enabled = false;
-
-            if (package is null)
-            {
-                fileToolStripMenuItemClose.Enabled = false;
-            }
-        }
-
         public void CopyAllItems()
         {
             try
@@ -340,22 +319,6 @@ namespace Office_File_Explorer
             scintilla1.AppendText(" - file encrypted\r\n");
             scintilla1.AppendText(" - file password protected\r\n");
             scintilla1.AppendText(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)\r\n");
-        }
-
-        /// <summary>
-        /// move cursor to a given location of the richtextbox
-        /// </summary>
-        /// <param name="startLocation"></param>
-        /// <param name="length"></param>
-        public void MoveCursorToLocation(int startLocation, int length)
-        {
-            scintilla1.SelectionStart = startLocation;
-            scintilla1.SelectionEnd = length;
-        }
-
-        public void FindText()
-        {
-
         }
 
         /// <summary>
@@ -1597,14 +1560,6 @@ namespace Office_File_Explorer
                 OpenOfficeDocument(true);
                 UpdateAppUI();
             }
-        }
-
-        /// <summary>
-        /// used for the richtextbox to find/replace
-        /// </summary>
-        public void ReplaceText()
-        {
-
         }
 
         public void ClearRecentMenuItems()
@@ -3418,22 +3373,9 @@ namespace Office_File_Explorer
             FileClose();
         }
 
-        private void ToolStripButtonFind_Click(object sender, EventArgs e)
-        {
-            if (scintilla1.Text.Length > 0)
-            {
-                FindText();
-            }
-        }
-
         private void MruToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (sender is not null) { OpenRecentFile(sender.ToString()!); }
-        }
-
-        private void ToolStripButtonReplace_Click(object sender, EventArgs e)
-        {
-            ReplaceText();
         }
 
         private void MruToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -3598,7 +3540,7 @@ namespace Office_File_Explorer
             }
             catch (Exception ex)
             {
-                LogInformation(LogInfoType.LogException, "BtnCopyLineOutput Error", ex.Message);
+                LogInformation(LogInfoType.LogException, "BtnCopySelectedLine Error", ex.Message);
             }
         }
 
