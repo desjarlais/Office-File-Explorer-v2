@@ -12,6 +12,7 @@ namespace Office_File_Explorer.Helpers
         public const char chGreaterThan = '>';
         public const char chBackslash = '/';
         public const char chPipe = '|';
+        public const char chUnderscore = '_';
 
         // byte values
         public const string bZero = "0";
@@ -33,22 +34,19 @@ namespace Office_File_Explorer.Helpers
         public const string sciMustBeInRange = "Must Be In Range";
         public const string sciMustBeNumeric = "Must Be Numeric";
 
-        // file extensions
+        // Office file extensions
         public const string docxFileExt = ".docx";
         public const string docmFileExt = ".docm";
         public const string dotxFileExt = ".dotx";
         public const string dotmFileExt = ".dotm";
-        
         public const string xlsxFileExt = ".xlsx";
         public const string xlsmFileExt = ".xlsm";
         public const string xltxFileExt = ".xltx";
         public const string xltmFileExt = ".xltm";
-
         public const string pptxFileExt = ".pptx";
         public const string pptmFileExt = ".pptm";
         public const string potxFileExt = ".potx";
         public const string potmFileExt = ".potm";
-
         public const string msgFileExt = ".msg";
 
         // global app words
@@ -202,11 +200,11 @@ namespace Office_File_Explorer.Helpers
         public const string allAuthors = "* All Authors *";
 
         // file locations
-        public static string fLogFilePath = Path.GetDirectoryName(Application.LocalUserAppDataPath) + "\\offexp.txt";
-        public static string fBackupFilePath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
-        public static string fNormalTemplatePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Templates\\Normal.dotm";
+        public readonly static string fLogFilePath = Path.GetDirectoryName(Application.LocalUserAppDataPath) + "\\offexp.txt";
+        public readonly static string fBackupFilePath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
+        public readonly static string fNormalTemplatePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Templates\\Normal.dotm";
 
-        // win32 dll refs
+        // win32 api refs
         public const string gdi32 = "gdi32.dll";
         public const string user32 = "user32.dll";
 

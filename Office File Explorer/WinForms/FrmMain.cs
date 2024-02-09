@@ -1912,8 +1912,6 @@ namespace Office_File_Explorer
 
             // Set the Styles
             scintilla1.StyleResetDefault();
-
-            // I like fixed font for XML
             scintilla1.StyleClearAll();
             scintilla1.Styles[Style.Xml.Attribute].ForeColor = Color.Red;
             scintilla1.Styles[Style.Xml.Entity].ForeColor = Color.Red;
@@ -1949,7 +1947,7 @@ namespace Office_File_Explorer
 
         private void ToolStripButtonGenerateCallback_Click(object sender, EventArgs e)
         {
-            // if there is no callback , then there is no point in generating the callback code
+            // if there is no callback, then there is no point in generating the callback code
             if (scintilla1.Text == null || scintilla1.Text.Length == 0)
             {
                 return;
@@ -2075,7 +2073,7 @@ namespace Office_File_Explorer
                         File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).Close();
 
                         TreeNode imageNode = new TreeNode(id);
-                        imageNode.ImageKey = "_" + id;
+                        imageNode.ImageKey = Strings.chUnderscore + id;
                         imageNode.SelectedImageKey = imageNode.ImageKey;
                         imageNode.Tag = partType;
 
@@ -3590,6 +3588,18 @@ namespace Office_File_Explorer
         private void ToolStripButtonFixXml_Click(object sender, EventArgs e)
         {
             FixLabelInfo();
+        }
+
+        private void copySelectedLineToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(scintilla1.Lines[scintilla1.CurrentLine].Text);
+            }
+            catch (Exception ex)
+            {
+                LogInformation(LogInfoType.LogException, "BtnCopyLineOutput Error", ex.Message);
+            }
         }
 
         #endregion
