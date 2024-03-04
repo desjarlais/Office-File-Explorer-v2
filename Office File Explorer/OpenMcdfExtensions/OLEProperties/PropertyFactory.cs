@@ -15,7 +15,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
         {
             get
             {
-#if NET6_0_OR_GREATER
+#if NETSTANDARD2_0_OR_GREATER
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
                 return instance.Value;
@@ -363,11 +363,24 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
             public override void WriteScalarValue(BinaryWriter bw, string pValue)
             {
+                data = Encoding.GetEncoding(codePage).GetBytes(pValue);
+                uint dataLength = (uint)data.Length;
 
-                data = Encoding.GetEncoding(codePage).GetBytes((String)pValue);
+                // The string data must be null terminated, so add a null byte if there isn't one already
+                bool addNullTerminator = dataLength == 0 || data[dataLength - 1] != '\0';
+
+                if (addNullTerminator)
+                {
+                    dataLength += 1;
+                }
 
                 bw.Write((uint)data.Length);
                 bw.Write(data);
+
+                if (addNullTerminator)
+                {
+                    bw.Write((byte)0);
+                }
             }
         }
         private class VT_LPWSTR_Property : TypedPropertyValue<string>

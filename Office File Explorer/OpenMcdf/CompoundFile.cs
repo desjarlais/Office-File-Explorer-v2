@@ -376,14 +376,7 @@ namespace Office_File_Explorer.OpenMcdf
             this.updateMode = updateMode;
             eraseFreeSectors = configParameters.HasFlag(CFSConfiguration.EraseFreeSectors);
 
-            try
-            {
-                LoadFile(fileName);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            LoadFile(fileName);
             
             DIFAT_SECTOR_FAT_ENTRIES_COUNT = (GetSectorSize() / 4) - 1;
             FAT_SECTOR_ENTRIES_COUNT = (GetSectorSize() / 4);
@@ -535,11 +528,11 @@ namespace Office_File_Explorer.OpenMcdf
                 //Here sectors should not be loaded dynamically because
                 //if they are null it means that no change has involved them;
 
-                Sector s = sectors[i];
+                Sector s = (Sector)sectors[i];
 
                 if (s != null && s.DirtyFlag)
                 {
-                    if (gap) sourceStream.Seek((long)(sSize) + (long)i * (long)sSize, SeekOrigin.Begin);
+                    if (gap) sourceStream.Seek(sSize + (long)i * (long)sSize, SeekOrigin.Begin);
                     sourceStream.Write(s.GetData(), 0, sSize);
                     sourceStream.Flush();
                     s.DirtyFlag = false;
@@ -701,7 +694,7 @@ namespace Office_File_Explorer.OpenMcdf
 
             if (header.ByteOrder != 0xFFFE)
             {
-                throw new CFCorruptedFileException("Byte order MUST be little endian (0xFFFE");
+                throw new CFCorruptedFileException("Byte order MUST be little endian (0xFFFE)");
             }
         }
 
@@ -1580,6 +1573,17 @@ namespace Office_File_Explorer.OpenMcdf
             return bst;
         }
 
+        private RBTree DoLoadChildrenTrusted(IDirectoryEntry de)
+        {
+            RBTree bst = null;
+            if (de.Child != DirectoryEntry.NOSTREAM)
+            {
+                bst = new RBTree(directoryEntries[de.Child]);
+            }
+
+            return bst;
+        }
+
         private void DoLoadChildren(RBTree bst, IDirectoryEntry de)
         {
             if (de.Child != DirectoryEntry.NOSTREAM)
@@ -1755,10 +1759,22 @@ namespace Office_File_Explorer.OpenMcdf
         }
 
         /// <summary>
+        /// Saves the in-memory image of Compound File opened in ReadOnly mode to a file.
+        /// </summary>
+        /// <param name="fileName">File name to write the compound file to</param>
+        /// <exception cref="T:OpenMcdf.CFException">Raised if destination file is not seekable</exception>
+        /// <exception cref="T:OpenMcdf.CFInvalidOperation">Raised if destination file is the current file</exception>
+        public void SaveAs(string fileName)
+        {
+            Save(fileName);
+        }
+
+        /// <summary>
         /// Saves the in-memory image of Compound File to a file.
         /// </summary>
         /// <param name="fileName">File name to write the compound file to</param>
         /// <exception cref="T:OpenMcdf.CFException">Raised if destination file is not seekable</exception>
+        [Obsolete("Use SaveAs method")]
         public void Save(string fileName)
         {
             if (_disposed) throw new CFException("Compound File closed: cannot save data");
@@ -1767,7 +1783,32 @@ namespace Office_File_Explorer.OpenMcdf
 
             try
             {
-                fs = new FileStream(fileName, FileMode.Create);
+                bool raiseSaveFileEx = false;
+                if (HasSourceStream && sourceStream != null && sourceStream is FileStream)
+                {
+                    if (Path.IsPathRooted(fileName))
+                    {
+                        if (((FileStream)(sourceStream)).Name == fileName)
+                        {
+                            raiseSaveFileEx = true;
+                        }
+                    }
+                    else
+                    {
+                        if (((FileStream)(sourceStream)).Name == (Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\" + fileName))
+                        {
+
+                            raiseSaveFileEx = true;
+                        }
+                    }
+                }
+
+                if (raiseSaveFileEx)
+                {
+                    throw new CFInvalidOperation("Cannot overwrite current backing file. Compound File should be opened in UpdateMode and Commit() method should be called to persist changes");
+                }
+
+                fs = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
                 Save(fs);
             }
             catch (Exception ex)
@@ -1776,11 +1817,9 @@ namespace Office_File_Explorer.OpenMcdf
             }
             finally
             {
-                if (fs != null)
-                {
-                    fs.Flush();
-                    fs.Close();
-                }
+                sourceStream?.Close();
+                fs?.Flush();
+                fs?.Close();
             }
         }
 
@@ -1818,6 +1857,14 @@ namespace Office_File_Explorer.OpenMcdf
 
             try
             {
+                if (HasSourceStream && sourceStream != null && sourceStream is FileStream && stream is FileStream)
+                {
+                    if (((FileStream)(sourceStream)).Name == ((FileStream)(stream)).Name)
+                    {
+                        throw new CFInvalidOperation("Cannot overwrite current backing file. Compound File should be opened in UpdateMode and Commit() method should be called to persist changes");
+                    }
+                }
+
                 stream.Write((byte[])Array.CreateInstance(typeof(byte), sSize), 0, sSize);
 
                 CommitDirectory();
@@ -1848,6 +1895,7 @@ namespace Office_File_Explorer.OpenMcdf
             }
             catch (Exception ex)
             {
+                sourceStream?.Close();
                 throw new CFException("Internal error while saving compound file to stream ", ex);
             }
         }
@@ -2389,6 +2437,7 @@ namespace Office_File_Explorer.OpenMcdf
 
         private bool closeStream = true;
 
+        [Obsolete("Use flag LeaveOpen in CompoundFile constructor")]
         public void Close(bool closeStream)
         {
             this.closeStream = closeStream;
