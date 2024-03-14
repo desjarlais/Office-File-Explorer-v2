@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Office_File_Explorer
+namespace Office_File_Explorer.Helpers
 {
     /// <summary>
     /// Specifies a range of characters. If the cpMin and cpMax members are equal, the range is empty.
@@ -26,8 +26,8 @@ namespace Office_File_Explorer
         /// <param name="Max">The maximum, or end position.</param>
         public CharacterRange(int Min, int Max)
         {
-            this.cpMin = Min;
-            this.cpMax = Max;
+            cpMin = Min;
+            cpMax = Max;
         }
     }
 }

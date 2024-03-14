@@ -4,10 +4,10 @@ namespace ScintillaNET_FindReplaceDialog
     using ScintillaNET;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Drawing;
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
+    using CharacterRange = Office_File_Explorer.Helpers.CharacterRange;
 
     public partial class FindReplaceDialog : Form
     {
@@ -20,7 +20,7 @@ namespace ScintillaNET_FindReplaceDialog
         private int _mruMaxCount = 10;
         private List<string> _mruReplace;
         private Scintilla _scintilla;
-        private Office_File_Explorer.CharacterRange _searchRange;
+        private Office_File_Explorer.Helpers.CharacterRange _searchRange;
 
         #endregion Fields
 
@@ -162,14 +162,14 @@ namespace ScintillaNET_FindReplaceDialog
                 {
                     if (_searchRange.cpMin == _searchRange.cpMax)
                     {
-                        _searchRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
                     }
 
                     foundCount = FindReplace.FindAll(_searchRange, rr, chkMarkLine.Checked, chkHighlightMatches.Checked).Count;
                 }
                 else
                 {
-                    _searchRange = new Office_File_Explorer.CharacterRange();
+                    _searchRange = new CharacterRange();
                     foundCount = FindReplace.FindAll(rr, chkMarkLine.Checked, chkHighlightMatches.Checked).Count;
                 }
             }
@@ -183,14 +183,14 @@ namespace ScintillaNET_FindReplaceDialog
                 if (chkSearchSelectionF.Checked)
                 {
                     if (_searchRange.cpMin == _searchRange.cpMax)
-                        _searchRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
                     string textToFind = rdoExtendedF.Checked ? FindReplace.Transform(txtFindF.Text) : txtFindF.Text;
                     foundCount = FindReplace.FindAll(_searchRange, textToFind, GetSearchFlags(), chkMarkLine.Checked, chkHighlightMatches.Checked).Count;
                 }
                 else
                 {
-                    _searchRange = new Office_File_Explorer.CharacterRange();
+                    _searchRange = new CharacterRange();
                     string textToFind = rdoExtendedF.Checked ? FindReplace.Transform(txtFindF.Text) : txtFindF.Text;
                     foundCount = FindReplace.FindAll(textToFind, GetSearchFlags(), chkMarkLine.Checked, chkHighlightMatches.Checked).Count;
                 }
@@ -239,14 +239,14 @@ namespace ScintillaNET_FindReplaceDialog
                 {
                     if (_searchRange.cpMin == _searchRange.cpMax)
                     {
-                        _searchRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
                     }
 
                     foundCount = FindReplace.ReplaceAll(_searchRange, rr, txtReplace.Text, false, false);
                 }
                 else
                 {
-                    _searchRange = new Office_File_Explorer.CharacterRange();
+                    _searchRange = new CharacterRange();
                     foundCount = FindReplace.ReplaceAll(rr, txtReplace.Text, false, false);
                 }
             }
@@ -260,7 +260,7 @@ namespace ScintillaNET_FindReplaceDialog
                 if (chkSearchSelectionR.Checked)
                 {
                     if (_searchRange.cpMin == _searchRange.cpMax)
-                        _searchRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
                     string textToFind = rdoExtendedR.Checked ? FindReplace.Transform(txtFindR.Text) : txtFindR.Text;
                     string textToReplace = rdoExtendedR.Checked ? FindReplace.Transform(txtReplace.Text) : txtReplace.Text;
@@ -268,7 +268,7 @@ namespace ScintillaNET_FindReplaceDialog
                 }
                 else
                 {
-                    _searchRange = new Office_File_Explorer.CharacterRange();
+                    _searchRange = new CharacterRange();
                     string textToFind = rdoExtendedR.Checked ? FindReplace.Transform(txtFindR.Text) : txtFindR.Text;
                     string textToReplace = rdoExtendedR.Checked ? FindReplace.Transform(txtReplace.Text) : txtReplace.Text;
                     foundCount = FindReplace.ReplaceAll(textToFind, textToReplace, GetSearchFlags(), false, false);
@@ -293,7 +293,7 @@ namespace ScintillaNET_FindReplaceDialog
             AddReplaceMru();
             lblStatus.Text = string.Empty;
 
-            Office_File_Explorer.CharacterRange nextRange;
+            Office_File_Explorer.Helpers.CharacterRange nextRange;
             try
             {
                 nextRange = ReplaceNext(true);
@@ -534,7 +534,7 @@ namespace ScintillaNET_FindReplaceDialog
             AddFindMru();
             lblStatus.Text = string.Empty;
 
-            Office_File_Explorer.CharacterRange foundRange;
+            CharacterRange foundRange;
 
             try
             {
@@ -575,7 +575,7 @@ namespace ScintillaNET_FindReplaceDialog
 
             AddFindMru();
             lblStatus.Text = string.Empty;
-            Office_File_Explorer.CharacterRange foundRange;
+            CharacterRange foundRange;
             try
             {
                 foundRange = FindNextF(true);
@@ -606,7 +606,7 @@ namespace ScintillaNET_FindReplaceDialog
             }
         }
 
-        private void EnsureVisible(Office_File_Explorer.CharacterRange range) {
+        private void EnsureVisible(CharacterRange range) {
             var startLine = Scintilla.LineFromPosition(range.cpMin);
             var endLine = Scintilla.LineFromPosition(range.cpMax);
             for (int line = startLine; line <= endLine; line++) {
@@ -763,7 +763,7 @@ namespace ScintillaNET_FindReplaceDialog
             AddReplaceMru();
             lblStatus.Text = string.Empty;
 
-            Office_File_Explorer.CharacterRange nextRange;
+            CharacterRange nextRange;
             try
             {
                 nextRange = ReplaceNext(false);
@@ -810,7 +810,7 @@ namespace ScintillaNET_FindReplaceDialog
 
             //	if they leave the dialog and come back any "Search Selection"
             //	range they might have had is invalidated
-            _searchRange = new Office_File_Explorer.CharacterRange();
+            _searchRange = new CharacterRange();
 
             lblStatus.Text = string.Empty;
 
@@ -900,9 +900,9 @@ namespace ScintillaNET_FindReplaceDialog
             txtFindF.SelectedText = e.ClickedItem.Tag.ToString();
         }
 
-        private Office_File_Explorer.CharacterRange FindNextF(bool searchUp)
+        private CharacterRange FindNextF(bool searchUp)
         {
-            Office_File_Explorer.CharacterRange foundRange;
+            CharacterRange foundRange;
 
             if (rdoRegexF.Checked)
             {
@@ -911,7 +911,7 @@ namespace ScintillaNET_FindReplaceDialog
                 if (chkSearchSelectionF.Checked)
                 {
                     if (_searchRange.cpMin == _searchRange.cpMax)
-                        _searchRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
                     if (searchUp)
                         foundRange = FindReplace.FindPrevious(rr, chkWrapF.Checked, _searchRange);
@@ -920,7 +920,7 @@ namespace ScintillaNET_FindReplaceDialog
                 }
                 else
                 {
-                    _searchRange = new Office_File_Explorer.CharacterRange();
+                    _searchRange = new CharacterRange();
                     if (searchUp)
                         foundRange = FindReplace.FindPrevious(rr, chkWrapF.Checked);
                     else
@@ -932,7 +932,7 @@ namespace ScintillaNET_FindReplaceDialog
                 if (chkSearchSelectionF.Checked)
                 {
                     if (_searchRange.cpMin == _searchRange.cpMax)
-                        _searchRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
                     if (searchUp)
                     {
@@ -947,7 +947,7 @@ namespace ScintillaNET_FindReplaceDialog
                 }
                 else
                 {
-                    _searchRange = new Office_File_Explorer.CharacterRange();
+                    _searchRange = new CharacterRange();
                     if (searchUp)
                     {
                         string textToFind = rdoExtendedF.Checked ? FindReplace.Transform(txtFindF.Text) : txtFindF.Text;
@@ -963,9 +963,9 @@ namespace ScintillaNET_FindReplaceDialog
             return foundRange;
         }
 
-        private Office_File_Explorer.CharacterRange FindNextR(bool searchUp, ref Regex rr)
+        private CharacterRange FindNextR(bool searchUp, ref Regex rr)
         {
-            Office_File_Explorer.CharacterRange foundRange;
+            CharacterRange foundRange;
 
             if (rdoRegexR.Checked)
             {
@@ -975,7 +975,7 @@ namespace ScintillaNET_FindReplaceDialog
                 if (chkSearchSelectionR.Checked)
                 {
                     if (_searchRange.cpMin == _searchRange.cpMax)
-                        _searchRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
                     if (searchUp)
                         foundRange = FindReplace.FindPrevious(rr, chkWrapR.Checked, _searchRange);
@@ -984,7 +984,7 @@ namespace ScintillaNET_FindReplaceDialog
                 }
                 else
                 {
-                    _searchRange = new Office_File_Explorer.CharacterRange();
+                    _searchRange = new CharacterRange();
                     if (searchUp)
                         foundRange = FindReplace.FindPrevious(rr, chkWrapR.Checked);
                     else
@@ -996,7 +996,7 @@ namespace ScintillaNET_FindReplaceDialog
                 if (chkSearchSelectionF.Checked)
                 {
                     if (_searchRange.cpMin == _searchRange.cpMax)
-                        _searchRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
                     if (searchUp)
                     {
@@ -1011,7 +1011,7 @@ namespace ScintillaNET_FindReplaceDialog
                 }
                 else
                 {
-                    _searchRange = new Office_File_Explorer.CharacterRange();
+                    _searchRange = new CharacterRange();
                     if (searchUp)
                     {
                         string textToFind = rdoExtendedR.Checked ? FindReplace.Transform(txtFindR.Text) : txtFindR.Text;
@@ -1088,10 +1088,10 @@ namespace ScintillaNET_FindReplaceDialog
             txtReplace.SelectedText = e.ClickedItem.Tag.ToString();
         }
 
-        private Office_File_Explorer.CharacterRange ReplaceNext(bool searchUp)
+        private CharacterRange ReplaceNext(bool searchUp)
         {
             Regex rr = null;
-            Office_File_Explorer.CharacterRange selRange = new Office_File_Explorer.CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+            CharacterRange selRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
             //	We only do the actual replacement if the current selection exactly
             //	matches the find.

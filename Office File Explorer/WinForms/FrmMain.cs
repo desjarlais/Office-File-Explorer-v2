@@ -314,6 +314,7 @@ namespace Office_File_Explorer
 
         public void DisplayInvalidFileFormatError()
         {
+            scintilla1.Clear();
             scintilla1.AppendText("Unable to open file, possible causes are:\r\n");
             scintilla1.AppendText(" - file corruption\r\n");
             scintilla1.AppendText(" - file encrypted\r\n");

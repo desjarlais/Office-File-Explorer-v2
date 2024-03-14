@@ -1,14 +1,15 @@
 namespace ScintillaNET_FindReplaceDialog
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Text.RegularExpressions;
-	using ScintillaNET;
-	using System.Drawing;
-	using System.Windows.Forms;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Text.RegularExpressions;
+    using ScintillaNET;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using CharacterRange = Office_File_Explorer.Helpers.CharacterRange;
 
-	[TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
+    [TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
 	public class FindReplace : Component
 	{
 		#region Fields
@@ -17,7 +18,7 @@ namespace ScintillaNET_FindReplaceDialog
 		private IncrementalSearcher _incrementalSearcher;
 		private Indicator _indicator;
 		private int _lastReplaceAllOffset = 0;
-		private Office_File_Explorer.CharacterRange _lastReplaceAllRangeToSearch;
+		private CharacterRange _lastReplaceAllRangeToSearch;
 		private string _lastReplaceAllReplaceString = "";
 		private int _lastReplaceCount = 0;
 		private Marker _marker;
@@ -212,7 +213,7 @@ namespace ScintillaNET_FindReplaceDialog
 		/// Highlight ranges in the document.
 		/// </summary>
 		/// <param name="Ranges">List of ranges to which highlighting should be applied.</param>
-		public void HighlightAll(List<Office_File_Explorer.CharacterRange> Ranges)
+		public void HighlightAll(List<CharacterRange> Ranges)
 		{
 			_scintilla.IndicatorCurrent = Indicator.Index;
 
@@ -231,36 +232,36 @@ namespace ScintillaNET_FindReplaceDialog
 			base.Dispose(disposing);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(int startPos, int endPos, Regex findExpression)
+		public CharacterRange Find(int startPos, int endPos, Regex findExpression)
 		{
-			return Find(new Office_File_Explorer.CharacterRange(startPos, endPos), findExpression, false);
+			return Find(new CharacterRange(startPos, endPos), findExpression, false);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(int startPos, int endPos, Regex findExpression, bool searchUp)
+		public CharacterRange Find(int startPos, int endPos, Regex findExpression, bool searchUp)
 		{
-			return Find(new Office_File_Explorer.CharacterRange(startPos, endPos), findExpression, searchUp);
+			return Find(new CharacterRange(startPos, endPos), findExpression, searchUp);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(int startPos, int endPos, string searchString, SearchFlags flags)
+		public CharacterRange Find(int startPos, int endPos, string searchString, SearchFlags flags)
 		{
 			if (string.IsNullOrEmpty(searchString))
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 
 			_scintilla.TargetStart = startPos;
 			_scintilla.TargetEnd = endPos;
 			_scintilla.SearchFlags = flags;
 			int pos = _scintilla.SearchInTarget(searchString);
 			if (pos == -1)
-				return new Office_File_Explorer.CharacterRange();
-			return new Office_File_Explorer.CharacterRange(_scintilla.TargetStart, _scintilla.TargetEnd);
+				return new CharacterRange();
+			return new CharacterRange(_scintilla.TargetStart, _scintilla.TargetEnd);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(Office_File_Explorer.CharacterRange r, Regex findExpression)
+		public CharacterRange Find(CharacterRange r, Regex findExpression)
 		{
 			return Find(r, findExpression, false);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(Office_File_Explorer.CharacterRange r, Regex findExpression, bool searchUp)
+		public CharacterRange Find(CharacterRange r, Regex findExpression, bool searchUp)
 		{
 			// Single line and Multi Line in RegExp doesn't really effect
 			// whether or not a match will include newline characters. This
@@ -273,7 +274,7 @@ namespace ScintillaNET_FindReplaceDialog
 			Match m = findExpression.Match(text);
 
 			if (!m.Success)
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 
 			if (searchUp)
 			{
@@ -281,7 +282,7 @@ namespace ScintillaNET_FindReplaceDialog
 				// have to search the entire string and return the
 				// last match. Not the most efficient way of doing
 				// things but it works.
-				Office_File_Explorer.CharacterRange range = new Office_File_Explorer.CharacterRange();
+				CharacterRange range = new CharacterRange();
 				while (m.Success)
 				{
 					//TODO - check that removing the byte count does not upset anything
@@ -290,7 +291,7 @@ namespace ScintillaNET_FindReplaceDialog
 					int start = r.cpMin + text.Substring(0, m.Index).Length;
 					int end = text.Substring(m.Index, m.Length).Length;
 
-					range = new Office_File_Explorer.CharacterRange(start, start + end);
+					range = new CharacterRange(start, start + end);
 					m = m.NextMatch();
 				}
 
@@ -304,16 +305,16 @@ namespace ScintillaNET_FindReplaceDialog
 				int start = r.cpMin + text.Substring(0, m.Index).Length;
 				int end = text.Substring(m.Index, m.Length).Length;
 
-				return new Office_File_Explorer.CharacterRange(start, start + end);
+				return new CharacterRange(start, start + end);
 			}
 		}
 
-		public Office_File_Explorer.CharacterRange Find(Office_File_Explorer.CharacterRange rangeToSearch, string searchString)
+		public CharacterRange Find(CharacterRange rangeToSearch, string searchString)
 		{
 			return Find(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(Office_File_Explorer.CharacterRange rangeToSearch, string searchString, bool searchUp)
+		public CharacterRange Find(CharacterRange rangeToSearch, string searchString, bool searchUp)
 		{
 			if (searchUp)
 				return Find(rangeToSearch.cpMax, rangeToSearch.cpMin, searchString, _flags);
@@ -321,12 +322,12 @@ namespace ScintillaNET_FindReplaceDialog
 				return Find(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(Office_File_Explorer.CharacterRange rangeToSearch, string searchString, SearchFlags searchflags)
+		public CharacterRange Find(CharacterRange rangeToSearch, string searchString, SearchFlags searchflags)
 		{
 			return Find(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, searchflags);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(Office_File_Explorer.CharacterRange rangeToSearch, string searchString, SearchFlags searchflags, bool searchUp)
+		public CharacterRange Find(CharacterRange rangeToSearch, string searchString, SearchFlags searchflags, bool searchUp)
 		{
 			if (searchUp)
 				return Find(rangeToSearch.cpMax, rangeToSearch.cpMin, searchString, searchflags);
@@ -334,22 +335,22 @@ namespace ScintillaNET_FindReplaceDialog
 				return Find(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, searchflags);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(Regex findExpression)
+		public CharacterRange Find(Regex findExpression)
 		{
-			return Find(new Office_File_Explorer.CharacterRange(0, _scintilla.TextLength), findExpression, false);
+			return Find(new CharacterRange(0, _scintilla.TextLength), findExpression, false);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(Regex findExpression, bool searchUp)
+		public CharacterRange Find(Regex findExpression, bool searchUp)
 		{
-			return Find(new Office_File_Explorer.CharacterRange(0, _scintilla.TextLength), findExpression, searchUp);
+			return Find(new CharacterRange(0, _scintilla.TextLength), findExpression, searchUp);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(string searchString)
+		public CharacterRange Find(string searchString)
 		{
 			return Find(0, _scintilla.TextLength, searchString, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(string searchString, bool searchUp)
+		public CharacterRange Find(string searchString, bool searchUp)
 		{
 			if (searchUp)
 				return Find(_scintilla.TextLength, 0, searchString, _flags);
@@ -357,12 +358,12 @@ namespace ScintillaNET_FindReplaceDialog
 				return Find(0, _scintilla.TextLength, searchString, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(string searchString, SearchFlags searchflags)
+		public CharacterRange Find(string searchString, SearchFlags searchflags)
 		{
 			return Find(0, _scintilla.TextLength, searchString, searchflags);
 		}
 
-		public Office_File_Explorer.CharacterRange Find(string searchString, SearchFlags searchflags, bool searchUp)
+		public CharacterRange Find(string searchString, SearchFlags searchflags, bool searchUp)
 		{
 			if (searchUp)
 				return Find(_scintilla.TextLength, 0, searchString, searchflags);
@@ -370,14 +371,14 @@ namespace ScintillaNET_FindReplaceDialog
 				return Find(0, _scintilla.TextLength, searchString, searchflags);
 		}
 
-		public List<Office_File_Explorer.CharacterRange> FindAll(int startPos, int endPos, Regex findExpression, bool Mark, bool Highlight)
+		public List<CharacterRange> FindAll(int startPos, int endPos, Regex findExpression, bool Mark, bool Highlight)
 		{
-			return FindAll(new Office_File_Explorer.CharacterRange(startPos, endPos), findExpression, Mark, Highlight);
+			return FindAll(new CharacterRange(startPos, endPos), findExpression, Mark, Highlight);
 		}
 
-		public List<Office_File_Explorer.CharacterRange> FindAll(int startPos, int endPos, string searchString, SearchFlags flags, bool Mark, bool Highlight)
+		public List<CharacterRange> FindAll(int startPos, int endPos, string searchString, SearchFlags flags, bool Mark, bool Highlight)
 		{
-			List<Office_File_Explorer.CharacterRange> Results = new List<Office_File_Explorer.CharacterRange>();
+			List<CharacterRange> Results = new List<CharacterRange>();
 
 			_scintilla.IndicatorCurrent = Indicator.Index;
 
@@ -385,7 +386,7 @@ namespace ScintillaNET_FindReplaceDialog
 			int lastLine = -1;
 			while (true)
 			{
-				Office_File_Explorer.CharacterRange r = Find(startPos, endPos, searchString, flags);
+				CharacterRange r = Find(startPos, endPos, searchString, flags);
 				if (r.cpMin == r.cpMax)
 				{
 					break;
@@ -418,9 +419,9 @@ namespace ScintillaNET_FindReplaceDialog
 			return Results;
 		}
 
-		public List<Office_File_Explorer.CharacterRange> FindAll(Office_File_Explorer.CharacterRange rangeToSearch, Regex findExpression, bool Mark, bool Highlight)
+		public List<CharacterRange> FindAll(CharacterRange rangeToSearch, Regex findExpression, bool Mark, bool Highlight)
 		{
-			List<Office_File_Explorer.CharacterRange> Results = new List<Office_File_Explorer.CharacterRange>();
+			List<CharacterRange> Results = new List<CharacterRange>();
 
 			_scintilla.IndicatorCurrent = Indicator.Index;
 
@@ -429,7 +430,7 @@ namespace ScintillaNET_FindReplaceDialog
 
 			while (true)
 			{
-				Office_File_Explorer.CharacterRange r = Find(rangeToSearch, findExpression);
+				CharacterRange r = Find(rangeToSearch, findExpression);
 				if (r.cpMin == r.cpMax)
 				{
 					break;
@@ -451,7 +452,7 @@ namespace ScintillaNET_FindReplaceDialog
 					{
 						_scintilla.IndicatorFillRange(r.cpMin, r.cpMax - r.cpMin);
 					}
-					rangeToSearch = new Office_File_Explorer.CharacterRange(r.cpMax, rangeToSearch.cpMax);
+					rangeToSearch = new CharacterRange(r.cpMax, rangeToSearch.cpMax);
 				}
 			}
 			//return findCount;
@@ -461,120 +462,120 @@ namespace ScintillaNET_FindReplaceDialog
 			return Results;
 		}
 
-		public List<Office_File_Explorer.CharacterRange> FindAll(Office_File_Explorer.CharacterRange rangeToSearch, string searchString, SearchFlags flags, bool Mark, bool Highlight)
+		public List<CharacterRange> FindAll(CharacterRange rangeToSearch, string searchString, SearchFlags flags, bool Mark, bool Highlight)
 		{
 			return FindAll(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, _flags, Mark, Highlight);
 		}
 
-		public List<Office_File_Explorer.CharacterRange> FindAll(Regex findExpression, bool Mark, bool Highlight)
+		public List<CharacterRange> FindAll(Regex findExpression, bool Mark, bool Highlight)
 		{
 			return FindAll(0, _scintilla.TextLength, findExpression, Mark, Highlight);
 		}
 
-		public List<Office_File_Explorer.CharacterRange> FindAll(string searchString, bool Mark, bool Highlight)
+		public List<CharacterRange> FindAll(string searchString, bool Mark, bool Highlight)
 		{
 			return FindAll(searchString, _flags, Mark, Highlight);
 		}
 
-		public List<Office_File_Explorer.CharacterRange> FindAll(string searchString)
+		public List<CharacterRange> FindAll(string searchString)
 		{
 			return FindAll(searchString, _flags, false, false);
 		}
 
-		public List<Office_File_Explorer.CharacterRange> FindAll(string searchString, SearchFlags flags, bool Mark, bool Highlight)
+		public List<CharacterRange> FindAll(string searchString, SearchFlags flags, bool Mark, bool Highlight)
 		{
 			return FindAll(0, _scintilla.TextLength, searchString, flags, Mark, Highlight);
 		}
 
-		public Office_File_Explorer.CharacterRange FindNext(Regex findExpression)
+		public CharacterRange FindNext(Regex findExpression)
 		{
 			return FindNext(findExpression, false);
 		}
 
-		public Office_File_Explorer.CharacterRange FindNext(Regex findExpression, bool wrap)
+		public CharacterRange FindNext(Regex findExpression, bool wrap)
 		{
-			Office_File_Explorer.CharacterRange r = Find(_scintilla.CurrentPosition, _scintilla.TextLength, findExpression);
+			CharacterRange r = Find(_scintilla.CurrentPosition, _scintilla.TextLength, findExpression);
 			if (r.cpMin != r.cpMax)
 				return r;
 			else if (wrap)
 				return Find(0, _scintilla.CurrentPosition, findExpression);
 			else
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 		}
 
-		public Office_File_Explorer.CharacterRange FindNext(Regex findExpression, bool wrap, Office_File_Explorer.CharacterRange searchRange)
+		public CharacterRange FindNext(Regex findExpression, bool wrap, CharacterRange searchRange)
 		{
 			int caret = _scintilla.CurrentPosition;
 			if (!(caret >= searchRange.cpMin && caret <= searchRange.cpMax))
 				return Find(searchRange.cpMin, searchRange.cpMax, findExpression, false);
 
-			Office_File_Explorer.CharacterRange r = Find(caret, searchRange.cpMax, findExpression);
+			CharacterRange r = Find(caret, searchRange.cpMax, findExpression);
 			if (r.cpMin != r.cpMax)
 				return r;
 			else if (wrap)
 				return Find(searchRange.cpMin, caret, findExpression);
 			else
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 		}
 
-		public Office_File_Explorer.CharacterRange FindNext(string searchString)
+		public CharacterRange FindNext(string searchString)
 		{
 			return FindNext(searchString, true, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange FindNext(string searchString, bool wrap)
+		public CharacterRange FindNext(string searchString, bool wrap)
 		{
 			return FindNext(searchString, wrap, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange FindNext(string searchString, bool wrap, SearchFlags flags)
+		public CharacterRange FindNext(string searchString, bool wrap, SearchFlags flags)
 		{
-			Office_File_Explorer.CharacterRange r = Find(_scintilla.CurrentPosition, _scintilla.TextLength, searchString, flags);
+			CharacterRange r = Find(_scintilla.CurrentPosition, _scintilla.TextLength, searchString, flags);
 			if (r.cpMin != r.cpMax)
 				return r;
 			else if (wrap)
 				return Find(0, _scintilla.CurrentPosition, searchString, flags);
 			else
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 		}
 
-		public Office_File_Explorer.CharacterRange FindNext(string searchString, bool wrap, SearchFlags flags, Office_File_Explorer.CharacterRange searchRange)
+		public CharacterRange FindNext(string searchString, bool wrap, SearchFlags flags, CharacterRange searchRange)
 		{
 			int caret = _scintilla.CurrentPosition;
 			if (!(caret >= searchRange.cpMin && caret <= searchRange.cpMax))
 				return Find(searchRange.cpMin, searchRange.cpMax, searchString, flags);
 
-			Office_File_Explorer.CharacterRange r = Find(caret, searchRange.cpMax, searchString, flags);
+			CharacterRange r = Find(caret, searchRange.cpMax, searchString, flags);
 			if (r.cpMin != r.cpMax)
 				return r;
 			else if (wrap)
 				return Find(searchRange.cpMin, caret, searchString, flags);
 			else
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 		}
 
-		public Office_File_Explorer.CharacterRange FindNext(string searchString, SearchFlags flags)
+		public CharacterRange FindNext(string searchString, SearchFlags flags)
 		{
 			return FindNext(searchString, true, flags);
 		}
 
-		public Office_File_Explorer.CharacterRange FindPrevious(Regex findExpression)
+		public CharacterRange FindPrevious(Regex findExpression)
 		{
 			return FindPrevious(findExpression, false);
 		}
 
-		public Office_File_Explorer.CharacterRange FindPrevious(Regex findExpression, bool wrap)
+		public CharacterRange FindPrevious(Regex findExpression, bool wrap)
 		{
-			Office_File_Explorer.CharacterRange r = Find(0, _scintilla.AnchorPosition, findExpression, true);
+			CharacterRange r = Find(0, _scintilla.AnchorPosition, findExpression, true);
 			if (r.cpMin != r.cpMax)
 				return r;
 			else if (wrap)
 				return Find(_scintilla.CurrentPosition, _scintilla.TextLength, findExpression, true);
 			else
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 		}
 
-		public Office_File_Explorer.CharacterRange FindPrevious(Regex findExpression, bool wrap, Office_File_Explorer.CharacterRange searchRange)
+		public CharacterRange FindPrevious(Regex findExpression, bool wrap, CharacterRange searchRange)
 		{
 			int caret = _scintilla.CurrentPosition;
 			if (!(caret >= searchRange.cpMin && caret <= searchRange.cpMax))
@@ -584,37 +585,37 @@ namespace ScintillaNET_FindReplaceDialog
 			if (!(anchor >= searchRange.cpMin && anchor <= searchRange.cpMax))
 				anchor = caret;
 
-			Office_File_Explorer.CharacterRange r = Find(searchRange.cpMin, anchor, findExpression, true);
+			CharacterRange r = Find(searchRange.cpMin, anchor, findExpression, true);
 			if (r.cpMin != r.cpMax)
 				return r;
 			else if (wrap)
 				return Find(anchor, searchRange.cpMax, findExpression, true);
 			else
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 		}
 
-		public Office_File_Explorer.CharacterRange FindPrevious(string searchString)
+		public CharacterRange FindPrevious(string searchString)
 		{
 			return FindPrevious(searchString, true, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange FindPrevious(string searchString, bool wrap)
+		public CharacterRange FindPrevious(string searchString, bool wrap)
 		{
 			return FindPrevious(searchString, wrap, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange FindPrevious(string searchString, bool wrap, SearchFlags flags)
+		public CharacterRange FindPrevious(string searchString, bool wrap, SearchFlags flags)
 		{
-			Office_File_Explorer.CharacterRange r = Find(_scintilla.AnchorPosition, 0, searchString, flags);
+			CharacterRange r = Find(_scintilla.AnchorPosition, 0, searchString, flags);
 			if (r.cpMin != r.cpMax)
 				return r;
 			else if (wrap)
 				return Find(_scintilla.TextLength, _scintilla.CurrentPosition, searchString, flags);
 			else
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 		}
 
-		public Office_File_Explorer.CharacterRange FindPrevious(string searchString, bool wrap, SearchFlags flags, Office_File_Explorer.CharacterRange searchRange)
+		public CharacterRange FindPrevious(string searchString, bool wrap, SearchFlags flags, CharacterRange searchRange)
 		{
 			int caret = _scintilla.CurrentPosition;
 			if (!(caret >= searchRange.cpMin && caret <= searchRange.cpMax))
@@ -624,28 +625,28 @@ namespace ScintillaNET_FindReplaceDialog
 			if (!(anchor >= searchRange.cpMin && anchor <= searchRange.cpMax))
 				anchor = caret;
 
-			Office_File_Explorer.CharacterRange r = Find(anchor, searchRange.cpMin, searchString, flags);
+			CharacterRange r = Find(anchor, searchRange.cpMin, searchString, flags);
 			if (r.cpMin != r.cpMax)
 				return r;
 			else if (wrap)
 				return Find(searchRange.cpMax, anchor, searchString, flags);
 			else
-				return new Office_File_Explorer.CharacterRange();
+				return new CharacterRange();
 		}
 
-		public Office_File_Explorer.CharacterRange FindPrevious(string searchString, SearchFlags flags)
+		public CharacterRange FindPrevious(string searchString, SearchFlags flags)
 		{
 			return FindPrevious(searchString, true, flags);
 		}
 
 		public int ReplaceAll(int startPos, int endPos, Regex findExpression, string replaceString, bool Mark, bool Highlight)
 		{
-			return ReplaceAll(new Office_File_Explorer.CharacterRange(startPos, endPos), findExpression, replaceString, Mark, Highlight);
+			return ReplaceAll(new CharacterRange(startPos, endPos), findExpression, replaceString, Mark, Highlight);
 		}
 
 		public int ReplaceAll(int startPos, int endPos, string searchString, string replaceString, SearchFlags flags, bool Mark, bool Highlight)
 		{
-			List<Office_File_Explorer.CharacterRange> Results = new List<Office_File_Explorer.CharacterRange>();
+			List<CharacterRange> Results = new List<CharacterRange>();
 
 			_scintilla.IndicatorCurrent = Indicator.Index;
 
@@ -657,7 +658,7 @@ namespace ScintillaNET_FindReplaceDialog
 			int diff = replaceString.Length - searchString.Length;
 			while (true)
 			{
-				Office_File_Explorer.CharacterRange r = Find(startPos, endPos, searchString, flags);
+				CharacterRange r = Find(startPos, endPos, searchString, flags);
 				if (r.cpMin == r.cpMax)
 				{
 					break;
@@ -697,7 +698,7 @@ namespace ScintillaNET_FindReplaceDialog
 			return findCount;
 		}
 
-		public int ReplaceAll(Office_File_Explorer.CharacterRange rangeToSearch, Regex findExpression, string replaceString, bool Mark, bool Highlight)
+		public int ReplaceAll(CharacterRange rangeToSearch, Regex findExpression, string replaceString, bool Mark, bool Highlight)
 		{
 			_scintilla.IndicatorCurrent = Indicator.Index;
 			_scintilla.BeginUndoAction();
@@ -725,12 +726,12 @@ namespace ScintillaNET_FindReplaceDialog
 
 			//	No use having these values hanging around wasting memory :)
 			_lastReplaceAllReplaceString = null;
-			_lastReplaceAllRangeToSearch = new Office_File_Explorer.CharacterRange();
+			_lastReplaceAllRangeToSearch = new CharacterRange();
 
 			return _lastReplaceCount;
 		}
 
-		public int ReplaceAll(Office_File_Explorer.CharacterRange rangeToSearch, string searchString, string replaceString, SearchFlags flags, bool Mark, bool Highlight)
+		public int ReplaceAll(CharacterRange rangeToSearch, string searchString, string replaceString, SearchFlags flags, bool Mark, bool Highlight)
 		{
 			return ReplaceAll(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, replaceString, _flags, Mark, Highlight);
 		}
@@ -745,19 +746,19 @@ namespace ScintillaNET_FindReplaceDialog
 			return ReplaceAll(0, _scintilla.TextLength, searchString, replaceString, flags, Mark, Highlight);
 		}
 
-		public Office_File_Explorer.CharacterRange ReplaceNext(string searchString, string replaceString)
+		public CharacterRange ReplaceNext(string searchString, string replaceString)
 		{
 			return ReplaceNext(searchString, replaceString, true, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange ReplaceNext(string searchString, string replaceString, bool wrap)
+		public CharacterRange ReplaceNext(string searchString, string replaceString, bool wrap)
 		{
 			return ReplaceNext(searchString, replaceString, wrap, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange ReplaceNext(string searchString, string replaceString, bool wrap, SearchFlags flags)
+		public CharacterRange ReplaceNext(string searchString, string replaceString, bool wrap, SearchFlags flags)
 		{
-			Office_File_Explorer.CharacterRange r = FindNext(searchString, wrap, flags);
+			CharacterRange r = FindNext(searchString, wrap, flags);
 
 			if (r.cpMin != r.cpMax)
 			{
@@ -770,24 +771,24 @@ namespace ScintillaNET_FindReplaceDialog
 			return r;
 		}
 
-		public Office_File_Explorer.CharacterRange ReplaceNext(string searchString, string replaceString, SearchFlags flags)
+		public CharacterRange ReplaceNext(string searchString, string replaceString, SearchFlags flags)
 		{
 			return ReplaceNext(searchString, replaceString, true, flags);
 		}
 
-		public Office_File_Explorer.CharacterRange ReplacePrevious(string searchString, string replaceString)
+		public CharacterRange ReplacePrevious(string searchString, string replaceString)
 		{
 			return ReplacePrevious(searchString, replaceString, true, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange ReplacePrevious(string searchString, string replaceString, bool wrap)
+		public CharacterRange ReplacePrevious(string searchString, string replaceString, bool wrap)
 		{
 			return ReplacePrevious(searchString, replaceString, wrap, _flags);
 		}
 
-		public Office_File_Explorer.CharacterRange ReplacePrevious(string searchString, string replaceString, bool wrap, SearchFlags flags)
+		public CharacterRange ReplacePrevious(string searchString, string replaceString, bool wrap, SearchFlags flags)
 		{
-			Office_File_Explorer.CharacterRange r = FindPrevious(searchString, wrap, flags);
+			CharacterRange r = FindPrevious(searchString, wrap, flags);
 
 			if (r.cpMin != r.cpMax)
 			{
@@ -800,7 +801,7 @@ namespace ScintillaNET_FindReplaceDialog
 			return r;
 		}
 
-		public Office_File_Explorer.CharacterRange ReplacePrevious(string searchString, string replaceString, SearchFlags flags)
+		public CharacterRange ReplacePrevious(string searchString, string replaceString, SearchFlags flags)
 		{
 			return ReplacePrevious(searchString, replaceString, true, flags);
 		}
@@ -934,7 +935,7 @@ namespace ScintillaNET_FindReplaceDialog
 				int start = _lastReplaceAllRangeToSearch.cpMin + m.Index + _lastReplaceAllOffset;
 				int end = start + m.Length;
 
-				Office_File_Explorer.CharacterRange r = new Office_File_Explorer.CharacterRange(start, end);
+				CharacterRange r = new CharacterRange(start, end);
 				_scintilla.SelectionStart = r.cpMin;
 				_scintilla.SelectionEnd = r.cpMax;
 				_scintilla.ReplaceSelection(replacement);
@@ -968,25 +969,25 @@ namespace ScintillaNET_FindReplaceDialog
 
 	public class FindResultsEventArgs : EventArgs
 	{
-		public FindResultsEventArgs(FindReplace FindReplace, List<Office_File_Explorer.CharacterRange> FindAllResults)
+		public FindResultsEventArgs(FindReplace FindReplace, List<CharacterRange> FindAllResults)
 		{
 			this.FindReplace = FindReplace;
 			this.FindAllResults = FindAllResults;
 		}
 
 		public FindReplace FindReplace { get; set; }
-		public List<Office_File_Explorer.CharacterRange> FindAllResults { get; set; }
+		public List<CharacterRange> FindAllResults { get; set; }
 	}
 
 	public class ReplaceResultsEventArgs : EventArgs
 	{
-		public ReplaceResultsEventArgs(FindReplace FindReplace, List<Office_File_Explorer.CharacterRange> ReplaceAllResults)
+		public ReplaceResultsEventArgs(FindReplace FindReplace, List<CharacterRange> ReplaceAllResults)
 		{
 			this.FindReplace = FindReplace;
 			this.ReplaceAllResults = ReplaceAllResults;
 		}
 
 		public FindReplace FindReplace { get; set; }
-		public List<Office_File_Explorer.CharacterRange> ReplaceAllResults { get; set; }
+		public List<CharacterRange> ReplaceAllResults { get; set; }
 	}
 }
