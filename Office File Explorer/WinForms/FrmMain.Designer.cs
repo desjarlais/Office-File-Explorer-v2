@@ -59,12 +59,14 @@ namespace Office_File_Explorer
             clipboardViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             base64DecoderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             excelSheetViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            renderRTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             openErrorLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             contextMenuScintilla = new System.Windows.Forms.ContextMenuStrip(components);
             copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            copySelectedLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             copyAllLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             toolStripButtonViewContents = new System.Windows.Forms.ToolStripButton();
@@ -101,7 +103,6 @@ namespace Office_File_Explorer
             extractPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tvImageList = new System.Windows.Forms.ImageList(components);
             scintilla1 = new ScintillaNET.Scintilla();
-            copySelectedLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             mnuMainMenu.SuspendLayout();
             contextMenuScintilla.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -291,7 +292,7 @@ namespace Office_File_Explorer
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, excelSheetViewerToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, excelSheetViewerToolStripMenuItem, renderRTFToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             toolsToolStripMenuItem.Text = "&Tools";
@@ -329,6 +330,15 @@ namespace Office_File_Explorer
             excelSheetViewerToolStripMenuItem.Text = "Excel Sheet Viewer";
             excelSheetViewerToolStripMenuItem.Click += excelSheetViewerToolStripMenuItem_Click;
             // 
+            // renderRTFToolStripMenuItem
+            // 
+            renderRTFToolStripMenuItem.Enabled = false;
+            renderRTFToolStripMenuItem.Image = Properties.Resources.TextArea;
+            renderRTFToolStripMenuItem.Name = "renderRTFToolStripMenuItem";
+            renderRTFToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            renderRTFToolStripMenuItem.Text = "Render RTF";
+            renderRTFToolStripMenuItem.Click += renderRTFToolStripMenuItem_Click;
+            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { aboutToolStripMenuItem, feedbackToolStripMenuItem, openErrorLogToolStripMenuItem });
@@ -364,19 +374,26 @@ namespace Office_File_Explorer
             // 
             contextMenuScintilla.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { copyToolStripMenuItem, copySelectedLineToolStripMenuItem, copyAllLinesToolStripMenuItem });
             contextMenuScintilla.Name = "contextMenuStrip1";
-            contextMenuScintilla.Size = new System.Drawing.Size(181, 92);
+            contextMenuScintilla.Size = new System.Drawing.Size(175, 70);
             // 
             // copyToolStripMenuItem
             // 
             copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            copyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            copyToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             copyToolStripMenuItem.Text = "Copy";
             copyToolStripMenuItem.Click += CopySelectedLineToolStripMenuItem_Click;
+            // 
+            // copySelectedLineToolStripMenuItem
+            // 
+            copySelectedLineToolStripMenuItem.Name = "copySelectedLineToolStripMenuItem";
+            copySelectedLineToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            copySelectedLineToolStripMenuItem.Text = "Copy Selected Line";
+            copySelectedLineToolStripMenuItem.Click += copySelectedLineToolStripMenuItem_Click_1;
             // 
             // copyAllLinesToolStripMenuItem
             // 
             copyAllLinesToolStripMenuItem.Name = "copyAllLinesToolStripMenuItem";
-            copyAllLinesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            copyAllLinesToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             copyAllLinesToolStripMenuItem.Text = "Copy All Lines";
             copyAllLinesToolStripMenuItem.Click += CopyAllLinesToolStripMenuItem_Click;
             // 
@@ -692,13 +709,6 @@ namespace Office_File_Explorer
             scintilla1.UseRightToLeftReadingLayout = false;
             scintilla1.WrapMode = ScintillaNET.WrapMode.None;
             // 
-            // copySelectedLineToolStripMenuItem
-            // 
-            copySelectedLineToolStripMenuItem.Name = "copySelectedLineToolStripMenuItem";
-            copySelectedLineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            copySelectedLineToolStripMenuItem.Text = "Copy Selected Line";
-            copySelectedLineToolStripMenuItem.Click += copySelectedLineToolStripMenuItem_Click_1;
-            // 
             // FrmMain
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -804,6 +814,7 @@ namespace Office_File_Explorer
         private ScintillaNET.Scintilla scintilla1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem renderRTFToolStripMenuItem;
     }
 }
 

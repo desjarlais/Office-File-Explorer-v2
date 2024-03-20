@@ -257,6 +257,7 @@ namespace Office_File_Explorer
             TvFiles.Nodes.Clear();
             toolStripStatusLabelFilePath.Text = Strings.wHeadingBegin;
             toolStripStatusLabelDocType.Text = Strings.wHeadingBegin;
+            renderRTFToolStripMenuItem.Enabled = false;
             fileToolStripMenuItemClose.Enabled = false;
             scintilla1.ReadOnly = false;
             scintilla1.ClearAll();
@@ -1596,6 +1597,7 @@ namespace Office_File_Explorer
                             if (Properties.Settings.Default.MsgAsRtf)
                             {
                                 scintilla1.Text = body[1];
+                                renderRTFToolStripMenuItem.Enabled = true;
                             }
                             else
                             {
@@ -1797,7 +1799,7 @@ namespace Office_File_Explorer
             // Reset the styles
             scintilla1.StyleResetDefault();
             scintilla1.StyleClearAll();
-            
+
             // custom settings
             scintilla1.TabIndents = true;
             scintilla1.IndentationGuides = IndentView.LookBoth;
@@ -3534,6 +3536,15 @@ namespace Office_File_Explorer
             {
                 LogInformation(LogInfoType.LogException, "BtnCopySelectedLine Error", ex.Message);
             }
+        }
+
+        private void renderRTFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmRichTextBox frmRtb = new FrmRichTextBox(scintilla1.Text)
+            {
+                Owner = this
+            };
+            frmRtb.ShowDialog();
         }
 
         #endregion

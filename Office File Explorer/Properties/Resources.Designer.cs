@@ -653,6 +653,16 @@ namespace Office_File_Explorer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap TextArea {
+            get {
+                object obj = ResourceManager.GetObject("TextArea", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap word {
             get {
                 object obj = ResourceManager.GetObject("word", resourceCulture);
