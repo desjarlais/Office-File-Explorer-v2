@@ -10,7 +10,7 @@ This tool is built for .NET Core 6 and you should be prompted to download from t
 Keep in mind if you use this on a production document and choose to use something that changes or removes data, you should be working on a copy of the file, not the original.  
 
 ## Main Window
-![image](https://github.com/desjarlais/desjarlais.github.io/blob/master/img/ofe-mainform.jpg?raw=true)
+![image](https://github.com/desjarlais/desjarlais.github.io/blob/a570b6d425ae62a896722d391efaa957683f9ecb/img/ofcscreenshot.png)
 
 ## List of features
 
