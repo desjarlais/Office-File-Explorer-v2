@@ -49,6 +49,10 @@ namespace Office_File_Explorer.Helpers
         public const string potmFileExt = ".potm";
         public const string msgFileExt = ".msg";
 
+        // non-Office file extensions
+        public const string emfFileExt = ".emf";
+        public const string svgFileExt = ".svg";
+
         // global app words
         public const string oAppWord = "Word";
         public const string oAppExcel = "Excel";

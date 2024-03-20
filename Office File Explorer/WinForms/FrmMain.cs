@@ -901,10 +901,11 @@ namespace Office_File_Explorer
         /// <summary>
         /// cleanup before the app exits
         /// </summary>
-        public static void AppExitWork()
+        public void AppExitWork()
         {
             try
             {
+                package?.Close();
                 if (Properties.Settings.Default.DeleteCopiesOnExit == true && File.Exists(StrCopiedFileName))
                 {
                     File.Delete(StrCopiedFileName);
@@ -1023,13 +1024,11 @@ namespace Office_File_Explorer
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            package?.Close();
             AppExitWork();
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            package?.Close();
             AppExitWork();
         }
 
@@ -1122,15 +1121,13 @@ namespace Office_File_Explorer
 
         public virtual void MoveFormAwayFromSelection()
         {
-            if (!Visible || scintilla1 == null)
-                return;
+            if (!Visible || scintilla1 == null) return;
 
             int pos = scintilla1.CurrentPosition;
             int x = scintilla1.PointXFromPosition(pos);
             int y = scintilla1.PointYFromPosition(pos);
 
             Point cursorPoint = new Point(x, y);
-
             Rectangle r = new Rectangle(Location, Size);
 
             if (scintilla1 != null)
@@ -1146,16 +1143,14 @@ namespace Office_File_Explorer
                     //TODO - replace lineheight with ScintillaNET command, when added
                     int SCI_TEXTHEIGHT = 2279;
                     int lineHeight = scintilla1.DirectMessage(SCI_TEXTHEIGHT, IntPtr.Zero, IntPtr.Zero).ToInt32();
-                    // Top half of the screen
-                    newLocation = new Point(r.X, cursorPoint.Y + lineHeight * 2);
+                    newLocation = new Point(r.X, cursorPoint.Y + lineHeight * 2); // Top half of the screen
                 }
                 else
                 {
                     //TODO - replace lineheight with ScintillaNET command, when added
                     int SCI_TEXTHEIGHT = 2279;
                     int lineHeight = scintilla1.DirectMessage(SCI_TEXTHEIGHT, IntPtr.Zero, IntPtr.Zero).ToInt32();
-                    // Bottom half of the screen
-                    newLocation = new Point(r.X, cursorPoint.Y - Height - (lineHeight * 2));
+                    newLocation = new Point(r.X, cursorPoint.Y - Height - (lineHeight * 2)); // Bottom half of the screen
                 }
 
                 Location = newLocation;
@@ -1739,7 +1734,7 @@ namespace Office_File_Explorer
                             partPropContentType = pp.ContentType;
 
                             // need to implement non-bitmap images
-                            if (pp.Uri.ToString().EndsWith(".emf") || (pp.Uri.ToString().EndsWith(".svg")))
+                            if (pp.Uri.ToString().EndsWith(Strings.emfFileExt) || (pp.Uri.ToString().EndsWith(Strings.svgFileExt)))
                             {
                                 scintilla1.Text = "No Viewer For File Type";
                                 return;
@@ -1801,10 +1796,8 @@ namespace Office_File_Explorer
         {
             // Reset the styles
             scintilla1.StyleResetDefault();
-            scintilla1.Styles[Style.Default].Font = "Consolas";
-            scintilla1.Styles[Style.Default].Size = 12;
             scintilla1.StyleClearAll();
-
+            
             // custom settings
             scintilla1.TabIndents = true;
             scintilla1.IndentationGuides = IndentView.LookBoth;
@@ -1812,7 +1805,7 @@ namespace Office_File_Explorer
             // Set the XML Lexer
             scintilla1.LexerName = "xml";
 
-            // Show line numbers
+            // add line numbers, use line count to determine margin width
             if (scintilla1.Lines.Count < 100)
             {
                 scintilla1.Margins[0].Width = 20;
@@ -1867,8 +1860,6 @@ namespace Office_File_Explorer
             scintilla1.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
 
             // Set the Styles
-            scintilla1.StyleResetDefault();
-            scintilla1.StyleClearAll();
             scintilla1.Styles[Style.Xml.Attribute].ForeColor = Color.Red;
             scintilla1.Styles[Style.Xml.Entity].ForeColor = Color.Red;
             scintilla1.Styles[Style.Xml.Comment].ForeColor = Color.Green;
