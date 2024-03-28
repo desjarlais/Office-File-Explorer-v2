@@ -4,7 +4,7 @@ The purpose of this tool is to provide potential file specific troubleshooting o
 
 The tool can also perform a series of checks for known document corruptions in the underlying xml tags to possibly fix and make the file open in Office.  
 
-This tool is built for .NET 8 and you should be prompted to download from the Microsoft site if you don't have .NET 6 installed.
+This tool is built for .NET 8 and you should be prompted to download from the Microsoft site if the runtime is not already installed.
 
 ## Note
 Keep in mind if you use this on a production document and choose to use something that changes or removes data, you should be working on a copy of the file, not the original.  
