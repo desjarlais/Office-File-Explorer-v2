@@ -1764,10 +1764,10 @@ namespace Office_File_Explorer.OpenMcdf
         /// <param name="fileName">File name to write the compound file to</param>
         /// <exception cref="T:OpenMcdf.CFException">Raised if destination file is not seekable</exception>
         /// <exception cref="T:OpenMcdf.CFInvalidOperation">Raised if destination file is the current file</exception>
-        public void SaveAs(string fileName)
-        {
-            Save(fileName);
-        }
+        //public void SaveAs(string fileName)
+        //{
+        //    Save(fileName);
+        //}
 
         /// <summary>
         /// Saves the in-memory image of Compound File to a file.

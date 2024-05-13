@@ -145,7 +145,7 @@ namespace Office_File_Explorer
         }
 
         /// <summary>
-        /// refresh the MRU UI
+        /// refresh the MRU
         /// </summary>
         public void UpdateMRU()
         {
@@ -320,6 +320,7 @@ namespace Office_File_Explorer
             scintilla1.AppendText(" - file corruption\r\n");
             scintilla1.AppendText(" - file encrypted\r\n");
             scintilla1.AppendText(" - file password protected\r\n");
+            scintilla1.AppendText(" - file is read-only\r\n");
             scintilla1.AppendText(" - binary Office Document (View file contents with Tools -> Structured Storage Viewer)\r\n");
         }
 
@@ -472,11 +473,14 @@ namespace Office_File_Explorer
                         else
                         {
                             // if it failed the SDK, disable all buttons except the fix corrupt doc button
+                            // update the UI with the message
                             DisableAllUI();
                             if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.docxFileExt))
                             {
                                 toolStripButtonFixCorruptDoc.Enabled = true;
                             }
+
+                            DisplayInvalidFileFormatError();
                         }
                     }
                 }
@@ -1805,7 +1809,8 @@ namespace Office_File_Explorer
             scintilla1.IndentationGuides = IndentView.LookBoth;
 
             // Set the XML Lexer
-            scintilla1.LexerName = "xml";
+            scintilla1.LexerName = scintilla1.GetLexerIDFromLexer(Lexer.SCLEX_XML);
+            scintilla1.CaretLineBackColor = Color.Yellow;
 
             // add line numbers, use line count to determine margin width
             if (scintilla1.Lines.Count < 100)

@@ -696,7 +696,6 @@ namespace Office_File_Explorer
             // 
             scintilla1.AutoCMaxHeight = 9;
             scintilla1.BiDirectionality = ScintillaNET.BiDirectionalDisplayType.Disabled;
-            scintilla1.CaretLineVisible = true;
             scintilla1.ContextMenuStrip = contextMenuScintilla;
             scintilla1.Dock = System.Windows.Forms.DockStyle.Fill;
             scintilla1.LexerName = null;
