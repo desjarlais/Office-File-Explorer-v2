@@ -38,81 +38,62 @@ namespace Office_File_Explorer.Helpers
         /// <returns></returns>
         public static bool RemoveBookmarks(string docName)
         {
-            RemoveBookmarksStart:
-            int bkCount = 0;
             fSuccess = false;
             using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
             {
+                // if there are comment bookmarks, remove them first
+                if (Properties.Settings.Default.DeleteOnlyCommentBookmarks == true)
+                {
+                    IEnumerable<BookmarkStart> bkStartCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
+                    IEnumerable<BookmarkEnd> bkEndCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkEnd>();
+                    int bkCommentCount;
+                    do
+                    {
+                        bkCommentCount = 0;
+                        bkCommentCount += bkStartCommentList.Count() + bkEndCommentList.Count();
+
+                        if (bkStartCommentList.Any())
+                        {
+                            bkStartCommentList.First().Remove();
+                            bkStartCommentList = null;
+                            fSuccess = true;
+                        }
+
+                        if (bkEndCommentList.Any())
+                        {
+                            bkEndCommentList.First().Remove();
+                            bkEndCommentList = null;
+                            fSuccess = true;
+                        }
+                    } while (bkCommentCount > 0);
+                }
+
+
                 // remove bookmarks from the main part of the document
                 IEnumerable<BookmarkStart> bkStartList = document.MainDocumentPart.Document.Descendants<BookmarkStart>();
                 IEnumerable<BookmarkEnd> bkEndList = document.MainDocumentPart.Document.Descendants<BookmarkEnd>();
-                IEnumerable<BookmarkStart> bkStartCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkStart>();
-                IEnumerable<BookmarkEnd> bkEndCommentList = document.MainDocumentPart.WordprocessingCommentsPart.Comments.Descendants<BookmarkEnd>();
-
-                // todo: looping through the bookmarks and deleting will cause some to not be deleted from the collection
-                // still not sure why that happens, ongoing debugging to figure that out
-                // until then, if I just save at each loop and then keep running the code until the bookmark count is 0
-                // they all eventually get deleted
-                if (Properties.Settings.Default.DeleteOnlyCommentBookmarks == false)
-                {
-                    foreach (BookmarkStart bs in bkStartList)
-                    {
-                        bs.Remove();
-                        fSuccess = true;
-                    }
-
-                    document.Save();
-
-                    foreach (BookmarkEnd be in bkEndList)
-                    {
-                        be.Remove();
-                        fSuccess = true;
-                    }
-
-                    document.Save();
-                }
                 
-                // now check for bookmarks in comments
-                if (document.MainDocumentPart.WordprocessingCommentsPart is not null)
+                int bkCount;
+                
+                do
                 {
-                    if (document.MainDocumentPart.WordprocessingCommentsPart.Comments is not null)
+                    bkCount = 0;
+                    bkCount += bkStartList.Count() + bkEndList.Count();
+
+                    if (bkStartList.Any())
                     {
-                        foreach (BookmarkStart bs in bkStartCommentList)
-                        {
-                            bs.Remove();
-                            fSuccess = true;
-                        }
-
+                        bkStartList.First().Remove();
                         document.Save();
-
-                        foreach (BookmarkEnd be in bkEndCommentList)
-                        {
-                            be.Remove();
-                            fSuccess = true;
-                        }
-
-                        document.Save();
+                        fSuccess = true;
                     }
-                }
 
-                if (Properties.Settings.Default.DeleteOnlyCommentBookmarks == false)
-                {
-                    bkCount += bkStartList.Count();
-                    bkCount += bkEndList.Count();
-                }
-                                
-                bkCount += bkStartCommentList.Count();
-                bkCount += bkEndCommentList.Count();
-
-                if (fSuccess)
-                {
-                    document.Save();
-                }
-            }
-
-            if (bkCount > 0)
-            {
-                goto RemoveBookmarksStart;
+                    if (bkEndList.Any())
+                    {
+                        bkEndList.First().Remove();
+                        document.Save();
+                        fSuccess = true;
+                    }
+                } while (bkCount > 0);
             }
 
             return fSuccess;
