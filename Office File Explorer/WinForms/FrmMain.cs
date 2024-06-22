@@ -2525,19 +2525,19 @@ namespace Office_File_Explorer
             {
                 if (WordFixes.FixListStyles(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("List Styles Fixed");
+                    sbFixes.AppendLine("List Styles Fixed - More information here https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-list-styles");
                     corruptionFound = true;
                 }
 
                 if (WordFixes.FixTextboxes(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Corrupt Textboxes Fixed");
+                    sbFixes.AppendLine("Corrupt Textboxes Fixed - More information here https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-textboxes");
                     corruptionFound = true;
                 }
 
                 if (WordFixes.RemoveMissingBookmarkTags(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Missing Bookmark Tags Fixed");
+                    sbFixes.AppendLine("Missing Bookmark Tags Fixed - More information here https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-bookmarks");
                     corruptionFound = true;
                 }
 

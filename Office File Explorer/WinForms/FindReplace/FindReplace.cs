@@ -9,7 +9,7 @@ namespace ScintillaNET_FindReplaceDialog
     using System.Windows.Forms;
     using CharacterRange = Office_File_Explorer.Helpers.CharacterRange;
 
-    [TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
+    [TypeConverterAttribute(typeof(ExpandableObjectConverter))]
 	public class FindReplace : Component
 	{
 		#region Fields

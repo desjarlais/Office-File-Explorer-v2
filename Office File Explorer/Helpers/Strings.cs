@@ -220,6 +220,7 @@ namespace Office_File_Explorer.Helpers
         public const string txtFieldCodeBegin = "<w:fldChar w:fldCharType=\"begin\"";
         public const string txtFieldCodeSeparate = "<w:fldChar w:fldCharType=\"separate\"";
         public const string txtFieldCodeEnd = "<w:fldChar w:fldCharType=\"end\"";
+        public const string txtFieldCodeEndFullXml = "<w:r><w:fldChar w:fldCharType=\"end\" /></w:r>";
         public const string txtRsid = "<w:rsidR=";
 
         // notes slide refs

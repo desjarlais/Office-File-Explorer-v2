@@ -24,6 +24,7 @@ using Hyperlink = DocumentFormat.OpenXml.Wordprocessing.Hyperlink;
 using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
 using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 using TableStyle = DocumentFormat.OpenXml.Wordprocessing.TableStyle;
+using static System.Net.WebRequestMethods;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -1895,9 +1896,43 @@ namespace Office_File_Explorer.Helpers
                 int count = 0;
 
                 IEnumerable<Hyperlink> hLinks = myDoc.MainDocumentPart.Document.Descendants<Hyperlink>();
+                List<Hyperlink> hdrLinks = new List<Hyperlink>();
+                List<Hyperlink> ftrLinks = new List<Hyperlink>();
+                
+                if (myDoc.MainDocumentPart.HeaderParts is not null)
+                {
+                    foreach (HeaderPart hdrPart in myDoc.MainDocumentPart.HeaderParts)
+                    {
+                        if (hdrPart.Header is not null)
+                        {
+                            foreach (Hyperlink h in hdrPart.Header.Descendants<Hyperlink>().ToList())
+                            {
+                                hdrLinks.Add(h);
+                            }
+                        }
+                    }
+                }
+
+                if (myDoc.MainDocumentPart.FooterParts is not null)
+                {
+                    foreach (FooterPart ftrPart in myDoc.MainDocumentPart.FooterParts)
+                    {
+                        if (ftrPart.Footer is not null)
+                        {
+                            foreach (Hyperlink h in ftrPart.Footer.Descendants<Hyperlink>().ToList())
+                            {
+                                ftrLinks.Add(h);
+                            }
+                        }
+                    }
+                }
 
                 // handle if no links are found
-                if (!myDoc.MainDocumentPart.HyperlinkRelationships.Any() && !myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>().Any() && !hLinks.Any())
+                if (!myDoc.MainDocumentPart.HyperlinkRelationships.Any() && 
+                    !myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>().Any() && 
+                    !hdrLinks.Any() &&
+                    !ftrLinks.Any() &&
+                    !hLinks.Any())
                 {
                     return hlinkList;
                 }
@@ -1916,6 +1951,52 @@ namespace Office_File_Explorer.Helpers
                             if (h.Id == hRel.Id)
                             {
                                 hRelUri = hRel.Uri.ToString();
+                            }
+                        }
+
+                        hlinkList.Add(count + Strings.wPeriod + h.InnerText + " Uri = " + hRelUri);
+                    }
+
+                    // check headers
+                    foreach (Hyperlink h in hdrLinks)
+                    {
+                        count++;
+
+                        string hRelUri = null;
+
+                        // then check for hyperlinks relationships
+                        foreach (HeaderPart hdrPart in myDoc.MainDocumentPart.HeaderParts)
+                        {
+                            foreach (HyperlinkRelationship hRel in hdrPart.HyperlinkRelationships)
+                            {
+                                if (h.Id == hRel.Id)
+                                {
+                                    hRelUri = hRel.Uri.ToString();
+                                }
+
+                            }
+                        }
+                        
+                        hlinkList.Add(count + Strings.wPeriod + h.InnerText + " Uri = " + hRelUri);
+                    }
+
+                    // check footers
+                    foreach (Hyperlink h in ftrLinks)
+                    {
+                        count++;
+
+                        string hRelUri = null;
+
+                        // then check for hyperlinks relationships
+                        foreach (FooterPart ftrPart in myDoc.MainDocumentPart.FooterParts)
+                        {
+                            foreach (HyperlinkRelationship hRel in ftrPart.HyperlinkRelationships)
+                            {
+                                if (h.Id == hRel.Id)
+                                {
+                                    hRelUri = hRel.Uri.ToString();
+                                }
+
                             }
                         }
 
@@ -2544,6 +2625,11 @@ namespace Office_File_Explorer.Helpers
         public static IEnumerable<OpenXmlElement> ContentControls(this OpenXmlPart part)
         {
             return part.RootElement.Descendants().Where(e => e is SdtBlock || e is SdtRun);
+        }
+
+        public static IEnumerable<OpenXmlElement> ContentControls(Table tbl)
+        {
+            return tbl.Descendants().Where(e => e is SdtBlock || e is SdtRun);
         }
 
         public static IEnumerable<OpenXmlElement> ContentControls(this WordprocessingDocument doc)
