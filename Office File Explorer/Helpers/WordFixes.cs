@@ -764,8 +764,20 @@ namespace Office_File_Explorer.Helpers
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
                 IEnumerable<Hyperlink> hLinks = myDoc.MainDocumentPart.Document.Descendants<Hyperlink>();
-                List<Hyperlink> hdrLinks = new List<Hyperlink>();
-                List<Hyperlink> ftrLinks = new List<Hyperlink>();
+                
+                if (hLinks.Any())
+                {
+                    for (int i = 0; i < hLinks.Count(); i++)
+                    {
+                        Hyperlink h = hLinks.ElementAt(i);
+                        if (h.InnerXml.Contains(Strings.txtFieldCodeEnd) && !h.InnerXml.Contains(Strings.txtFieldCodeBegin))
+                        {
+                            h.InnerXml = h.InnerXml.Replace(Strings.txtFieldCodeEnd, string.Empty);
+                            h.Parent.PrependChild(new FieldChar() { FieldCharType = FieldCharValues.End });
+                            fileChanged = true;
+                        }
+                    }
+                }
 
                 if (myDoc.MainDocumentPart.HeaderParts is not null)
                 {
@@ -773,9 +785,16 @@ namespace Office_File_Explorer.Helpers
                     {
                         if (hdrPart.Header is not null)
                         {
-                            foreach (Hyperlink h in hdrPart.Header.Descendants<Hyperlink>().ToList())
+                            IEnumerable<Hyperlink> hdrLinks = hdrPart.Header.Descendants<Hyperlink>();
+                            for (int i = 0; i < hdrLinks.Count(); i++)
                             {
-                                hdrLinks.Add(h);
+                                Hyperlink h = hdrLinks.ElementAt(i);
+                                if (h.InnerXml.Contains(Strings.txtFieldCodeEnd) && !h.InnerXml.Contains(Strings.txtFieldCodeBegin))
+                                {
+                                    h.InnerXml = h.InnerXml.Replace(Strings.txtFieldCodeEnd, string.Empty);
+                                    h.Parent.PrependChild(new FieldChar() { FieldCharType = FieldCharValues.End });
+                                    fileChanged = true;
+                                }
                             }
                         }
                     }
@@ -787,58 +806,21 @@ namespace Office_File_Explorer.Helpers
                     {
                         if (ftrPart.Footer is not null)
                         {
-                            foreach (Hyperlink h in ftrPart.Footer.Descendants<Hyperlink>().ToList())
+                            IEnumerable<Hyperlink> ftrLinks = ftrPart.Footer.Descendants<Hyperlink>();
+                            for (int i = 0; i < ftrLinks.Count(); i++)
                             {
-                                ftrLinks.Add(h);
+                                Hyperlink h = ftrLinks.ElementAt(i);
+                                if (h.InnerXml.Contains(Strings.txtFieldCodeEnd) && !h.InnerXml.Contains(Strings.txtFieldCodeBegin))
+                                {
+                                    h.InnerXml = h.InnerXml.Replace(Strings.txtFieldCodeEnd, string.Empty);
+                                    h.Parent.PrependChild(new FieldChar() { FieldCharType = FieldCharValues.End });
+                                    fileChanged = true;
+                                }
                             }
                         }
                     }
                 }
 
-                // handle if no links are found
-                if (!myDoc.MainDocumentPart.HyperlinkRelationships.Any() &&
-                    !myDoc.MainDocumentPart.RootElement.Descendants<FieldCode>().Any() &&
-                    !hdrLinks.Any() &&
-                    !ftrLinks.Any() &&
-                    !hLinks.Any())
-                {
-                    return fileChanged;
-                }
-                else
-                {
-                    // loop through regular hyperlinks
-                    foreach (Hyperlink h in hLinks)
-                    {
-                        if (h.InnerXml.Contains(Strings.txtFieldCodeEnd) && !h.InnerXml.Contains(Strings.txtFieldCodeBegin))
-                        {
-                            h.InnerXml.Replace(Strings.txtFieldCodeEnd, string.Empty);
-                            h.AppendChild(new FieldChar() { FieldCharType = FieldCharValues.End });
-                            fileChanged = true;
-                        }
-                    }
-
-                    // check headers
-                    foreach (Hyperlink h in hdrLinks)
-                    {
-                        if (h.InnerXml.Contains(Strings.txtFieldCodeEnd) && !h.InnerXml.Contains(Strings.txtFieldCodeBegin))
-                        {
-                            h.InnerXml.Replace(Strings.txtFieldCodeEnd, string.Empty);
-                            h.AppendChild(new FieldChar() { FieldCharType = FieldCharValues.End });
-                            fileChanged = true;
-                        }
-                    }
-
-                    // check footers
-                    foreach (Hyperlink h in ftrLinks)
-                    {
-                        if (h.InnerXml.Contains(Strings.txtFieldCodeEnd) && !h.InnerXml.Contains(Strings.txtFieldCodeBegin))
-                        {
-                            h.InnerXml.Replace(Strings.txtFieldCodeEnd, string.Empty);
-                            h.AppendChild(new FieldChar() { FieldCharType = FieldCharValues.End });
-                            fileChanged = true;
-                        }
-                    }
-                }
                 //bool isHyperlinkInBetweenSequence = false;
                 //IEnumerable<Paragraph> paras = myDoc.MainDocumentPart.Document.Descendants<Paragraph>();
                 //int pCount = paras.Count();
