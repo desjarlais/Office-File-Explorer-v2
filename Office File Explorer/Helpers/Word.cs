@@ -2627,11 +2627,6 @@ namespace Office_File_Explorer.Helpers
             return part.RootElement.Descendants().Where(e => e is SdtBlock || e is SdtRun);
         }
 
-        public static IEnumerable<OpenXmlElement> ContentControls(Table tbl)
-        {
-            return tbl.Descendants().Where(e => e is SdtBlock || e is SdtRun);
-        }
-
         public static IEnumerable<OpenXmlElement> ContentControls(this WordprocessingDocument doc)
         {
             foreach (var cc in doc.MainDocumentPart.ContentControls())
@@ -2858,6 +2853,18 @@ namespace Office_File_Explorer.Helpers
                    paraFtrList = ftrPart.Footer.Descendants<Paragraph>().Where(p => IsParagraphInStyle(p, styleId));
                }
                paraList = paraList.Concat(paraFtrList);
+            }
+
+            if (mainPart.EndnotesPart is not null)
+            {
+                IEnumerable<Paragraph> paraEndList = mainPart.EndnotesPart.Endnotes.Descendants<Paragraph>().Where(p => IsParagraphInStyle(p, styleId));
+                paraList = paraList.Concat(paraEndList);
+            }
+
+            if (mainPart.FootnotesPart is not null)
+            {
+                IEnumerable<Paragraph> paraFtnList = mainPart.FootnotesPart.Footnotes.Descendants<Paragraph>().Where(p => IsParagraphInStyle(p, styleId));
+                paraList = paraList.Concat(paraFtnList);
             }
 
             return paraList;

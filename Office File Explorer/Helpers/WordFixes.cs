@@ -14,6 +14,7 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
+using System.IO.Packaging;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -624,6 +625,7 @@ namespace Office_File_Explorer.Helpers
             corruptionFound = false;
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
+                // loop content controls
                 foreach (var cc in myDoc.ContentControls())
                 {
                     // make sure we are a plain text control
@@ -820,146 +822,6 @@ namespace Office_File_Explorer.Helpers
                         }
                     }
                 }
-
-                //bool isHyperlinkInBetweenSequence = false;
-                //IEnumerable<Paragraph> paras = myDoc.MainDocumentPart.Document.Descendants<Paragraph>();
-                //int pCount = paras.Count();
-                //int tempCount = 0;
-
-                //// need to keep looping paragraphs until we don't find a bad hlink position
-                //do
-                //{
-                //    isHyperlinkInBetweenSequence = false;
-                //    bool inBeginEndSequence = false;
-                //    int beginPosition = 0;
-                //    int endPosition = 0;
-                //    int elementCount = 0;
-                //    int beginCount = 0;
-                //    int prevRunPosition = 0;
-                //    tempCount = 0;
-
-                //    foreach (Paragraph p in paras)
-                //    {
-                //        tempCount++;
-                //        foreach (OpenXmlElement oxe in p.Descendants<OpenXmlElement>())
-                //        {
-                //            // keep track of previous run so we can get the right start position
-                //            // you could just use the first "begin" field code, but fixing it back up later is more challenging
-                //            // if we grab the begin root run, it makes this much easier
-                //            elementCount++;
-                //            if (oxe.GetType().Name == "Run")
-                //            {
-                //                prevRunPosition = elementCount;
-                //            }
-
-                //            // here we are keeping track of begin-end sequences
-                //            // the beginCount is there for nested begin-end scenarios
-                //            // you can have begin-begin-separate-end-end
-                //            if (oxe.GetType().Name == "FieldChar")
-                //            {
-                //                FieldChar fc = (FieldChar)oxe;
-                //                if (fc.FieldCharType == FieldCharValues.Begin)
-                //                {
-                //                    beginCount++;
-                //                    inBeginEndSequence = true;
-                //                    if (beginPosition == 0)
-                //                    {
-                //                        beginPosition = prevRunPosition;
-                //                    }
-                //                }
-
-                //                if (fc.FieldCharType == FieldCharValues.End)
-                //                {
-                //                    // valid sequence, reset values
-                //                    beginCount--;
-                //                    if (beginCount == 0)
-                //                    {
-                //                        inBeginEndSequence = false;
-                //                        beginPosition = 0;
-                //                    }
-                //                }
-                //            }
-
-                //            // if we are still in the middle of a begin-end sequence
-                //            // we can't have a hlink so we know we have a corruption
-                //            if (oxe.GetType().Name == "Hyperlink" && inBeginEndSequence == true)
-                //            {
-                //                // you can have a hlink in between the begin-end tags or vica versa
-                //                // so we are only looking for an hlink that has an end inside it with no begin
-                //                if (oxe.InnerXml.Contains(Strings.txtFieldCodeEnd) && !oxe.InnerXml.Contains(Strings.txtFieldCodeBegin))
-                //                {
-                //                    isHyperlinkInBetweenSequence = true;
-                //                    endPosition = elementCount;
-                //                    break;
-                //                }
-                //            }
-                //        }
-
-                //        if (isHyperlinkInBetweenSequence == true)
-                //        {
-                //            break;
-                //        }
-                //    }
-
-                //    // if isHyperlinkInBetween we need to loop again now that we have the bad position
-                //    if (isHyperlinkInBetweenSequence == true)
-                //    {
-                //        int tCount = 0;
-                //        bool atEndPosition = false;
-                //        List<OpenXmlElement> els = new List<OpenXmlElement>();
-                //        List<Run> runs = new List<Run>();
-
-                //        foreach (Paragraph p in paras)
-                //        {
-                //            foreach (OpenXmlElement oxe in p.Descendants<OpenXmlElement>())
-                //            {
-                //                tCount++;
-                //                if (tCount >= beginPosition)
-                //                {
-                //                    // once we are at the right position where we need to start moving elements around
-                //                    // create a list of elements
-                //                    els.Add(oxe);
-                //                    if (tCount == endPosition)
-                //                    {
-                //                        // once we are at the end of the bad sequence
-                //                        // reverse the list so we can prepend to the hyperlink
-                //                        atEndPosition = true;
-                //                        els.Reverse();
-
-                //                        foreach (OpenXmlElement e in els)
-                //                        {
-                //                            if (e.LocalName != "hyperlink")
-                //                            {
-                //                                // haven't quite figured out why, but I need to create a run for all non-run elements
-                //                                // then I can clone it and add it back to the right location in the hyperlink
-                //                                // then we can remove the original bad position elements
-                //                                if (e.LocalName != "r")
-                //                                {
-                //                                    Run r = new Run();
-                //                                    r.AppendChild(e.CloneNode(true));
-                //                                    oxe.PrependChild(r);
-                //                                    e.Remove();
-                //                                    fileChanged = true;
-                //                                }
-                //                                else
-                //                                {
-                //                                    oxe.PrependChild(e.CloneNode(false));
-                //                                    e.Remove();
-                //                                    fileChanged = true;
-                //                                }
-                //                            }
-                //                        }
-                //                    }
-                //                }
-                //            }
-
-                //            if (atEndPosition == true)
-                //            {
-                //                break;
-                //            }
-                //        }
-                //    }
-                //} while (tempCount < pCount);
 
                 if (fileChanged)
                 {

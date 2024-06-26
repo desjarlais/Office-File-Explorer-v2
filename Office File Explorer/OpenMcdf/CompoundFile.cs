@@ -223,7 +223,6 @@ namespace Office_File_Explorer.OpenMcdf
         /// </example>
         public CompoundFile() : this(CFSVersion.Ver_3, CFSConfiguration.Default)
         {
-
             //this.header = new Header();
             //this.sectorRecycle = false;
 
@@ -1795,7 +1794,7 @@ namespace Office_File_Explorer.OpenMcdf
                     }
                     else
                     {
-                        if (((FileStream)(sourceStream)).Name == (Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\" + fileName))
+                        if (((FileStream)sourceStream).Name == (Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\" + fileName))
                         {
 
                             raiseSaveFileEx = true;
