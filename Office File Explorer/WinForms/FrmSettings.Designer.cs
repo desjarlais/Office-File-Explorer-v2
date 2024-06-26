@@ -52,6 +52,7 @@ namespace Office_File_Explorer.WinForms
             rdoUseSPGuid = new System.Windows.Forms.RadioButton();
             rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
             groupBox6 = new System.Windows.Forms.GroupBox();
+            ckbShowStyleText = new System.Windows.Forms.CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -61,16 +62,17 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(ckbShowStyleText);
             groupBox1.Controls.Add(ckbDeleteOnlyCommentBookmarks);
             groupBox1.Controls.Add(ckbFixGroupedShapes);
             groupBox1.Controls.Add(ckbListRsids);
             groupBox1.Controls.Add(ckbRemoveFallbackTags);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(235, 121);
+            groupBox1.Size = new System.Drawing.Size(235, 167);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Word Corrupt Document";
+            groupBox1.Text = "Word Options";
             // 
             // ckbDeleteOnlyCommentBookmarks
             // 
@@ -200,12 +202,12 @@ namespace Office_File_Explorer.WinForms
             // 
             groupBox4.Controls.Add(rdoSAX);
             groupBox4.Controls.Add(rdoDOM);
-            groupBox4.Location = new System.Drawing.Point(9, 248);
+            groupBox4.Location = new System.Drawing.Point(253, 218);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new System.Drawing.Size(238, 75);
             groupBox4.TabIndex = 0;
             groupBox4.TabStop = false;
-            groupBox4.Text = "Excel Cell Value Option";
+            groupBox4.Text = "Excel Parse Options";
             // 
             // rdoSAX
             // 
@@ -287,12 +289,22 @@ namespace Office_File_Explorer.WinForms
             groupBox6.Controls.Add(rdoUserSelectedCC);
             groupBox6.Controls.Add(rdoUseSPGuid);
             groupBox6.Controls.Add(rdoUseCCGuid);
-            groupBox6.Location = new System.Drawing.Point(12, 139);
+            groupBox6.Location = new System.Drawing.Point(12, 187);
             groupBox6.Name = "groupBox6";
             groupBox6.Size = new System.Drawing.Size(235, 103);
             groupBox6.TabIndex = 5;
             groupBox6.TabStop = false;
             groupBox6.Text = "Fix Content Control Prefix Mappings";
+            // 
+            // ckbShowStyleText
+            // 
+            ckbShowStyleText.AutoSize = true;
+            ckbShowStyleText.Location = new System.Drawing.Point(6, 116);
+            ckbShowStyleText.Name = "ckbShowStyleText";
+            ckbShowStyleText.Size = new System.Drawing.Size(195, 19);
+            ckbShowStyleText.TabIndex = 5;
+            ckbShowStyleText.Text = "Show Text Associated With Style";
+            ckbShowStyleText.UseVisualStyleBackColor = true;
             // 
             // FrmSettings
             // 
@@ -352,5 +364,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox ckbResetIndentLevels;
         private System.Windows.Forms.CheckBox ckbOutlookMsgAsRtf;
+        private System.Windows.Forms.CheckBox ckbShowStyleText;
     }
 }

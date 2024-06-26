@@ -2028,7 +2028,6 @@ namespace Office_File_Explorer.Helpers
             XNamespace w = Strings.wordMainAttributeNamespace;
             XDocument xDoc = null;
             XDocument styleDoc = null;
-            bool containStyle = false;
             bool styleInUse = false;
             int count = 0;
 
@@ -2059,7 +2058,6 @@ namespace Office_File_Explorer.Helpers
                             {
                                 count += 1;
                                 stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + pStyleCount + " paragraphs");
-                                // containStyle = true;
                                 styleInUse = true;
                                 continue;
                             }
@@ -2072,7 +2070,6 @@ namespace Office_File_Explorer.Helpers
                             {
                                 count += 1;
                                 stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + rStyleCount + " runs");
-                                // containStyle = true;
                                 styleInUse = true;
                                 continue;
                             }
@@ -2085,7 +2082,6 @@ namespace Office_File_Explorer.Helpers
                             {
                                 count += 1;
                                 stylesList.Add(count + Strings.wPeriod + sName + Strings.wUsedIn + tStyleCount + " tables");
-                                // containStyle = true;
                                 styleInUse = true;
                                 continue;
                             }
@@ -2126,11 +2122,7 @@ namespace Office_File_Explorer.Helpers
                 stylesList.Add("** Missing StylesWithEffects part **");
             }
 
-            if (containStyle == false)
-            {
-                return stylesList;
-            }
-            else
+            if (Properties.Settings.Default.ShowStyleText)
             {
                 // list the styles for paragraphs
                 stylesList.Add(string.Empty);
@@ -2163,8 +2155,7 @@ namespace Office_File_Explorer.Helpers
                 string defaultStyle = (string)(
                     from style in styleDoc.Root.Elements(w + "style")
                     where (string)style.Attribute(w + "type") == "paragraph" && (string)style.Attribute(w + "default") == "1"
-                    select style
-                ).First().Attribute(w + "styleId");
+                    select style).First().Attribute(w + "styleId");
 
                 // Find all paragraphs in the document.  
                 var paragraphs =
@@ -2189,12 +2180,11 @@ namespace Office_File_Explorer.Helpers
                 foreach (var p in paraWithText)
                 {
                     count++;
-                    stylesList.Add(count + ". StyleName: " + p.StyleName + " Text: " + p.Text);
+                    stylesList.Add(count + ". StyleName: " + p.StyleName + " || Text: " + p.Text);
                 }
 
                 pkg.Close();
             }
-
 
             return stylesList;
         }
