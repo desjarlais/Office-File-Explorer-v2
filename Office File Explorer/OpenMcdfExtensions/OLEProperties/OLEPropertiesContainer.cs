@@ -237,7 +237,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
                     PropertyContext = UserDefinedProperties.Context
                 };
 
-                ps.FMTID1 = new Guid("{D5CDD502-2E9C-101B-9397-08002B2CF9AE}");
+                ps.FMTID1 = new Guid(WellKnownFMTID.FMTID_UserDefinedProperties);
                 ps.Offset1 = 0;
 
                 // Add the dictionary containing the property names

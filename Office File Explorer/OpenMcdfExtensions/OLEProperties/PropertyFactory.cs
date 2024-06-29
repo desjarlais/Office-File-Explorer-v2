@@ -363,23 +363,31 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
             public override void WriteScalarValue(BinaryWriter bw, string pValue)
             {
-                data = Encoding.GetEncoding(codePage).GetBytes(pValue);
-                uint dataLength = (uint)data.Length;
+                //bool addNullTerminator = true;
 
-                // The string data must be null terminated, so add a null byte if there isn't one already
-                bool addNullTerminator = dataLength == 0 || data[dataLength - 1] != '\0';
-
-                if (addNullTerminator)
+                if (String.IsNullOrEmpty(pValue)) //|| String.IsNullOrEmpty(pValue.Trim(new char[] { '\0' })))
                 {
-                    dataLength += 1;
+                    bw.Write((uint)0);
                 }
-
-                bw.Write((uint)data.Length);
-                bw.Write(data);
-
-                if (addNullTerminator)
+                else if (this.codePage == CodePages.CP_WINUNICODE)
                 {
-                    bw.Write((byte)0);
+                    data = Encoding.GetEncoding(codePage).GetBytes(pValue);
+                    uint dataLength = (uint)data.Length;
+                    dataLength += 2;            // null terminator \u+0000
+                    bw.Write(dataLength);           // datalength of string + null char (unicode)
+                    bw.Write(data);                 // string
+                    bw.Write('\0');                 // first byte of null unicode char
+                    bw.Write('\0');                 // second byte of null unicode char
+                }
+                else
+                {
+                    data = Encoding.GetEncoding(codePage).GetBytes(pValue);
+                    uint dataLength = (uint)data.Length;
+                    dataLength += 1;            // null terminator \u+0000
+                    var mod = dataLength % 4;       // pad to multiple of 4 bytes
+                    bw.Write(dataLength);           // datalength of string + null char (unicode)
+                    bw.Write(data);                 // string
+                    bw.Write('\0');
                 }
             }
         }
@@ -396,15 +404,36 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             public override string ReadScalarValue(BinaryReader br)
             {
                 uint nChars = br.ReadUInt32();
-                data = br.ReadBytes((int)(nChars * 2));  //WChar
+                data = br.ReadBytes((int)((nChars * 2) - 2));  //WChar - null terminator
                 return Encoding.Unicode.GetString(data);
             }
 
             public override void WriteScalarValue(BinaryWriter bw, string pValue)
             {
                 data = Encoding.Unicode.GetBytes(pValue);
-                bw.Write((uint)data.Length >> 2);
+
+                // The written data length field is the number of characters (not bytes) and must include a null terminator
+                // add a null terminator if there isn't one already
+                var byteLength = data.Length;
+
+                //bool addNullTerminator =
+                //    byteLength == 0 || data[byteLength - 1] != '\0' || data[byteLength - 2] != '\0';
+
+                //if (addNullTerminator)
+                byteLength += 2;
+
+                bw.Write((uint)byteLength / 2);
                 bw.Write(data);
+
+                //if (addNullTerminator)
+                //{
+                bw.Write((byte)0);
+                bw.Write((byte)0);
+                //}
+
+                //var mod = byteLength % 4;       // pad to multiple of 4 bytes
+                //for (int i = 0; i < (4 - mod); i++)   // padding
+                //    bw.Write('\0');
             }
         }
 
@@ -450,7 +479,7 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
             public override void WriteScalarValue(BinaryWriter bw, Decimal pValue)
             {
-                int[] parts = Decimal.GetBits((Decimal)pValue);
+                int[] parts = Decimal.GetBits(pValue);
 
                 bool sign = (parts[3] & 0x80000000) != 0;
                 byte scale = (byte)((parts[3] >> 16) & 0x7F);
@@ -472,7 +501,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
             public override bool ReadScalarValue(BinaryReader br)
             {
-
                 this.propertyValue = br.ReadUInt16() == (ushort)0xFFFF ? true : false;
                 return (bool)propertyValue;
                 //br.ReadUInt16();//padding
@@ -500,7 +528,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             public override void WriteScalarValue(BinaryWriter bw, object pValue)
             {
                 byte[] r = pValue as byte[];
-                if (r != null) bw.Write(r);
+                if (r is null)
+                {
+                    bw.Write(0u);
+                }
+                else
+                {
+                    bw.Write((uint)r.Length);
+                    bw.Write(r);
+                }
             }
         }
 
@@ -518,7 +554,15 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
             public override void WriteScalarValue(BinaryWriter bw, object pValue)
             {
                 byte[] r = pValue as byte[];
-                if (r != null) bw.Write(r);
+                if (r is null)
+                {
+                    bw.Write(r);
+                }
+                else
+                {
+                    bw.Write((uint)r.Length);
+                    bw.Write(r);
+                }
             }
         }
 

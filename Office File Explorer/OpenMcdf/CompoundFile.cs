@@ -11,7 +11,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using RedBlackTree;
 
 namespace Office_File_Explorer.OpenMcdf
@@ -674,6 +673,7 @@ namespace Office_File_Explorer.OpenMcdf
         /// Validate header values specified in [MS-CFB] document
         /// </summary>
         /// <param name="header">The Header sector of file to validate</param>
+        /// <exception cref="CFCorruptedFileException">If one of the validation checks fails a <see cref="T:OpenMcdf.CFCorruptedFileException">CFCorruptedFileException</see> exception will be thrown</exception>
         private void ValidateHeader(Header header)
         {
             if (header.MiniSectorShift != 6)
@@ -1758,71 +1758,6 @@ namespace Office_File_Explorer.OpenMcdf
         }
 
         /// <summary>
-        /// Saves the in-memory image of Compound File opened in ReadOnly mode to a file.
-        /// </summary>
-        /// <param name="fileName">File name to write the compound file to</param>
-        /// <exception cref="T:OpenMcdf.CFException">Raised if destination file is not seekable</exception>
-        /// <exception cref="T:OpenMcdf.CFInvalidOperation">Raised if destination file is the current file</exception>
-        //public void SaveAs(string fileName)
-        //{
-        //    Save(fileName);
-        //}
-
-        /// <summary>
-        /// Saves the in-memory image of Compound File to a file.
-        /// </summary>
-        /// <param name="fileName">File name to write the compound file to</param>
-        /// <exception cref="T:OpenMcdf.CFException">Raised if destination file is not seekable</exception>
-        [Obsolete("Use SaveAs method")]
-        public void Save(string fileName)
-        {
-            if (_disposed) throw new CFException("Compound File closed: cannot save data");
-
-            FileStream fs = null;
-
-            try
-            {
-                bool raiseSaveFileEx = false;
-                if (HasSourceStream && sourceStream != null && sourceStream is FileStream)
-                {
-                    if (Path.IsPathRooted(fileName))
-                    {
-                        if (((FileStream)(sourceStream)).Name == fileName)
-                        {
-                            raiseSaveFileEx = true;
-                        }
-                    }
-                    else
-                    {
-                        if (((FileStream)sourceStream).Name == (Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\" + fileName))
-                        {
-
-                            raiseSaveFileEx = true;
-                        }
-                    }
-                }
-
-                if (raiseSaveFileEx)
-                {
-                    throw new CFInvalidOperation("Cannot overwrite current backing file. Compound File should be opened in UpdateMode and Commit() method should be called to persist changes");
-                }
-
-                fs = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-                Save(fs);
-            }
-            catch (Exception ex)
-            {
-                throw new CFException("Error saving file [" + fileName + "]", ex);
-            }
-            finally
-            {
-                sourceStream?.Close();
-                fs?.Flush();
-                fs?.Close();
-            }
-        }
-
-        /// <summary>
         /// Saves the in-memory image of Compound File to a stream.
         /// </summary>        
         /// <remarks>
@@ -2728,3 +2663,54 @@ namespace Office_File_Explorer.OpenMcdf
         }
     }
 }
+
+/// ### CODE SAMPLES ###
+/// Read Stream:
+/// String filename = "report.xls";
+/// CompoundFile cf = new CompoundFile(filename);
+/// CFStream foundStream = cf.RootStorage.GetStream("Workbook");
+/// byte[] data = foundStream.GetData();
+/// cf.Close();
+/// 
+
+/// Write Stream:
+/// byte[] b = new byte[10000];
+/// for (int i = 0; i < 10000; i++)
+/// {
+///     b[i % 120] = (byte)i;
+/// }
+/// CompoundFile cf = new CompoundFile();
+/// CFStream st = cf.RootStorage.AddStream("MyStream");
+/// st.SetData(b);
+/// 
+
+/// Visit Entries:
+/// const String STORAGE_NAME = "report.xls";
+/// CompoundFile cf = new CompoundFile(STORAGE_NAME);
+/// FileStream output = new FileStream("output.txt", FileMode.Create);
+/// TextWriter tw = new StreamWriter(output);
+/// VisitedEntryAction va = delegate(CFItem item)
+/// {
+///     tw.WriteLine(item.Name);
+/// };
+/// cf.RootStorage.VisitEntries(va, true);
+/// tw.Close();
+/// 
+
+/// Partial Stream:
+/// int cnt = 1;
+/// long offset = 12000;
+/// cfTest = new CompoundFile("YourCompoundFile.cfs");
+/// byte[] buffer = cfTest.GetStream("YourStream").GetData(offset, cnt);
+/// // buffer now holds 1 byte
+/// 
+
+/// Stuctured Storage:
+/// - Root Storage
+///  -- stream 1
+///  -- stream 2
+///  -- storage 1
+///     --- stream 4
+///     --- storage 2
+///  -- stream 3
+/// 

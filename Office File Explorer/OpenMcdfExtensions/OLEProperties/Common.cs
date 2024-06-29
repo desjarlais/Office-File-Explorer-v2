@@ -36,6 +36,6 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
     internal static class CodePages
     {
-        public const int CP_WINUNICODE = 1200;
+        public const int CP_WINUNICODE = 0x04B0;
     }
 }

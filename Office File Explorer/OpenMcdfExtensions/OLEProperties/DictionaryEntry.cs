@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -54,7 +53,9 @@ namespace Office_File_Explorer.OpenMcdfExtensions.OLEProperties
 
         private string GetName()
         {
-            return Encoding.GetEncoding(this.codePage).GetString(nameBytes);
+            var result = Encoding.GetEncoding(this.codePage).GetString(nameBytes);
+            result = result.Trim('\0');
+            return result;
         }
     }
 }
