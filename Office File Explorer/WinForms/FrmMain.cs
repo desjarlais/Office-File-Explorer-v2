@@ -33,6 +33,7 @@ using Application = System.Windows.Forms.Application;
 // scintilla refs
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
+using static ScintillaNET.Style;
 
 namespace Office_File_Explorer
 {
@@ -370,7 +371,7 @@ namespace Office_File_Explorer
                 {
                     OpenFileDialog fDialog = new OpenFileDialog
                     {
-                        Title = "Select Office Open Xml File.",
+                        Title = "Select Office File",
                         Filter = "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm|" +
                                  "Binary Office Documents | *.doc; *.dot; *.xls; *.xlt; *.ppt; *.pot|" +
                                  "Outlook Message Format | *.msg",
@@ -1318,7 +1319,24 @@ namespace Office_File_Explorer
                             }
                         }
 
-                        scintilla1.Text = sb.ToString();
+                        // special handling for unencrypted xml stream data
+                        if (isEncrypted)
+                        {
+                            if (sb.ToString().Contains("..<?xml"))
+                            {
+                                // the other transform data is typically xml with some plain text at the beginning, so pull that out so we can format the rest of the xml
+                                scintilla1.Text = FormatXml(sb.ToString().Replace("><", ">\n" + "<"));
+                            }
+                            else
+                            {
+                                // typically labelinfo.xml is pure xml and can be displayed and formatted as such
+                                scintilla1.Text = FormatXml(sb.ToString());
+                            }
+                        }
+                        else
+                        {
+                            scintilla1.Text = sb.ToString();
+                        }
                     }
                 }
             }
@@ -1793,6 +1811,20 @@ namespace Office_File_Explorer
         {
             scintilla1.SelectionStart = 0;
             scintilla1.ScrollCaret();
+        }
+
+        public string FormatXml(string xml)
+        {
+            try
+            {
+                XDocument doc = XDocument.Parse(xml);
+                return doc.ToString();
+            }
+            catch (Exception)
+            {
+                // Handle and throw if fatal exception here; don't just ignore them
+                return xml;
+            }
         }
 
         /// <summary>
