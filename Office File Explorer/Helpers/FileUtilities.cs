@@ -45,6 +45,7 @@ namespace Office_File_Explorer.Helpers
                 case ".wmf":
                     return OpenXmlInnerFileTypes.Image;
                 case ".xml":
+                case ".vml":
                 case ".rels":
                     return OpenXmlInnerFileTypes.XML;
                 case ".mp4":

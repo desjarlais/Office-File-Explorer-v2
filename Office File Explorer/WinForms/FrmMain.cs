@@ -84,7 +84,7 @@ namespace Office_File_Explorer
         public FindReplace myFindReplace;
 
         // enums
-        public enum OpenXmlInnerFileTypes { Word, Excel, PowerPoint, Outlook, XML, Image, Binary, Video, Audio, Text, Other }
+        public enum OpenXmlInnerFileTypes { Word, Excel, PowerPoint, Outlook, XML, VML, Image, Binary, Video, Audio, Text, Other }
 
         public enum LogInfoType { ClearAndAdd, TextOnly, InvalidFile, LogException, EmptyCount }
 
@@ -1667,7 +1667,7 @@ namespace Office_File_Explorer
                     toolStripButtonModify.Enabled = true;
                 }
 
-                if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML)
+                if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML || FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.VML)
                 {
                     // customui files have additional editing options
                     if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
@@ -2703,6 +2703,12 @@ namespace Office_File_Explorer
                 if (Excel.RemoveCorruptClientDataObjects(tempFilePackageViewer))
                 {
                     sbFixes.AppendLine("Corrupt Client Data Objects Fixed");
+                    corruptionFound = true;
+                }
+
+                if (Excel.FixCorruptAnchorTags(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Fixed Corrupt Vml Anchor Tags");
                     corruptionFound = true;
                 }
             }

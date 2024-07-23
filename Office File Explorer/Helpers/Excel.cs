@@ -1,6 +1,8 @@
 ﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +16,126 @@ namespace Office_File_Explorer.Helpers
     class Excel
     {
         public static bool fSuccess;
+
+        private static string GetNumbers(string input)
+        {
+            return new string(input.Where(c => char.IsDigit(c)).ToArray());
+        }
+
+        public static bool FixCorruptAnchorTags(string path)
+        {
+            bool isFixed = false;
+
+            corruptionFound:
+            using (SpreadsheetDocument excelDoc = SpreadsheetDocument.Open(path, true))
+            {
+                WorkbookPart wbPart = excelDoc.WorkbookPart;
+
+                foreach (WorksheetPart wsp in wbPart.WorksheetParts)
+                {
+                    if (wsp.VmlDrawingParts != null)
+                    {
+                        foreach (VmlDrawingPart vdp in wsp.VmlDrawingParts)
+                        {
+                            XmlDocument xDoc = new XmlDocument();
+                            MemoryStream ms = new MemoryStream();
+                            Stream vmlStream = vdp.GetStream();
+                            vmlStream.CopyTo(ms);
+                            ms.Position = 0;
+                            xDoc.Load(ms);
+                            XmlNodeList xnl = xDoc.ChildNodes;
+                            foreach (XmlNode xn in xnl)
+                            {
+                                if (xn.Name == "xml")
+                                {
+                                    XmlNodeList xnl2 = xn.ChildNodes;
+                                    foreach (XmlNode xn2 in xnl2)
+                                    {
+                                        if (xn2.Name == "v:shape")
+                                        {
+                                            XmlNodeList xnl3 = xn2.ChildNodes;
+                                            foreach (XmlNode xn3 in xnl3)
+                                            {
+                                                // If ClientData ObjectType is Note, xml = ClientData ObjectType ="Note"
+                                                // < x:Anchor > #1, #2, #3, #4, #5, #6, #7, #8 </ x:Anchor >
+                                                // If the width in columns(#5 - #1) is > 5, then narrow the width to 5 columns (change #5 to be #1 + 5)
+                                                // If the height in rows(#7 - #3) is > 20, then shorten the height to 20 rows (change #7 to be #3 + 20)
+                                                // Sample Incorrect Anchor Tag == <x:Anchor>1, 0, 6438, 14, 2, 8, 6591, 10</x:Anchor>
+                                                // Should be == <x:Anchor>1, 0, 6438, 14, 2, 8, 6458, 10</x:Anchor>
+                                                if (xn3.Name == "x:ClientData" && xn3.Attributes.Count > 0)
+                                                {
+                                                    foreach (XmlAttribute xa in xn3.Attributes)
+                                                    {
+                                                        if (xa.Name == "ObjectType" && xa.Value == "Note" && xn3.ChildNodes.Count > 0)
+                                                        {
+                                                            foreach (XmlNode xn4 in xn3.ChildNodes)
+                                                            {
+                                                                if (xn4.Name == "x:Anchor")
+                                                                {
+                                                                    bool isFixedAnchor = false;
+                                                                    string[] anchorValues = xn4.InnerText.Split(',');
+                                                                    // keep in mind, the split creates a 0 based index and the logic is discussing a non-zero based index
+                                                                    int width = int.Parse(anchorValues[4]) - int.Parse(GetNumbers(anchorValues[0]));
+                                                                    int height = int.Parse(anchorValues[6]) - int.Parse(anchorValues[2]);
+
+                                                                    if (width > 5)
+                                                                    {
+                                                                        anchorValues[4] = (int.Parse(GetNumbers(anchorValues[0])) + 5).ToString();
+                                                                        xn4.InnerText = string.Join(",", anchorValues);
+                                                                        isFixedAnchor = true;
+                                                                    }
+
+                                                                    if (height > 20)
+                                                                    {
+                                                                        anchorValues[6] = (int.Parse(anchorValues[2]) + 20).ToString();
+                                                                        xn4.InnerText = string.Join(",", anchorValues);
+                                                                        isFixedAnchor = true;
+                                                                    }
+
+                                                                    if (isFixedAnchor)
+                                                                    {
+                                                                        XmlNode xnFixed = xn4;
+                                                                        xn3.RemoveChild(xn4);
+                                                                        xn3.AppendChild(xnFixed);
+                                                                        vmlStream.SetLength(0);
+                                                                        xDoc.Save(vmlStream);
+                                                                        vmlStream.Flush();
+                                                                        isFixed = true;
+                                                                        goto corruptionFound;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // XML Sample
+                            //< x:ClientData ObjectType="Note">
+                            //< x:MoveWithCells />
+                            //< x:SizeWithCells />
+                            //< x:Anchor >1, 10, 3, 12, 2, 0, 7, 17 </ x:Anchor >
+                            //< x:AutoFill > False </ x:AutoFill >
+                            //< x:Row > 4 </ x:Row >
+                            //< x:Column > 0 </ x:Column >
+                            //< x:Visible />
+                            //</ x:ClientData >
+                        }
+                    }
+                }
+
+                if (isFixed)
+                {
+                    excelDoc.Save();
+                }
+            }
+
+            return isFixed;
+        }
 
         /// <summary>
         ///  known corrupt scenario with Excel legacy vml drawings having an empty ClientData object
