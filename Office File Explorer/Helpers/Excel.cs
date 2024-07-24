@@ -1,8 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +20,12 @@ namespace Office_File_Explorer.Helpers
             return new string(input.Where(c => char.IsDigit(c)).ToArray());
         }
 
+        /// <summary>
+        /// There are times when Excel comment notes get really large which causes perf issues during coauthoring
+        /// This function looks for those large notes and truncates them to a smaller size
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static bool FixCorruptAnchorTags(string path)
         {
             bool isFixed = false;

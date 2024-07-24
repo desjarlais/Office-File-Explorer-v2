@@ -2702,13 +2702,13 @@ namespace Office_File_Explorer
             {
                 if (Excel.RemoveCorruptClientDataObjects(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Corrupt Client Data Objects Fixed");
+                    sbFixes.AppendLine("Corrupt Client Data Objects Fixed - More Information Here: https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-comment-notes");
                     corruptionFound = true;
                 }
 
                 if (Excel.FixCorruptAnchorTags(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Fixed Corrupt Vml Anchor Tags");
+                    sbFixes.AppendLine("Fixed Corrupt Vml Anchor Tags - More Information Here: https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-corrupt-vml-drawings");
                     corruptionFound = true;
                 }
             }
