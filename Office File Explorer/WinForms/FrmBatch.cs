@@ -118,6 +118,7 @@ namespace Office_File_Explorer.WinForms
             BtnRemoveCustomXml.Enabled = false;
             BtnFixDupeCustomXml.Enabled = false;
             BtnFixTabBehavior.Enabled = false;
+            BtnFixCommentNotes.Enabled = false;
         }
 
         public void EnableUI()
@@ -173,6 +174,7 @@ namespace Office_File_Explorer.WinForms
             {
                 BtnConvertStrict.Enabled = true;
                 BtnFixHyperlinks.Enabled = true;
+                BtnFixCommentNotes.Enabled = true;
             }
         }
 
@@ -329,6 +331,7 @@ namespace Office_File_Explorer.WinForms
             }
             catch (Exception ex)
             {
+                lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BatchProcessing Copy Error: " + ex.Message);
             }
         }
@@ -400,6 +403,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
+                            lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + innerEx.Message);
                             FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
@@ -448,6 +452,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
+                            lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + innerEx.Message);
                             FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
@@ -496,6 +501,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
+                            lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + innerEx.Message);
                             FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnListCustomProps Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
@@ -1279,6 +1285,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
+                        lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + innerEx.Message);
                         FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixTableProps: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
@@ -1406,6 +1413,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
+                            lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + innerEx.Message);
                             FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
@@ -1463,6 +1471,7 @@ namespace Office_File_Explorer.WinForms
                         }
                         catch (Exception innerEx)
                         {
+                            lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + innerEx.Message);
                             FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnDeleteRequestStatus Error: " + f + Strings.wColonBuffer + innerEx.Message);
                         }
                     }
@@ -1644,6 +1653,7 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
+                        lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                         FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnFixCorruptComments Error: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
@@ -1687,12 +1697,14 @@ namespace Office_File_Explorer.WinForms
                     }
                     catch (Exception innerEx)
                     {
+                        lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                         FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnRemovePII Error: " + f + Strings.wColonBuffer + innerEx.Message);
                     }
                 }
             }
             catch (Exception ex)
             {
+                lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnRemovePII Error: " + ex.Message);
             }
             finally
@@ -1768,6 +1780,7 @@ namespace Office_File_Explorer.WinForms
             }
             catch (Exception ex)
             {
+                lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 FileUtilities.WriteToLog(Strings.fLogFilePath, "BtnRemoveCustomTitle Error: " + ex.Message);
             }
             finally
@@ -1837,6 +1850,7 @@ namespace Office_File_Explorer.WinForms
                 }
                 catch (Exception ex)
                 {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 }
                 finally
@@ -1909,6 +1923,7 @@ namespace Office_File_Explorer.WinForms
                 }
                 catch (Exception ex)
                 {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 }
                 finally
@@ -1971,6 +1986,7 @@ namespace Office_File_Explorer.WinForms
                 }
                 catch (Exception ex)
                 {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 }
                 finally
@@ -2011,6 +2027,7 @@ namespace Office_File_Explorer.WinForms
                 }
                 catch (Exception ex)
                 {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 }
                 finally
@@ -2044,6 +2061,7 @@ namespace Office_File_Explorer.WinForms
                 }
                 catch (Exception ex)
                 {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 }
                 finally
@@ -2167,6 +2185,7 @@ namespace Office_File_Explorer.WinForms
                 }
                 catch (Exception ex)
                 {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 }
                 finally
@@ -2204,6 +2223,39 @@ namespace Office_File_Explorer.WinForms
                 }
                 catch (Exception ex)
                 {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void BtnFixCommentNotes_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    Cursor = Cursors.WaitCursor;
+                    bool isFixed = Excel.FixCorruptAnchorTags(f);
+
+                    if (isFixed)
+                    {
+                        lstOutput.Items.Add(f + " : Comment Notes Fixed.");
+                    }
+                    else
+                    {
+                        lstOutput.Items.Add(f + " : No Large Comment Notes Found.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
                     FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
                 }
                 finally

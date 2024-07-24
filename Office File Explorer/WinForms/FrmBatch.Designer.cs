@@ -43,6 +43,7 @@ namespace Office_File_Explorer.WinForms
             ckbSubfolders = new System.Windows.Forms.CheckBox();
             lstOutput = new System.Windows.Forms.ListBox();
             groupBox4 = new System.Windows.Forms.GroupBox();
+            BtnFixTabBehavior = new System.Windows.Forms.Button();
             BtnFixDupeCustomXml = new System.Windows.Forms.Button();
             BtnRemoveCustomXml = new System.Windows.Forms.Button();
             BtnRemoveCustomFileProps = new System.Windows.Forms.Button();
@@ -68,7 +69,7 @@ namespace Office_File_Explorer.WinForms
             BtnDeleteCustomProps = new System.Windows.Forms.Button();
             BtnAddCustomProps = new System.Windows.Forms.Button();
             folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            BtnFixTabBehavior = new System.Windows.Forms.Button();
+            BtnFixCommentNotes = new System.Windows.Forms.Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -205,6 +206,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(BtnFixCommentNotes);
             groupBox4.Controls.Add(BtnFixTabBehavior);
             groupBox4.Controls.Add(BtnFixDupeCustomXml);
             groupBox4.Controls.Add(BtnRemoveCustomXml);
@@ -236,6 +238,16 @@ namespace Office_File_Explorer.WinForms
             groupBox4.TabIndex = 0;
             groupBox4.TabStop = false;
             groupBox4.Text = "Batch Commands";
+            // 
+            // BtnFixTabBehavior
+            // 
+            BtnFixTabBehavior.Location = new System.Drawing.Point(6, 138);
+            BtnFixTabBehavior.Name = "BtnFixTabBehavior";
+            BtnFixTabBehavior.Size = new System.Drawing.Size(185, 23);
+            BtnFixTabBehavior.TabIndex = 18;
+            BtnFixTabBehavior.Text = "Fix Tabbing Behavior";
+            BtnFixTabBehavior.UseVisualStyleBackColor = true;
+            BtnFixTabBehavior.Click += BtnFixTabBehavior_Click;
             // 
             // BtnFixDupeCustomXml
             // 
@@ -477,15 +489,15 @@ namespace Office_File_Explorer.WinForms
             BtnAddCustomProps.UseVisualStyleBackColor = true;
             BtnAddCustomProps.Click += BtnAddCustomProps_Click;
             // 
-            // BtnFixTabBehavior
+            // BtnFixCommentNotes
             // 
-            BtnFixTabBehavior.Location = new System.Drawing.Point(6, 138);
-            BtnFixTabBehavior.Name = "BtnFixTabBehavior";
-            BtnFixTabBehavior.Size = new System.Drawing.Size(185, 23);
-            BtnFixTabBehavior.TabIndex = 18;
-            BtnFixTabBehavior.Text = "Fix Tabbing Behavior";
-            BtnFixTabBehavior.UseVisualStyleBackColor = true;
-            BtnFixTabBehavior.Click += BtnFixTabBehavior_Click;
+            BtnFixCommentNotes.Location = new System.Drawing.Point(197, 138);
+            BtnFixCommentNotes.Name = "BtnFixCommentNotes";
+            BtnFixCommentNotes.Size = new System.Drawing.Size(141, 23);
+            BtnFixCommentNotes.TabIndex = 1;
+            BtnFixCommentNotes.Text = "Fix Comment Notes";
+            BtnFixCommentNotes.UseVisualStyleBackColor = true;
+            BtnFixCommentNotes.Click += BtnFixCommentNotes_Click;
             // 
             // FrmBatch
             // 
@@ -556,5 +568,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnRemoveCustomXml;
         private System.Windows.Forms.Button BtnFixDupeCustomXml;
         private System.Windows.Forms.Button BtnFixTabBehavior;
+        private System.Windows.Forms.Button BtnFixCommentNotes;
     }
 }

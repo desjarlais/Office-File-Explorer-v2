@@ -113,17 +113,6 @@ namespace Office_File_Explorer.Helpers
                                     }
                                 }
                             }
-
-                            // XML Sample
-                            //< x:ClientData ObjectType="Note">
-                            //< x:MoveWithCells />
-                            //< x:SizeWithCells />
-                            //< x:Anchor >1, 10, 3, 12, 2, 0, 7, 17 </ x:Anchor >
-                            //< x:AutoFill > False </ x:AutoFill >
-                            //< x:Row > 4 </ x:Row >
-                            //< x:Column > 0 </ x:Column >
-                            //< x:Visible />
-                            //</ x:ClientData >
                         }
                     }
                 }
