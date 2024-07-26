@@ -1322,7 +1322,7 @@ namespace Office_File_Explorer
                         // special handling for unencrypted xml stream data
                         if (isEncrypted)
                         {
-                            if (sb.ToString().Contains("..<?xml"))
+                            if (sb.ToString().Contains("<?xml version=\"1.0\"?>"))
                             {
                                 // the other transform data is typically xml with some plain text at the beginning, so pull that out so we can format the rest of the xml
                                 scintilla1.Text = FormatXml(sb.ToString().Replace("><", ">\n" + "<"));
@@ -1807,6 +1807,9 @@ namespace Office_File_Explorer
             }
         }
 
+        /// <summary>
+        /// Move the cursor and scroll to the top of the scintilla control
+        /// </summary>
         public void ScrollToTopOfRtb()
         {
             scintilla1.SelectionStart = 0;
