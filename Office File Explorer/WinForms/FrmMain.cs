@@ -33,7 +33,6 @@ using Application = System.Windows.Forms.Application;
 // scintilla refs
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
-using static ScintillaNET.Style;
 
 namespace Office_File_Explorer
 {
