@@ -2033,8 +2033,29 @@ namespace Office_File_Explorer.Helpers
 
             MainDocumentPart mainPart = myDoc.MainDocumentPart;
             StyleDefinitionsPart stylePart = mainPart.StyleDefinitionsPart;
-
             stylesList.Add("# Style Summary #");
+
+            // get the header parts
+            List<XDocument> headers = new List<XDocument>();
+            foreach (var hdr in mainPart.HeaderParts)
+            {
+                XDocument xHdrDoc = XDocument.Load(XmlReader.Create(hdr.GetStream()));
+                headers.Add(xHdrDoc);
+            }
+
+            // get the footer parts
+            List<XDocument> footers = new List<XDocument>();
+            foreach (var ftr in mainPart.FooterParts)
+            {
+                XDocument xFtrDoc = XDocument.Load(XmlReader.Create(ftr.GetStream()));
+                headers.Add(xFtrDoc);
+            }
+
+            // get the endnote part
+            XDocument xEndNtDoc = XDocument.Load(XmlReader.Create(mainPart.EndnotesPart.GetStream()));
+
+            // get the footnote part
+            XDocument xFootNtDoc = XDocument.Load(XmlReader.Create(mainPart.FootnotesPart.GetStream()));
 
             try
             {
@@ -2157,7 +2178,7 @@ namespace Office_File_Explorer.Helpers
                     where (string)style.Attribute(w + "type") == "paragraph" && (string)style.Attribute(w + "default") == "1"
                     select style).First().Attribute(w + "styleId");
 
-                // Find all paragraphs in the document.  
+                // Find all paragraphs in the main document part
                 var paragraphs =
                     from para in xDoc.Root.Element(w + "body").Descendants(w + "p")
                     let styleNode = para.Elements(w + "pPr").Elements(w + "pStyle").FirstOrDefault()
@@ -2167,7 +2188,7 @@ namespace Office_File_Explorer.Helpers
                         StyleName = styleNode is null ? defaultStyle : (string)styleNode.Attribute(w + "val")
                     };
 
-                // Retrieve the text of each paragraph.  
+                // Retrieve the text of each paragraph
                 var paraWithText =
                     from para in paragraphs
                     select new
@@ -2177,7 +2198,122 @@ namespace Office_File_Explorer.Helpers
                         Text = ParagraphText(para.ParagraphNode)
                     };
 
+                // print the text and style name for each paragraph
                 foreach (var p in paraWithText)
+                {
+                    count++;
+                    stylesList.Add(count + ". StyleName: " + p.StyleName + " || Text: " + p.Text);
+                }
+
+                // find all paragraphs in headers
+                foreach (XDocument hdr in headers)
+                {
+                    var Hdrparagraphs =
+                    from Hdrpara in hdr.Root.Descendants(w + "p")
+                    let styleNode = Hdrpara.Elements(w + "pPr").Elements(w + "pStyle").FirstOrDefault()
+                    select new
+                    {
+                        ParagraphNode = Hdrpara,
+                        StyleName = styleNode is null ? defaultStyle : (string)styleNode.Attribute(w + "val")
+                    };
+
+
+                    // Retrieve the text of each paragraph.  
+                    var HdrParaWithText =
+                        from para in Hdrparagraphs
+                        select new
+                        {
+                            para.ParagraphNode,
+                            para.StyleName,
+                            Text = ParagraphText(para.ParagraphNode)
+                        };
+
+                    foreach (var p in HdrParaWithText)
+                    {
+                        count++;
+                        stylesList.Add(count + ". StyleName: " + p.StyleName + " || Text: " + p.Text);
+                    }
+                }
+
+                // find all paragraphs in footers
+                foreach (XDocument ftr in footers)
+                {
+                    var Ftrparagraphs =
+                    from Ftrpara in ftr.Root.Descendants(w + "p")
+                    let styleNode = Ftrpara.Elements(w + "pPr").Elements(w + "pStyle").FirstOrDefault()
+                    select new
+                    {
+                        ParagraphNode = Ftrpara,
+                        StyleName = styleNode is null ? defaultStyle : (string)styleNode.Attribute(w + "val")
+                    };
+
+
+                    // Retrieve the text of each paragraph.  
+                    var FtrParaWithText =
+                        from para in Ftrparagraphs
+                        select new
+                        {
+                            para.ParagraphNode,
+                            para.StyleName,
+                            Text = ParagraphText(para.ParagraphNode)
+                        };
+
+                    foreach (var p in FtrParaWithText)
+                    {
+                        count++;
+                        stylesList.Add(count + ". StyleName: " + p.StyleName + " || Text: " + p.Text);
+                    }
+                }
+
+                // find all paragraphs in endnote part
+                var FtNtparagraphs =
+                    from FtNtpara in xFootNtDoc.Root.Descendants(w + "p")
+                    let styleNode = FtNtpara.Elements(w + "pPr").Elements(w + "pStyle").FirstOrDefault()
+                    select new
+                    {
+                        ParagraphNode = FtNtpara,
+                        StyleName = styleNode is null ? defaultStyle : (string)styleNode.Attribute(w + "val")
+                    };
+
+
+                // Retrieve the text of each paragraph.  
+                var FtNtParaWithText =
+                    from para in FtNtparagraphs
+                    select new
+                    {
+                        para.ParagraphNode,
+                        para.StyleName,
+                        Text = ParagraphText(para.ParagraphNode)
+                    };
+
+                foreach (var p in FtNtParaWithText)
+                {
+                    count++;
+                    stylesList.Add(count + ". StyleName: " + p.StyleName + " || Text: " + p.Text);
+                }
+
+                // find all parargraphs in footnote part
+                var EndNtparagraphs =
+                    from EndNtpara in xEndNtDoc.Root.Descendants(w + "p")
+                    let styleNode = EndNtpara.Elements(w + "pPr").Elements(w + "pStyle").FirstOrDefault()
+                    select new
+                    {
+                        ParagraphNode = EndNtpara,
+                        StyleName = styleNode is null ? defaultStyle : (string)styleNode.Attribute(w + "val")
+                    };
+
+
+                // Retrieve the text of each paragraph.  
+                var EndNtParaWithText =
+                    from para in FtNtparagraphs
+                    select new
+                    {
+                        para.ParagraphNode,
+                        para.StyleName,
+                        Text = ParagraphText(para.ParagraphNode)
+                    };
+
+                foreach (var p in EndNtParaWithText)
                 {
                     count++;
                     stylesList.Add(count + ". StyleName: " + p.StyleName + " || Text: " + p.Text);

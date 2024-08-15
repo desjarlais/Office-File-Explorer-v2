@@ -70,6 +70,7 @@ namespace Office_File_Explorer
             copyAllLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             toolStripButtonViewContents = new System.Windows.Forms.ToolStripButton();
+            toolStripButtonViewStyles = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixCorruptDoc = new System.Windows.Forms.ToolStripButton();
             toolStripButtonFixDoc = new System.Windows.Forms.ToolStripButton();
             toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -399,7 +400,7 @@ namespace Office_File_Explorer
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripButtonFixXml, toolStripButtonValidateXml, toolStripSeparator3, toolStripButton1 });
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonViewStyles, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripButtonFixXml, toolStripButtonValidateXml, toolStripSeparator3, toolStripButton1 });
             toolStrip1.Location = new System.Drawing.Point(0, 24);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new System.Drawing.Size(1051, 25);
@@ -415,6 +416,16 @@ namespace Office_File_Explorer
             toolStripButtonViewContents.Size = new System.Drawing.Size(103, 22);
             toolStripButtonViewContents.Text = "View Contents";
             toolStripButtonViewContents.Click += ToolStripButtonViewContents_Click;
+            // 
+            // toolStripButtonViewStyles
+            // 
+            toolStripButtonViewStyles.Enabled = false;
+            toolStripButtonViewStyles.Image = Properties.Resources.Strings_7959_0;
+            toolStripButtonViewStyles.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButtonViewStyles.Name = "toolStripButtonViewStyles";
+            toolStripButtonViewStyles.Size = new System.Drawing.Size(85, 22);
+            toolStripButtonViewStyles.Text = "View Styles";
+            toolStripButtonViewStyles.Click += toolStripButtonViewStyles_Click;
             // 
             // toolStripButtonFixCorruptDoc
             // 
@@ -694,8 +705,7 @@ namespace Office_File_Explorer
             // 
             // scintilla1
             // 
-            scintilla1.AutoCMaxHeight = 9;
-            scintilla1.BiDirectionality = ScintillaNET.BiDirectionalDisplayType.Disabled;
+            scintilla1.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(0, 120, 215);
             scintilla1.ContextMenuStrip = contextMenuScintilla;
             scintilla1.Dock = System.Windows.Forms.DockStyle.Fill;
             scintilla1.LexerName = null;
@@ -703,10 +713,7 @@ namespace Office_File_Explorer
             scintilla1.Name = "scintilla1";
             scintilla1.ScrollWidth = 49;
             scintilla1.Size = new System.Drawing.Size(698, 506);
-            scintilla1.TabIndents = true;
             scintilla1.TabIndex = 0;
-            scintilla1.UseRightToLeftReadingLayout = false;
-            scintilla1.WrapMode = ScintillaNET.WrapMode.None;
             // 
             // FrmMain
             // 
@@ -814,6 +821,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem renderRTFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButtonViewStyles;
     }
 }
 

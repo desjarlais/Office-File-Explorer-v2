@@ -1184,6 +1184,7 @@ namespace Office_File_Explorer
                     wordDocumentRevisionsToolStripMenuItem.Enabled = true;
                     toolStripDropDownButtonInsert.Enabled = true;
                     fileToolStripMenuItemClose.Enabled = true;
+                    toolStripButtonViewStyles.Enabled = true;
                     break;
                 case UIType.OpenExcel:
                     DisableAllUI();
@@ -1265,6 +1266,7 @@ namespace Office_File_Explorer
             toolStripButtonFixXml.Enabled = false;
             toolStripButtonValidateXml.Enabled = false;
             excelSheetViewerToolStripMenuItem.Enabled = false;
+            toolStripButtonViewStyles.Enabled = false;
             scintilla1.ReadOnly = true;
             scintilla1.BackColor = SystemColors.Control;
 
@@ -2149,7 +2151,6 @@ namespace Office_File_Explorer
                 {
                     sb.Append(DisplayListContents(Word.LstContentControls(tempFileReadOnly), Strings.wContentControls));
                     sb.Append(DisplayListContents(Word.LstTables(tempFileReadOnly), Strings.wTables));
-                    sb.Append(DisplayListContents(Word.LstStyles(tempFileReadOnly), Strings.wStyles));
                     sb.Append(DisplayListContents(Word.LstHyperlinks(tempFileReadOnly), Strings.wHyperlinks));
                     sb.Append(DisplayListContents(Word.LstListTemplates(tempFileReadOnly, false), Strings.wListTemplates));
                     sb.Append(DisplayListContents(Word.LstFonts(tempFileReadOnly), Strings.wFonts));
@@ -3590,6 +3591,14 @@ namespace Office_File_Explorer
                 Owner = this
             };
             frmRtb.ShowDialog();
+        }
+
+        private void toolStripButtonViewStyles_Click(object sender, EventArgs e)
+        {
+            scintilla1.ReadOnly = false;
+            scintilla1.Margins[0].Width = 0;
+            scintilla1.ClearAll();
+            scintilla1.AppendText(DisplayListContents(Word.LstStyles(tempFileReadOnly), Strings.wStyles).ToString());
         }
 
         #endregion
