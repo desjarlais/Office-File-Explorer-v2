@@ -153,17 +153,19 @@ namespace Office_File_Explorer.Helpers
 
         public static bool IsFileEncrypted(string filePath)
         {
-            byte[] buffer = new byte[2];
+            byte[] buffer = new byte[8];
             try
             {
-                // open the file and populate the first 2 bytes into the buffer
+                // open the file and populate the first 8 bytes into the buffer
                 using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
                     fs.Read(buffer, 0, buffer.Length);
                 }
 
-                // if the buffer starts with PK the file is a zip archive
-                if (buffer[0].ToString() == "208" && buffer[1].ToString() == "207")
+                // encrypted files from Office start with D0 CF 11 E0, which is the compound file format header
+                // D0 CF 11 E0 A1 B1 1A E1 (208 207 17 224 161 177 26 225)
+                if (buffer[0].ToString() == "208" && buffer[1].ToString() == "207" && buffer[2].ToString() == "17" && buffer[3].ToString() == "224" && buffer[4].ToString() == "161" &&
+                    buffer[5].ToString() == "177" && buffer[6].ToString() == "26" && buffer[7].ToString() == "225")
                 {
                     return true;
                 }

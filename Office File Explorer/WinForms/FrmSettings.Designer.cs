@@ -52,7 +52,6 @@ namespace Office_File_Explorer.WinForms
             rdoUseSPGuid = new System.Windows.Forms.RadioButton();
             rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
             groupBox6 = new System.Windows.Forms.GroupBox();
-            ckbShowStyleText = new System.Windows.Forms.CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -62,7 +61,6 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(ckbShowStyleText);
             groupBox1.Controls.Add(ckbDeleteOnlyCommentBookmarks);
             groupBox1.Controls.Add(ckbFixGroupedShapes);
             groupBox1.Controls.Add(ckbListRsids);
@@ -296,16 +294,6 @@ namespace Office_File_Explorer.WinForms
             groupBox6.TabStop = false;
             groupBox6.Text = "Fix Content Control Prefix Mappings";
             // 
-            // ckbShowStyleText
-            // 
-            ckbShowStyleText.AutoSize = true;
-            ckbShowStyleText.Location = new System.Drawing.Point(6, 116);
-            ckbShowStyleText.Name = "ckbShowStyleText";
-            ckbShowStyleText.Size = new System.Drawing.Size(195, 19);
-            ckbShowStyleText.TabIndex = 5;
-            ckbShowStyleText.Text = "Show Text Associated With Style";
-            ckbShowStyleText.UseVisualStyleBackColor = true;
-            // 
             // FrmSettings
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -364,6 +352,5 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox ckbResetIndentLevels;
         private System.Windows.Forms.CheckBox ckbOutlookMsgAsRtf;
-        private System.Windows.Forms.CheckBox ckbShowStyleText;
     }
 }

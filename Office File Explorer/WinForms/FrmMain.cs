@@ -261,6 +261,7 @@ namespace Office_File_Explorer
             fileToolStripMenuItemClose.Enabled = false;
             scintilla1.ReadOnly = false;
             scintilla1.ClearAll();
+            scintilla1.Margins[0].Width = 0;
 
             // check for encrypted file
             fs?.Close();

@@ -69,11 +69,6 @@ namespace Office_File_Explorer.WinForms
                 ckbOutlookMsgAsRtf.Checked = true;
             }
 
-            if (Properties.Settings.Default.ShowStyleText == true)
-            {
-                ckbShowStyleText.Checked = true;
-            }
-
             // namespace options
             if (Properties.Settings.Default.UseContentControlGuid == true)
             {
@@ -101,7 +96,6 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.RemoveCustDataTags = ckbRemoveCustDataTags.Checked;
             Properties.Settings.Default.ResetIndentLevels = ckbResetIndentLevels.Checked;
             Properties.Settings.Default.MsgAsRtf = ckbOutlookMsgAsRtf.Checked;
-            Properties.Settings.Default.ShowStyleText = ckbShowStyleText.Checked;
 
             if (rdoUseCCGuid.Checked)
             {
@@ -155,15 +149,6 @@ namespace Office_File_Explorer.WinForms
             else
             {
                 Properties.Settings.Default.MsgAsRtf = false;
-            }
-
-            if (ckbShowStyleText.Checked)
-            {
-                Properties.Settings.Default.ShowStyleText = true;
-            }
-            else
-            {
-                Properties.Settings.Default.ShowStyleText = false;
             }
 
             Properties.Settings.Default.Save();
