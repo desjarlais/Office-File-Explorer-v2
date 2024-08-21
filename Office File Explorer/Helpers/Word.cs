@@ -2310,9 +2310,9 @@ namespace Office_File_Explorer.Helpers
                 }
             }
 
+            // find all parargraphs in endnote part
             if (xEndNtDoc is not null)
             {
-                // find all parargraphs in endnote part
                 var EndNtparagraphs =
                     from EndNtpara in xEndNtDoc.Root.Descendants(w + "p")
                     let styleNode = EndNtpara.Elements(w + "pPr").Elements(w + "pStyle").FirstOrDefault()
