@@ -410,6 +410,30 @@ namespace Office_File_Explorer.Helpers
             return tList;
         }
 
+        public static List<string> GetFonts(string fPath)
+        {
+            List<string> fList = new List<string>();
+            List<string> dList = new List<string>();
+            using (SpreadsheetDocument mySpreadsheet = SpreadsheetDocument.Open(fPath, false))
+            {
+                foreach (Font f in mySpreadsheet.WorkbookPart.WorkbookStylesPart.Stylesheet.Fonts)
+                {
+                    fList.Add(f.FontName.Val);
+                }
+            }
+
+            fList = fList.Distinct().ToList();
+
+            int count = 0;
+            foreach (string s in fList)
+            {
+                count++;
+                dList.Add(count + Strings.wPeriod + s);
+            }
+
+            return dList;
+        }
+
         public static List<string> GetSheetInfo(string fPath)
         {
             List<string> tList = new List<string>();

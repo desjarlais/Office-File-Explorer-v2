@@ -1,13 +1,4 @@
-﻿// Open XML SDK refs
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-
-// App refs
-using Office_File_Explorer.Helpers;
-using Office_File_Explorer.WinForms;
-using Office_File_Explorer.OpenMcdf;
-
-// .NET refs
+﻿// .NET refs
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,6 +14,15 @@ using System.Xml;
 using System.Drawing;
 using System.Xml.Schema;
 using System.Xml.Linq;
+
+// Open XML SDK refs
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+
+// App refs
+using Office_File_Explorer.Helpers;
+using Office_File_Explorer.WinForms;
+using Office_File_Explorer.OpenMcdf;
 
 // named refs
 using File = System.IO.File;
@@ -62,7 +62,7 @@ namespace Office_File_Explorer
         private static string FixedFallback = string.Empty;
         private static string StrExtension = string.Empty;
         private static string StrDestFileName = string.Empty;
-        static StringBuilder sbNodeBuffer = new StringBuilder();
+        private static StringBuilder sbNodeBuffer = new StringBuilder();
 
         // temp files
         public static string tempFileReadOnly, tempFilePackageViewer;
@@ -93,7 +93,7 @@ namespace Office_File_Explorer
         {
             InitializeComponent();
 
-            this.Text = Strings.oAppTitle + Strings.wMinusSign + Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+            Text = Strings.oAppTitle + Strings.wMinusSign + Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
             // make sure the log file is created
             if (!File.Exists(Strings.fLogFilePath))
@@ -2174,6 +2174,7 @@ namespace Office_File_Explorer
                     sb.Append(DisplayListContents(Excel.GetDefinedNames(tempFileReadOnly), Strings.wDefinedNames));
                     sb.Append(DisplayListContents(Excel.GetConnections(tempFileReadOnly), Strings.wConnections));
                     sb.Append(DisplayListContents(Excel.GetHiddenRowCols(tempFileReadOnly), Strings.wHiddenRowCol));
+                    sb.Append(DisplayListContents(Excel.GetFonts(tempFileReadOnly), Strings.wFonts));
                 }
                 else if (StrOfficeApp == Strings.oAppPowerPoint)
                 {
