@@ -2578,6 +2578,12 @@ namespace Office_File_Explorer
                     corruptionFound = true;
                 }
 
+                if (WordFixes.FixVneAttributes(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Fixed Corrupt Vne Attributes - More information here ");
+                    corruptionFound = true;
+                }
+
                 if (WordFixes.RemovePlainTextCcFromBookmark(tempFilePackageViewer))
                 {
                     sbFixes.AppendLine("Removed Corrupt Content Controls");
@@ -2981,7 +2987,7 @@ namespace Office_File_Explorer
                         {
                             using (WordprocessingDocument document = WordprocessingDocument.Open(tempFilePackageViewer, true))
                             {
-                                if ((Word.HasPersonalInfo(document) == true) && Word.RemovePersonalInfo(document) == true)
+                                if (Word.RemovePersonalInfo(document) == true)
                                 {
                                     LogInformation(LogInfoType.ClearAndAdd, "PII Removed from file.", string.Empty);
                                 }

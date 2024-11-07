@@ -25,6 +25,7 @@ using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
 using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 using TableStyle = DocumentFormat.OpenXml.Wordprocessing.TableStyle;
 using static System.Net.WebRequestMethods;
+using System.Runtime.CompilerServices;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -2810,8 +2811,55 @@ namespace Office_File_Explorer.Helpers
             return xdoc;
         }
 
+        /// <summary>
+        /// if the settings.xml file has either of the following, remove them
+        /// <w:removePersonalInformation />
+        /// <w:removeDateAndTime />
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        public static bool RemovePersonalInfo(WordprocessingDocument document)
+        {
+            bool isFixed = false;
+
+            // check for nonexistence of removePersonalInformation and removeDateAndTime
+            XNamespace w = Strings.wordMainAttributeNamespace;
+            OpenXmlPart documentSettingsPart = document.MainDocumentPart.DocumentSettingsPart;
+            XDocument documentSettingsXDoc = documentSettingsPart.GetXDocument();
+            XElement settings = documentSettingsXDoc.Root;
+
+            bool hasRemovePI = settings.Elements(w + Strings.wRemovePI).Any();
+            bool hasRemoveDateTime = settings.Elements(w + Strings.wRemoveDateTime).Any();
+
+            if (hasRemovePI)
+            {
+                settings.Element(w + Strings.wRemovePI).Remove();
+                document.Save();
+                isFixed = true;
+            }
+
+            if (hasRemoveDateTime)
+            {
+                settings.Element(w + Strings.wRemoveDateTime).Remove();
+                document.Save();
+                isFixed = true;
+            }
+
+            if (isFixed)
+            {
+                using (XmlWriter xw = XmlWriter.Create(documentSettingsPart.GetStream(FileMode.Create, FileAccess.Write)))
+                {
+                    documentSettingsXDoc.Save(xw);
+                }
+            }
+
+            return isFixed;
+        }
+
         public static bool HasPersonalInfo(WordprocessingDocument document)
         {
+            bool hasPersonalInfo = false;
+
             // check for company name from /docProps/app.xml
             XNamespace x = Strings.OfficeExtendedProps;
             OpenXmlPart extendedFilePropertiesPart = document.ExtendedFilePropertiesPart;
@@ -2821,7 +2869,7 @@ namespace Office_File_Explorer.Helpers
 
             if (company.Length > 0)
             {
-                return true;
+                hasPersonalInfo = true;
             }
 
             // check for dc:creator, cp:lastModifiedBy from /docProps/core.xml
@@ -2834,7 +2882,7 @@ namespace Office_File_Explorer.Helpers
 
             if (creator.Length > 0)
             {
-                return true;
+                hasPersonalInfo = true;
             }
 
             string lastModifiedBy = coreFilePropertiesXDoc.Elements(cp + Strings.wCoreProperties).Elements(cp + Strings.wLastModifiedBy)
@@ -2842,7 +2890,7 @@ namespace Office_File_Explorer.Helpers
 
             if (lastModifiedBy.Length > 0)
             {
-                return true;
+                hasPersonalInfo = true;
             }
 
             // check for nonexistence of removePersonalInformation and removeDateAndTime
@@ -2851,22 +2899,22 @@ namespace Office_File_Explorer.Helpers
             XDocument documentSettingsXDoc = documentSettingsPart.GetXDocument();
             XElement settings = documentSettingsXDoc.Root;
 
-            if (settings.Element(w + Strings.wRemovePI) is null)
+            if (settings.Element(w + Strings.wRemovePI) is not null)
             {
-                return true;
+                hasPersonalInfo = true;
             }
 
-            if (settings.Element(w + Strings.wRemoveDateTime) is null)
+            if (settings.Element(w + Strings.wRemoveDateTime) is not null)
             {
-                return true;
+                hasPersonalInfo = true;
             }
 
-            return false;
+            return hasPersonalInfo;
         }
 
-        public static bool RemovePersonalInfo(WordprocessingDocument document)
+        public static bool AddPersonalInfo(WordprocessingDocument document)
         {
-            bool isFixed = false;
+            bool isAdded = false;
 
             // remove the company name from /docProps/app.xml
             // set TotalTime to "0"
@@ -2883,7 +2931,7 @@ namespace Office_File_Explorer.Helpers
             using (XmlWriter xw = XmlWriter.Create(extendedFilePropertiesPart.GetStream(FileMode.Create, FileAccess.Write)))
             {
                 extendedFilePropertiesXDoc.Save(xw);
-                isFixed = true;
+                isAdded = true;
             }
 
             // remove the values of dc:creator, cp:lastModifiedBy from /docProps/core.xml
@@ -2917,7 +2965,7 @@ namespace Office_File_Explorer.Helpers
             using (XmlWriter xw = XmlWriter.Create(coreFilePropertiesPart.GetStream(FileMode.Create, FileAccess.Write)))
             {
                 coreFilePropertiesXDoc.Save(xw);
-                isFixed = true;
+                isAdded = true;
             }
 
             // add w:removePersonalInformation, w:removeDateAndTime to /word/settings.xml
@@ -2961,10 +3009,10 @@ namespace Office_File_Explorer.Helpers
             using (XmlWriter xw = XmlWriter.Create(documentSettingsPart.GetStream(FileMode.Create, FileAccess.Write)))
             {
                 documentSettingsXDoc.Save(xw);
-                isFixed = true;
+                isAdded = true;
             }
 
-            return isFixed;
+            return isAdded;
         }
 
         private static string GetStyleIdFromStyleName(MainDocumentPart mainPart, string styleName)

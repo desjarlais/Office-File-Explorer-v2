@@ -1574,6 +1574,29 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixVneAttributes(string filePath)
+        {
+            bool isFixed = false;
+
+            try
+            {
+                using (WordprocessingDocument package = WordprocessingDocument.Open(filePath, true))
+                {
+                    return isFixed;
+                }
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, "FixListStyles Error: " + ex.Message);
+                return isFixed;
+            }
+        }
+
+        /// <summary>
         /// this fix is for a known issue where list styles are somehow getting the style name changed to Normal
         /// the fix is to find those number styles and change them to a default list style
         /// </summary>
