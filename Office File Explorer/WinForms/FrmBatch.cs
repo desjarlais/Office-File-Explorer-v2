@@ -1682,9 +1682,8 @@ namespace Office_File_Explorer.WinForms
                     {
                         using (WordprocessingDocument document = WordprocessingDocument.Open(f, true))
                         {
-                            if (Word.HasPersonalInfo(document) == true)
+                            if (Word.RemovePersonalInfo(document))
                             {
-                                Word.RemovePersonalInfo(document);
                                 lstOutput.Items.Add(f + " : PII removed from file.");
                                 FileUtilities.WriteToLog(Strings.fLogFilePath, f + " : PII removed from file.");
                             }

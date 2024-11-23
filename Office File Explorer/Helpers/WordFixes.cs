@@ -1574,7 +1574,8 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
-        /// 
+        /// There are times when third parties fail to write out the vne attributes in the document.xml file correctly
+        /// They add it to the ignorable attribute, but they don't write out the corresponding namespace
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -1586,6 +1587,28 @@ namespace Office_File_Explorer.Helpers
             {
                 using (WordprocessingDocument package = WordprocessingDocument.Open(filePath, true))
                 {
+                    // get the vne attribute list
+                    OpenXmlAttribute vne = package.MainDocumentPart.Document.GetAttributes().First();
+
+                    // check each vne attribute for the correct namespace
+                    if (vne.LocalName == "Ignorable")
+                    {
+                        string[] vneArray = vne.Value.Split(' ');
+                        List<KeyValuePair<string, string>> nslist = package.MainDocumentPart.Document.NamespaceDeclarations.ToList();
+                        List<string> missingNamespaces = new List<string>();
+
+                        foreach (string s in vneArray)
+                        {
+                            foreach (var v in nslist)
+                            {
+                                if (v.Value == s)
+                                {
+                                    missingNamespaces.Add(s);
+                                }
+                            }
+                        }
+                    }
+
                     return isFixed;
                 }
             }

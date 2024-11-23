@@ -2813,8 +2813,8 @@ namespace Office_File_Explorer.Helpers
 
         /// <summary>
         /// if the settings.xml file has either of the following, remove them
-        /// <w:removePersonalInformation />
-        /// <w:removeDateAndTime />
+        ///  <w:removePersonalInformation />
+        ///  <w:removeDateAndTime />
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
