@@ -33,6 +33,7 @@ using Application = System.Windows.Forms.Application;
 // scintilla refs
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
+using System.Globalization;
 
 namespace Office_File_Explorer
 {
@@ -48,8 +49,7 @@ namespace Office_File_Explorer
 
         // openmcdf globals
         private FileStream fs;
-        private CompoundFile cf;
-        private CFStream cfStream;
+        private RootStorage rs;
         private bool isValidXml;
         private List<string> validationErrors = new List<string>();
 
@@ -284,33 +284,31 @@ namespace Office_File_Explorer
         {
             try
             {
-                fs = new FileStream(fileName, FileMode.Open, enableCommit ? FileAccess.ReadWrite : FileAccess.Read);
+                rs?.Dispose();
+                rs = null;
 
-                try
-                {
-                    cf = new CompoundFile(fs, CFSUpdateMode.Update, CFSConfiguration.SectorRecycle | CFSConfiguration.NoValidationException | CFSConfiguration.EraseFreeSectors);
+                // load the file
+                rs = RootStorage.Open(fileName, FileMode.Open, StorageModeFlags.Transacted);
 
-                    // populate treeview
-                    TvFiles.Nodes.Clear();
-                    TreeNode root = null;
-                    root = TvFiles.Nodes.Add("Root Entry", "Root");
-                    root.Tag = cf.RootStorage;
-                    root.ImageIndex = 5;
-                    root.SelectedImageIndex = 5;
-                    AddNodes(root, cf.RootStorage);
-                    TvFiles.ExpandAll();
-                    isEncrypted = true;
-                }
-                catch (Exception ex)
-                {
-                    FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
-                    MessageBox.Show(ex.Message, "File Load Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    FileClose();
-                }
+                // populate treeview
+                TvFiles.Nodes.Clear();
+                TreeNode root = null;
+                root = TvFiles.Nodes.Add(rs.EntryInfo.Name);
+                root.Tag = new NodeSelection(null, rs.EntryInfo);
+
+                root.ImageIndex = 5;
+                root.SelectedImageIndex = 5;
+
+                AddNodes(root, rs);
+
+                TvFiles.ExpandAll();
+                isEncrypted = true;
             }
             catch (Exception ex)
             {
-                LogInformation(LogInfoType.LogException, "OpenEncryptedOfficeDocument Error", ex.Message);
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+                MessageBox.Show(ex.Message, "File Load Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FileClose();
             }
         }
 
@@ -329,32 +327,28 @@ namespace Office_File_Explorer
         /// Recursive addition of tree nodes foreach child of current item in the storage
         /// </summary>
         /// <param name="node">Current TreeNode</param>
-        /// <param name="cfs">Current storage associated with node</param>
-        private static void AddNodes(TreeNode node, CFStorage cfs)
+        /// <param name="storage">Current storage associated with node</param>
+        private static void AddNodes(TreeNode node, Storage storage)
         {
-            Action<CFItem> va = delegate (CFItem target)
+            foreach (EntryInfo item in storage.EnumerateEntries())
             {
-                TreeNode temp = node.Nodes.Add(target.Name, target.Name + (target.IsStream ? " (" + target.Size + " bytes )" : string.Empty));
-                temp.Tag = target;
+                TreeNode childNode = node.Nodes.Add(item.Name);
+                childNode.Tag = new NodeSelection(storage, item);
 
-                // set images for treeview
-                if (target.IsStream)
+                if (item.Type is EntryType.Storage)
                 {
-                    temp.ImageIndex = 5;
-                    temp.SelectedImageIndex = 5;
+                    childNode.ImageIndex = 6;
+                    childNode.SelectedImageIndex = 6;
+
+                    Storage subStorage = storage.OpenStorage(item.Name);
+                    AddNodes(childNode, subStorage);
                 }
                 else
                 {
-                    temp.ImageIndex = 6;
-                    temp.SelectedImageIndex = 6;
-
-                    // Recursion into the storage
-                    AddNodes(temp, (CFStorage)target);
+                    childNode.ImageIndex = 7;
+                    childNode.SelectedImageIndex = 7;
                 }
-            };
-
-            //Visit NON-recursively (first level only)
-            cfs.VisitEntries(va, false);
+            }
         }
 
         /// <summary>
@@ -429,7 +423,7 @@ namespace Office_File_Explorer
                     // handle office files
                     if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
                     {
-                        // check for encrypted files
+                        // check for encrypted files or compound file format
                         if (FileUtilities.IsFileEncrypted(toolStripStatusLabelFilePath.Text))
                         {
                             OpenEncryptedOfficeDocument(toolStripStatusLabelFilePath.Text, true);
@@ -1304,21 +1298,25 @@ namespace Office_File_Explorer
                 if (tn is not null)
                 {
                     TvFiles.SelectedNode = tn;
-                    // The tag property contains the underlying CFItem.
-                    // CFItem target = (CFItem)n.Tag;
-                    cfStream = tn.Tag as CFStream;
-                    if (cfStream is not null)
+                    NodeSelection cfbStream = (NodeSelection)tn.Tag;
+                    
+                    if (cfbStream is not null)
                     {
-                        byte[] buffer = new byte[cfStream.Size];
-                        cfStream.Read(buffer, 0, buffer.Length);
-
                         StringBuilder sb = new StringBuilder();
-                        foreach (byte b in buffer)
+
+                        // handle compound file streams
+                        using CfbStream cfbStream1 = rs.OpenStream(tn.Text);
                         {
-                            if (b != 0)
+                            byte[] buffer = new byte[cfbStream1.EntryInfo.Length];
+                            cfbStream1.Read(buffer, 0, buffer.Length);
+                            foreach (byte b in buffer)
                             {
-                                sb.Append(AppUtilities.ConvertByteToText(b.ToString()));
+                                if (b != 0)
+                                {
+                                    sb.Append(AppUtilities.ConvertByteToText(b.ToString()));
+                                }
                             }
+
                         }
 
                         // special handling for unencrypted xml stream data
@@ -1608,6 +1606,18 @@ namespace Office_File_Explorer
                 Cursor = Cursors.WaitCursor;
                 scintilla1.ReadOnly = false;
 
+                // if file is binary
+                if (toolStripStatusLabelFilePath.Text.EndsWith(".doc"))
+                {
+                    using CfbStream cfbStream = rs.OpenStream(e.Node.Text);
+                    {
+                        byte[] buffer = new byte[cfbStream.EntryInfo.Length];
+                        cfbStream.Read(buffer, 0, buffer.Length);
+                        scintilla1.Text = Convert.ToHexString(buffer);
+                    }
+                    return;
+                }
+
                 // render msg content
                 if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.msgFileExt))
                 {
@@ -1650,7 +1660,7 @@ namespace Office_File_Explorer
                     return;
                 }
 
-                if (isEncrypted || e.Node.Text.Contains("LabelInfo.xml"))
+                if (isEncrypted && e.Node.Text.Contains("LabelInfo.xml"))
                 {
                     foreach (PackagePart pp in pkgParts)
                     {
@@ -2092,12 +2102,12 @@ namespace Office_File_Explorer
             if (isEncrypted)
             {
                 // write the stream changes and save
-                cfStream.Write(Encoding.Default.GetBytes(scintilla1.Text), 0, 0, Encoding.Default.GetByteCount(scintilla1.Text));
-                cf.Commit();
+                //cfStream.Write(Encoding.Default.GetBytes(scintilla1.Text), 0, 0, Encoding.Default.GetByteCount(scintilla1.Text));
+                rs.Flush();
+                rs.Commit();
 
                 // let the user know it worked, then close the stream and form
                 MessageBox.Show("Stream changes saved.", "File Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                cf.Close();
                 return;
             }
 
@@ -2496,11 +2506,6 @@ namespace Office_File_Explorer
                         }
                     }
                 }
-            }
-            catch (FileFormatException ffe)
-            {
-                DisplayInvalidFileFormatError();
-                FileUtilities.WriteToLog(Strings.fLogFilePath, "Corrupt Doc Exception = " + ffe.Message);
             }
             catch (Exception ex)
             {
@@ -3610,5 +3615,33 @@ namespace Office_File_Explorer
         }
 
         #endregion
+    }
+
+    internal sealed record class NodeSelection(OpenMcdf.Storage? Parent, EntryInfo EntryInfo)
+    {
+        public string SanitizedFileName
+        {
+            get
+            {
+                // A lot of stream and storage have only non-printable characters.
+                // We need to sanitize filename.
+
+                string sanitizedFileName = string.Empty;
+
+                foreach (char c in EntryInfo.Name)
+                {
+                    UnicodeCategory category = char.GetUnicodeCategory(c);
+                    if (category is UnicodeCategory.LetterNumber or UnicodeCategory.LowercaseLetter or UnicodeCategory.UppercaseLetter)
+                        sanitizedFileName += c;
+                }
+
+                if (string.IsNullOrEmpty(sanitizedFileName))
+                {
+                    sanitizedFileName = "tempFileName";
+                }
+
+                return $"{sanitizedFileName}.bin";
+            }
+        }
     }
 }

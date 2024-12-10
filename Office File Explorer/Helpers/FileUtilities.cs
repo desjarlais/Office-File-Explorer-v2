@@ -151,6 +151,11 @@ namespace Office_File_Explorer.Helpers
             }
         }
 
+        /// <summary>
+        /// check if file is encrypted or compound file format
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static bool IsFileEncrypted(string filePath)
         {
             byte[] buffer = new byte[8];

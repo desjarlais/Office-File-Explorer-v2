@@ -1,579 +1,266 @@
-﻿/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
- * 
- * The Original Code is OpenMCDF - Compound Document Format library.
- * 
- * The Initial Developer of the Original Code is Federico Blaseotto.*/
-
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using static Office_File_Explorer.OpenMcdf.CompoundFile;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdf
 {
-    public enum StgType : int
+    /// <summary>
+    /// The storage type of a <see cref="DirectoryEntry"/>.
+    /// </summary>
+    enum StorageType
     {
-        StgInvalid = 0,
-        StgStorage = 1,
-        StgStream = 2,
-        StgLockbytes = 3,
-        StgProperty = 4,
-        StgRoot = 5
+        Unallocated = 0,
+        Storage = 1,
+        Stream = 2,
+        Root = 5
     }
 
-    public enum StgColor : int
+    /// <summary>
+    /// Red-black node color.
+    /// </summary>
+    enum NodeColor
     {
         Red = 0,
         Black = 1
     }
 
-    internal class DirectoryEntry : IDirectoryEntry
+    /// <summary>
+    /// Stream ID constants for <see cref="DirectoryEntry"/>.
+    /// </summary>
+    internal static class StreamId
     {
-        internal const int THIS_IS_GREATER = 1;
-        internal const int OTHER_IS_GREATER = -1;
-        private IList<IDirectoryEntry> dirRepository;
+        public const uint Maximum = 0xFFFFFFFA;
+        public const uint NoStream = 0xFFFFFFFF;
+    }
 
-        private int sid = -1;
-        public int SID
+    /// <summary>
+    /// Encapsulates data about a <see cref="Storage"/> or Stream.
+    /// </summary>
+    internal sealed class DirectoryEntry : IEquatable<DirectoryEntry?>
+    {
+        internal const int Length = 128;
+        internal const int NameFieldLength = 64;
+        internal const uint MaxV3StreamLength = 0x80000000;
+
+        internal static readonly DateTime ZeroFileTime = DateTime.FromFileTimeUtc(0);
+
+        internal static readonly byte[] Unallocated = new byte[128];
+
+        DateTime creationTime;
+        DateTime modifiedTime;
+
+        public uint Id { get; set; }
+
+        public byte[] Name { get; } = new byte[NameFieldLength];
+
+        public ushort NameLength { get; set; }
+
+        /// <summary>
+        /// The type of the storage object.
+        /// </summary>
+        public StorageType Type { get; set; } = StorageType.Unallocated;
+
+        public NodeColor Color { get; set; }
+
+        /// <summary>
+        /// Stream ID of the left sibling.
+        /// </summary>
+        public uint LeftSiblingId { get; set; } = StreamId.NoStream;
+
+        /// <summary>
+        /// Stream ID of the right sibling.
+        /// </summary>
+        public uint RightSiblingId { get; set; } = StreamId.NoStream;
+
+        /// <summary>
+        /// Stream ID of the child.
+        /// </summary>
+        public uint ChildId { get; set; } = StreamId.NoStream;
+
+        /// <summary>
+        /// GUID for storage objects.
+        /// </summary>
+        public Guid CLSID { get; set; }
+
+        /// <summary>
+        /// User defined flags for storage objects.
+        /// </summary>
+        public uint StateBits { get; set; }
+
+        /// <summary>
+        /// The creation time of the storage object.
+        /// </summary>
+        public DateTime CreationTime
         {
-            get { return sid; }
-            set { sid = value; }
-        }
-
-        internal static Int32 NOSTREAM
-            = unchecked((int)0xFFFFFFFF);
-
-        internal static Int32 ZERO
-            = 0;
-
-        private DirectoryEntry(String name, StgType stgType, IList<IDirectoryEntry> dirRepository)
-        {
-            this.dirRepository = dirRepository;
-
-            this.stgType = stgType;
-
-            if (stgType == StgType.StgStorage)
-            {
-                creationDate = BitConverter.GetBytes((DateTime.Now.ToFileTime()));
-                StartSetc = ZERO;
-            }
-
-            if (stgType == StgType.StgInvalid)
-            {
-                StartSetc = ZERO;
-            }
-
-            if (name != String.Empty)
-            {
-                SetEntryName(name);
-            }
-        }
-
-        private byte[] entryName = new byte[64];
-
-        public byte[] EntryName
-        {
-            get
-            {
-                return entryName;
-            }
-            //set
-            //{
-            //    entryName = value;
-            //}
-        }
-
-        public String GetEntryName()
-        {
-            if (entryName != null && entryName.Length > 0)
-            {
-                return Encoding.Unicode.GetString(entryName).Remove((nameLength - 1) / 2);
-            }
-            else
-                return String.Empty;
-        }
-
-        public void SetEntryName(String entryName)
-        {
-            if (entryName == String.Empty)
-            {
-                this.entryName = new byte[64];
-                nameLength = 0;
-            }
-            else
-            {
-                if (entryName.Contains(@"\") || entryName.Contains(@"/") || entryName.Contains(@":") || entryName.Contains(@"!"))
-                    throw new CFException("Invalid character in entry: the characters '\\', '/', ':','!' cannot be used in entry name");
-
-                if (entryName.Length > 31)
-                    throw new CFException("Entry name MUST NOT exceed 31 characters");
-
-                byte[] newName = null;
-                byte[] temp = Encoding.Unicode.GetBytes(entryName);
-                newName = new byte[64];
-                Buffer.BlockCopy(temp, 0, newName, 0, temp.Length);
-                newName[temp.Length] = 0x00;
-                newName[temp.Length + 1] = 0x00;
-
-                this.entryName = newName;
-                nameLength = (ushort)(temp.Length + 2);
-            }
-        }
-
-        private ushort nameLength;
-        public ushort NameLength
-        {
-            get
-            {
-                return nameLength;
-            }
+            get => creationTime;
             set
             {
-                throw new NotImplementedException();
+                if (Type is StorageType.Stream or StorageType.Root && value != ZeroFileTime)
+                    throw new ArgumentException("Creation time must be zero for streams and root.", nameof(value));
+
+                creationTime = value;
             }
-        }
-
-        private StgType stgType = StgType.StgInvalid;
-        public StgType StgType
-        {
-            get
-            {
-                return stgType;
-            }
-            set
-            {
-                stgType = value;
-            }
-        }
-        private StgColor stgColor = StgColor.Red;
-
-        public StgColor StgColor
-        {
-            get
-            {
-                return stgColor;
-            }
-            set
-            {
-                stgColor = value;
-            }
-        }
-
-        private Int32 leftSibling = NOSTREAM;
-        public Int32 LeftSibling
-        {
-            get { return leftSibling; }
-            set { leftSibling = value; }
-        }
-
-        private Int32 rightSibling = NOSTREAM;
-        public Int32 RightSibling
-        {
-            get { return rightSibling; }
-            set { rightSibling = value; }
-        }
-
-        private Int32 child = NOSTREAM;
-        public Int32 Child
-        {
-            get { return child; }
-            set { child = value; }
-        }
-
-        private Guid storageCLSID = Guid.Empty;
-
-        public Guid StorageCLSID
-        {
-            get
-            {
-                return storageCLSID;
-            }
-            set
-            {
-                storageCLSID = value;
-            }
-        }
-
-
-        private Int32 stateBits;
-
-        public Int32 StateBits
-        {
-            get { return stateBits; }
-            set { stateBits = value; }
-        }
-
-        private byte[] creationDate = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-        public byte[] CreationDate
-        {
-            get
-            {
-                return creationDate;
-            }
-            set
-            {
-                creationDate = value;
-            }
-        }
-
-        private byte[] modifyDate = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-        public byte[] ModifyDate
-        {
-            get
-            {
-                return modifyDate;
-            }
-            set
-            {
-                modifyDate = value;
-            }
-        }
-
-        private Int32 startSetc = Sector.ENDOFCHAIN;
-        public Int32 StartSetc
-        {
-            get
-            {
-                return startSetc;
-            }
-            set
-            {
-                startSetc = value;
-            }
-        }
-        private long size;
-        public long Size
-        {
-            get
-            {
-                return size;
-            }
-            set
-            {
-                size = value;
-            }
-        }
-
-        public int CompareTo(object obj)
-        {
-            IDirectoryEntry otherDir = obj as IDirectoryEntry;
-
-            if (otherDir == null)
-                throw new CFException("Invalid casting: compared object does not implement IDirectorEntry interface");
-
-            if (NameLength > otherDir.NameLength)
-            {
-                return THIS_IS_GREATER;
-            }
-            else if (NameLength < otherDir.NameLength)
-            {
-                return OTHER_IS_GREATER;
-            }
-            else
-            {
-                string thisName = Encoding.Unicode.GetString(EntryName, 0, NameLength);
-                string otherName = Encoding.Unicode.GetString(otherDir.EntryName, 0, otherDir.NameLength);
-
-                for (int z = 0; z < thisName.Length; z++)
-                {
-                    char thisChar = char.ToUpperInvariant(thisName[z]);
-                    char otherChar = char.ToUpperInvariant(otherName[z]);
-
-                    if (thisChar > otherChar)
-                        return THIS_IS_GREATER;
-                    else if (thisChar < otherChar)
-                        return OTHER_IS_GREATER;
-                }
-
-                return 0;
-
-            }
-
-            //   return String.Compare(Encoding.Unicode.GetString(this.EntryName).ToUpper(), Encoding.Unicode.GetString(other.EntryName).ToUpper());
-        }
-
-        public override bool Equals(object obj)
-        {
-            return CompareTo(obj) == 0;
         }
 
         /// <summary>
-        /// FNV hash, short for Fowler/Noll/Vo
+        /// The modified time of the storage object.
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <returns>(not warranted) unique hash for byte array</returns>
-        private static ulong fnv_hash(byte[] buffer)
+        public DateTime ModifiedTime
         {
+            get => modifiedTime;
+            set
+            {
+                if (Type is StorageType.Stream && value != ZeroFileTime)
+                    throw new ArgumentException("Modified time must be zero for streams.", nameof(value));
 
-            ulong h = 2166136261;
-            int i;
+                modifiedTime = value;
+            }
+        }
 
-            for (i = 0; i < buffer.Length; i++)
-                h = (h * 16777619) ^ buffer[i];
+        /// <summary>
+        /// The starting sector location for a stream or the first sector of the mini-stream for the root storage object.
+        /// </summary>
+        public uint StartSectorId { get; set; } = StreamId.NoStream;
 
-            return h;
+        /// <summary>
+        /// The length of the stream.
+        /// </summary>
+        public long StreamLength { get; set; }
+
+        internal char ColorChar => Color switch
+        {
+            NodeColor.Red => 'R',
+            NodeColor.Black => 'B',
+            _ => '?'
+        };
+
+        public ReadOnlySpan<byte> NameByteSpan
+        {
+            get
+            {
+                int clampedNameLength = Math.Max(0, Math.Min(NameFieldLength, NameLength - 2));
+                return Name.AsSpan(0, clampedNameLength);
+            }
+        }
+
+        public ReadOnlySpan<char> NameCharSpan => MemoryMarshal.Cast<byte, char>(NameByteSpan);
+
+        public string NameString
+        {
+            get
+            {
+                int clampedNameLength = Math.Max(0, Math.Min(NameFieldLength, NameLength - 2));
+                return Encoding.Unicode.GetString(Name, 0, clampedNameLength);
+            }
+            set => NameLength = (ushort)(Encoding.Unicode.GetBytes(value, 0, value.Length, Name, 0) + 2);
         }
 
         public override int GetHashCode()
         {
-            return (int)fnv_hash(entryName);
+            HashCode code = new();
+            code.Add(Id);
+            code.Add(NameLength);
+            foreach (byte b in Name)
+                code.Add(b);
+            return code.GetHashCode();
         }
 
-        public void Write(Stream stream)
+        public override bool Equals(object? obj) => Equals(obj as DirectoryEntry);
+
+        public bool Equals(DirectoryEntry? other)
         {
-            StreamRW rw = new StreamRW(stream);
-
-            rw.Write(entryName);
-            rw.Write(nameLength);
-            rw.Write((byte)stgType);
-            rw.Write((byte)stgColor);
-            rw.Write(leftSibling);
-            rw.Write(rightSibling);
-            rw.Write(child);
-            rw.Write(storageCLSID.ToByteArray());
-            rw.Write(stateBits);
-            rw.Write(creationDate);
-            rw.Write(modifyDate);
-            rw.Write(startSetc);
-            rw.Write(size);
-
-            rw.Close();
+            return other is not null
+                && Id == other.Id
+                && Name.SequenceEqual(other.Name)
+                && NameLength == other.NameLength
+                && Type == other.Type
+                && Color == other.Color
+                && LeftSiblingId == other.LeftSiblingId
+                && RightSiblingId == other.RightSiblingId
+                && ChildId == other.ChildId
+                && CLSID == other.CLSID
+                && StateBits == other.StateBits
+                && CreationTime == other.CreationTime
+                && ModifiedTime == other.ModifiedTime
+                && StartSectorId == other.StartSectorId
+                && StreamLength == other.StreamLength;
         }
 
-        //public Byte[] ToByteArray()
-        //{
-        //    MemoryStream ms
-        //        = new MemoryStream(128);
+        public void RecycleRoot() => Recycle(StorageType.Root, "Root Entry");
 
-        //    BinaryWriter bw = new BinaryWriter(ms);
+        public void Recycle() => Recycle(StorageType.Unallocated, string.Empty);
 
-        //    byte[] paddedName = new byte[64];
-        //    Array.Copy(entryName, paddedName, entryName.Length);
-
-        //    bw.Write(paddedName);
-        //    bw.Write(nameLength);
-        //    bw.Write((byte)stgType);
-        //    bw.Write((byte)stgColor);
-        //    bw.Write(leftSibling);
-        //    bw.Write(rightSibling);
-        //    bw.Write(child);
-        //    bw.Write(storageCLSID.ToByteArray());
-        //    bw.Write(stateBits);
-        //    bw.Write(creationDate);
-        //    bw.Write(modifyDate);
-        //    bw.Write(startSetc);
-        //    bw.Write(size);
-
-        //    return ms.ToArray();
-        //}
-
-        public void Read(Stream stream, CFSVersion ver = CFSVersion.Ver_3)
+        public void Recycle(StorageType storageType, string name)
         {
-            StreamRW rw = new StreamRW(stream);
+            Type = storageType;
+            NameString = name;
+            Color = NodeColor.Black;
+            LeftSiblingId = StreamId.NoStream;
+            RightSiblingId = StreamId.NoStream;
+            ChildId = StreamId.NoStream;
+            StartSectorId = StreamId.NoStream;
+            StreamLength = 0;
 
-            entryName = rw.ReadBytes(64);
-            nameLength = rw.ReadUInt16();
-            stgType = (StgType)rw.ReadByte();
-            //rw.ReadByte();//Ignore color, only black tree
-            stgColor = (StgColor)rw.ReadByte();
-            leftSibling = rw.ReadInt32();
-            rightSibling = rw.ReadInt32();
-            child = rw.ReadInt32();
-
-            // Thanks to bugaccount (BugTrack id 3519554)
-            if (stgType == StgType.StgInvalid)
+            if (storageType is StorageType.Root)
             {
-                leftSibling = NOSTREAM;
-                rightSibling = NOSTREAM;
-                child = NOSTREAM;
+                CreationTime = ZeroFileTime;
+                ModifiedTime = DateTime.UtcNow;
             }
-
-            storageCLSID = new Guid(rw.ReadBytes(16));
-            stateBits = rw.ReadInt32();
-            creationDate = rw.ReadBytes(8);
-            modifyDate = rw.ReadBytes(8);
-            startSetc = rw.ReadInt32();
-
-            if (ver == CFSVersion.Ver_3)
+            else if (storageType is StorageType.Storage)
             {
-                // avoid dirty read for version 3 files (max size: 32bit integer)
-                // where most significant bits are not initialized to zero
-
-                size = rw.ReadInt32();
-                rw.ReadBytes(4); //discard most significant 4 (possibly) dirty bytes
+                DateTime now = DateTime.UtcNow;
+                CreationTime = now;
+                ModifiedTime = now;
             }
             else
             {
-                size = rw.ReadInt64();
+                CreationTime = ZeroFileTime;
+                ModifiedTime = ZeroFileTime;
             }
         }
 
-        public string Name
+        public EntryType EntryType => Type switch
         {
-            get { return GetEntryName(); }
-        }
+            StorageType.Stream => EntryType.Stream,
+            StorageType.Storage => EntryType.Storage,
+            StorageType.Root => EntryType.Storage,
+            _ => throw new FileFormatException($"Invalid storage type: {Type}.")
+        };
 
+        public EntryInfo ToEntryInfo(string path) => new(EntryType, path, NameString, StreamLength, CLSID, CreationTime, ModifiedTime);
 
-        public RedBlackTree.IRBNode Left
+        [ExcludeFromCodeCoverage]
+        public override string ToString() => $"{Id}: \"{NameString}\"";
+
+        public DirectoryEntry Clone()
         {
-            get
+            DirectoryEntry clone = new()
             {
-                if (leftSibling == DirectoryEntry.NOSTREAM)
-                    return null;
+                Id = Id,
+                NameLength = NameLength,
+                Type = Type,
+                Color = Color,
+                LeftSiblingId = LeftSiblingId,
+                RightSiblingId = RightSiblingId,
+                ChildId = ChildId,
+                CLSID = CLSID,
+                StateBits = StateBits,
+                CreationTime = CreationTime,
+                ModifiedTime = ModifiedTime,
+                StartSectorId = StreamId.NoStream,
+                StreamLength = 0
+            };
 
-                return dirRepository[leftSibling];
-            }
-            set
-            {
-                leftSibling = value != null ? ((IDirectoryEntry)value).SID : DirectoryEntry.NOSTREAM;
+            Array.Copy(Name, clone.Name, Name.Length);
 
-                if (leftSibling != DirectoryEntry.NOSTREAM)
-                    dirRepository[leftSibling].Parent = this;
-            }
-        }
-
-        public RedBlackTree.IRBNode Right
-        {
-            get
-            {
-                if (rightSibling == DirectoryEntry.NOSTREAM)
-                    return null;
-
-                return dirRepository[rightSibling];
-            }
-            set
-            {
-
-                rightSibling = value != null ? ((IDirectoryEntry)value).SID : DirectoryEntry.NOSTREAM;
-
-                if (rightSibling != DirectoryEntry.NOSTREAM)
-                    dirRepository[rightSibling].Parent = this;
-
-            }
-        }
-
-        public RedBlackTree.Color Color
-        {
-            get
-            {
-                return (RedBlackTree.Color)StgColor;
-            }
-            set
-            {
-                StgColor = (StgColor)value;
-            }
-        }
-
-        private IDirectoryEntry parent = null;
-
-        public RedBlackTree.IRBNode Parent
-        {
-            get
-            {
-                return parent;
-            }
-            set
-            {
-                parent = value as IDirectoryEntry;
-            }
-        }
-
-        public RedBlackTree.IRBNode Grandparent()
-        {
-            return parent != null ? parent.Parent : null;
-        }
-
-        public RedBlackTree.IRBNode Sibling()
-        {
-            if (this == Parent.Left)
-                return Parent.Right;
-            else
-                return Parent.Left;
-        }
-
-        public RedBlackTree.IRBNode Uncle()
-        {
-            return parent != null ? Parent.Sibling() : null;
-        }
-
-        internal static IDirectoryEntry New(string name, StgType stgType, IList<IDirectoryEntry> dirRepository)
-        {
-            DirectoryEntry de = null;
-            if (dirRepository != null)
-            {
-                de = new DirectoryEntry(name, stgType, dirRepository);
-                // No invalid directory entry found
-                dirRepository.Add(de);
-                de.SID = dirRepository.Count - 1;
-            }
-            else
-                throw new ArgumentNullException("dirRepository", "Directory repository cannot be null in New() method");
-
-            return de;
-        }
-
-        internal static IDirectoryEntry Mock(string name, StgType stgType)
-        {
-            DirectoryEntry de = new DirectoryEntry(name, stgType, null);
-
-            return de;
-        }
-
-        internal static IDirectoryEntry TryNew(String name, StgType stgType, IList<IDirectoryEntry> dirRepository)
-        {
-            DirectoryEntry de = new DirectoryEntry(name, stgType, dirRepository);
-
-            // If we are not adding an invalid dirEntry as
-            // in a normal loading from file (invalid dirs MAY pad a sector)
-            if (de != null)
-            {
-                // Find first available invalid slot (if any) to reuse it
-                for (int i = 0; i < dirRepository.Count; i++)
-                {
-                    if (dirRepository[i].StgType == StgType.StgInvalid)
-                    {
-                        dirRepository[i] = de;
-                        de.SID = i;
-                        return de;
-                    }
-                }
-            }
-
-            // No invalid directory entry found
-            dirRepository.Add(de);
-            de.SID = dirRepository.Count - 1;
-
-            return de;
-        }
-
-        public override string ToString()
-        {
-            return Name + " [" + sid + "]" + (stgType == StgType.StgStream ? "Stream" : "Storage");
-        }
-
-        public void AssignValueTo(RedBlackTree.IRBNode other)
-        {
-            DirectoryEntry d = other as DirectoryEntry;
-
-            d.SetEntryName(GetEntryName());
-
-            d.creationDate = new byte[creationDate.Length];
-            creationDate.CopyTo(d.creationDate, 0);
-
-            d.modifyDate = new byte[modifyDate.Length];
-            modifyDate.CopyTo(d.modifyDate, 0);
-
-            d.size = size;
-            d.startSetc = startSetc;
-            d.stateBits = stateBits;
-            d.stgType = stgType;
-            d.storageCLSID = new Guid(storageCLSID.ToByteArray());
-            d.Child = Child;
+            return clone;
         }
     }
+
 }

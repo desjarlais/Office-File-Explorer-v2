@@ -9,20 +9,30 @@ using System.Threading.Tasks;
 namespace Office_File_Explorer.OpenMcdf
 {
     /// <summary>
-    /// Encapsulates information about a sector in a compound file.
+    /// Encapsulates information about a mini sector in a compound file.
     /// </summary>
-    /// <param name="Id">The sector ID</param>
+    /// <param name="Id">The ID of the mini sector</param>
     /// <param name="Length">The sector length</param>
-    internal record struct Sector(uint Id, int Length)
+    internal record struct MiniSector(uint Id, int Length)
     {
-        public static readonly Sector EndOfChain = new(SectorType.EndOfChain, 0);
-
         public readonly bool IsValid => Id <= SectorType.Maximum;
 
         /// <summary>
-        /// The position of the sector in the compound file stream.
+        /// The position of the mini sector in the mini FAT stream.
         /// </summary>
         public readonly long Position
+        {
+            get
+            {
+                ThrowIfInvalid();
+                return Id * Length;
+            }
+        }
+
+        /// <summary>
+        /// The end position of the mini sector in the mini FAT stream.
+        /// </summary>
+        public readonly long EndPosition
         {
             get
             {
@@ -31,22 +41,10 @@ namespace Office_File_Explorer.OpenMcdf
             }
         }
 
-        /// <summary>
-        /// The end position of the sector in the compound file stream.
-        /// </summary>
-        public readonly long EndPosition
-        {
-            get
-            {
-                ThrowIfInvalid();
-                return (Id + 2) * Length;
-            }
-        }
-
         readonly void ThrowIfInvalid()
         {
             if (!IsValid)
-                throw new InvalidOperationException($"Invalid FAT sector ID: {Id}.");
+                throw new InvalidOperationException($"Invalid mini FAT sector ID: {Id}.");
         }
 
         [ExcludeFromCodeCoverage]
