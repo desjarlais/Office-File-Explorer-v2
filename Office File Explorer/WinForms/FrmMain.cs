@@ -47,6 +47,7 @@ namespace Office_File_Explorer
         private string partPropCompression;
         private bool isEncrypted;
 
+
         // openmcdf globals
         private FileStream fs;
         private RootStorage rs;
@@ -83,7 +84,7 @@ namespace Office_File_Explorer
         public FindReplace myFindReplace;
 
         // enums
-        public enum OpenXmlInnerFileTypes { Word, Excel, PowerPoint, Outlook, XML, VML, Image, Binary, Video, Audio, Text, Other }
+        public enum OpenXmlInnerFileTypes { Word, Excel, PowerPoint, Outlook, XML, VML, Image, CompoundFile, Binary, Video, Audio, Text, Other }
 
         public enum LogInfoType { ClearAndAdd, TextOnly, InvalidFile, LogException, EmptyCount }
 
@@ -1299,24 +1300,27 @@ namespace Office_File_Explorer
                 {
                     TvFiles.SelectedNode = tn;
                     NodeSelection cfbStream = (NodeSelection)tn.Tag;
-                    
+
                     if (cfbStream is not null)
                     {
                         StringBuilder sb = new StringBuilder();
 
-                        // handle compound file streams
-                        using CfbStream cfbStream1 = rs.OpenStream(tn.Text);
+                        if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.CompoundFile)
                         {
-                            byte[] buffer = new byte[cfbStream1.EntryInfo.Length];
-                            cfbStream1.Read(buffer, 0, buffer.Length);
-                            foreach (byte b in buffer)
+                            // handle compound file streams
+                            using CfbStream cfbStream1 = rs.OpenStream(tn.Text);
                             {
-                                if (b != 0)
+                                byte[] buffer = new byte[cfbStream1.EntryInfo.Length];
+                                cfbStream1.Read(buffer, 0, buffer.Length);
+                                foreach (byte b in buffer)
                                 {
-                                    sb.Append(AppUtilities.ConvertByteToText(b.ToString()));
+                                    if (b != 0)
+                                    {
+                                        sb.Append(AppUtilities.ConvertByteToText(b.ToString()));
+                                    }
                                 }
                             }
-
+                            scintilla1.WrapMode = WrapMode.Word;
                         }
 
                         // special handling for unencrypted xml stream data
@@ -1607,7 +1611,7 @@ namespace Office_File_Explorer
                 scintilla1.ReadOnly = false;
 
                 // if file is binary
-                if (toolStripStatusLabelFilePath.Text.EndsWith(".doc"))
+                if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.CompoundFile)
                 {
                     using CfbStream cfbStream = rs.OpenStream(e.Node.Text);
                     {

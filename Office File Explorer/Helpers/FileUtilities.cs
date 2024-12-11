@@ -36,6 +36,13 @@ namespace Office_File_Explorer.Helpers
                     return OpenXmlInnerFileTypes.PowerPoint;
                 case ".msg":
                     return OpenXmlInnerFileTypes.Outlook;
+                case ".doc":
+                case ".dot":
+                case ".xls":
+                case ".xlt":
+                case ".ppt":
+                case ".pot":
+                    return OpenXmlInnerFileTypes.CompoundFile;
                 case ".jpeg":
                 case ".jpg":
                 case ".bmp":

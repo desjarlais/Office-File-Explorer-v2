@@ -90,7 +90,6 @@ namespace Office_File_Explorer
             toolStripButtonFixXml = new System.Windows.Forms.ToolStripButton();
             toolStripButtonValidateXml = new System.Windows.Forms.ToolStripButton();
             toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             statusStrip1 = new System.Windows.Forms.StatusStrip();
             toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             toolStripStatusLabelDocType = new System.Windows.Forms.ToolStripStatusLabel();
@@ -400,7 +399,7 @@ namespace Office_File_Explorer
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonViewStyles, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripButtonFixXml, toolStripButtonValidateXml, toolStripSeparator3, toolStripButton1 });
+            toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripButtonViewContents, toolStripButtonViewStyles, toolStripButtonFixCorruptDoc, toolStripButtonFixDoc, toolStripSeparator2, toolStripButtonModify, toolStripButtonSave, toolStripButtonInsertIcon, toolStripButtonGenerateCallback, toolStripDropDownButtonInsert, toolStripButtonFixXml, toolStripButtonValidateXml, toolStripSeparator3 });
             toolStrip1.Location = new System.Drawing.Point(0, 24);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new System.Drawing.Size(1051, 25);
@@ -591,11 +590,6 @@ namespace Office_File_Explorer
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
             toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripButton1
-            // 
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new System.Drawing.Size(23, 22);
             // 
             // statusStrip1
             // 
@@ -818,7 +812,6 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem extractPartToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonFixXml;
         private ScintillaNET.Scintilla scintilla1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem renderRTFToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonViewStyles;
