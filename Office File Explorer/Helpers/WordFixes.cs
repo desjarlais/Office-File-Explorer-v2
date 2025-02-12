@@ -15,6 +15,7 @@ using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
 using System.IO.Packaging;
+using System.Text;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -620,9 +621,12 @@ namespace Office_File_Explorer.Helpers
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static bool FixContentControls(string filePath)
+        public static bool FixContentControls(string filePath, ref StringBuilder sb)
         {
             corruptionFound = false;
+            string previousParentText = string.Empty;
+            string currentParentText = string.Empty;
+
             using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
             {
                 // loop content controls
@@ -636,6 +640,8 @@ namespace Office_File_Explorer.Helpers
                         if (oxeProp.GetType().Name == "SdtContentText")
                         {
                             plainTextControl = true;
+                            previousParentText = currentParentText;
+                            currentParentText = cc.Parent.InnerText;
                         }
                     }
 
@@ -652,11 +658,15 @@ namespace Office_File_Explorer.Helpers
                                     {
                                         oxeInner.Remove();
                                         corruptionFound = true;
+                                        sb.AppendLine("Text before corruption = " + previousParentText);
+                                        sb.AppendLine("Corrupt text that was deleted = " + currentParentText);
+                                        previousParentText = string.Empty;
+                                        currentParentText = string.Empty;
                                     }
                                 }
                             }
                         }
-                    }
+                     }
                 }
 
                 if (corruptionFound)

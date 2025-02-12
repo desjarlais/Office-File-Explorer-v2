@@ -1191,6 +1191,7 @@ namespace Office_File_Explorer.Helpers
         {
             bool isCorrupt = false;
 
+            // check for item level corrupt items
             using (FileStream zFile = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 int totalByteIndex = 0;

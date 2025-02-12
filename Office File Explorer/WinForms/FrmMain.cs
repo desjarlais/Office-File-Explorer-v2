@@ -1,5 +1,6 @@
 ﻿// .NET refs
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -33,7 +34,6 @@ using Application = System.Windows.Forms.Application;
 // scintilla refs
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
-using System.Globalization;
 
 namespace Office_File_Explorer
 {
@@ -45,11 +45,10 @@ namespace Office_File_Explorer
         private string fromChangeTemplate;
         private string partPropContentType;
         private string partPropCompression;
-        private bool isEncrypted;
+        private bool isEncrypted, isCompound;
 
 
         // openmcdf globals
-        private FileStream fs;
         private RootStorage rs;
         private bool isValidXml;
         private List<string> validationErrors = new List<string>();
@@ -263,9 +262,6 @@ namespace Office_File_Explorer
             scintilla1.ReadOnly = false;
             scintilla1.ClearAll();
             scintilla1.Margins[0].Width = 0;
-
-            // check for encrypted file
-            fs?.Close();
         }
 
         public void CopyAllItems()
@@ -417,9 +413,6 @@ namespace Office_File_Explorer
                         message.Dispose();
                         return;
                     }
-
-                    // cleanup in case this is an open and no close of previous file
-                    fs?.Close();
 
                     // handle office files
                     if (!FileUtilities.IsZipArchiveFile(toolStripStatusLabelFilePath.Text))
@@ -999,7 +992,7 @@ namespace Office_File_Explorer
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenOfficeDocument(false);
-
+            
             if (toolStripStatusLabelFilePath.Text != Strings.wHeadingBegin)
             {
                 AddFileToMRU();
@@ -1305,7 +1298,7 @@ namespace Office_File_Explorer
                     {
                         StringBuilder sb = new StringBuilder();
 
-                        if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.CompoundFile)
+                        if (tn.FullPath.StartsWith("Root Entry"))
                         {
                             // handle compound file streams
                             using CfbStream cfbStream1 = rs.OpenStream(tn.Text);
@@ -1610,19 +1603,7 @@ namespace Office_File_Explorer
                 Cursor = Cursors.WaitCursor;
                 scintilla1.ReadOnly = false;
 
-                // if file is binary
-                if (FileUtilities.GetFileType(toolStripStatusLabelFilePath.Text) == OpenXmlInnerFileTypes.CompoundFile)
-                {
-                    using CfbStream cfbStream = rs.OpenStream(e.Node.Text);
-                    {
-                        byte[] buffer = new byte[cfbStream.EntryInfo.Length];
-                        cfbStream.Read(buffer, 0, buffer.Length);
-                        scintilla1.Text = Convert.ToHexString(buffer);
-                    }
-                    return;
-                }
-
-                // render msg content
+                // outlook msg content
                 if (toolStripStatusLabelFilePath.Text.EndsWith(Strings.msgFileExt))
                 {
                     string[] body = e.Node.Tag as string[];
@@ -1664,25 +1645,7 @@ namespace Office_File_Explorer
                     return;
                 }
 
-                if (isEncrypted && e.Node.Text.Contains("LabelInfo.xml"))
-                {
-                    foreach (PackagePart pp in pkgParts)
-                    {
-                        if (pp.Uri.ToString() == TvFiles.SelectedNode.Text)
-                        {
-                            Stream stream = pp.GetStream();
-                            byte[] binData = FileUtilities.ReadToEnd(stream);
-                            scintilla1.Text = Convert.ToHexString(binData);
-                            stream.Close();
-                            return;
-                        }
-                    }
-                    FormatXmlColors();
-                    toolStripButtonValidateXml.Enabled = true;
-                    toolStripButtonFixXml.Enabled = true;
-                    toolStripButtonModify.Enabled = true;
-                }
-
+                // open xml inner files
                 if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML || FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.VML)
                 {
                     // customui files have additional editing options
@@ -2677,9 +2640,9 @@ namespace Office_File_Explorer
                     corruptionFound = true;
                 }
 
-                if (WordFixes.FixContentControls(tempFilePackageViewer))
+                if (WordFixes.FixContentControls(tempFilePackageViewer, ref sbFixes))
                 {
-                    sbFixes.AppendLine("Corrupt Content Controls Fixed");
+                    sbFixes.AppendLine("\r\nCorrupt Content Controls Fixed - More information here https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-content-controls");
                     corruptionFound = true;
                 }
 
@@ -2736,10 +2699,11 @@ namespace Office_File_Explorer
             // if any corruptions were found, copy the file to a new location and display the fixes and new file path
             if (corruptionFound)
             {
+                scintilla1.ReadOnly = false;
                 string modifiedPath = AddTextToFileName(toolStripStatusLabelFilePath.Text, " (Fixed)");
                 File.Copy(tempFilePackageViewer, modifiedPath, true);
                 scintilla1.Text = sbFixes.ToString();
-                scintilla1.AppendText("\r\n\r\nModified File Location = " + modifiedPath);
+                scintilla1.AppendText("\r\nModified File Location = " + modifiedPath);
             }
             else
             {
@@ -3621,7 +3585,7 @@ namespace Office_File_Explorer
         #endregion
     }
 
-    internal sealed record class NodeSelection(OpenMcdf.Storage? Parent, EntryInfo EntryInfo)
+    internal sealed record class NodeSelection(Storage Parent, EntryInfo EntryInfo)
     {
         public string SanitizedFileName
         {
