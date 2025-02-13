@@ -2526,7 +2526,6 @@ namespace Office_File_Explorer
         private void ToolStripButtonFixDoc_Click(object sender, EventArgs e)
         {
             bool corruptionFound = false;
-            EnableScintillaAddText();
 
             StringBuilder sbFixes = new StringBuilder();
 
@@ -2534,25 +2533,25 @@ namespace Office_File_Explorer
             {
                 if (WordFixes.FixListStyles(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("List Styles Fixed - More information here https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-list-styles");
+                    sbFixes.AppendLine("List Styles Fixed - More information here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-list-styles");
                     corruptionFound = true;
                 }
 
                 if (WordFixes.FixTextboxes(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Corrupt Textboxes Fixed - More information here https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-textboxes");
+                    sbFixes.AppendLine("Corrupt Textboxes Fixed - More information here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-textboxes");
                     corruptionFound = true;
                 }
 
                 if (WordFixes.RemoveMissingBookmarkTags(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Missing Bookmark Tags Fixed - More information here https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-bookmarks");
+                    sbFixes.AppendLine("Missing Bookmark Tags Fixed - More information here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-bookmarks");
                     corruptionFound = true;
                 }
 
                 if (WordFixes.FixVneAttributes(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Fixed Corrupt Vne Attributes - More information here ");
+                    sbFixes.AppendLine("Fixed Corrupt Vne Attributes");
                     corruptionFound = true;
                 }
 
@@ -2642,7 +2641,7 @@ namespace Office_File_Explorer
 
                 if (WordFixes.FixContentControls(tempFilePackageViewer, ref sbFixes))
                 {
-                    sbFixes.AppendLine("\r\nCorrupt Content Controls Fixed - More information here https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-content-controls");
+                    sbFixes.AppendLine("\r\nCorrupt Content Controls Fixed - More information here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-content-controls");
                     corruptionFound = true;
                 }
 
@@ -2685,21 +2684,22 @@ namespace Office_File_Explorer
             {
                 if (Excel.RemoveCorruptClientDataObjects(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Corrupt Client Data Objects Fixed - More Information Here: https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-comment-notes");
+                    sbFixes.AppendLine("Corrupt Client Data Objects Fixed - More Information Here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-comment-notes");
                     corruptionFound = true;
                 }
 
                 if (Excel.FixCorruptAnchorTags(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Fixed Corrupt Vml Anchor Tags - More Information Here: https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-corrupt-vml-drawings");
+                    sbFixes.AppendLine("Fixed Corrupt Vml Anchor Tags - More Information Here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-corrupt-vml-drawings");
                     corruptionFound = true;
                 }
             }
 
+            EnableScintillaAddText();
+
             // if any corruptions were found, copy the file to a new location and display the fixes and new file path
             if (corruptionFound)
             {
-                scintilla1.ReadOnly = false;
                 string modifiedPath = AddTextToFileName(toolStripStatusLabelFilePath.Text, " (Fixed)");
                 File.Copy(tempFilePackageViewer, modifiedPath, true);
                 scintilla1.Text = sbFixes.ToString();
@@ -2709,6 +2709,7 @@ namespace Office_File_Explorer
             {
                 scintilla1.AppendText("No Corruption Found.");
             }
+            
             scintilla1.ReadOnly = true;
         }
 
