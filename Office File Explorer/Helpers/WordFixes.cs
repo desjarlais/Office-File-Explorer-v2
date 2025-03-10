@@ -929,7 +929,8 @@ namespace Office_File_Explorer.Helpers
                             }
                         }
 
-                        // move the comment range start and end to the parent of the content control
+                        // move the comment range start before the content control
+                        // move the comment range end and comment ref after the content control
                         cc.PrependChild(oxeCommentRangeStartClone);
                         cc.Parent.Append(oxeCommentRangeEndClone);
                         cc.Parent.Append(oxeCommentReferenceClone);
