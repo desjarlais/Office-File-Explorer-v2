@@ -99,6 +99,11 @@ namespace Office_File_Explorer.WinForms
                 wdModCmd = AppUtilities.WordModifyCmds.DelDupeAuthors;
             }
 
+            if (rdoDeleteDupeSPCustomXml.Checked)
+            {
+                wdModCmd = AppUtilities.WordModifyCmds.DelDupeSPCustomXml;
+            }
+
             this.DialogResult = DialogResult.OK;
             Close();
         }

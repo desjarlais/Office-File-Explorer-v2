@@ -92,6 +92,7 @@ namespace Office_File_Explorer.Helpers
         public const string wXmlNsStart = "xmlns:";
         public const string wSPCustomXmlProperties = "p:properties";
         public const string wSPDocManagement = "documentManagement";
+        public const string wMoreInformationHere = "- More information here:\r\n";
 
         public const string wCompany = "Company";
         public const string wCreator = "creator";

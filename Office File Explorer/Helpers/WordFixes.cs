@@ -843,6 +843,109 @@ namespace Office_File_Explorer.Helpers
         }
 
         /// <summary>
+        /// There are times when a comment is included inside a plain text content control
+        /// this is not allowed
+        /// </summary>
+        /// <param name="filePath">File to attempt fix</param>
+        /// <returns></returns>
+        public static bool FixCommentRange(string filePath)
+        {
+            bool isFileChanged = false;
+
+            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
+            {
+                // loop content controls
+                foreach (var cc in myDoc.ContentControls())
+                {
+                    bool plainTextControl = false;
+
+                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
+                    foreach (OpenXmlElement oxeProp in props.ChildElements)
+                    {
+                        if (oxeProp.GetType().Name == "SdtContentText")
+                        {
+                            plainTextControl = true;
+                        }
+                    }
+
+                    // plaint text controls can't have comments
+                    if (plainTextControl)
+                    {
+                        OpenXmlElement oxeCommentRangeStart = null;
+                        OpenXmlElement oxeCommentRangeEnd = null;
+                        OpenXmlElement oxeCommentReference = null;
+                        OpenXmlElement oxeCommentRangeStartClone = null;
+                        OpenXmlElement oxeCommentRangeEndClone = null;
+                        OpenXmlElement oxeCommentReferenceClone = null;
+
+                        foreach (OpenXmlElement oElement in cc.ChildElements)
+                        {
+                            // the problem is in the content tag
+                            if (oElement.LocalName == "sdtContent")
+                            {
+                                // only do something if we have a comment range start or end
+                                if (oElement.InnerXml.Contains("<w:commentRangeStart") || oElement.InnerXml.Contains("<w:commentRangeEnd"))
+                                {
+                                    foreach (OpenXmlElement el in oElement.ChildElements)
+                                    {
+                                        if (el.GetType().Name == "CommentRangeStart")
+                                        {
+                                            oxeCommentRangeStart = el;
+                                            oxeCommentRangeStartClone = el.CloneNode(true);
+                                        }
+
+                                        if (el.GetType().Name == "CommentRangeEnd")
+                                        {
+                                            oxeCommentRangeEnd = el;
+                                            oxeCommentRangeEndClone = el.CloneNode(true);
+                                        }
+
+                                        if (el.InnerXml.Contains("<w:commentReference"))
+                                        {
+                                            oxeCommentReference = el;
+                                            oxeCommentReferenceClone = el.CloneNode(true);
+                                        }
+                                    }
+
+                                    // if we have a comment range start, end and reference, remove them
+                                    if (oxeCommentRangeStart != null)
+                                    {
+                                        oxeCommentRangeStart.Remove();
+                                        isFileChanged = true;
+                                    }
+
+                                    if (oxeCommentRangeEnd != null)
+                                    {
+                                        oxeCommentRangeEnd.Remove();
+                                        isFileChanged = true;
+                                    }
+
+                                    if (oxeCommentReference != null)
+                                    {
+                                        oxeCommentReference.Remove();
+                                        isFileChanged = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        // move the comment range start and end to the parent of the content control
+                        cc.PrependChild(oxeCommentRangeStartClone);
+                        cc.Parent.Append(oxeCommentRangeEndClone);
+                        cc.Parent.Append(oxeCommentReferenceClone);
+                    }
+                }
+
+                if (isFileChanged)
+                {
+                    myDoc.MainDocumentPart.Document.Save();
+                }
+            }
+
+            return isFileChanged;
+        }
+
+        /// <summary>
         /// This looks for corrupt @mention style field codes in comments with missing Separate tags
         /// It will pull the email out and then add a new begin-separate-end sequence with the mailto info to fix the issue
         /// </summary>

@@ -34,6 +34,7 @@ using Application = System.Windows.Forms.Application;
 // scintilla refs
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
+using static System.Net.WebRequestMethods;
 
 namespace Office_File_Explorer
 {
@@ -992,7 +993,7 @@ namespace Office_File_Explorer
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenOfficeDocument(false);
-            
+
             if (toolStripStatusLabelFilePath.Text != Strings.wHeadingBegin)
             {
                 AddFileToMRU();
@@ -2533,19 +2534,19 @@ namespace Office_File_Explorer
             {
                 if (WordFixes.FixListStyles(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("List Styles Fixed - More information here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-list-styles");
+                    sbFixes.AppendLine("List Styles Fixed " + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-list-styles");
                     corruptionFound = true;
                 }
 
                 if (WordFixes.FixTextboxes(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Corrupt Textboxes Fixed - More information here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-textboxes");
+                    sbFixes.AppendLine("Corrupt Textboxes Fixed" + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-textboxes");
                     corruptionFound = true;
                 }
 
                 if (WordFixes.RemoveMissingBookmarkTags(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Missing Bookmark Tags Fixed - More information here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-bookmarks");
+                    sbFixes.AppendLine("Missing Bookmark Tags Fixed" + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-bookmarks");
                     corruptionFound = true;
                 }
 
@@ -2633,6 +2634,12 @@ namespace Office_File_Explorer
                     corruptionFound = true;
                 }
 
+                if (WordFixes.FixCommentRange(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("Corrupt Content Control Range Fixed");
+                    corruptionFound = true;
+                }
+
                 if (WordFixes.FixHyperlinks(tempFilePackageViewer))
                 {
                     sbFixes.AppendLine("Corrupt Hyperlinks Fixed");
@@ -2641,7 +2648,7 @@ namespace Office_File_Explorer
 
                 if (WordFixes.FixContentControls(tempFilePackageViewer, ref sbFixes))
                 {
-                    sbFixes.AppendLine("\r\nCorrupt Content Controls Fixed - More information here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-content-controls");
+                    sbFixes.AppendLine("\r\nCorrupt Content Controls Fixed" + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-content-controls");
                     corruptionFound = true;
                 }
 
@@ -2684,13 +2691,13 @@ namespace Office_File_Explorer
             {
                 if (Excel.RemoveCorruptClientDataObjects(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Corrupt Client Data Objects Fixed - More Information Here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-comment-notes");
+                    sbFixes.AppendLine("Corrupt Client Data Objects Fixed" + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-comment-notes");
                     corruptionFound = true;
                 }
 
                 if (Excel.FixCorruptAnchorTags(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Fixed Corrupt Vml Anchor Tags - More Information Here:\r\n https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-corrupt-vml-drawings");
+                    sbFixes.AppendLine("Fixed Corrupt Vml Anchor Tags" + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-corrupt-vml-drawings");
                     corruptionFound = true;
                 }
             }
@@ -2709,7 +2716,7 @@ namespace Office_File_Explorer
             {
                 scintilla1.AppendText("No Corruption Found.");
             }
-            
+
             scintilla1.ReadOnly = true;
         }
 
@@ -3036,6 +3043,20 @@ namespace Office_File_Explorer
                                 {
                                     result = DialogResult.Cancel;
                                 }
+                            }
+                        }
+
+                        if (f.wdModCmd == AppUtilities.WordModifyCmds.DelDupeSPCustomXml)
+                        {
+                            using (WordprocessingDocument document = WordprocessingDocument.Open(tempFilePackageViewer, true))
+                            {
+                                // loop the content controls, get the storeitem # in use
+                                foreach (var myCC in document.ContentControls())
+                                {
+
+                                }
+
+                                // loop the custom xml files, if there are more than 1 for SPO, delete the one that has zero refs in the storeitem
                             }
                         }
 
@@ -3584,6 +3605,11 @@ namespace Office_File_Explorer
         }
 
         #endregion
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            WordFixes.FixCommentRange(tempFilePackageViewer);
+        }
     }
 
     internal sealed record class NodeSelection(Storage Parent, EntryInfo EntryInfo)
