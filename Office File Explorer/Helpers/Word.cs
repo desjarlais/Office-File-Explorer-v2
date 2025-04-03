@@ -26,6 +26,7 @@ using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 using TableStyle = DocumentFormat.OpenXml.Wordprocessing.TableStyle;
 using static System.Net.WebRequestMethods;
 using System.Runtime.CompilerServices;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -2790,6 +2791,19 @@ namespace Office_File_Explorer.Helpers
             if (doc.MainDocumentPart.EndnotesPart is not null)
                 foreach (var cc in doc.MainDocumentPart.EndnotesPart.ContentControls())
                     yield return cc;
+            IEnumerable<Table> tableList = doc.MainDocumentPart.Document.Descendants<Table>().ToList();
+            foreach (Table tbl in tableList)
+            {
+                IEnumerable<TableRow> tblRows = tbl.Descendants<TableRow>().ToList();
+                foreach (TableRow tr in tblRows)
+                {
+                    IEnumerable<SdtCell> sdtCells = tr.Descendants<SdtCell>().ToList();
+                    foreach (var cc in sdtCells)
+                    {
+                        yield return cc;
+                    }
+                }
+            }
         }
 
         public static XDocument GetXDocument(this OpenXmlPart part)

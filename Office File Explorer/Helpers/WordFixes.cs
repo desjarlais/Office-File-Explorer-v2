@@ -14,8 +14,19 @@ using System.Xml;
 using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
-using System.IO.Packaging;
 using System.Text;
+using DocumentFormat.OpenXml.Drawing;
+
+using TableRow = DocumentFormat.OpenXml.Wordprocessing.TableRow;
+using TableCell = DocumentFormat.OpenXml.Wordprocessing.TableCell;
+using Hyperlink = DocumentFormat.OpenXml.Wordprocessing.Hyperlink;
+using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
+using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
+using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
+using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
+using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
+using System.Net;
+using System.Collections;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -333,6 +344,151 @@ namespace Office_File_Explorer.Helpers
             }
 
             return corruptionFound;
+        }
+
+        public static bool FixContentControlGuidWithSharePointGuid(string filePath)
+        {
+            bool corruptionFound = false;
+            Dictionary<string, string> contentControlGuids = new Dictionary<string, string>();
+
+            try
+            {
+                using (WordprocessingDocument document = WordprocessingDocument.Open(filePath, true))
+                {
+                    // loop sharepoint metadata and get list of column names and guids
+                    foreach (CustomXmlPart cxp in document.MainDocumentPart.CustomXmlParts)
+                    {
+                        XmlDocument xDoc = new XmlDocument();
+                        Stream stream = cxp.GetStream();
+                        xDoc.Load(stream);
+
+                        if (xDoc.DocumentElement.NamespaceURI == Strings.schemaMetadataProperties)
+                        {
+                            foreach (XmlNode xNode in xDoc.ChildNodes)
+                            {
+                                if (xNode.Name == Strings.wSPCustomXmlProperties)
+                                {
+                                    foreach (XmlNode xNode2 in xNode.ChildNodes)
+                                    {
+                                        if (xNode2.Name == Strings.wSPDocManagement)
+                                        {
+                                            foreach (XmlNode xNode3 in xNode2.ChildNodes)
+                                            {
+                                                foreach (XmlAttribute xa in xNode3.Attributes)
+                                                {
+                                                    if (xa.LocalName == "xmlns")
+                                                    {
+                                                        contentControlGuids.Add(xNode3.Name, xa.Value);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        stream.Close();
+                    }
+
+                    // now loop through the content controls, check each data binding xpath against the guids
+                    // if the guid is different, update the content control with the new guid from SharePoint
+                    foreach (var cc in document.ContentControls())
+                    {
+                        List<string> prefixMappingList = new List<string>();
+                        List<string> xPathList = new List<string>();
+                        string oldXpath = string.Empty;
+
+                        SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
+
+                        foreach (OpenXmlElement oxe in props.ChildElements)
+                        {
+                            DataBinding db = new DataBinding();
+                            bool pmFound = false;
+                            bool xpathFound = false;
+
+                            // get details from the databinding tag
+                            if (oxe.GetType().ToString() == Strings.dfowDataBinding)
+                            {
+                                foreach (OpenXmlAttribute oxa in oxe.GetAttributes())
+                                {
+                                    if (oxa.LocalName == "prefixMappings")
+                                    {
+                                        string[] prefixMappings = oxa.Value.Split(' ');
+                                        foreach (string s in prefixMappings)
+                                        {
+                                            prefixMappingList.Add(s);
+                                        }
+                                        pmFound = true;
+                                    }
+
+                                    if (oxa.LocalName == "xpath")
+                                    {
+                                        oldXpath = oxa.Value;
+                                        string[] xpathVal = oxa.Value.Split('/');
+                                        foreach (string s in xpathVal)
+                                        {
+                                            xPathList.Add(s);
+                                        }
+                                        xpathFound = true;
+                                    }
+                                }
+                            }
+
+                            // loop the prefixMapping guids and compare them with the xpath value
+                            // based on the ns value of the xpath, get the guid from the prefixMapping
+                            // if the guid is different from the dictionary, update the content control with the new guid
+                            if (xpathFound && pmFound)
+                            {
+                                string lastXpath = xPathList.Last();
+                                string nsValue = lastXpath.Split(':')[0];
+
+                                foreach (var pm in prefixMappingList)
+                                {
+                                    if (pm.Contains("xmlns:" + nsValue))
+                                    {
+                                        string[] guidVal = pm.Split('=');
+                                        string guid = guidVal[1].Replace("'", string.Empty);
+                                        string ccName = lastXpath.Split(':')[1];
+                                        string ccNameSubstring = ccName.Substring(0, ccName.Length - 3);
+
+                                        // check the content control guid against the SharePoint guid
+                                        foreach (KeyValuePair<string, string> entry in contentControlGuids)
+                                        {
+                                            if (entry.Key == ccNameSubstring)
+                                            {
+                                                if (entry.Value != guid)
+                                                {
+                                                    // this is the correct guid and needs to be replaced
+                                                    corruptionFound = true;
+                                                    // create the databinding object that will replace the old value
+                                                    db.XPath = oldXpath;
+                                                    db.PrefixMappings = db.PrefixMappings.Value.Replace(guid, entry.Value);
+                                                    // remove the current databinding tag and add the new one back into the file
+                                                    oxe.Remove();
+                                                    props.Append(db);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (corruptionFound)
+                    {
+                        document.Save();
+                    }
+                }
+
+                return corruptionFound;
+            }
+            catch (Exception ex)
+            {
+                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
+                return corruptionFound;
+            }
         }
 
         /// <summary>

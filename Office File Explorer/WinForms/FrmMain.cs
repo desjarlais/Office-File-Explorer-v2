@@ -34,7 +34,6 @@ using Application = System.Windows.Forms.Application;
 // scintilla refs
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
-using static System.Net.WebRequestMethods;
 
 namespace Office_File_Explorer
 {
@@ -313,6 +312,7 @@ namespace Office_File_Explorer
         public void DisplayInvalidFileFormatError()
         {
             scintilla1.Clear();
+            scintilla1.ReadOnly = false;
             scintilla1.AppendText("Unable to open file, possible causes are:\r\n");
             scintilla1.AppendText(" - file corruption\r\n");
             scintilla1.AppendText(" - file encrypted\r\n");
@@ -994,7 +994,7 @@ namespace Office_File_Explorer
         {
             OpenOfficeDocument(false);
 
-            if (toolStripStatusLabelFilePath.Text != Strings.wHeadingBegin)
+            if (toolStripStatusLabelDocType.Text != Strings.wHeadingBegin)
             {
                 AddFileToMRU();
             }
@@ -1844,9 +1844,17 @@ namespace Office_File_Explorer
             {
                 scintilla1.Margins[0].Width = 40;
             }
-            else
+            else if (scintilla1.Lines.Count < 1000000)
             {
                 scintilla1.Margins[0].Width = 50;
+            }
+            else if (scintilla1.Lines.Count < 10000000)
+            {
+                scintilla1.Margins[0].Width = 60;
+            }
+            else
+            {
+                scintilla1.Margins[0].Width = 70;
             }
 
             // Enable folding
@@ -2636,7 +2644,7 @@ namespace Office_File_Explorer
 
                 if (WordFixes.FixCommentRange(tempFilePackageViewer))
                 {
-                    sbFixes.AppendLine("Corrupt Content Control Range Fixed");
+                    sbFixes.AppendLine("Corrupt Content Control Range Fixed" + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-comment-range");
                     corruptionFound = true;
                 }
 
