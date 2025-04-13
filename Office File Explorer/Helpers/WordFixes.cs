@@ -15,7 +15,6 @@ using System.IO;
 using Office_File_Explorer.WinForms;
 using System.Reflection;
 using System.Text;
-using DocumentFormat.OpenXml.Drawing;
 
 using TableRow = DocumentFormat.OpenXml.Wordprocessing.TableRow;
 using TableCell = DocumentFormat.OpenXml.Wordprocessing.TableCell;
@@ -25,8 +24,6 @@ using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
 using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
 using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
 using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
-using System.Net;
-using System.Collections;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -769,6 +766,63 @@ namespace Office_File_Explorer.Helpers
                 }
             }
 
+            return corruptionFound;
+        }
+
+        /// <summary>
+        /// Flow has a corruption where the showingplaceholder tag is not removed after updating a content control
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool FixContentControlPlaceholders(string filePath)
+        {
+            corruptionFound = false;
+            using (WordprocessingDocument myDoc = WordprocessingDocument.Open(filePath, true))
+            {
+                // loop content controls
+                foreach (var cc in myDoc.ContentControls())
+                {
+                    bool containsDefaultText = false;
+
+                    // 1. check for rsidR and rsidRPr
+                    foreach (OpenXmlElement oxe in cc.ChildElements)
+                    {
+                        if (oxe.LocalName == "sdtContent")
+                        {
+                            foreach (OpenXmlElement oxeRun in oxe.ChildElements)
+                            {
+                                if (oxeRun.LocalName == "r")
+                                {
+                                    // Flow does not remove the placeholder style either, but for now, just look for the default text of a content control
+                                    // if the text is different than the default, it should not be a placeholder and we can remove it
+                                    if (oxeRun.InnerXml.Contains("Click or tap here to enter text."))
+                                    {
+                                        containsDefaultText = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // 2. check for showingplchdr and remove if the text is default placeholder text
+                    SdtProperties props = cc.Elements<SdtProperties>().FirstOrDefault();
+                    if (props is not null)
+                    {
+                        foreach (OpenXmlElement oxe in props.ChildElements)
+                        {
+                            if (oxe.LocalName == "showingPlcHdr" && containsDefaultText == false)
+                            {
+                                oxe.Remove();
+                                corruptionFound = true;
+                            }
+                        }
+                    }
+                }
+                if (corruptionFound)
+                {
+                    myDoc.MainDocumentPart.Document.Save();
+                }
+            }
             return corruptionFound;
         }
 

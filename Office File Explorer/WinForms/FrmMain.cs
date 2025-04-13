@@ -2654,6 +2654,12 @@ namespace Office_File_Explorer
                     corruptionFound = true;
                 }
 
+                if (WordFixes.FixContentControlPlaceholders(tempFilePackageViewer))
+                {
+                    sbFixes.AppendLine("\r\nCorrupt Content Controls Fixed" + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-content-controls");
+                    corruptionFound = true;
+                }
+
                 if (WordFixes.FixContentControls(tempFilePackageViewer, ref sbFixes))
                 {
                     sbFixes.AppendLine("\r\nCorrupt Content Controls Fixed" + Strings.wMoreInformationHere + "https://github.com/desjarlais/Office-File-Explorer-v2/wiki/Fix-Document-Feature#fix-content-controls");
