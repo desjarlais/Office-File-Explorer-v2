@@ -795,7 +795,10 @@ namespace Office_File_Explorer.Helpers
                                 {
                                     // Flow does not remove the placeholder style either, but for now, just look for the default text of a content control
                                     // if the text is different than the default, it should not be a placeholder and we can remove it
-                                    if (oxeRun.InnerXml.Contains("Click or tap here to enter text."))
+                                    if (oxeRun.InnerXml.Contains("Click or tap here to enter text.") || 
+                                        oxeRun.InnerXml.Contains("Choose an item.") || 
+                                        oxeRun.InnerXml.Contains("Click or tap to enter a date.") ||
+                                        oxeRun.InnerXml.Contains("Enter any content that you want to repeat"))
                                     {
                                         containsDefaultText = true;
                                     }
@@ -818,6 +821,7 @@ namespace Office_File_Explorer.Helpers
                         }
                     }
                 }
+
                 if (corruptionFound)
                 {
                     myDoc.MainDocumentPart.Document.Save();
