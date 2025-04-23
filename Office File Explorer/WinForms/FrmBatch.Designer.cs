@@ -43,6 +43,8 @@ namespace Office_File_Explorer.WinForms
             ckbSubfolders = new System.Windows.Forms.CheckBox();
             lstOutput = new System.Windows.Forms.ListBox();
             groupBox4 = new System.Windows.Forms.GroupBox();
+            btnFixContentControls = new System.Windows.Forms.Button();
+            BtnFixCommentNotes = new System.Windows.Forms.Button();
             BtnFixTabBehavior = new System.Windows.Forms.Button();
             BtnFixDupeCustomXml = new System.Windows.Forms.Button();
             BtnRemoveCustomXml = new System.Windows.Forms.Button();
@@ -69,7 +71,6 @@ namespace Office_File_Explorer.WinForms
             BtnDeleteCustomProps = new System.Windows.Forms.Button();
             BtnAddCustomProps = new System.Windows.Forms.Button();
             folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            BtnFixCommentNotes = new System.Windows.Forms.Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -104,7 +105,7 @@ namespace Office_File_Explorer.WinForms
             rdoExcel.AutoSize = true;
             rdoExcel.Location = new System.Drawing.Point(63, 27);
             rdoExcel.Name = "rdoExcel";
-            rdoExcel.Size = new System.Drawing.Size(52, 19);
+            rdoExcel.Size = new System.Drawing.Size(51, 19);
             rdoExcel.TabIndex = 1;
             rdoExcel.Text = "Excel";
             rdoExcel.UseVisualStyleBackColor = true;
@@ -206,6 +207,7 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(btnFixContentControls);
             groupBox4.Controls.Add(BtnFixCommentNotes);
             groupBox4.Controls.Add(BtnFixTabBehavior);
             groupBox4.Controls.Add(BtnFixDupeCustomXml);
@@ -238,6 +240,27 @@ namespace Office_File_Explorer.WinForms
             groupBox4.TabIndex = 0;
             groupBox4.TabStop = false;
             groupBox4.Text = "Batch Commands";
+            // 
+            // btnFixContentControls
+            // 
+            btnFixContentControls.Enabled = false;
+            btnFixContentControls.Location = new System.Drawing.Point(344, 138);
+            btnFixContentControls.Name = "btnFixContentControls";
+            btnFixContentControls.Size = new System.Drawing.Size(173, 23);
+            btnFixContentControls.TabIndex = 1;
+            btnFixContentControls.Text = "Fix Corrupt Content Controls";
+            btnFixContentControls.UseVisualStyleBackColor = true;
+            btnFixContentControls.Click += btnFixContentControls_Click;
+            // 
+            // BtnFixCommentNotes
+            // 
+            BtnFixCommentNotes.Location = new System.Drawing.Point(197, 138);
+            BtnFixCommentNotes.Name = "BtnFixCommentNotes";
+            BtnFixCommentNotes.Size = new System.Drawing.Size(141, 23);
+            BtnFixCommentNotes.TabIndex = 1;
+            BtnFixCommentNotes.Text = "Fix Comment Notes";
+            BtnFixCommentNotes.UseVisualStyleBackColor = true;
+            BtnFixCommentNotes.Click += BtnFixCommentNotes_Click;
             // 
             // BtnFixTabBehavior
             // 
@@ -489,16 +512,6 @@ namespace Office_File_Explorer.WinForms
             BtnAddCustomProps.UseVisualStyleBackColor = true;
             BtnAddCustomProps.Click += BtnAddCustomProps_Click;
             // 
-            // BtnFixCommentNotes
-            // 
-            BtnFixCommentNotes.Location = new System.Drawing.Point(197, 138);
-            BtnFixCommentNotes.Name = "BtnFixCommentNotes";
-            BtnFixCommentNotes.Size = new System.Drawing.Size(141, 23);
-            BtnFixCommentNotes.TabIndex = 1;
-            BtnFixCommentNotes.Text = "Fix Comment Notes";
-            BtnFixCommentNotes.UseVisualStyleBackColor = true;
-            BtnFixCommentNotes.Click += BtnFixCommentNotes_Click;
-            // 
             // FrmBatch
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -569,5 +582,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.Button BtnFixDupeCustomXml;
         private System.Windows.Forms.Button BtnFixTabBehavior;
         private System.Windows.Forms.Button BtnFixCommentNotes;
+        private System.Windows.Forms.Button btnFixContentControls;
     }
 }

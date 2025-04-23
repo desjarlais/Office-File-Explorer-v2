@@ -159,6 +159,7 @@ namespace Office_File_Explorer.WinForms
                 BtnFixFooterSpacing.Enabled = true;
                 BtnFixCorruptTcTags.Enabled = true;
                 BtnFixDupeCustomXml.Enabled = true;
+                btnFixContentControls.Enabled = true;
             }
 
             if (rdoPowerPoint.Checked == true)
@@ -2250,6 +2251,39 @@ namespace Office_File_Explorer.WinForms
                     else
                     {
                         lstOutput.Items.Add(f + " : No Large Comment Notes Found.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lstOutput.Items.Add(f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                    FileUtilities.WriteToLog(Strings.fLogFilePath, f + Strings.wArrow + Strings.wErrorText + ex.Message);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void btnFixContentControls_Click(object sender, EventArgs e)
+        {
+            lstOutput.Items.Clear();
+
+            foreach (string f in files)
+            {
+                try
+                {
+                    Cursor = Cursors.WaitCursor;
+                    StringBuilder sb = new StringBuilder();
+                    bool isFixed = WordFixes.FixContentControlPlaceholders(f);
+
+                    if (isFixed)
+                    {
+                        lstOutput.Items.Add(f + " : Content Controls Fixed.");
+                    }
+                    else
+                    {
+                        lstOutput.Items.Add(f + " : No Corrupt Content Controls Found.");
                     }
                 }
                 catch (Exception ex)
