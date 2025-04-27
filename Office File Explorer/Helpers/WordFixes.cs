@@ -771,6 +771,8 @@ namespace Office_File_Explorer.Helpers
 
         /// <summary>
         /// Flow has a corruption where the showingplaceholder tag is not removed after updating a content control
+        /// TODO: Flow also does not remove the placeholder style tag, but that is typically not going to be a noticeable issue,
+        /// look into adjust that later, for now, getting the showingplaceholder tag removed is the priority
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -784,7 +786,7 @@ namespace Office_File_Explorer.Helpers
                 {
                     bool containsDefaultText = false;
 
-                    // 1. check for rsidR and rsidRPr
+                    // 1. check for content runs to see if the default text is present
                     foreach (OpenXmlElement oxe in cc.ChildElements)
                     {
                         if (oxe.LocalName == "sdtContent")
