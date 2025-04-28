@@ -1,14 +1,10 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using System;
+﻿using System;
 using System.Buffers.Binary;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdf
 {
@@ -140,7 +136,7 @@ namespace Office_File_Explorer.OpenMcdf
             FatEntry entry = miniFatEnumerator.Current;
             this[entry.Index] = SectorType.EndOfChain;
 
-            Debug.Assert(entry.IsFree);
+            Debug.Assert(entry.Value is SectorType.Free);
             MiniSector miniSector = new(entry.Index, Context.MiniSectorSize);
             if (Context.MiniStream.Length < miniSector.EndPosition)
                 Context.MiniStream.SetLength(miniSector.EndPosition);
@@ -160,7 +156,7 @@ namespace Office_File_Explorer.OpenMcdf
         }
 
         [ExcludeFromCodeCoverage]
-        internal void Validate()
+        internal bool Validate()
         {
             using MiniFatEnumerator miniFatEnumerator = new(ContextSite);
 
@@ -172,7 +168,8 @@ namespace Office_File_Explorer.OpenMcdf
                     throw new FileFormatException($"Mini FAT entry {current} is beyond the end of the mini stream.");
                 }
             }
+
+            return true;
         }
     }
-
 }

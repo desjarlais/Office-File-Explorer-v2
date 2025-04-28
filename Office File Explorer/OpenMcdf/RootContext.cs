@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdf
 {
@@ -22,6 +18,10 @@ namespace Office_File_Explorer.OpenMcdf
     /// </summary>
     internal sealed class RootContext : ContextBase, IDisposable
     {
+        internal const long MaximumV3StreamLength = 2147483648;
+        internal const uint RangeLockSectorOffset = 0x7FFFFF00;
+        internal const uint RangeLockSectorId = RangeLockSectorOffset / (1 << Header.SectorShiftV4) - 1;
+
         readonly IOContextFlags contextFlags;
         readonly CfbBinaryWriter? writer;
         readonly TransactedStream? transactedStream;
@@ -31,6 +31,8 @@ namespace Office_File_Explorer.OpenMcdf
         public Header Header { get; }
 
         public Stream BaseStream { get; }
+
+        public Stream Stream { get; }
 
         public CfbBinaryReader Reader { get; }
 
@@ -91,8 +93,6 @@ namespace Office_File_Explorer.OpenMcdf
 
         public uint SectorCount => (uint)Math.Max(0, (Length - SectorSize) / SectorSize); // TODO: Check
 
-        bool isDirty;
-
         public RootContext(RootContextSite rootContextSite, Stream stream, Version version, IOContextFlags contextFlags = IOContextFlags.None)
             : base(rootContextSite)
         {
@@ -110,17 +110,20 @@ namespace Office_File_Explorer.OpenMcdf
             DirectoryEntriesPerSector = SectorSize / DirectoryEntry.Length;
             Length = stream.Length;
 
-            Stream actualStream = stream;
             if (contextFlags.HasFlag(IOContextFlags.Transacted))
             {
                 Stream overlayStream = stream is MemoryStream ? new MemoryStream() : File.Create(Path.GetTempFileName());
                 transactedStream = new TransactedStream(ContextSite, stream, overlayStream);
-                actualStream = new BufferedStream(transactedStream, SectorSize);
+                Stream = new BufferedStream(transactedStream, SectorSize);
+            }
+            else
+            {
+                Stream = stream;
             }
 
-            Reader = new(actualStream);
+            Reader = new(Stream);
             if (stream.CanWrite)
-                writer = new(actualStream);
+                writer = new(Stream);
 
             Fat = new(ContextSite);
             DirectoryEntries = new(ContextSite);
@@ -179,20 +182,36 @@ namespace Office_File_Explorer.OpenMcdf
         {
             Fat.Flush();
 
-            if (isDirty && writer is not null && transactedStream is null)
+            if (writer is not null && transactedStream is null)
             {
-                // Ensure the stream is as long as expected
-                BaseStream.SetLength(Length);
+                TrimBaseStream();
                 WriteHeader();
-                isDirty = false;
             }
         }
 
         public void ExtendStreamLength(long length)
         {
-            if (Length < length)
-                Length = length;
-            isDirty = true;
+            if (Length >= length)
+                return;
+
+            if (Version is Version.V3 && length > MaximumV3StreamLength)
+                throw new IOException("V3 compound files are limited to 2 GB.");
+            else if (Version is Version.V4 && Length < RangeLockSectorOffset && length >= RangeLockSectorOffset)
+                Fat[RangeLockSectorId] = SectorType.EndOfChain;
+            Length = length;
+        }
+
+        void TrimBaseStream()
+        {
+            Sector lastUsedSector = Fat.GetLastUsedSector();
+            if (!lastUsedSector.IsValid)
+                throw new FileFormatException("Last used sector is invalid");
+
+            if (Version is Version.V4 && lastUsedSector.EndPosition < RangeLockSectorOffset)
+                Fat.TrySetValue(RangeLockSectorId, SectorType.Free);
+
+            Length = lastUsedSector.EndPosition;
+            BaseStream.SetLength(Length);
         }
 
         public void WriteHeader()
@@ -222,5 +241,4 @@ namespace Office_File_Explorer.OpenMcdf
             transactedStream.Revert();
         }
     }
-
 }

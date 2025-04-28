@@ -1,12 +1,7 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdf
 {
@@ -84,7 +79,7 @@ namespace Office_File_Explorer.OpenMcdf
         {
             while (MoveNext())
             {
-                if (value == SectorType.Free)
+                if (value is SectorType.Free)
                     return true;
             }
 

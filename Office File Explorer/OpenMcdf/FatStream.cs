@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdf
 {
@@ -118,7 +114,8 @@ namespace Office_File_Explorer.OpenMcdf
                     return readCount;
                 if (!chain.MoveNext())
                     throw new FileFormatException($"The FAT chain was shorter than the stream length.");
-            };
+            }
+            ;
         }
 
         /// <inheritdoc/>
@@ -193,6 +190,7 @@ namespace Office_File_Explorer.OpenMcdf
                 long writeLength = Math.Min(remaining, sector.Length - sectorOffset);
                 writer.Write(buffer, localOffset, (int)writeLength);
                 Context.ExtendStreamLength(sector.EndPosition);
+                Debug.Assert(Context.Length >= Context.Stream.Length);
                 position += writeLength;
                 writeCount += (int)writeLength;
                 sectorOffset = 0;

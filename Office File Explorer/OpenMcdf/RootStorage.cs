@@ -41,7 +41,7 @@ namespace Office_File_Explorer.OpenMcdf
         private static void ThrowIfLeaveOpen(StorageModeFlags flags)
         {
             if (flags.HasFlag(StorageModeFlags.LeaveOpen))
-                throw new ArgumentException($"{StorageModeFlags.LeaveOpen} is not valid for files");
+                throw new ArgumentException($"{StorageModeFlags.LeaveOpen} is only valid for injected streams.");
         }
 
         private static IOContextFlags ToIOContextFlags(StorageModeFlags flags)
@@ -80,7 +80,12 @@ namespace Office_File_Explorer.OpenMcdf
             return new RootStorage(rootContextSite, flags);
         }
 
-        public static RootStorage CreateInMemory(Version version = Version.V3) => Create(new MemoryStream(), version);
+        public static RootStorage CreateInMemory(Version version = Version.V3, StorageModeFlags flags = StorageModeFlags.None)
+        {
+            ThrowIfLeaveOpen(flags);
+
+            return Create(new MemoryStream(), version, flags);
+        }
 
         public static RootStorage Open(string fileName, FileMode mode, StorageModeFlags flags = StorageModeFlags.None)
         {
@@ -207,15 +212,7 @@ namespace Office_File_Explorer.OpenMcdf
         private void SwitchToCore(Stream stream, bool allowLeaveOpen)
         {
             Flush();
-
-            stream.SetLength(Context.BaseStream.Length);
-
-            stream.Position = 0;
-            Context.BaseStream.Position = 0;
-
-            Context.BaseStream.CopyTo(stream);
-            stream.Position = 0;
-
+            Context.Stream.CopyAllTo(stream);
             Context.Dispose();
 
             IOContextFlags contextFlags = ToIOContextFlags(storageModeFlags);
@@ -249,12 +246,12 @@ namespace Office_File_Explorer.OpenMcdf
             Context.MiniFat.WriteTrace(writer);
         }
 
+        // TODO: Move checks to Tests project as Asserts
         [ExcludeFromCodeCoverage]
-        internal void Validate()
+        internal bool Validate()
         {
-            Context.Fat.Validate();
-            Context.MiniFat.Validate();
+            return Context.Fat.Validate()
+                && Context.MiniFat.Validate();
         }
     }
-
 }

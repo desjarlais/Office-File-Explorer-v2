@@ -1,15 +1,11 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using System;
+﻿using System;
 using System.Buffers.Binary;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
-using System.Formats.Tar;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Office_File_Explorer.OpenMcdf
 {
@@ -23,11 +19,20 @@ namespace Office_File_Explorer.OpenMcdf
         Sector cachedSector = Sector.EndOfChain;
         private bool isDirty;
 
+        public Func<FatEntry, bool> IsUsed { get; }
+
         public Fat(RootContextSite rootContextSite)
             : base(rootContextSite)
         {
             fatSectorEnumerator = new(rootContextSite);
             cachedSectorBuffer = new byte[Context.SectorSize];
+
+            if (Context.Version == Version.V3)
+                IsUsed = entry => entry.Value is not SectorType.Free;
+            else if (Context.Version == Version.V4)
+                IsUsed = entry => entry.Value is not SectorType.Free && entry.Index is not RootContext.RangeLockSectorId;
+            else
+                throw new NotSupportedException($"Unsupported major version: {Context.Version}.");
         }
 
         public void Dispose()
@@ -149,6 +154,18 @@ namespace Office_File_Explorer.OpenMcdf
             return entry.Index;
         }
 
+        public Sector GetLastUsedSector()
+        {
+            FatEntry lastUsedSectorIndex = new(uint.MaxValue, uint.MaxValue);
+            foreach (FatEntry entry in this)
+            {
+                if (IsUsed(entry))
+                    lastUsedSectorIndex = entry;
+            }
+
+            return new(lastUsedSectorIndex.Index, Context.SectorSize);
+        }
+
         public IEnumerator<FatEntry> GetEnumerator() => new FatEnumerator(Context.Fat);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -168,7 +185,7 @@ namespace Office_File_Explorer.OpenMcdf
             foreach (FatEntry entry in this)
             {
                 Sector sector = new(entry.Index, Context.SectorSize);
-                if (entry.IsFree)
+                if (entry.Value is SectorType.Free)
                 {
                     freeCount++;
                     writer.WriteLine($"{entry}");
@@ -190,7 +207,7 @@ namespace Office_File_Explorer.OpenMcdf
         }
 
         [ExcludeFromCodeCoverage]
-        internal void Validate()
+        internal bool Validate()
         {
             long fatSectorCount = 0;
             long difatSectorCount = 0;
@@ -209,10 +226,23 @@ namespace Office_File_Explorer.OpenMcdf
                 throw new FileFormatException($"FAT sector count mismatch. Expected: {Context.Header.FatSectorCount} Actual: {fatSectorCount}.");
             if (Context.Header.DifatSectorCount != difatSectorCount)
                 throw new FileFormatException($"DIFAT sector count mismatch: Expected: {Context.Header.DifatSectorCount} Actual: {difatSectorCount}.");
+
+            if (Context.Length < RootContext.RangeLockSectorOffset)
+            {
+                if (this.TryGetValue(RootContext.RangeLockSectorId, out uint value) && value != SectorType.Free)
+                    throw new FileFormatException($"Range lock FAT entry is not free.");
+            }
+            else
+            {
+                if (this[RootContext.RangeLockSectorId] != SectorType.EndOfChain)
+                    throw new FileFormatException($"Range lock sector is not at the end of the chain.");
+            }
+
+            return true;
         }
 
         [ExcludeFromCodeCoverage]
-        internal long GetFreeSectorCount() => this.Count(entry => entry.IsFree);
+        internal long GetFreeSectorCount() => this.Count(entry => entry.Value == SectorType.Free);
     }
 
 }
