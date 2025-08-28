@@ -52,6 +52,7 @@ namespace Office_File_Explorer.WinForms
             rdoUseSPGuid = new System.Windows.Forms.RadioButton();
             rdoUserSelectedCC = new System.Windows.Forms.RadioButton();
             groupBox6 = new System.Windows.Forms.GroupBox();
+            ckbCleanInvalidXml = new System.Windows.Forms.CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -67,7 +68,7 @@ namespace Office_File_Explorer.WinForms
             groupBox1.Controls.Add(ckbRemoveFallbackTags);
             groupBox1.Location = new System.Drawing.Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(235, 167);
+            groupBox1.Size = new System.Drawing.Size(235, 121);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Word Options";
@@ -87,7 +88,7 @@ namespace Office_File_Explorer.WinForms
             ckbFixGroupedShapes.AutoSize = true;
             ckbFixGroupedShapes.Location = new System.Drawing.Point(6, 66);
             ckbFixGroupedShapes.Name = "ckbFixGroupedShapes";
-            ckbFixGroupedShapes.Size = new System.Drawing.Size(130, 19);
+            ckbFixGroupedShapes.Size = new System.Drawing.Size(129, 19);
             ckbFixGroupedShapes.TabIndex = 2;
             ckbFixGroupedShapes.Text = "Fix Grouped Shapes";
             ckbFixGroupedShapes.UseVisualStyleBackColor = true;
@@ -107,7 +108,7 @@ namespace Office_File_Explorer.WinForms
             ckbRemoveFallbackTags.AutoSize = true;
             ckbRemoveFallbackTags.Location = new System.Drawing.Point(6, 19);
             ckbRemoveFallbackTags.Name = "ckbRemoveFallbackTags";
-            ckbRemoveFallbackTags.Size = new System.Drawing.Size(158, 19);
+            ckbRemoveFallbackTags.Size = new System.Drawing.Size(159, 19);
             ckbRemoveFallbackTags.TabIndex = 0;
             ckbRemoveFallbackTags.Text = "Remove All Fallback Tags";
             ckbRemoveFallbackTags.UseVisualStyleBackColor = true;
@@ -139,7 +140,7 @@ namespace Office_File_Explorer.WinForms
             ckbRemoveCustDataTags.AutoSize = true;
             ckbRemoveCustDataTags.Location = new System.Drawing.Point(8, 44);
             ckbRemoveCustDataTags.Name = "ckbRemoveCustDataTags";
-            ckbRemoveCustDataTags.Size = new System.Drawing.Size(167, 19);
+            ckbRemoveCustDataTags.Size = new System.Drawing.Size(168, 19);
             ckbRemoveCustDataTags.TabIndex = 6;
             ckbRemoveCustDataTags.Text = "Remove Custom Data Tags";
             ckbRemoveCustDataTags.UseVisualStyleBackColor = true;
@@ -156,12 +157,13 @@ namespace Office_File_Explorer.WinForms
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(ckbCleanInvalidXml);
             groupBox3.Controls.Add(ckbOutlookMsgAsRtf);
             groupBox3.Controls.Add(ckbZipItemCorrupt);
             groupBox3.Controls.Add(ckbDeleteOnExit);
             groupBox3.Location = new System.Drawing.Point(253, 110);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new System.Drawing.Size(238, 102);
+            groupBox3.Size = new System.Drawing.Size(238, 179);
             groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "App Settings";
@@ -171,7 +173,7 @@ namespace Office_File_Explorer.WinForms
             ckbOutlookMsgAsRtf.AutoSize = true;
             ckbOutlookMsgAsRtf.Location = new System.Drawing.Point(6, 77);
             ckbOutlookMsgAsRtf.Name = "ckbOutlookMsgAsRtf";
-            ckbOutlookMsgAsRtf.Size = new System.Drawing.Size(196, 19);
+            ckbOutlookMsgAsRtf.Size = new System.Drawing.Size(197, 19);
             ckbOutlookMsgAsRtf.TabIndex = 5;
             ckbOutlookMsgAsRtf.Text = "Display Outlook Msg Files in RTF";
             ckbOutlookMsgAsRtf.UseVisualStyleBackColor = true;
@@ -191,7 +193,7 @@ namespace Office_File_Explorer.WinForms
             ckbDeleteOnExit.AutoSize = true;
             ckbDeleteOnExit.Location = new System.Drawing.Point(6, 22);
             ckbDeleteOnExit.Name = "ckbDeleteOnExit";
-            ckbDeleteOnExit.Size = new System.Drawing.Size(167, 19);
+            ckbDeleteOnExit.Size = new System.Drawing.Size(166, 19);
             ckbDeleteOnExit.TabIndex = 0;
             ckbDeleteOnExit.Text = "Delete Copied Files On Exit";
             ckbDeleteOnExit.UseVisualStyleBackColor = true;
@@ -200,9 +202,9 @@ namespace Office_File_Explorer.WinForms
             // 
             groupBox4.Controls.Add(rdoSAX);
             groupBox4.Controls.Add(rdoDOM);
-            groupBox4.Location = new System.Drawing.Point(253, 218);
+            groupBox4.Location = new System.Drawing.Point(12, 248);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new System.Drawing.Size(238, 75);
+            groupBox4.Size = new System.Drawing.Size(235, 75);
             groupBox4.TabIndex = 0;
             groupBox4.TabStop = false;
             groupBox4.Text = "Excel Parse Options";
@@ -287,12 +289,22 @@ namespace Office_File_Explorer.WinForms
             groupBox6.Controls.Add(rdoUserSelectedCC);
             groupBox6.Controls.Add(rdoUseSPGuid);
             groupBox6.Controls.Add(rdoUseCCGuid);
-            groupBox6.Location = new System.Drawing.Point(12, 187);
+            groupBox6.Location = new System.Drawing.Point(12, 139);
             groupBox6.Name = "groupBox6";
             groupBox6.Size = new System.Drawing.Size(235, 103);
             groupBox6.TabIndex = 5;
             groupBox6.TabStop = false;
             groupBox6.Text = "Fix Content Control Prefix Mappings";
+            // 
+            // ckbCleanInvalidXml
+            // 
+            ckbCleanInvalidXml.AutoSize = true;
+            ckbCleanInvalidXml.Location = new System.Drawing.Point(6, 102);
+            ckbCleanInvalidXml.Name = "ckbCleanInvalidXml";
+            ckbCleanInvalidXml.Size = new System.Drawing.Size(190, 19);
+            ckbCleanInvalidXml.TabIndex = 6;
+            ckbCleanInvalidXml.Text = "Remove Invalid Xml Characters";
+            ckbCleanInvalidXml.UseVisualStyleBackColor = true;
             // 
             // FrmSettings
             // 
@@ -352,5 +364,6 @@ namespace Office_File_Explorer.WinForms
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox ckbResetIndentLevels;
         private System.Windows.Forms.CheckBox ckbOutlookMsgAsRtf;
+        private System.Windows.Forms.CheckBox ckbCleanInvalidXml;
     }
 }

@@ -35,6 +35,11 @@ namespace Office_File_Explorer.WinForms
                 ckbDeleteOnExit.Checked = true;
             }
 
+            if (Properties.Settings.Default.RemoveInvalXmlChars == true)
+            {
+                ckbCleanInvalidXml.Checked = true;
+            }
+
             if (Properties.Settings.Default.ListCellValuesSax == true)
             {
                 rdoSAX.Checked = true;
@@ -96,6 +101,7 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.RemoveCustDataTags = ckbRemoveCustDataTags.Checked;
             Properties.Settings.Default.ResetIndentLevels = ckbResetIndentLevels.Checked;
             Properties.Settings.Default.MsgAsRtf = ckbOutlookMsgAsRtf.Checked;
+            Properties.Settings.Default.RemoveInvalXmlChars = ckbCleanInvalidXml.Checked;
 
             if (rdoUseCCGuid.Checked)
             {

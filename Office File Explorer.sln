@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Office File Explorer", "Office File Explorer\Office File Explorer.csproj", "{DD075084-5210-41DC-B72C-F9B580C1B8C8}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Office File Explorer Setup", "Office File Explorer Setup\Office File Explorer Setup.vdproj", "{76755B6A-B851-9FB8-BD95-71901BC79A67}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,8 +15,6 @@ Global
 		{DD075084-5210-41DC-B72C-F9B580C1B8C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD075084-5210-41DC-B72C-F9B580C1B8C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD075084-5210-41DC-B72C-F9B580C1B8C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76755B6A-B851-9FB8-BD95-71901BC79A67}.Debug|Any CPU.ActiveCfg = Debug
-		{76755B6A-B851-9FB8-BD95-71901BC79A67}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

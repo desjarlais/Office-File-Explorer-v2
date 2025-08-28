@@ -604,41 +604,41 @@ namespace Office_File_Explorer.Helpers
             return fSuccess;
         }
 
-        // Given a document, remove all hidden text.
-        public static bool DeleteHiddenText(string docName)
-        {
-            fSuccess = false;
+        //// Given a document, remove all hidden text.
+        //public static bool DeleteHiddenText(string docName)
+        //{
+        //    fSuccess = false;
 
-            using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
-            {
-                Document doc = document.MainDocumentPart.Document;
-                var hiddenItems = doc.Descendants<Vanish>().ToList();
-                foreach (var item in hiddenItems)
-                {
-                    // Need to go up at least two levels to get to the run.
-                    if ((item.Parent is not null) &&
-                      (item.Parent.Parent is not null) &&
-                      (item.Parent.Parent.Parent is not null))
-                    {
-                        var topNode = item.Parent.Parent;
-                        var topParentNode = item.Parent.Parent.Parent;
-                        if (topParentNode is not null)
-                        {
-                            topNode.Remove();
-                            // No more children? Remove the parent node, as well.
-                            if (!topParentNode.HasChildren)
-                            {
-                                topParentNode.Remove();
-                            }
-                        }
-                    }
-                }
-                doc.Save();
-                fSuccess = true;
-            }
+        //    using (WordprocessingDocument document = WordprocessingDocument.Open(docName, true))
+        //    {
+        //        Document doc = document.MainDocumentPart.Document;
+        //        var hiddenItems = doc.Descendants<Vanish>().ToList();
+        //        foreach (var item in hiddenItems)
+        //        {
+        //            // Need to go up at least two levels to get to the run.
+        //            if ((item.Parent is not null) &&
+        //              (item.Parent.Parent is not null) &&
+        //              (item.Parent.Parent.Parent is not null))
+        //            {
+        //                var topNode = item.Parent.Parent;
+        //                var topParentNode = item.Parent.Parent.Parent;
+        //                if (topParentNode is not null)
+        //                {
+        //                    topNode.Remove();
+        //                    // No more children? Remove the parent node, as well.
+        //                    if (!topParentNode.HasChildren)
+        //                    {
+        //                        topParentNode.Remove();
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        doc.Save();
+        //        fSuccess = true;
+        //    }
 
-            return fSuccess;
-        }
+        //    return fSuccess;
+        //}
 
         public static List<string> RemoveUnusedStyles(string filePath)
         {
@@ -779,25 +779,33 @@ namespace Office_File_Explorer.Helpers
 
             using (WordprocessingDocument wdDoc = WordprocessingDocument.Open(docName, true))
             {
-                FootnotesPart fnp = wdDoc.MainDocumentPart.FootnotesPart;
-                if (fnp is not null)
+                if (wdDoc.MainDocumentPart.GetPartsOfType<FootnotesPart>().Any())
                 {
-                    var footnotes = fnp.Footnotes.Elements<Footnote>();
-                    var references = wdDoc.MainDocumentPart.Document.Body.Descendants<FootnoteReference>().ToArray();
+                    MainDocumentPart mainPart = wdDoc.MainDocumentPart;
 
-                    foreach (var reference in references)
+                    var enr = mainPart.Document.Descendants<FootnoteReference>().ToArray();
+                    foreach (var e in enr)
                     {
-                        reference.Remove();
+                        e.Remove();
                     }
 
-                    foreach (var footnote in footnotes)
+                    mainPart.DeletePart(mainPart.FootnotesPart);
+
+                    var settingsPart = mainPart.DocumentSettingsPart;
+                    if (settingsPart != null)
                     {
-                        footnote.Remove();
+                        var settings = settingsPart.Settings;
+                        var footnotePr = settings.Descendants<FootnoteDocumentWideProperties>().FirstOrDefault();
+                        if (footnotePr != null)
+                        {
+                            footnotePr.Remove();
+                            settings.Save();
+                        }
                     }
+
+                    mainPart.Document.Save();
+                    fSuccess = true;
                 }
-
-                wdDoc.MainDocumentPart.Document.Save();
-                fSuccess = true;
             }
 
             return fSuccess;
@@ -825,7 +833,23 @@ namespace Office_File_Explorer.Helpers
                     }
 
                     EndnotesPart ep = mainPart.EndnotesPart;
-                    ep.Endnotes = CreateDefaultEndnotes();
+                    mainPart.DeletePart(ep);
+
+                    // remove endnote setting properties
+
+                    var settingsPart = mainPart.DocumentSettingsPart;
+                    if (settingsPart != null)
+                    {
+                        var settings = settingsPart.Settings;
+                        var endnotePr = settings.Descendants<EndnoteDocumentWideProperties>().FirstOrDefault();
+                        if (endnotePr != null)
+                        {
+                            endnotePr.Remove();
+                            settings.Save();
+                        }
+                    }
+
+
                     mainPart.Document.Save();
                     fSuccess = true;
                 }
@@ -852,6 +876,7 @@ namespace Office_File_Explorer.Helpers
                     wdDoc.MainDocumentPart.DeleteParts(wdDoc.MainDocumentPart.HeaderParts);
                     wdDoc.MainDocumentPart.DeleteParts(wdDoc.MainDocumentPart.FooterParts);
 
+                    fSuccess = true;
                     Document doc = wdDoc.MainDocumentPart.Document;
 
                     // Remove references to the headers and footers.
@@ -866,8 +891,52 @@ namespace Office_File_Explorer.Helpers
                     {
                         footer.Parent.RemoveChild(footer);
                     }
+
                     doc.Save();
-                    fSuccess = true;
+                }
+            }
+
+            return fSuccess;
+        }
+
+        /// <summary>
+        /// Given a document name, delete all the hidden text.
+        /// </summary>
+        /// <param name="docName"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static bool DeleteHiddenText(string docName)
+        {
+            bool fSuccess = false;
+
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(docName, true))
+            {
+                if (doc.MainDocumentPart is null || doc.MainDocumentPart.Document.Body is null)
+                {
+                    return fSuccess;
+                }
+
+                // Get a list of all the Vanish elements
+                List<Vanish> vanishes = doc.MainDocumentPart.Document.Body.Descendants<Vanish>().ToList();
+
+                // Loop over the list of Vanish elements
+                foreach (Vanish vanish in vanishes)
+                {
+                    var parent = vanish?.Parent;
+                    var grandparent = parent?.Parent;
+
+                    // If the grandparent is a Run remove it
+                    if (grandparent is Run)
+                    {
+                        grandparent.Remove();
+                        fSuccess = true;
+                    }
+                    // If it's not a run remove the Vanish
+                    else if (parent is not null)
+                    {
+                        parent.RemoveAllChildren<Vanish>();
+                        fSuccess = true;
+                    }
                 }
             }
 
@@ -2548,6 +2617,93 @@ namespace Office_File_Explorer.Helpers
                 package.MainDocumentPart.Document.Save();
             }
         }
+
+        // Generates content of footnotesPart1.
+        public static FootnotesPart CreateDefaultFootnotes(FootnotesPart fnp)
+        {
+            Footnotes footnotes1 = new Footnotes() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du wp14" } };
+            footnotes1.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
+            footnotes1.AddNamespaceDeclaration("cx", "http://schemas.microsoft.com/office/drawing/2014/chartex");
+            footnotes1.AddNamespaceDeclaration("cx1", "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex");
+            footnotes1.AddNamespaceDeclaration("cx2", "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex");
+            footnotes1.AddNamespaceDeclaration("cx3", "http://schemas.microsoft.com/office/drawing/2016/5/9/chartex");
+            footnotes1.AddNamespaceDeclaration("cx4", "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex");
+            footnotes1.AddNamespaceDeclaration("cx5", "http://schemas.microsoft.com/office/drawing/2016/5/11/chartex");
+            footnotes1.AddNamespaceDeclaration("cx6", "http://schemas.microsoft.com/office/drawing/2016/5/12/chartex");
+            footnotes1.AddNamespaceDeclaration("cx7", "http://schemas.microsoft.com/office/drawing/2016/5/13/chartex");
+            footnotes1.AddNamespaceDeclaration("cx8", "http://schemas.microsoft.com/office/drawing/2016/5/14/chartex");
+            footnotes1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+            footnotes1.AddNamespaceDeclaration("aink", "http://schemas.microsoft.com/office/drawing/2016/ink");
+            footnotes1.AddNamespaceDeclaration("am3d", "http://schemas.microsoft.com/office/drawing/2017/model3d");
+            footnotes1.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
+            footnotes1.AddNamespaceDeclaration("oel", "http://schemas.microsoft.com/office/2019/extlst");
+            footnotes1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+            footnotes1.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+            footnotes1.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
+            footnotes1.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+            footnotes1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+            footnotes1.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
+            footnotes1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+            footnotes1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
+            footnotes1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
+            footnotes1.AddNamespaceDeclaration("w16cex", "http://schemas.microsoft.com/office/word/2018/wordml/cex");
+            footnotes1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
+            footnotes1.AddNamespaceDeclaration("w16", "http://schemas.microsoft.com/office/word/2018/wordml");
+            footnotes1.AddNamespaceDeclaration("w16du", "http://schemas.microsoft.com/office/word/2023/wordml/word16du");
+            footnotes1.AddNamespaceDeclaration("w16sdtdh", "http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash");
+            footnotes1.AddNamespaceDeclaration("w16sdtfl", "http://schemas.microsoft.com/office/word/2024/wordml/sdtformatlock");
+            footnotes1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
+            footnotes1.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
+            footnotes1.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
+            footnotes1.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
+            footnotes1.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+
+            Footnote footnote1 = new Footnote() { Type = FootnoteEndnoteValues.Separator, Id = -1 };
+
+            Paragraph paragraph9 = new Paragraph() { RsidParagraphAddition = "00B679B1", RsidParagraphProperties = "006C62EB", RsidRunAdditionDefault = "00B679B1", ParagraphId = "4502F2DB", TextId = "77777777" };
+
+            ParagraphProperties paragraphProperties3 = new ParagraphProperties();
+            SpacingBetweenLines spacingBetweenLines17 = new SpacingBetweenLines() { After = "0", Line = "240", LineRule = LineSpacingRuleValues.Auto };
+
+            paragraphProperties3.Append(spacingBetweenLines17);
+
+            Run run8 = new Run();
+            SeparatorMark separatorMark2 = new SeparatorMark();
+
+            run8.Append(separatorMark2);
+
+            paragraph9.Append(paragraphProperties3);
+            paragraph9.Append(run8);
+
+            footnote1.Append(paragraph9);
+
+            Footnote footnote2 = new Footnote() { Type = FootnoteEndnoteValues.ContinuationSeparator, Id = 0 };
+
+            Paragraph paragraph10 = new Paragraph() { RsidParagraphAddition = "00B679B1", RsidParagraphProperties = "006C62EB", RsidRunAdditionDefault = "00B679B1", ParagraphId = "2B40450A", TextId = "77777777" };
+
+            ParagraphProperties paragraphProperties4 = new ParagraphProperties();
+            SpacingBetweenLines spacingBetweenLines18 = new SpacingBetweenLines() { After = "0", Line = "240", LineRule = LineSpacingRuleValues.Auto };
+
+            paragraphProperties4.Append(spacingBetweenLines18);
+
+            Run run9 = new Run();
+            ContinuationSeparatorMark continuationSeparatorMark2 = new ContinuationSeparatorMark();
+
+            run9.Append(continuationSeparatorMark2);
+
+            paragraph10.Append(paragraphProperties4);
+            paragraph10.Append(run9);
+
+            footnote2.Append(paragraph10);
+
+            footnotes1.Append(footnote1);
+            footnotes1.Append(footnote2);
+
+            fnp.Footnotes = footnotes1;
+
+            return fnp;
+        }
+
 
         // Creates an Endnotes instance and adds its children.
         public static Endnotes CreateDefaultEndnotes()

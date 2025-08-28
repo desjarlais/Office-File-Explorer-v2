@@ -45,7 +45,7 @@ namespace Office_File_Explorer
         private string fromChangeTemplate;
         private string partPropContentType;
         private string partPropCompression;
-        private bool isEncrypted, isCompound;
+        private bool isEncrypted;
 
 
         // openmcdf globals
@@ -1779,12 +1779,19 @@ namespace Office_File_Explorer
             }
             catch (Exception ex)
             {
+
                 scintilla1.Text = "Error: " + ex.Message;
             }
             finally
             {
                 Cursor = Cursors.Default;
             }
+        }
+
+        public static string CleanInvalidXmlChars(string text)
+        {
+            string re = @"[^\x09\x0A\x0D\x20-\xD7FF\xE000-\xFFFD\x10000-x10FFFF]";
+            return Regex.Replace(text, re, "");
         }
 
         /// <summary>
@@ -1830,23 +1837,23 @@ namespace Office_File_Explorer
             // add line numbers, use line count to determine margin width
             if (scintilla1.Lines.Count < 100)
             {
-                scintilla1.Margins[0].Width = 20;
+                scintilla1.Margins[0].Width = 30;
             }
             else if (scintilla1.Lines.Count < 1000)
             {
-                scintilla1.Margins[0].Width = 30;
+                scintilla1.Margins[0].Width = 40;
             }
             else if (scintilla1.Lines.Count < 10000)
             {
-                scintilla1.Margins[0].Width = 35;
+                scintilla1.Margins[0].Width = 45;
             }
             else if (scintilla1.Lines.Count < 100000)
             {
-                scintilla1.Margins[0].Width = 40;
+                scintilla1.Margins[0].Width = 50;
             }
             else if (scintilla1.Lines.Count < 1000000)
             {
-                scintilla1.Margins[0].Width = 50;
+                scintilla1.Margins[0].Width = 60;
             }
             else if (scintilla1.Lines.Count < 10000000)
             {
@@ -1854,7 +1861,7 @@ namespace Office_File_Explorer
             }
             else
             {
-                scintilla1.Margins[0].Width = 70;
+                scintilla1.Margins[0].Width = 80;
             }
 
             // Enable folding
@@ -2678,6 +2685,16 @@ namespace Office_File_Explorer
                     {
                         sbFixes.AppendLine("Corrupt Data Descriptor Fixed");
                         corruptionFound = true;
+                    }
+                }
+
+                if (Properties.Settings.Default.RemoveInvalXmlChars)
+                {
+                    foreach (PackagePart part in package.GetParts())
+                    {
+                        Stream temp = part.GetStream(FileMode.Open, FileAccess.Read);
+                        StreamReader sr = new StreamReader(temp);
+                        string text = sr.ReadToEnd();
                     }
                 }
             }
