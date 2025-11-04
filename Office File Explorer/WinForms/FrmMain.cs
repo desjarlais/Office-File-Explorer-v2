@@ -1755,6 +1755,20 @@ namespace Office_File_Explorer
                         }
                     }
                 }
+                else if (isEncrypted)
+                {
+                    TreeNode? node = e.Node;
+                    if (node?.Tag is not NodeSelection nodeSelection)
+                    {
+                        return;
+                    }
+
+                    CfbStream cfbStream = nodeSelection.Parent!.OpenStream(nodeSelection.EntryInfo.Name);
+                    // display encrypted binary data as string
+                    byte[] buffer = new byte[cfbStream.EntryInfo.Length];
+                    cfbStream.Read(buffer);
+                    scintilla1.Text = AppUtilities.ConvertByteArrayToText(buffer);
+                }
                 else if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Binary)
                 {
                     foreach (PackagePart pp in pkgParts)
@@ -3516,8 +3530,7 @@ namespace Office_File_Explorer
 
         private void TvFiles_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            TreeNode tNode = TvFiles.GetNodeAt(e.X, e.Y);
-            UpdateStreamDisplay(tNode);
+            TvFiles.SelectedNode = e.Node;
         }
 
         /// <summary>

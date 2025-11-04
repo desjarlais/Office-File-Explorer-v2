@@ -50,6 +50,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -74,6 +82,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -182,15 +198,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Office File Explorer v2"
-        "ProductCode" = "8:{E59CC02E-6A44-4B29-900B-A22DBA88269A}"
-        "PackageCode" = "8:{D8647E44-7D14-4DF8-84D5-88B06A0AEBB4}"
+        "ProductCode" = "8:{FA75E08A-7DB9-4F3B-8F20-AD37AE39299D}"
+        "PackageCode" = "8:{7422D240-AA7D-46A3-801B-6F6338DACB12}"
         "UpgradeCode" = "8:{4E19C48C-79E7-4065-91D4-900DCD51314E}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.25.0924"
+        "ProductVersion" = "8:2.25.1104"
         "Manufacturer" = "8:BrandeSoft"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/desjarlais/Office-File-Explorer-v2/issues"

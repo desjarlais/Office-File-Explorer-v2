@@ -1,8 +1,7 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Xml;
+using System.Text;
 
 namespace Office_File_Explorer.Helpers
 {
@@ -381,6 +380,41 @@ namespace Office_File_Explorer.Helpers
         {
             return !string.IsNullOrWhiteSpace(path) ?
                 path.Contains(' ') && (!path.StartsWith("\"") && !path.EndsWith("\"")) ? "\"" + path + "\"" : path : string.Empty;
+        }
+
+        public static string ConvertByteArrayToText(byte[] buffer)
+        {
+            if (buffer == null || buffer.Length == 0)
+                return string.Empty;
+
+            // Trim trailing null bytes (common in compound file streams)
+            int effectiveLength = buffer.Length;
+            while (effectiveLength > 0 && buffer[effectiveLength - 1] == 0)
+                effectiveLength--;
+
+            if (effectiveLength == 0)
+                return string.Empty;
+
+            // Attempt UTF-8 first
+            try
+            {
+                string utf8 = Encoding.UTF8.GetString(buffer, 0, effectiveLength);
+
+                // Heuristic: if a large portion are replacement chars, fallback
+                int replacementCount = utf8.Count(c => c == '\uFFFD');
+                if (replacementCount > utf8.Length / 10)
+                {
+                    // Fallback to ANSI / system default
+                    return Encoding.Default.GetString(buffer, 0, effectiveLength);
+                }
+
+                return utf8;
+            }
+            catch
+            {
+                // Final fallback
+                return Encoding.Default.GetString(buffer, 0, effectiveLength);
+            }
         }
     }
 }
