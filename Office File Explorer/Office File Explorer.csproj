@@ -5,8 +5,8 @@
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <RootNamespace>Office_File_Explorer</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.25.0427</AssemblyVersion>
-    <FileVersion>2.25.0427</FileVersion>
+    <AssemblyVersion>2.25.0828</AssemblyVersion>
+    <FileVersion>2.25.0828</FileVersion>
     <Version>2.25.0828</Version>
     <PackageIcon>Office2013.ico</PackageIcon>
     <PackageIconUrl />
@@ -39,7 +39,8 @@
 
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
-    <PackageReference Include="Scintilla5.NET" Version="6.0.1" />
+    <PackageReference Include="OpenMcdf" Version="3.0.3" />
+    <PackageReference Include="Scintilla5.NET" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>

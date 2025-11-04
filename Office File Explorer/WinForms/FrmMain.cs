@@ -23,7 +23,7 @@ using DocumentFormat.OpenXml.Packaging;
 // App refs
 using Office_File_Explorer.Helpers;
 using Office_File_Explorer.WinForms;
-using Office_File_Explorer.OpenMcdf;
+using OpenMcdf;
 
 // named refs
 using File = System.IO.File;
