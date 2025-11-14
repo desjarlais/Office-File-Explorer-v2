@@ -171,7 +171,7 @@ namespace Office_File_Explorer.Helpers
                 // open the file and populate the first 8 bytes into the buffer
                 using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
-                    fs.Read(buffer, 0, buffer.Length);
+                    fs.ReadExactly(buffer);
                 }
 
                 // encrypted files from Office start with D0 CF 11 E0 A1 B1 1A E1 (compound file format header)
@@ -201,7 +201,7 @@ namespace Office_File_Explorer.Helpers
                 // open the file and populate the first 2 bytes into the buffer
                 using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
-                    fs.Read(buffer, 0, buffer.Length);
+                    fs.ReadExactly(buffer);
                 }
 
                 // if the buffer starts with PK (hex = 80 75) the file is a zip archive

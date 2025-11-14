@@ -34,6 +34,7 @@ using Application = System.Windows.Forms.Application;
 // scintilla refs
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
+using System.ComponentModel;
 
 namespace Office_File_Explorer
 {
@@ -112,16 +113,19 @@ namespace Office_File_Explorer
 
         #region Class Properties
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string FindTextProperty
         {
             set => findText = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ReplaceTextProperty
         {
             set => replaceText = value;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DefaultTemplate
         {
             set => fromChangeTemplate = value;
@@ -1305,7 +1309,7 @@ namespace Office_File_Explorer
                             using CfbStream cfbStream1 = rs.OpenStream(tn.Text);
                             {
                                 byte[] buffer = new byte[cfbStream1.EntryInfo.Length];
-                                cfbStream1.Read(buffer, 0, buffer.Length);
+                                cfbStream1.ReadExactly(buffer);
                                 foreach (byte b in buffer)
                                 {
                                     if (b != 0)
@@ -1766,7 +1770,7 @@ namespace Office_File_Explorer
                     CfbStream cfbStream = nodeSelection.Parent!.OpenStream(nodeSelection.EntryInfo.Name);
                     // display encrypted binary data as string
                     byte[] buffer = new byte[cfbStream.EntryInfo.Length];
-                    cfbStream.Read(buffer);
+                    cfbStream.ReadExactly(buffer);
                     scintilla1.Text = AppUtilities.ConvertByteArrayToText(buffer);
                 }
                 else if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Binary)

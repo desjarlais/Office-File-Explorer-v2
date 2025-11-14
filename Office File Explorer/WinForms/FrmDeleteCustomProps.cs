@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Packaging;
 using Office_File_Explorer.Helpers;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -10,6 +11,7 @@ namespace Office_File_Explorer.WinForms
     {
         CustomFilePropertiesPart part;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool PartModified { get; set; }
 
         public FrmDeleteCustomProps(CustomFilePropertiesPart cfp)

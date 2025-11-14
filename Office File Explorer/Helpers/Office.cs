@@ -1197,7 +1197,7 @@ namespace Office_File_Explorer.Helpers
                 int totalByteIndex = 0;
                 corruptByteIndexes.Clear();
                 byte[] buffer = new byte[zFile.Length];
-                zFile.Read(buffer, 0, buffer.Length);
+                zFile.ReadExactly(buffer);
 
                 int byteCount = 0;
                 int ddIndex = 0;

@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <RootNamespace>Office_File_Explorer</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.25.0828</AssemblyVersion>
-    <FileVersion>2.25.0828</FileVersion>
+    <AssemblyVersion>2.25.1104</AssemblyVersion>
+    <FileVersion>2.25.1104</FileVersion>
     <Version>2.25.1104</Version>
     <PackageIcon>Office2013.ico</PackageIcon>
     <PackageIconUrl />

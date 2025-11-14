@@ -1,11 +1,13 @@
 ﻿using Office_File_Explorer.Helpers;
 using System;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace Office_File_Explorer.WinForms
 {
     public partial class FrmBatchDeleteCustomProps : Form
     {
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string PropName { get; set; }
 
         public FrmBatchDeleteCustomProps()

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 namespace ScintillaNET_FindReplaceDialog
 {
     using Office_File_Explorer.Helpers;
@@ -50,6 +51,7 @@ namespace ScintillaNET_FindReplaceDialog
         /// selection to prevent obscuring it.
         /// </summary>
         /// <returns>true to automatically move away from the current selection; otherwise, false.</returns>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool AutoPosition
         {
             get
@@ -62,6 +64,7 @@ namespace ScintillaNET_FindReplaceDialog
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<string> MruFind
         {
             get
@@ -75,12 +78,14 @@ namespace ScintillaNET_FindReplaceDialog
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int MruMaxCount
         {
             get { return _mruMaxCount; }
             set { _mruMaxCount = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<string> MruReplace
         {
             get
@@ -94,6 +99,7 @@ namespace ScintillaNET_FindReplaceDialog
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Scintilla Scintilla
         {
             get
@@ -106,6 +112,7 @@ namespace ScintillaNET_FindReplaceDialog
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public FindReplace FindReplace { get; set; }
 
         #endregion Properties

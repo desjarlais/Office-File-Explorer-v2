@@ -24,6 +24,7 @@ using System.Xml.XPath;
 
 // namespace refs
 using O = DocumentFormat.OpenXml;
+using System.ComponentModel;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -66,6 +67,7 @@ namespace Office_File_Explorer.WinForms
             return fileType;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DefaultTemplate
         {
             set => fromChangeTemplate = value;

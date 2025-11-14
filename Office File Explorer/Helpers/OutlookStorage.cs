@@ -1064,7 +1064,7 @@ namespace Office_File_Explorer.Helpers
             {
                 //read stream into buffer
                 byte[] buffer = new byte[storageStream.Length];
-                storageStream.Read(buffer, 0, buffer.Length);
+                storageStream.ReadExactly(buffer);
 
                 //create a ILockBytes (unmanaged byte array) and write buffer into it
                 NativeMethods.CreateILockBytesOnHGlobal(IntPtr.Zero, true, out memoryStorageBytes);
