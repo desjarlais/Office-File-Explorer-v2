@@ -198,15 +198,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Office File Explorer v2"
-        "ProductCode" = "8:{FA75E08A-7DB9-4F3B-8F20-AD37AE39299D}"
-        "PackageCode" = "8:{7422D240-AA7D-46A3-801B-6F6338DACB12}"
+        "ProductCode" = "8:{109660F4-9CBF-4A31-BCD0-2F8897DE8B60}"
+        "PackageCode" = "8:{200658A9-1692-41A6-893D-087D7CDF5D57}"
         "UpgradeCode" = "8:{4E19C48C-79E7-4065-91D4-900DCD51314E}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.25.1104"
+        "ProductVersion" = "8:2.25.1114"
         "Manufacturer" = "8:BrandeSoft"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/desjarlais/Office-File-Explorer-v2/issues"
@@ -748,7 +748,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6BDDB907806F4161B5097A5B6C02CBED"
             {
-            "SourcePath" = "8:..\\Office File Explorer\\obj\\Debug\\net8.0-windows7.0\\apphost.exe"
+            "SourcePath" = "8:..\\Office File Explorer\\obj\\Release\\net10.0-windows7.0\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_79E30A73A4F246C08BA32200F26506E1"
