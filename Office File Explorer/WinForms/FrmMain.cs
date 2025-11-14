@@ -73,6 +73,12 @@ namespace Office_File_Explorer
         private static List<string> pParts = new List<string>();
         private List<string> oNumIdList = new List<string>();
         private Dictionary<string, Image> attachmentList = new Dictionary<string, Image>();
+        // cache for part uri -> inner file type to avoid repeated GetFileType() calls
+        private readonly Dictionary<string, OpenXmlInnerFileTypes> _partTypeCache = new Dictionary<string, OpenXmlInnerFileTypes>();
+        // xml validation cache: key = checksum(schemaPath + content), value = validation errors list (empty means valid)
+        private readonly Dictionary<string, List<string>> _xmlValidationCache = new Dictionary<string, List<string>>();
+        // map part uri to last validation cache key for invalidation on save
+        private readonly Dictionary<string, string> _partValidationKey = new Dictionary<string, string>();
 
         // part viewer globals
         public List<PackagePart> pkgParts = new List<PackagePart>();
@@ -547,47 +553,30 @@ namespace Office_File_Explorer
                 TvFiles.ImageIndex = 1;
             }
 
-            // update inner file icon, need to update both the selected and normal image index
+            // update inner file icon using cached file types
             foreach (PackagePart part in package.GetParts())
             {
-                tRoot.Nodes.Add(part.Uri.ToString());
-
-                if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.XML)
+                string uri = part.Uri.ToString();
+                if (!_partTypeCache.TryGetValue(uri, out var fType))
                 {
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 3;
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 3;
+                    fType = FileUtilities.GetFileType(uri);
+                    _partTypeCache[uri] = fType;
                 }
-                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Image)
+                tRoot.Nodes.Add(uri);
+                int imgIndex;
+                switch (fType)
                 {
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 4;
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 4;
+                    case OpenXmlInnerFileTypes.XML: imgIndex = 3; break;
+                    case OpenXmlInnerFileTypes.Image: imgIndex = 4; break;
+                    case OpenXmlInnerFileTypes.Word: imgIndex = 0; break;
+                    case OpenXmlInnerFileTypes.Excel: imgIndex = 2; break;
+                    case OpenXmlInnerFileTypes.PowerPoint: imgIndex = 1; break;
+                    case OpenXmlInnerFileTypes.Binary: imgIndex = 5; break;
+                    default: imgIndex = 7; break;
                 }
-                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Word)
-                {
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 0;
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 0;
-                }
-                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Excel)
-                {
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 2;
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 2;
-                }
-                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.PowerPoint)
-                {
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 1;
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 1;
-                }
-                else if (FileUtilities.GetFileType(part.Uri.ToString()) == OpenXmlInnerFileTypes.Binary)
-                {
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 5;
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 5;
-                }
-                else
-                {
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].ImageIndex = 7;
-                    tRoot.Nodes[tRoot.Nodes.Count - 1].SelectedImageIndex = 7;
-                }
-
+                var node = tRoot.Nodes[tRoot.Nodes.Count - 1];
+                node.ImageIndex = imgIndex;
+                node.SelectedImageIndex = imgIndex;
                 pkgParts.Add(part);
             }
 
@@ -727,7 +716,6 @@ namespace Office_File_Explorer
                 sb.AppendLine(string.Empty);
                 return sb;
             }
-
             // if we have any values, display them
             foreach (string s in output)
             {
@@ -736,6 +724,23 @@ namespace Office_File_Explorer
 
             sb.AppendLine(string.Empty);
             return sb;
+        }
+
+        // consolidated helper to append list contents directly to an existing StringBuilder
+        public static void AppendListContents(StringBuilder target, List<string> output, string type)
+        {
+            if (target == null) return;
+            target.AppendLine(Strings.wHeadingBegin + type + Strings.wHeadingEnd);
+            if (output == null || output.Count == 0)
+            {
+                target.AppendLine();
+                return;
+            }
+            foreach (string s in output)
+            {
+                target.AppendLine(Strings.wTripleSpace + s);
+            }
+            target.AppendLine();
         }
 
         /// <summary>
@@ -1118,7 +1123,7 @@ namespace Office_File_Explorer
             scintilla1.ReadOnly = false;
         }
 
-        public virtual void MoveFormAwayFromSelection()
+        public void MoveFormAwayFromSelection()
         {
             if (!Visible || scintilla1 == null) return;
 
@@ -1127,11 +1132,11 @@ namespace Office_File_Explorer
             int y = scintilla1.PointYFromPosition(pos);
 
             Point cursorPoint = new Point(x, y);
-            Rectangle r = new Rectangle(Location, Size);
+            Rectangle r = new Rectangle(Location, this.Size);
 
             if (scintilla1 != null)
             {
-                r.Location = new Point(scintilla1.ClientRectangle.Right - Size.Width, 0);
+                r.Location = new Point(scintilla1.ClientRectangle.Right - this.Size.Width, 0);
             }
 
             if (r.Contains(cursorPoint))
@@ -1363,38 +1368,10 @@ namespace Office_File_Explorer
             {
                 return;
             }
-
-            try
+            var errors = ValidateXmlWithSchema(scintilla1.Text, @".\Schemas\LabelInfo.xsd");
+            if (errors.Count == 0)
             {
-                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
-                XmlSchemaSet schema = new XmlSchemaSet();
-                XmlTextReader xtr = new XmlTextReader(@".\Schemas\LabelInfo.xsd");
-                XmlSchema sch = XmlSchema.Read(xtr, ValidationEventHandler);
-                schema.Add(sch);
-
-                var settings = new XmlReaderSettings();
-                settings.Schemas.Add(sch);
-                settings.ValidationType = ValidationType.Schema;
-                settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
-                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
-                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
-
-                using (TextReader textReader = new StringReader(scintilla1.Text))
-                {
-                    XmlReader rd = XmlReader.Create(textReader, settings);
-                    XDocument doc = XDocument.Load(rd);
-                    doc.Validate(schema, eventHandler);
-                }
-            }
-            catch (Exception ex)
-            {
-                // if there were xml validation errors, display a message with those details
-                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
-            }
-
-            if (isValidXml)
-            {
-                MessageBox.Show("Xml Valid", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Xml Valid", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1409,51 +1386,17 @@ namespace Office_File_Explorer
             {
                 return false;
             }
-
-            scintilla1.SuspendLayout();
-
-            try
+            var errors = ValidateXmlWithSchema(scintilla1.Text, @".\Schemas\customui14.xsd");
+            bool valid = errors.Count == 0;
+            if (valid && showValidMessage)
             {
-                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
-                XmlTextReader xtr = new XmlTextReader(@".\Schemas\customui14.xsd");
-                XmlSchema sch = XmlSchema.Read(xtr, ValidationEventHandler);
-                XmlSchemaSet schema = new XmlSchemaSet();
-                schema.Add(sch);
-
-                var settings = new XmlReaderSettings();
-                settings.Schemas.Add(sch);
-                settings.ValidationType = ValidationType.Schema;
-                settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
-                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
-                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
-
-                using (TextReader textReader = new StringReader(scintilla1.Text))
-                {
-                    XmlReader rd = XmlReader.Create(textReader, settings);
-                    XDocument doc = XDocument.Load(rd);
-                    doc.Validate(schema, eventHandler);
-                }
-
-                isValidXml = false;
+                MessageBox.Show(this, "Valid Xml", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (XmlException ex)
+            else if (!valid && showValidMessage)
             {
-                ShowError("Invalid Xml" + "\n" + ex.Message);
-                isValidXml = false;
-                return false;
+                MessageBox.Show(this, string.Join(Environment.NewLine, errors), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            scintilla1.ResumeLayout();
-
-            if (isValidXml)
-            {
-                if (showValidMessage)
-                {
-                    MessageBox.Show(this, "Valid Xml", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                return true;
-            }
-            return false;
+            return valid;
         }
 
         /// <summary>
@@ -1651,7 +1594,13 @@ namespace Office_File_Explorer
                 }
 
                 // open xml inner files
-                if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.XML || FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.VML)
+                OpenXmlInnerFileTypes selectedType;
+                if (!_partTypeCache.TryGetValue(e.Node.Text, out selectedType))
+                {
+                    selectedType = FileUtilities.GetFileType(e.Node.Text);
+                    _partTypeCache[e.Node.Text] = selectedType;
+                }
+                if (selectedType == OpenXmlInnerFileTypes.XML || selectedType == OpenXmlInnerFileTypes.VML)
                 {
                     // customui files have additional editing options
                     if (e.Node.Text.EndsWith("customUI.xml") || e.Node.Text.EndsWith("customUI14.xml"))
@@ -1730,7 +1679,7 @@ namespace Office_File_Explorer
                         }
                     }
                 }
-                else if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Image)
+                else if (selectedType == OpenXmlInnerFileTypes.Image)
                 {
                     // currently showing images with a form
                     // TODO find a way to keep the image in the main form
@@ -1773,7 +1722,7 @@ namespace Office_File_Explorer
                     cfbStream.ReadExactly(buffer);
                     scintilla1.Text = AppUtilities.ConvertByteArrayToText(buffer);
                 }
-                else if (FileUtilities.GetFileType(e.Node.Text) == OpenXmlInnerFileTypes.Binary)
+                else if (selectedType == OpenXmlInnerFileTypes.Binary)
                 {
                     foreach (PackagePart pp in pkgParts)
                     {
@@ -2129,6 +2078,13 @@ namespace Office_File_Explorer
                         partStream.SetLength(0);
                         ms.WriteTo(partStream);
                         isModified = true;
+                        // invalidate validation cache for this part (content changed)
+                        string partUri = pp.Uri.ToString();
+                        if (_partValidationKey.TryGetValue(partUri, out var cacheKey))
+                        {
+                            _xmlValidationCache.Remove(cacheKey);
+                            _partValidationKey.Remove(partUri);
+                        }
                     }
                     break;
                 }
@@ -2161,72 +2117,71 @@ namespace Office_File_Explorer
                 // display file contents based on user selection
                 if (StrOfficeApp == Strings.oAppWord)
                 {
-                    sb.Append(DisplayListContents(Word.LstContentControls(tempFileReadOnly), Strings.wContentControls));
-                    sb.Append(DisplayListContents(Word.LstTables(tempFileReadOnly), Strings.wTables));
-                    sb.Append(DisplayListContents(Word.LstHyperlinks(tempFileReadOnly), Strings.wHyperlinks));
-                    sb.Append(DisplayListContents(Word.LstListTemplates(tempFileReadOnly, false), Strings.wListTemplates));
-                    sb.Append(DisplayListContents(Word.LstFonts(tempFileReadOnly), Strings.wFonts));
-                    sb.Append(DisplayListContents(Word.LstRunFonts(tempFileReadOnly), Strings.wRunFonts));
-                    sb.Append(DisplayListContents(Word.LstFootnotes(tempFileReadOnly), Strings.wFootnotes));
-                    sb.Append(DisplayListContents(Word.LstEndnotes(tempFileReadOnly), Strings.wEndnotes));
-                    sb.Append(DisplayListContents(Word.LstDocProps(tempFileReadOnly), Strings.wDocProps));
-                    sb.Append(DisplayListContents(Word.LstBookmarks(tempFileReadOnly), Strings.wBookmarks));
-                    sb.Append(DisplayListContents(Word.LstFieldCodes(tempFileReadOnly), Strings.wFldCodes));
-                    sb.Append(DisplayListContents(Word.LstFieldCodesInHeader(tempFileReadOnly), " ** Header Field Codes **"));
-                    sb.Append(DisplayListContents(Word.LstFieldCodesInFooter(tempFileReadOnly), " ** Footer Field Codes **"));
+                    AppendListContents(sb, Word.LstContentControls(tempFileReadOnly), Strings.wContentControls);
+                    AppendListContents(sb, Word.LstTables(tempFileReadOnly), Strings.wTables);
+                    AppendListContents(sb, Word.LstHyperlinks(tempFileReadOnly), Strings.wHyperlinks);
+                    AppendListContents(sb, Word.LstListTemplates(tempFileReadOnly, false), Strings.wListTemplates);
+                    AppendListContents(sb, Word.LstFonts(tempFileReadOnly), Strings.wFonts);
+                    AppendListContents(sb, Word.LstRunFonts(tempFileReadOnly), Strings.wRunFonts);
+                    AppendListContents(sb, Word.LstFootnotes(tempFileReadOnly), Strings.wFootnotes);
+                    AppendListContents(sb, Word.LstEndnotes(tempFileReadOnly), Strings.wEndnotes);
+                    AppendListContents(sb, Word.LstDocProps(tempFileReadOnly), Strings.wDocProps);
+                    AppendListContents(sb, Word.LstBookmarks(tempFileReadOnly), Strings.wBookmarks);
+                    AppendListContents(sb, Word.LstFieldCodes(tempFileReadOnly), Strings.wFldCodes);
+                    AppendListContents(sb, Word.LstFieldCodesInHeader(tempFileReadOnly), " ** Header Field Codes **");
+                    AppendListContents(sb, Word.LstFieldCodesInFooter(tempFileReadOnly), " ** Footer Field Codes **");
                 }
                 else if (StrOfficeApp == Strings.oAppExcel)
                 {
-                    sb.Append(DisplayListContents(Excel.GetLinks(tempFileReadOnly, true), Strings.wLinks));
-                    sb.Append(DisplayListContents(Excel.GetComments(tempFileReadOnly), Strings.wComments));
-                    sb.Append(DisplayListContents(Excel.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks));
-                    sb.Append(DisplayListContents(Excel.GetSheetInfo(tempFileReadOnly), Strings.wWorksheetInfo));
-                    sb.Append(DisplayListContents(Excel.GetSharedStrings(tempFileReadOnly), Strings.wSharedStrings));
-                    sb.Append(DisplayListContents(Excel.GetDefinedNames(tempFileReadOnly), Strings.wDefinedNames));
-                    sb.Append(DisplayListContents(Excel.GetConnections(tempFileReadOnly), Strings.wConnections));
-                    sb.Append(DisplayListContents(Excel.GetHiddenRowCols(tempFileReadOnly), Strings.wHiddenRowCol));
-                    sb.Append(DisplayListContents(Excel.GetFonts(tempFileReadOnly), Strings.wFonts));
+                    AppendListContents(sb, Excel.GetLinks(tempFileReadOnly, true), Strings.wLinks);
+                    AppendListContents(sb, Excel.GetComments(tempFileReadOnly), Strings.wComments);
+                    AppendListContents(sb, Excel.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks);
+                    AppendListContents(sb, Excel.GetSheetInfo(tempFileReadOnly), Strings.wWorksheetInfo);
+                    AppendListContents(sb, Excel.GetSharedStrings(tempFileReadOnly), Strings.wSharedStrings);
+                    AppendListContents(sb, Excel.GetDefinedNames(tempFileReadOnly), Strings.wDefinedNames);
+                    AppendListContents(sb, Excel.GetConnections(tempFileReadOnly), Strings.wConnections);
+                    AppendListContents(sb, Excel.GetHiddenRowCols(tempFileReadOnly), Strings.wHiddenRowCol);
+                    AppendListContents(sb, Excel.GetFonts(tempFileReadOnly), Strings.wFonts);
                 }
                 else if (StrOfficeApp == Strings.oAppPowerPoint)
                 {
-                    sb.Append(DisplayListContents(PowerPoint.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks));
-                    sb.Append(DisplayListContents(PowerPoint.GetComments(tempFileReadOnly), Strings.wComments));
-                    sb.Append(DisplayListContents(PowerPoint.GetSlideText(tempFileReadOnly), Strings.wSlideText));
-                    sb.Append(DisplayListContents(PowerPoint.GetSlideTitles(tempFileReadOnly), Strings.wSlideText));
-                    sb.Append(DisplayListContents(PowerPoint.GetSlideTransitions(tempFileReadOnly), Strings.wSlideTransitions));
-                    sb.Append(DisplayListContents(PowerPoint.GetFonts(tempFileReadOnly), Strings.wFonts));
+                    AppendListContents(sb, PowerPoint.GetHyperlinks(tempFileReadOnly), Strings.wHyperlinks);
+                    AppendListContents(sb, PowerPoint.GetComments(tempFileReadOnly), Strings.wComments);
+                    AppendListContents(sb, PowerPoint.GetSlideText(tempFileReadOnly), Strings.wSlideText);
+                    AppendListContents(sb, PowerPoint.GetSlideTitles(tempFileReadOnly), Strings.wSlideText);
+                    AppendListContents(sb, PowerPoint.GetSlideTransitions(tempFileReadOnly), Strings.wSlideTransitions);
+                    AppendListContents(sb, PowerPoint.GetFonts(tempFileReadOnly), Strings.wFonts);
                 }
 
                 // display selected Office features
-
-                sb.Append(DisplayListContents(Office.GetEmbeddedObjectProperties(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects));
-                sb.Append(DisplayListContents(Office.GetShapes(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wShapes));
-                sb.Append(DisplayListContents(pParts, Strings.wPackageParts));
-                sb.Append(DisplayListContents(Office.GetSignatures(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures));
+                AppendListContents(sb, Office.GetEmbeddedObjectProperties(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wEmbeddedObjects);
+                AppendListContents(sb, Office.GetShapes(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wShapes);
+                AppendListContents(sb, pParts, Strings.wPackageParts);
+                AppendListContents(sb, Office.GetSignatures(tempFileReadOnly, toolStripStatusLabelDocType.Text), Strings.wXmlSignatures);
 
                 // validate the file and update custom file props
                 if (toolStripStatusLabelDocType.Text == Strings.oAppWord)
                 {
                     using (WordprocessingDocument myDoc = WordprocessingDocument.Open(tempFileReadOnly, false))
                     {
-                        sb.Append(DisplayListContents(CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps));
-                        sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
+                        AppendListContents(sb, CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps);
+                        AppendListContents(sb, Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppExcel)
                 {
                     using (SpreadsheetDocument myDoc = SpreadsheetDocument.Open(tempFileReadOnly, false))
                     {
-                        sb.Append(DisplayListContents(CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps));
-                        sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
+                        AppendListContents(sb, CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps);
+                        AppendListContents(sb, Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
                 else if (toolStripStatusLabelDocType.Text == Strings.oAppPowerPoint)
                 {
                     using (PresentationDocument myDoc = PresentationDocument.Open(tempFileReadOnly, false))
                     {
-                        sb.Append(DisplayListContents(CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps));
-                        sb.Append(DisplayListContents(Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation));
+                        AppendListContents(sb, CustomDocPropsList(myDoc.CustomFilePropertiesPart), Strings.wCustomDocProps);
+                        AppendListContents(sb, Office.DisplayValidationErrorInformation(myDoc), Strings.errorValidation);
                     }
                 }
 
@@ -3544,66 +3499,100 @@ namespace Office_File_Explorer
         private void ValidateLabelInfoXml(bool displayOnly)
         {
             validationErrors.Clear();
+            var errors = ValidateXmlWithSchema(scintilla1.Text, @".\Schemas\LabelInfo.xsd");
+            bool valid = errors.Count == 0;
+            if (valid && displayOnly)
+            {
+                MessageBox.Show("Xml Is Valid.", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (!valid)
+            {
+                if (displayOnly)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    int errorCount = 0;
+                    foreach (string s in errors)
+                    {
+                        errorCount++;
+                        sb.AppendLine(errorCount + Strings.wPeriod + s);
+                    }
+                    MessageBox.Show(sb.ToString(), "Schema Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                validationErrors.AddRange(errors);
+            }
+        }
+
+        // Generic cached validation
+        private List<string> ValidateXmlWithSchema(string xmlContent, string schemaPath)
+        {
+            List<string> errors = new List<string>();
+            if (string.IsNullOrWhiteSpace(xmlContent) || !File.Exists(schemaPath)) return errors;
+
+            string key = ComputeValidationKey(xmlContent, schemaPath);
+            if (_xmlValidationCache.TryGetValue(key, out var cached))
+            {
+                return cached;
+            }
 
             try
             {
-                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
                 XmlSchemaSet schema = new XmlSchemaSet();
-                XmlTextReader xtr = new XmlTextReader(@".\Schemas\LabelInfo.xsd");
-                XmlSchema sch = XmlSchema.Read(xtr, ValidationEventHandler);
-                schema.Add(sch);
-
-                var settings = new XmlReaderSettings();
-                settings.Schemas.Add(sch);
-                settings.ValidationType = ValidationType.Schema;
+                using (XmlTextReader xtr = new XmlTextReader(schemaPath))
+                {
+                    XmlSchema sch = XmlSchema.Read(xtr, (s, e) => errors.Add(e.Message));
+                    schema.Add(sch);
+                }
+                var settings = new XmlReaderSettings
+                {
+                    ValidationType = ValidationType.Schema
+                };
+                settings.Schemas = schema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
-                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
-
-                using (TextReader textReader = new StringReader(scintilla1.Text))
+                settings.ValidationEventHandler += (s, e) => errors.Add(e.Message);
+                using (TextReader textReader = new StringReader(xmlContent))
+                using (XmlReader rd = XmlReader.Create(textReader, settings))
                 {
-                    XmlReader rd = XmlReader.Create(textReader, settings);
                     XDocument doc = XDocument.Load(rd);
-                    doc.Validate(schema, eventHandler);
+                    doc.Validate(schema, (o, ve) => errors.Add(ve.Message));
                 }
             }
             catch (Exception ex)
             {
-                FileUtilities.WriteToLog(Strings.fLogFilePath, ex.Message);
-
-                if (displayOnly)
-                {
-                    MessageBox.Show(ex.Message, "Xml Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-                isValidXml = false;
+                errors.Add(ex.Message);
             }
-            finally
+
+            _xmlValidationCache[key] = errors; // cache even errors list
+            if (TvFiles.SelectedNode != null)
             {
-                if (isValidXml && displayOnly)
-                {
-                    MessageBox.Show("Xml Is Valid.", "Xml Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    // display schema errors
-                    if (validationErrors.Count > 0)
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        int errorCount = 0;
-                        foreach (string s in validationErrors)
-                        {
-                            errorCount++;
-                            sb.Append(errorCount + Strings.wPeriod + s + "\r\n");
-                        }
+                _partValidationKey[TvFiles.SelectedNode.Text] = key;
+            }
+            return errors;
+        }
 
-                        if (displayOnly)
-                        {
-                            MessageBox.Show(sb.ToString(), "Schema Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
+        private static string ComputeValidationKey(string xmlContent, string schemaPath)
+        {
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            byte[] data = Encoding.UTF8.GetBytes(xmlContent + "|" + schemaPath + "|" + new FileInfo(schemaPath).Length);
+            return Convert.ToHexString(sha.ComputeHash(data));
+        }
+
+        // Batch validate currently loaded XML parts (returns dictionary of part uri -> errors)
+        public Dictionary<string, List<string>> BatchValidateXmlParts(IEnumerable<string> partUris, string schemaPath)
+        {
+            var result = new Dictionary<string, List<string>>();
+            foreach (var uri in partUris)
+            {
+                var part = pkgParts.FirstOrDefault(p => p.Uri.ToString() == uri);
+                if (part == null) continue;
+                using (StreamReader sr = new StreamReader(part.GetStream()))
+                {
+                    string xml = sr.ReadToEnd();
+                    var errs = ValidateXmlWithSchema(xml, schemaPath);
+                    result[uri] = errs;
                 }
             }
+            return result;
         }
 
         private void TvFiles_KeyUp(object sender, KeyEventArgs e)
