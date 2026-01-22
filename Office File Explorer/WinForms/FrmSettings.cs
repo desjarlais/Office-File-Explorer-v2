@@ -74,6 +74,11 @@ namespace Office_File_Explorer.WinForms
                 ckbOutlookMsgAsRtf.Checked = true;
             }
 
+            if (Properties.Settings.Default.ViewInUseStylesOnly == true)
+            {
+                ckbViewInUseStylesOnly.Checked = true;
+            }
+
             // namespace options
             if (Properties.Settings.Default.UseContentControlGuid == true)
             {
@@ -91,6 +96,7 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnOk_Click(object sender, EventArgs e)
         {
+            // save out checkboxes
             Properties.Settings.Default.RemoveFallback = ckbRemoveFallbackTags.Checked;
             Properties.Settings.Default.ListRsids = ckbListRsids.Checked;
             Properties.Settings.Default.FixGroupedShapes = ckbFixGroupedShapes.Checked;
@@ -102,7 +108,9 @@ namespace Office_File_Explorer.WinForms
             Properties.Settings.Default.ResetIndentLevels = ckbResetIndentLevels.Checked;
             Properties.Settings.Default.MsgAsRtf = ckbOutlookMsgAsRtf.Checked;
             Properties.Settings.Default.RemoveInvalXmlChars = ckbCleanInvalidXml.Checked;
+            Properties.Settings.Default.ViewInUseStylesOnly = ckbViewInUseStylesOnly.Checked;
 
+            // save out radio buttons
             if (rdoUseCCGuid.Checked)
             {
                 Properties.Settings.Default.UseContentControlGuid = true;

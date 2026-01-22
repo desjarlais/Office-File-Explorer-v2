@@ -2196,7 +2196,8 @@ namespace Office_File_Explorer.Helpers
                             }
                         }
 
-                        if (styleInUse == false)
+                        // if we have unused styles and the setting is to not show them, don't add them to the list to display
+                        if (styleInUse == false && Properties.Settings.Default.ViewInUseStylesOnly == true)
                         {
                             count += 1;
                             stylesList.Add(count + Strings.wPeriod + sName + " -> (Not Used)");

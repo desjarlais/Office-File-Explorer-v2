@@ -99,6 +99,7 @@ namespace Office_File_Explorer
         public FrmMain()
         {
             InitializeComponent();
+            KeyPreview = true; // ensure form recieves key events before child controls
 
             Text = Strings.oAppTitle + Strings.wMinusSign + Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
@@ -3646,6 +3647,41 @@ namespace Office_File_Explorer
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             WordFixes.FixCommentRange(tempFilePackageViewer);
+        }
+
+        private void FrmMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                myFindReplace.ShowFind();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Shift && e.KeyCode == Keys.F3)
+            {
+                myFindReplace.Window.FindPrevious();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.F3)
+            {
+                myFindReplace.Window.FindNext();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.H)
+            {
+                myFindReplace.ShowReplace();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.I)
+            {
+                myFindReplace.ShowIncrementalSearch();
+                e.SuppressKeyPress = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.G)
+            {
+                GoTo MyGoTo = new GoTo((Scintilla)sender);
+                MyGoTo.ShowGoToDialog();
+                e.SuppressKeyPress = true;
+            }
         }
     }
 

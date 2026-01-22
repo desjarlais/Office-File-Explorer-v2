@@ -5,9 +5,9 @@
     <TargetFramework>net10.0-windows7.0</TargetFramework>
     <RootNamespace>Office_File_Explorer</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.25.1104</AssemblyVersion>
-    <FileVersion>2.25.1104</FileVersion>
-    <Version>2.25.1114</Version>
+    <AssemblyVersion>2.26.0122</AssemblyVersion>
+    <FileVersion>2.26.0122</FileVersion>
+    <Version></Version>
     <PackageIcon>Office2013.ico</PackageIcon>
     <PackageIconUrl />
     <Authors>Brandon Desjarlais</Authors>
@@ -38,9 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
-    <PackageReference Include="OpenMcdf" Version="3.0.3" />
-    <PackageReference Include="Scintilla5.NET" Version="6.0.1" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
+    <PackageReference Include="OpenMcdf" Version="3.1.0" />
+    <PackageReference Include="Scintilla5.NET" Version="6.1.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -342,7 +342,8 @@ namespace Office_File_Explorer.Helpers
                 Level9ParagraphProperties level9ParagraphProperties1 = new Level9ParagraphProperties() { LeftMargin = 3657600, Level = 8, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
 
                 // check defaultparagraphproperties
-                if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.RightToLeft == false
+                if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.RightToLeft is null
+                    || document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.RightToLeft == false
                     && document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.InnerXml.Contains("marR=\"0\""))
