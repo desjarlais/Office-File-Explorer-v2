@@ -38,9 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
-    <PackageReference Include="OpenMcdf" Version="3.1.0" />
-    <PackageReference Include="Scintilla5.NET" Version="6.1.1" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
+    <PackageReference Include="OpenMcdf" Version="3.1.2" />
+    <PackageReference Include="Scintilla5.NET" Version="6.1.2" />
+    <PackageReference Include="ScintillaDiff5.NET" Version="1.1.15" />
   </ItemGroup>
 
   <ItemGroup>

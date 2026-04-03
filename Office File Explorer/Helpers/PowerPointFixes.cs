@@ -342,9 +342,18 @@ namespace Office_File_Explorer.Helpers
                 Level9ParagraphProperties level9ParagraphProperties1 = new Level9ParagraphProperties() { LeftMargin = 3657600, Level = 8, Alignment = TextAlignmentTypeValues.Left, RightToLeft = false };
 
                 // check defaultparagraphproperties
-                if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.RightToLeft is null
-                    || document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.LeftMargin is null)
+
+                // first check is for defaultparagraphprops being null
+                if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties is null)
+                {
+                    document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties = defaultParagraphProperties1;
+                    return true;
+                }
+
+                // if we have values, adjust accordingly
+                if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.RightToLeft is null || 
+                    document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.RightToLeft == false && 
+                    document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.DefaultParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -359,8 +368,8 @@ namespace Office_File_Explorer.Helpers
                 }
 
                 // check each level paragraphproperties
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.RightToLeft == false && 
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level1ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -374,8 +383,8 @@ namespace Office_File_Explorer.Helpers
                     isFixed = true;
                 }
 
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.RightToLeft == false && 
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level2ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -388,8 +397,8 @@ namespace Office_File_Explorer.Helpers
                     isFixed = true;
                 }
 
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.RightToLeft == false &&
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level3ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -402,8 +411,8 @@ namespace Office_File_Explorer.Helpers
                     isFixed = true;
                 }
 
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.RightToLeft == false &&
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level4ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -416,8 +425,8 @@ namespace Office_File_Explorer.Helpers
                     isFixed = true;
                 }
 
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.RightToLeft == false && 
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level5ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -430,8 +439,8 @@ namespace Office_File_Explorer.Helpers
                     isFixed = true;
                 }
 
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.RightToLeft == false &&
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level6ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -444,8 +453,8 @@ namespace Office_File_Explorer.Helpers
                     isFixed = true;
                 }
 
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.RightToLeft == false &&
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level7ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -458,8 +467,8 @@ namespace Office_File_Explorer.Helpers
                     isFixed = true;
                 }
 
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.RightToLeft == false &&
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level8ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {
@@ -472,8 +481,8 @@ namespace Office_File_Explorer.Helpers
                     isFixed = true;
                 }
 
-                if (document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.RightToLeft == false
-                    && document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.LeftMargin is null)
+                if (document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.RightToLeft == false &&
+                    document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.LeftMargin is null)
                 {
                     if (document.PresentationPart.Presentation.DefaultTextStyle.Level9ParagraphProperties.InnerXml.Contains("marR=\"0\""))
                     {

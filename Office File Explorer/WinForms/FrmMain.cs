@@ -3683,6 +3683,15 @@ namespace Office_File_Explorer
                 e.SuppressKeyPress = true;
             }
         }
+
+        private void compareFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmCompareFiles cmpFrm = new FrmCompareFiles()
+            {
+                Owner = this
+            };
+            cmpFrm.ShowDialog();
+        }
     }
 
     internal sealed record class NodeSelection(Storage Parent, EntryInfo EntryInfo)

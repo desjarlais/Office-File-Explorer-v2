@@ -103,6 +103,7 @@ namespace Office_File_Explorer
             extractPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tvImageList = new System.Windows.Forms.ImageList(components);
             scintilla1 = new ScintillaNET.Scintilla();
+            compareFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             mnuMainMenu.SuspendLayout();
             contextMenuScintilla.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -294,7 +295,7 @@ namespace Office_File_Explorer
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, base64DecoderToolStripMenuItem, excelSheetViewerToolStripMenuItem, renderRTFToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { batchFileProcessingToolStripMenuItem, clipboardViewerToolStripMenuItem, compareFilesToolStripMenuItem, base64DecoderToolStripMenuItem, excelSheetViewerToolStripMenuItem, renderRTFToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
             toolsToolStripMenuItem.Text = "&Tools";
@@ -646,7 +647,7 @@ namespace Office_File_Explorer
             // 
             splitContainer1.Panel2.Controls.Add(scintilla1);
             splitContainer1.Size = new System.Drawing.Size(1501, 861);
-            splitContainer1.SplitterDistance = 498;
+            splitContainer1.SplitterDistance = 497;
             splitContainer1.SplitterWidth = 6;
             splitContainer1.TabIndex = 5;
             // 
@@ -660,7 +661,7 @@ namespace Office_File_Explorer
             TvFiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             TvFiles.Name = "TvFiles";
             TvFiles.SelectedImageIndex = 0;
-            TvFiles.Size = new System.Drawing.Size(498, 861);
+            TvFiles.Size = new System.Drawing.Size(497, 861);
             TvFiles.TabIndex = 0;
             TvFiles.AfterSelect += TvFiles_AfterSelect;
             TvFiles.NodeMouseClick += TvFiles_NodeMouseClick;
@@ -718,8 +719,15 @@ namespace Office_File_Explorer
             scintilla1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             scintilla1.Name = "scintilla1";
             scintilla1.ScrollWidth = 49;
-            scintilla1.Size = new System.Drawing.Size(997, 861);
+            scintilla1.Size = new System.Drawing.Size(998, 861);
             scintilla1.TabIndex = 0;
+            // 
+            // compareFilesToolStripMenuItem
+            // 
+            compareFilesToolStripMenuItem.Name = "compareFilesToolStripMenuItem";
+            compareFilesToolStripMenuItem.Size = new System.Drawing.Size(278, 34);
+            compareFilesToolStripMenuItem.Text = "Compare Files";
+            compareFilesToolStripMenuItem.Click += compareFilesToolStripMenuItem_Click;
             // 
             // FrmMain
             // 
@@ -829,6 +837,7 @@ namespace Office_File_Explorer
         private System.Windows.Forms.ToolStripMenuItem copySelectedLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem renderRTFToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonViewStyles;
+        private System.Windows.Forms.ToolStripMenuItem compareFilesToolStripMenuItem;
     }
 }
 
