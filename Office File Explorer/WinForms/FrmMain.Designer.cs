@@ -57,6 +57,7 @@ namespace Office_File_Explorer
             toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             batchFileProcessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             clipboardViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            compareFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             base64DecoderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             excelSheetViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             renderRTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,7 +104,6 @@ namespace Office_File_Explorer
             extractPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tvImageList = new System.Windows.Forms.ImageList(components);
             scintilla1 = new ScintillaNET.Scintilla();
-            compareFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             mnuMainMenu.SuspendLayout();
             contextMenuScintilla.SuspendLayout();
             toolStrip1.SuspendLayout();
@@ -315,6 +315,14 @@ namespace Office_File_Explorer
             clipboardViewerToolStripMenuItem.Size = new System.Drawing.Size(278, 34);
             clipboardViewerToolStripMenuItem.Text = "Clipboard Viewer";
             clipboardViewerToolStripMenuItem.Click += ClipboardViewerToolStripMenuItem_Click;
+            // 
+            // compareFilesToolStripMenuItem
+            // 
+            compareFilesToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("compareFilesToolStripMenuItem.Image");
+            compareFilesToolStripMenuItem.Name = "compareFilesToolStripMenuItem";
+            compareFilesToolStripMenuItem.Size = new System.Drawing.Size(278, 34);
+            compareFilesToolStripMenuItem.Text = "Compare Files";
+            compareFilesToolStripMenuItem.Click += compareFilesToolStripMenuItem_Click;
             // 
             // base64DecoderToolStripMenuItem
             // 
@@ -721,13 +729,6 @@ namespace Office_File_Explorer
             scintilla1.ScrollWidth = 49;
             scintilla1.Size = new System.Drawing.Size(998, 861);
             scintilla1.TabIndex = 0;
-            // 
-            // compareFilesToolStripMenuItem
-            // 
-            compareFilesToolStripMenuItem.Name = "compareFilesToolStripMenuItem";
-            compareFilesToolStripMenuItem.Size = new System.Drawing.Size(278, 34);
-            compareFilesToolStripMenuItem.Text = "Compare Files";
-            compareFilesToolStripMenuItem.Click += compareFilesToolStripMenuItem_Click;
             // 
             // FrmMain
             // 

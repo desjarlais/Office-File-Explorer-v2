@@ -25,15 +25,15 @@ namespace Office_File_Explorer.WinForms
 
         private void BtnFileLeft_Click(object sender, EventArgs e)
         {
-            _leftParts = OpenFileAndPopulateTree(label1, tvLeft);
+            _leftParts = OpenFileAndPopulateTree(tvLeft);
         }
 
         private void BtnFileRight_Click(object sender, EventArgs e)
         {
-            _rightParts = OpenFileAndPopulateTree(label2, tvRight);
+            _rightParts = OpenFileAndPopulateTree(tvRight);
         }
 
-        private Dictionary<string, string> OpenFileAndPopulateTree(Label pathLabel, TreeView treeView)
+        private Dictionary<string, string> OpenFileAndPopulateTree(TreeView treeView)
         {
             using OpenFileDialog fDialog = new OpenFileDialog
             {
@@ -49,8 +49,6 @@ namespace Office_File_Explorer.WinForms
             }
 
             string filePath = fDialog.FileName;
-            pathLabel.Text = filePath;
-
             treeView.Nodes.Clear();
 
             try
