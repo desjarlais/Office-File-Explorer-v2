@@ -22,6 +22,7 @@ namespace Office_File_Explorer.WinForms
 
         private Dictionary<string, string> _leftParts = [];
         private Dictionary<string, string> _rightParts = [];
+        private bool _syncing;
 
         private void BtnFileLeft_Click(object sender, EventArgs e)
         {
@@ -132,6 +133,13 @@ namespace Office_File_Explorer.WinForms
             string uri = e.Node?.Text ?? string.Empty;
             _leftParts.TryGetValue(uri, out string leftText);
             scintillaDiffControl1.TextLeft = leftText ?? string.Empty;
+
+            if (!_syncing)
+            {
+                _syncing = true;
+                SelectMatchingNode(tvRight, uri, _rightParts);
+                _syncing = false;
+            }
         }
 
         private void TvRight_AfterSelect(object sender, TreeViewEventArgs e)
@@ -139,6 +147,46 @@ namespace Office_File_Explorer.WinForms
             string uri = e.Node?.Text ?? string.Empty;
             _rightParts.TryGetValue(uri, out string rightText);
             scintillaDiffControl1.TextRight = rightText ?? string.Empty;
+
+            if (!_syncing)
+            {
+                _syncing = true;
+                SelectMatchingNode(tvLeft, uri, _leftParts);
+                _syncing = false;
+            }
+        }
+
+        private void SelectMatchingNode(TreeView targetTree, string nodeText, Dictionary<string, string> parts)
+        {
+            TreeNode match = FindNodeByText(targetTree.Nodes, nodeText);
+            if (match is not null)
+            {
+                targetTree.SelectedNode = match;
+            }
+            else
+            {
+                targetTree.SelectedNode = null;
+                parts.TryGetValue(string.Empty, out _);
+                if (targetTree == tvRight)
+                    scintillaDiffControl1.TextRight = string.Empty;
+                else
+                    scintillaDiffControl1.TextLeft = string.Empty;
+            }
+        }
+
+        private static TreeNode FindNodeByText(TreeNodeCollection nodes, string text)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Text == text)
+                    return node;
+
+                TreeNode child = FindNodeByText(node.Nodes, text);
+                if (child is not null)
+                    return child;
+            }
+
+            return null;
         }
     }
 }
