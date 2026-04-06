@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using DiffPlex.DiffBuilder;
+using DiffPlex.DiffBuilder.Model;
 
 namespace Office_File_Explorer.WinForms
 {
@@ -133,6 +136,7 @@ namespace Office_File_Explorer.WinForms
             string uri = e.Node?.Text ?? string.Empty;
             _leftParts.TryGetValue(uri, out string leftText);
             scintillaDiffControl1.TextLeft = leftText ?? string.Empty;
+            UpdateDiffCount();
 
             if (!_syncing)
             {
@@ -147,6 +151,7 @@ namespace Office_File_Explorer.WinForms
             string uri = e.Node?.Text ?? string.Empty;
             _rightParts.TryGetValue(uri, out string rightText);
             scintillaDiffControl1.TextRight = rightText ?? string.Empty;
+            UpdateDiffCount();
 
             if (!_syncing)
             {
@@ -172,6 +177,22 @@ namespace Office_File_Explorer.WinForms
                 else
                     scintillaDiffControl1.TextLeft = string.Empty;
             }
+        }
+
+        private void UpdateDiffCount()
+        {
+            string leftText = scintillaDiffControl1.TextLeft ?? string.Empty;
+            string rightText = scintillaDiffControl1.TextRight ?? string.Empty;
+
+            if (string.IsNullOrEmpty(leftText) && string.IsNullOrEmpty(rightText))
+            {
+                lblDiffCount.Text = "";
+                return;
+            }
+
+            var diffModel = new SideBySideDiffBuilder().BuildDiffModel(leftText, rightText);
+            int count = diffModel.OldText.Lines.Count(l => l.Type != ChangeType.Unchanged);
+            lblDiffCount.Text = count == 0 ? "No differences" : $"{count} difference(s)";
         }
 
         private static TreeNode FindNodeByText(TreeNodeCollection nodes, string text)

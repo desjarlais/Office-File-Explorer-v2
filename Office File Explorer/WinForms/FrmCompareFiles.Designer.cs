@@ -34,6 +34,7 @@
             scintillaDiffControl1 = new ScintillaDiff.ScintillaDiffControl();
             BtnFileLeft = new System.Windows.Forms.Button();
             BtnFileRight = new System.Windows.Forms.Button();
+            lblDiffCount = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             panelTop = new System.Windows.Forms.Panel();
@@ -118,6 +119,14 @@
             BtnFileRight.UseVisualStyleBackColor = true;
             BtnFileRight.Click += BtnFileRight_Click;
             // 
+            // lblDiffCount
+            // 
+            lblDiffCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            lblDiffCount.Name = "lblDiffCount";
+            lblDiffCount.TabIndex = 9;
+            lblDiffCount.Text = "";
+            lblDiffCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // groupBox1
             // 
             groupBox1.Controls.Add(scintillaDiffControl1);
@@ -149,6 +158,7 @@
             // 
             // panelTop
             // 
+            panelTop.Controls.Add(lblDiffCount);
             panelTop.Controls.Add(BtnFileRight);
             panelTop.Controls.Add(BtnFileLeft);
             panelTop.Dock = System.Windows.Forms.DockStyle.Top;
@@ -186,5 +196,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Label lblDiffCount;
     }
 }
