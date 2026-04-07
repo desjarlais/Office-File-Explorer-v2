@@ -14,9 +14,7 @@ namespace Office_File_Explorer.WinForms
     public partial class FrmCompareFiles : Form
     {
         private static readonly string FileFilter =
-            "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm|" +
-            "Binary Office Documents | *.doc; *.dot; *.xls; *.xlt; *.ppt; *.pot|" +
-            "All Files | *.*";
+            "Open XML Files | *.docx; *.dotx; *.docm; *.dotm; *.xlsx; *.xlsm; *.xlst; *.xltm; *.pptx; *.pptm; *.potx; *.potm";
 
         public FrmCompareFiles()
         {
